@@ -85,48 +85,6 @@ const PointsEarnedIcon = () => {
   );
 };
 
-const CountdownTimer = ({ secondsRemaining, totalSeconds }) => {
-  const progress = (secondsRemaining / totalSeconds) * 100;
-  const minutes = Math.floor(secondsRemaining / 60);
-  const seconds = secondsRemaining % 60;
-
-  const getTimerColor = () => {
-    if (secondsRemaining > 300) return "primary";
-    if (secondsRemaining > 60) return "warning";
-    return "error";
-  };
-
-  return (
-    <Box sx={{ width: "100%", mb: 2 }}>
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1 }}>
-        <Typography variant="body2" sx={{ display: "flex", alignItems: "center", color: "text.secondary" }}>
-          <AccessTimeIcon sx={{ fontSize: 16, mr: 0.5 }} />
-          Time remaining to complete booking:
-        </Typography>
-        <Typography
-          variant="body2"
-          sx={{
-            fontWeight: "bold",
-            color: secondsRemaining <= 60 ? "error.main" : secondsRemaining <= 300 ? "warning.main" : "primary.main"
-          }}
-        >
-          {minutes}:{seconds.toString().padStart(2, '0')}
-        </Typography>
-      </Box>
-      <LinearProgress
-        variant="determinate"
-        value={progress}
-        color={getTimerColor()}
-        sx={{
-          height: 6,
-          borderRadius: 3,
-          backgroundColor: '#f0f0f0'
-        }}
-      />
-    </Box>
-  );
-};
-
 const MaintenanceDay = ({ day, isSelected, isMaintenance }) => {
   return (
     <Box
@@ -191,11 +149,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
   const [loading, setLoading] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const dispatch = useDispatch();
-  const [countdownActive, setCountdownActive] = useState(false);
-  const [secondsRemaining, setSecondsRemaining] = useState(600);
-  const countdownIntervalRef = useRef(null);
-  const lastResetTimeRef = useRef(0);
-  const RESET_COOLDOWN = 5000;
   const { authKey } = useAuth();
 
   // Country options for phone number
@@ -303,43 +256,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
     return false;
   }, [isDateUnderMaintenance]);
 
-  const stopCountdown = useCallback(() => {
-    if (countdownIntervalRef.current) {
-      clearInterval(countdownIntervalRef.current);
-      countdownIntervalRef.current = null;
-    }
-    setCountdownActive(false);
-    setSecondsRemaining(600);
-  }, []);
-
-  const startCountdown = useCallback(() => {
-    stopCountdown();
-
-    setSecondsRemaining(600);
-    setCountdownActive(true);
-
-    countdownIntervalRef.current = setInterval(() => {
-      setSecondsRemaining(prev => {
-        if (prev <= 1) {
-          clearInterval(countdownIntervalRef.current);
-          countdownIntervalRef.current = null;
-          handleAutoClose();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  }, [stopCountdown]);
-
-  const resetCountdown = useCallback(() => {
-    const now = Date.now();
-    if (now - lastResetTimeRef.current > RESET_COOLDOWN) {
-      stopCountdown();
-      startCountdown();
-      lastResetTimeRef.current = now;
-    }
-  }, [startCountdown, stopCountdown]);
-
   const handleAutoClose = useCallback(() => {
     Swal.fire({
       icon: "warning",
@@ -355,13 +271,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
     if (isClosing) return;
 
     setIsClosing(true);
-
-    stopCountdown();
-
-    if (reason === 'backdropClick' && countdownActive) {
-      setIsClosing(false);
-      return;
-    }
 
     setCheckInDate(null);
     setCheckOutDate(null);
@@ -379,7 +288,7 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
     setCapacityError("");
     handleClose();
     setIsClosing(false);
-  }, [stopCountdown, countdownActive, handleClose, isClosing]);
+  }, [handleClose, isClosing]);
 
   const handleCancel = useCallback(() => {
     Swal.fire({
@@ -425,53 +334,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
     });
   }, [dispatch, handleCloseModal]);
 
-  useEffect(() => {
-    return () => {
-      stopCountdown();
-    };
-  }, [stopCountdown]);
-
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      stopCountdown();
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      stopCountdown();
-    };
-  }, [stopCountdown]);
-
-  useEffect(() => {
-    if (open) {
-      setCheckInDate(null);
-      setCheckOutDate(null);
-      setBungalowType("");
-      setAdults(1);
-      setChildren(0);
-      setGuestName("");
-      setAddress("");
-      setCountry("");
-      setPhoneNumber("");
-      setSelectedCountry("US");
-      setPhoneNumberInput("");
-      setEmail("");
-      setRemarks("");
-      setCapacityError("");
-      setLoading(false);
-
-      const timer = setTimeout(() => {
-        startCountdown();
-      }, 100);
-
-      return () => clearTimeout(timer);
-    } else {
-      stopCountdown();
-    }
-  }, [open, startCountdown, stopCountdown]);
-
   const handleBungalowChange = (e) => {
     setBungalowType(e.target.value);
   };
@@ -514,8 +376,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
   }, [bungalowType, adults, children, selectedBungalow]);
 
   const handleBookClick = async () => {
-    stopCountdown();
-
     // Combined validation for all required fields
     const missingFields = [];
     if (!checkInDate) missingFields.push("Check-in Date");
@@ -534,7 +394,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
         text: `Please fill in the following required fields: ${missingFields.join(", ")}.`,
         confirmButtonColor: "#3f51b5",
       });
-      startCountdown();
       return;
     }
 
@@ -547,7 +406,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
         text: "Please enter a valid email address (e.g., user@example.com).",
         confirmButtonColor: "#3f51b5",
       });
-      startCountdown();
       return;
     }
 
@@ -559,7 +417,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
         text: "Check-out date must be after check-in date.",
         confirmButtonColor: "#3f51b5",
       });
-      startCountdown();
       return;
     }
 
@@ -571,7 +428,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
         text: "Check-in date is during maintenance period. Please select another date.",
         confirmButtonColor: "#3f51b5",
       });
-      startCountdown();
       return;
     }
 
@@ -582,7 +438,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
         text: "Check-out date is during maintenance period. Please select another date.",
         confirmButtonColor: "#3f51b5",
       });
-      startCountdown();
       return;
     }
 
@@ -597,7 +452,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
           text: "Selected date range includes maintenance period. Please select different dates.",
           confirmButtonColor: "#3f51b5",
         });
-        startCountdown();
         return;
       }
     }
@@ -610,7 +464,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
         text: capacityError,
         confirmButtonColor: "#3f51b5",
       });
-      startCountdown();
       return;
     }
 
@@ -663,13 +516,9 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
           text: error.message || error.Result || "Booking already exists for this period.",
           confirmButtonColor: "#f44336",
         });
-
-        startCountdown();
       } finally {
         setLoading(false);
       }
-    } else {
-      startCountdown();
     }
   };
 
@@ -726,19 +575,9 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Modal
         open={open}
-        onClose={(event, reason) => {
-          if (
-            countdownActive &&
-            (reason === "backdropClick" || reason === "escapeKeyDown")
-          ) {
-            return;
-          }
-
-          handleCloseModal(event, reason);
-        }}
+        onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        disableEscapeKeyDown={countdownActive}
       >
         <Box sx={style}>
           {/* Header */}
@@ -772,16 +611,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
               <CloseIcon />
             </IconButton>
           </Box>
-
-          {/* Countdown Timer */}
-          {countdownActive && (
-            <Box sx={{ px: 3, pt: 2 }}>
-              <CountdownTimer
-                secondsRemaining={secondsRemaining}
-                totalSeconds={600}
-              />
-            </Box>
-          )}
 
           {/* Maintenance Legend */}
           {/* {maintenanceDates.size > 0 && (
