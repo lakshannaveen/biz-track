@@ -14,6 +14,9 @@ import {
   CircularProgress,
   Alert,
   LinearProgress,
+  FormControl,
+  InputLabel,
+  Select,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -39,6 +42,7 @@ import { useDispatch } from "react-redux";
 import { UpdateResStatus } from "../../action/Reservation";
 import BuildIcon from '@mui/icons-material/Build';
 import BlockIcon from '@mui/icons-material/Block';
+import PhoneInput, { getCountries, getCountryCallingCode } from 'react-phone-number-input';
 
 const style = {
   position: "absolute",
@@ -178,6 +182,8 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
   const [address, setAddress] = useState("");
   const [country, setCountry] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("US");
+  const [phoneNumberInput, setPhoneNumberInput] = useState("");
   const [email, setEmail] = useState("");
   const [remarks, setRemarks] = useState("");
   const [capacityError, setCapacityError] = useState("");
@@ -191,6 +197,21 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
   const lastResetTimeRef = useRef(0);
   const RESET_COOLDOWN = 5000;
   const { authKey } = useAuth();
+
+  // Country options for phone number
+  const countries = getCountries();
+  const countryOptions = countries.map(country => ({
+    value: country,
+    label: `+${getCountryCallingCode(country)} (${country})`,
+    code: getCountryCallingCode(country),
+  }));
+
+  // Update phoneNumber when country or input changes
+  useEffect(() => {
+    const code = getCountryCallingCode(selectedCountry);
+    const fullNumber = phoneNumberInput ? `+${code}${phoneNumberInput}` : "";
+    setPhoneNumber(fullNumber);
+  }, [selectedCountry, phoneNumberInput]);
   
   const addMonths = (date, months) => {
     const d = new Date(date);
@@ -351,6 +372,8 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
     setAddress("");
     setCountry("");
     setPhoneNumber("");
+    setSelectedCountry("US");
+    setPhoneNumberInput("");
     setEmail("");
     setRemarks("");
     setCapacityError("");
@@ -432,6 +455,8 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
       setAddress("");
       setCountry("");
       setPhoneNumber("");
+      setSelectedCountry("US");
+      setPhoneNumberInput("");
       setEmail("");
       setRemarks("");
       setCapacityError("");
@@ -499,7 +524,7 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
     if (!guestName.trim()) missingFields.push("Guest Name");
     if (!address.trim()) missingFields.push("Address");
     if (!country.trim()) missingFields.push("Country");
-    if (!phoneNumber.trim()) missingFields.push("Phone Number");
+    if (!phoneNumberInput.trim()) missingFields.push("Phone Number");
     if (!email.trim()) missingFields.push("Email Address");
 
     if (missingFields.length > 0) {
@@ -507,19 +532,6 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
         icon: "warning",
         title: "Missing Information",
         text: `Please fill in the following required fields: ${missingFields.join(", ")}.`,
-        confirmButtonColor: "#3f51b5",
-      });
-      startCountdown();
-      return;
-    }
-
-    // Validate phone number format (international style)
-    const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-    if (phoneNumber.trim() && !phoneRegex.test(phoneNumber.replace(/[\s\-\(\)]/g, ''))) {
-      Swal.fire({
-        icon: "warning",
-        title: "Invalid Phone Number",
-        text: "Please enter a valid international phone number (e.g., +1234567890).",
         confirmButtonColor: "#3f51b5",
       });
       startCountdown();
@@ -965,36 +977,157 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
                       <PublicIcon sx={{ mr: 1, color: '#1976d2' }} />
                       <Typography variant="body2" sx={{ fontWeight: '500' }}>Country</Typography>
                     </Box>
-                    <TextField
-                      fullWidth
-                      placeholder="Enter country"
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
-                      disabled={loading}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: 2,
+                    <Box sx={{
+                      position: 'relative',
+                      '& .country-dropdown': {
+                        width: '100%',
+                        padding: '16.5px 14px',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                        fontSize: '16px',
+                        backgroundColor: loading ? '#f5f5f5' : 'white',
+                        cursor: loading ? 'not-allowed' : 'pointer',
+                        transition: 'border-color 0.2s',
+                        '&:hover': {
+                          borderColor: '#1976d2',
                         },
-                      }}
-                    />
+                        '&:focus': {
+                          borderColor: '#1976d2',
+                          outline: 'none',
+                          boxShadow: '0 0 0 2px rgba(25, 118, 210, 0.2)',
+                        },
+                      },
+                      '& .country-dropdown option': {
+                        padding: '8px',
+                      },
+                    }}>
+                      <FormControl fullWidth disabled={loading}>
+                        <InputLabel>Country</InputLabel>
+                        <Select
+                          value={country}
+                          onChange={(e) => setCountry(e.target.value)}
+                          label="Country"
+                        >
+                          <MenuItem value="">
+                            <em>Select Country</em>
+                          </MenuItem>
+                          <MenuItem value="Afghanistan">Afghanistan</MenuItem>
+                          <MenuItem value="Albania">Albania</MenuItem>
+                          <MenuItem value="Algeria">Algeria</MenuItem>
+                          <MenuItem value="Argentina">Argentina</MenuItem>
+                          <MenuItem value="Australia">Australia</MenuItem>
+                          <MenuItem value="Austria">Austria</MenuItem>
+                          <MenuItem value="Bangladesh">Bangladesh</MenuItem>
+                          <MenuItem value="Belgium">Belgium</MenuItem>
+                          <MenuItem value="Brazil">Brazil</MenuItem>
+                          <MenuItem value="Canada">Canada</MenuItem>
+                          <MenuItem value="China">China</MenuItem>
+                          <MenuItem value="Colombia">Colombia</MenuItem>
+                          <MenuItem value="Denmark">Denmark</MenuItem>
+                          <MenuItem value="Egypt">Egypt</MenuItem>
+                          <MenuItem value="Finland">Finland</MenuItem>
+                          <MenuItem value="France">France</MenuItem>
+                          <MenuItem value="Germany">Germany</MenuItem>
+                          <MenuItem value="Greece">Greece</MenuItem>
+                          <MenuItem value="India">India</MenuItem>
+                          <MenuItem value="Indonesia">Indonesia</MenuItem>
+                          <MenuItem value="Ireland">Ireland</MenuItem>
+                          <MenuItem value="Italy">Italy</MenuItem>
+                          <MenuItem value="Japan">Japan</MenuItem>
+                          <MenuItem value="Jordan">Jordan</MenuItem>
+                          <MenuItem value="Kenya">Kenya</MenuItem>
+                          <MenuItem value="South Korea">South Korea</MenuItem>
+                          <MenuItem value="Kuwait">Kuwait</MenuItem>
+                          <MenuItem value="Lebanon">Lebanon</MenuItem>
+                          <MenuItem value="Malaysia">Malaysia</MenuItem>
+                          <MenuItem value="Mexico">Mexico</MenuItem>
+                          <MenuItem value="Morocco">Morocco</MenuItem>
+                          <MenuItem value="Netherlands">Netherlands</MenuItem>
+                          <MenuItem value="New Zealand">New Zealand</MenuItem>
+                          <MenuItem value="Norway">Norway</MenuItem>
+                          <MenuItem value="Oman">Oman</MenuItem>
+                          <MenuItem value="Pakistan">Pakistan</MenuItem>
+                          <MenuItem value="Peru">Peru</MenuItem>
+                          <MenuItem value="Philippines">Philippines</MenuItem>
+                          <MenuItem value="Poland">Poland</MenuItem>
+                          <MenuItem value="Portugal">Portugal</MenuItem>
+                          <MenuItem value="Qatar">Qatar</MenuItem>
+                          <MenuItem value="Romania">Romania</MenuItem>
+                          <MenuItem value="Russia">Russia</MenuItem>
+                          <MenuItem value="Saudi Arabia">Saudi Arabia</MenuItem>
+                          <MenuItem value="Singapore">Singapore</MenuItem>
+                          <MenuItem value="South Africa">South Africa</MenuItem>
+                          <MenuItem value="Spain">Spain</MenuItem>
+                          <MenuItem value="Sweden">Sweden</MenuItem>
+                          <MenuItem value="Switzerland">Switzerland</MenuItem>
+                          <MenuItem value="Thailand">Thailand</MenuItem>
+                          <MenuItem value="Turkey">Turkey</MenuItem>
+                          <MenuItem value="Ukraine">Ukraine</MenuItem>
+                          <MenuItem value="United Arab Emirates">United Arab Emirates</MenuItem>
+                          <MenuItem value="United Kingdom">United Kingdom</MenuItem>
+                          <MenuItem value="United States">United States</MenuItem>
+                          <MenuItem value="Vietnam">Vietnam</MenuItem>
+                          <MenuItem value="Other">Other</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                       <PhoneIcon sx={{ mr: 1, color: '#1976d2' }} />
                       <Typography variant="body2" sx={{ fontWeight: '500' }}>Phone</Typography>
                     </Box>
-                    <TextField
-                      fullWidth
-                      placeholder="Enter phone number (e.g., +1234567890)"
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      disabled={loading}
-                      sx={{
-                        "& .MuiOutlinedInput-root": {
-                          borderRadius: 2,
-                        },
-                      }}
-                    />
+                    <Box sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      backgroundColor: loading ? '#f5f5f5' : 'white',
+                      transition: 'border-color 0.2s',
+                      '&:hover': {
+                        borderColor: '#1976d2',
+                      },
+                      '&:focus-within': {
+                        borderColor: '#1976d2',
+                        boxShadow: '0 0 0 2px rgba(25, 118, 210, 0.2)',
+                      },
+                    }}>
+                      <FormControl size="small" sx={{ minWidth: 140, '& .MuiOutlinedInput-root': { '& fieldset': { border: 'none' } } }}>
+                        <Select
+                          value={selectedCountry}
+                          onChange={(e) => setSelectedCountry(e.target.value)}
+                          disabled={loading}
+                          sx={{
+                            fontSize: '14px',
+                            '& .MuiSelect-select': {
+                              padding: '16.5px 14px',
+                            },
+                          }}
+                        >
+                          {countryOptions.map(option => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                      <Divider orientation="vertical" flexItem sx={{ height: '60%', mx: 1 }} />
+                      <TextField
+                        fullWidth
+                        placeholder="Phone number"
+                        value={phoneNumberInput}
+                        onChange={(e) => setPhoneNumberInput(e.target.value)}
+                        disabled={loading}
+                        sx={{
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': { border: 'none' },
+                            '& .MuiOutlinedInput-input': {
+                              padding: '16.5px 14px',
+                            },
+                          },
+                        }}
+                      />
+                    </Box>
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
