@@ -35,7 +35,7 @@ import HistoryModal from "../../components/Utility/Reservations/HistoryModal";
 import MaintenanceModal from "../../components/Utility/Reservations/MaintainModal";
 import CloseModal from "../../../src/layouts/reservations/CloseModal";
 import SpecialModal from "../../../src/layouts/reservations/SpecialGuest";
-import { GetLoadResDetails, GetPriorityListByDate, PostResvationLog, UpdateResStatus } from "../../action/Reservation";
+import { GetLoadResDetails, GetPriorityListByDate, /* PostResvationLog, */ UpdateResStatus } from "../../action/Reservation";
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import PrintIcon from '@mui/icons-material/Print';
@@ -523,6 +523,7 @@ const Reservations = () => {
         return getGradeFromRemarks(reservation.Res_Remarks);
     };
 
+    /*
     const handleReserveClick = async () => {
         setReserveLoading(true);
         try {
@@ -565,6 +566,7 @@ const Reservations = () => {
             setReserveLoading(false);
         }
     };
+    */
 
     const handleFeedbackClick = () => {
         setFeedbackModalOpen(true);
