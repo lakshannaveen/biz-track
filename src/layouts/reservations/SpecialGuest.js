@@ -20,6 +20,8 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import HomeIcon from "@mui/icons-material/Home";
 import PublicIcon from "@mui/icons-material/Public";
 import PersonIcon from "@mui/icons-material/Person";
+import PhoneIcon from "@mui/icons-material/Phone";
+import EmailIcon from "@mui/icons-material/Email";
 import NoteIcon from "@mui/icons-material/Note";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import FamilyRestroomIcon from "@mui/icons-material/FamilyRestroom";
@@ -175,6 +177,8 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
   const [guestName, setGuestName] = useState("");
   const [address, setAddress] = useState("");
   const [country, setCountry] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [remarks, setRemarks] = useState("");
   const [capacityError, setCapacityError] = useState("");
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
@@ -346,6 +350,8 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
     setGuestName("");
     setAddress("");
     setCountry("");
+    setPhoneNumber("");
+    setEmail("");
     setRemarks("");
     setCapacityError("");
     handleClose();
@@ -425,6 +431,8 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
       setGuestName("");
       setAddress("");
       setCountry("");
+      setPhoneNumber("");
+      setEmail("");
       setRemarks("");
       setCapacityError("");
       setLoading(false);
@@ -483,19 +491,55 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
   const handleBookClick = async () => {
     stopCountdown();
 
-     
-    if (!checkInDate || !checkOutDate || !bungalowType) {
+    // Combined validation for all required fields
+    const missingFields = [];
+    if (!checkInDate) missingFields.push("Check-in Date");
+    if (!checkOutDate) missingFields.push("Check-out Date");
+    if (!bungalowType) missingFields.push("Bungalow Type");
+    if (!guestName.trim()) missingFields.push("Guest Name");
+    if (!address.trim()) missingFields.push("Address");
+    if (!country.trim()) missingFields.push("Country");
+    if (!phoneNumber.trim()) missingFields.push("Phone Number");
+    if (!email.trim()) missingFields.push("Email Address");
+
+    if (missingFields.length > 0) {
       Swal.fire({
         icon: "warning",
-        title: "Oops...",
-        text: "Please select Check-in Date, Check-out Date and Bungalow Type.",
+        title: "Missing Information",
+        text: `Please fill in the following required fields: ${missingFields.join(", ")}.`,
         confirmButtonColor: "#3f51b5",
       });
       startCountdown();
       return;
     }
 
-    
+    // Validate phone number format (international style)
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+    if (phoneNumber.trim() && !phoneRegex.test(phoneNumber.replace(/[\s\-\(\)]/g, ''))) {
+      Swal.fire({
+        icon: "warning",
+        title: "Invalid Phone Number",
+        text: "Please enter a valid international phone number (e.g., +1234567890).",
+        confirmButtonColor: "#3f51b5",
+      });
+      startCountdown();
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email.trim() && !emailRegex.test(email)) {
+      Swal.fire({
+        icon: "warning",
+        title: "Invalid Email Address",
+        text: "Please enter a valid email address (e.g., user@example.com).",
+        confirmButtonColor: "#3f51b5",
+      });
+      startCountdown();
+      return;
+    }
+
+    // Validate date order
     if (checkInDate >= checkOutDate) {
       Swal.fire({
         icon: "warning",
@@ -578,7 +622,7 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
         const logId = localStorage.getItem("logId");
 
         const response = await axios.post(
-          `Reservation/PostBooking?P_BUNGALOW_ID=${bungalowType}&P_CHECK_IN=${formattedCheckIn}&P_CHECK_OUT=${formattedCheckOut}&P_ADULT_COUNT=${adults}&P_CHILD_COUNT=${children}&P_GUEST_NAME=${encodeURIComponent(guestName)}&P_ADDRESS=${encodeURIComponent(address)}&P_COUNTRY=${encodeURIComponent(country)}&P_LOG_ID=${logId}&P_SERIAL_NO=${sno}`,
+          `Reservation/PostBooking?P_BUNGALOW_ID=${bungalowType}&P_CHECK_IN=${formattedCheckIn}&P_CHECK_OUT=${formattedCheckOut}&P_ADULT_COUNT=${adults}&P_CHILD_COUNT=${children}&P_GUEST_NAME=${encodeURIComponent(guestName)}&P_ADDRESS=${encodeURIComponent(address)}&P_COUNTRY=${encodeURIComponent(country)}&P_PHONE_NUMBER=${encodeURIComponent(phoneNumber)}&P_EMAIL=${encodeURIComponent(email)}&P_LOG_ID=${logId}&P_SERIAL_NO=${sno}`,
           {},
           {
             headers: {
@@ -880,7 +924,7 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
 
                 {/* Additional Guest Details */}
                 <Grid container spacing={2} sx={{ mt: 1 }}>
-                  <Grid item xs={12} sm={4}>
+                  <Grid item xs={12} sm={6} md={3}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                       <PersonIcon sx={{ mr: 1, color: '#1976d2' }} />
                       <Typography variant="body2" sx={{ fontWeight: '500' }}>Name</Typography>
@@ -898,7 +942,7 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={4}>
+                  <Grid item xs={12} sm={6} md={3}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                       <HomeIcon sx={{ mr: 1, color: '#1976d2' }} />
                       <Typography variant="body2" sx={{ fontWeight: '500' }}>Address</Typography>
@@ -916,7 +960,7 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={4}>
+                  <Grid item xs={12} sm={6} md={3}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                       <PublicIcon sx={{ mr: 1, color: '#1976d2' }} />
                       <Typography variant="body2" sx={{ fontWeight: '500' }}>Country</Typography>
@@ -926,6 +970,42 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
                       placeholder="Enter country"
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
+                      disabled={loading}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: 2,
+                        },
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={3}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                      <PhoneIcon sx={{ mr: 1, color: '#1976d2' }} />
+                      <Typography variant="body2" sx={{ fontWeight: '500' }}>Phone</Typography>
+                    </Box>
+                    <TextField
+                      fullWidth
+                      placeholder="Enter phone number (e.g., +1234567890)"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      disabled={loading}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: 2,
+                        },
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={3}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                      <EmailIcon sx={{ mr: 1, color: '#1976d2' }} />
+                      <Typography variant="body2" sx={{ fontWeight: '500' }}>Email</Typography>
+                    </Box>
+                    <TextField
+                      fullWidth
+                      placeholder="Enter email address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       disabled={loading}
                       sx={{
                         "& .MuiOutlinedInput-root": {
