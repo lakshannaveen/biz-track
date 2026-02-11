@@ -802,7 +802,7 @@ const FeedbackModal = ({ open, handleClose, reservation }) => {
           }}
         >
           <CardContent>
-            <Typography variant="h6" fontWeight="600" gutterBottom>
+            {/* <Typography variant="h6" fontWeight="600" gutterBottom>
               Reservation Details
             </Typography>
             <Stack
@@ -868,7 +868,68 @@ const FeedbackModal = ({ open, handleClose, reservation }) => {
                   },
                 }}
               />
-            </Stack>
+            </Stack> */}
+
+           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <Avatar sx={{ bgcolor: "warning.light", width: 36, height: 36 }}>
+                  <BuildIcon fontSize="small" />
+                </Avatar>
+                <Box>
+                  <Typography variant="h6" fontWeight="600">
+                    Maintenance Report
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Report any issues you encountered
+                  </Typography>
+                </Box>
+              </Box>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={showMaintenanceFields}
+                    onChange={(e) => setShowMaintenanceFields(e.target.checked)}
+                    color="warning"
+                  />
+                }
+                label={showMaintenanceFields ? "Enabled" : "Enable"}
+              />
+            </Box>
+
+            {showMaintenanceFields && (
+              <Box
+                sx={{
+                  mt: 2,
+                  p: 3,
+                  borderRadius: "12px",
+                  backgroundColor: "warning.light",
+                  background: `linear-gradient(135deg, ${theme.palette.warning.light}15, ${theme.palette.warning.light}30)`,
+                  border: "1px solid",
+                  borderColor: "warning.light",
+                }}
+              >
+                <TextField
+                  fullWidth
+                  label="Describe the issue..."
+                  variant="outlined"
+                  multiline
+                  rows={3}
+                  value={maintenanceReport}
+                  onChange={(e) => setMaintenanceReport(e.target.value)}
+                  required={showMaintenanceFields}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "8px",
+                      backgroundColor: "background.paper",
+                    },
+                  }}
+                />
+                <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
+                  Our team will address this promptly
+                </Typography>
+              </Box>
+            )}
+
           </CardContent>
         </Card>
 
@@ -985,7 +1046,7 @@ const FeedbackModal = ({ open, handleClose, reservation }) => {
         </Card>
 
         {/* Maintenance Section */}
-        <Card 
+        {/* <Card 
           sx={{ 
             mb: 4, 
             borderRadius: "16px",
@@ -1056,7 +1117,7 @@ const FeedbackModal = ({ open, handleClose, reservation }) => {
               </Box>
             )}
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Progress Bar when submitting */}
         {isSubmitting && (

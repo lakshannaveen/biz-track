@@ -20,7 +20,7 @@ export const AuthContextProvider = ({ children }) => {
   const dispatch = useDispatch();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
-  let authKey = localStorage.getItem("token");
+  let authKey = JSON.parse(localStorage.getItem("token"));
   const { isLoggedIn } = useSelector((state) => state.auth);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     if (authKey) {

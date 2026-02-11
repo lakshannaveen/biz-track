@@ -33,7 +33,67 @@ export const caregiverTranslations = {
     processing: "Processing...",
     na: "N/A",
     mainBungalow: "Main Bungalow",
-    lowerGardenSuite: "Lower Garden Suite Bungalow"
+    lowerGardenSuite: "Lower Garden Suite Bungalow",
+
+
+    // new
+    pageTitle: "Bungalow Caretaker Portal",
+    pageSubtitle: "Manage bungalow check-in and checkout operations",
+    refresh: "Refresh",
+    cardView: "Card View",
+    listView: "List View",
+    back: "Back",
+    checkIn: "Check In",
+    checkOut: "Check Out",
+    viewFeedback: "View Feedback",
+    feedback: "Feedback",
+    allBungalows: "All Bungalows",
+    mainBungalowShort: "Main",
+    lowerGardenSuiteShort: "Lower Garden Suite",
+    tableBungalow: "Bungalow",
+    tableStatus: "Status",
+    tableGuest: "Guest",
+    tableGuestCount: "Guest Count",
+    tableCheckInOut: "Check-In/Out",
+    tableActions: "Actions",
+    cardReservation: "Reservation",
+    cardGuest: "Guest",
+    cardCheckIn: "Check-In",
+    cardCheckOut: "Check-Out",
+    loadingData: "Loading bungalow data...",
+    noResultsFound: "No Results Found",
+    noBungalowsMatch: "No bungalows match your search criteria. Try adjusting your search terms.",
+    noPendingReservations: "No pending reservations found.",
+    noBungalowReservations: "No bungalow reservations found.",
+    overCapacity: "Over Capacity!",
+
+
+    confirmed: "Confirmed",
+    checkedIn: "Checked In",
+    checkedOut: "Checked Out",
+    pending: "Pending",
+    maintenanceNeeded: "Maintenance Needed",
+
+    // Feedback Dialog Translations
+    badCondition: "Bad",
+    agreed: "Agreed",
+    guestFeedback: "Guest Feedback",
+    caregiverResponse: "Caregiver Response",
+    noGuestFeedback: "No guest feedback provided",
+    noCaregiverResponse: "No caregiver response yet",
+    guestFeedbackTitle: "Guest Feedback",
+    reservation: "Reservation",
+    loadingFeedback: "Loading feedback details...",
+    errorLoading: "Error Loading Feedback",
+    totalFeedbackEntries: "Total Feedback Entries",
+    reviewExperience: "Review guest experience and responses",
+    checkOutGuest: "Check Out Guest",
+    noFeedbackAvailable: "No Feedback Available",
+    noFeedbackDescription: "There are currently no feedback entries for this reservation.",
+    close: "Close",
+    feedback: "Feedback",
+    viewfeadback: "View Feedback",
+
   },
   si: {
     reservationDetails: "වෙන්කිරීම් විස්තර",
@@ -65,7 +125,65 @@ export const caregiverTranslations = {
     processing: "සැකසෙමින්...",
     na: "නැත",
     mainBungalow: "ප්‍රධාන බංගලාව",
-    lowerGardenSuite: "පහළ ගෙවතු කාමර බංගලාව"
+    lowerGardenSuite: "පහළ ගෙවතු කාමර බංගලාව",
+
+    // new 
+
+    pageTitle: "බංගලාවේ රැකවරණ නිලධාරී ද්වාරය",
+    pageSubtitle: "බංගලා ඇතුල්වීම් සහ පිටවීම් කටයුතු කළමනාකරණය කරන්න",
+    refresh: "යාවත්කාලීන කරන්න",
+    cardView: "කාඩ් දර්ශනය",
+    listView: "ලැයිස්තු දර්ශනය",
+    back: "ආපසු",
+    checkIn: "ඇතුල්වීම",
+    checkOut: "පිටවීම",
+    viewFeedback: "ප්‍රතිපෝෂණ බලන්න",
+    feedback: "ප්‍රතිපෝෂණය",
+    allBungalows: "සියළු බංගලා",
+    mainBungalowShort: "ප්‍රධාන",
+    lowerGardenSuiteShort: "පහළ ගෙවතු කාමර",
+    tableBungalow: "බංගලාව",
+    tableStatus: "තත්වය",
+    tableGuest: "අමුත්තා",
+    tableGuestCount: "අමුත්තන්ගේ ගණන",
+    tableCheckInOut: "ඇතුල්වීම/පිටවීම",
+    tableActions: "ක්‍රියා",
+    cardReservation: "වෙන්කිරීම",
+    cardGuest: "අමුත්තා",
+    cardCheckIn: "ඇතුල්වීම",
+    cardCheckOut: "පිටවීම",
+    loadingData: "බංගලා දත්ත පූරණය වෙමින්...",
+    noResultsFound: "ප්‍රතිපල හමු නොවීය",
+    noBungalowsMatch: "ඔබගේ සෙවුම් නිර්ණායක සමඟ ගැලපෙන බංගලා හමු නොවීය. ඔබගේ සෙවුම් නිර්ණායක සකස් කරන්න.",
+    noPendingReservations: "පොරොත්තුවෙන් ඉතිරිව ඇති වෙන්කිරීම් හමු නොවීය.",
+    noBungalowReservations: "බංගලා වෙන්කිරීම් හමු නොවීය.",
+    overCapacity: "ධාරිතාව ඉක්මවා ඇත!",
+
+
+    confirmed: "තහවුරු කරන ලදී",
+    checkedIn: "ඇතුල් වී ඇත",
+    checkedOut: "පිටවී ඇත",
+    pending: "පොරොත්තුවෙන්",
+    maintenanceNeeded: "නඩත්තුව අවශ්‍යයි",
+
+    badCondition: "නරක",
+    agreed: "එකඟ",
+    guestFeedback: "අමුත්තාගේ ප්‍රතිපෝෂණය",
+    caregiverResponse: "රැකවරණ නිලධාරියාගේ ප්‍රතිචාරය",
+    noGuestFeedback: "අමුත්තාගේ ප්‍රතිපෝෂණයක් සපයා නොමැත",
+    noCaregiverResponse: "රැකවරණ නිලධාරියාගේ ප්‍රතිචාරයක් තවම නොමැත",
+    guestFeedbackTitle: "අමුත්තාගේ ප්‍රතිපෝෂණය",
+    reservation: "වෙන්කිරීම",
+    loadingFeedback: "ප්‍රතිපෝෂණ විස්තර පූරණය වෙමින්...",
+    errorLoading: "ප්‍රතිපෝෂණ පූරණය කිරීමේ දෝෂයකි",
+    totalFeedbackEntries: "මුළු ප්‍රතිපෝෂණ ඇතුලත් කිරීම්",
+    reviewExperience: "අමුත්තාගේ අත්දැකීම් සහ ප්‍රතිචාර සමාලෝචනය කරන්න",
+    checkOutGuest: "අමුත්තා පිටවීම",
+    noFeedbackAvailable: "ප්‍රතිපෝෂණ නැත",
+    noFeedbackDescription: "මෙම වෙන්කිරීම සඳහා දැනට ප්‍රතිපෝෂණ ඇතුලත් කිරීම් නොමැත.",
+    close: "වසන්න",
+    feedback: "ප්‍රතිපෝෂණය",
+    viewfeadback: "ප්‍රතිපෝෂණය බලන්න",
   },
   ta: {
     reservationDetails: "முன்பதிவு விவரங்கள்",
@@ -97,7 +215,64 @@ export const caregiverTranslations = {
     processing: "செயல்படுத்துகிறது...",
     na: "இல்லை",
     mainBungalow: "முக்கிய பங்களா",
-    lowerGardenSuite: "கீழ் தோட்டம் சூட் பங்களா"
+    lowerGardenSuite: "கீழ் தோட்டம் சூட் பங்களா",
+
+    //new 
+    pageTitle: "பங்களா காப்பாளர் நுழைவாயில்",
+    pageSubtitle: "பங்களா சேர்க்கை மற்றும் வெளியேறல் நடவடிக்கைகளை நிர்வகிக்கவும்",
+    refresh: "புதுப்பிக்கவும்",
+    cardView: "அட்டை காட்சி",
+    listView: "பட்டியல் காட்சி",
+    back: "பின் செல்ல",
+    checkIn: "சேர்க்கை",
+    checkOut: "வெளியேறுதல்",
+    viewFeedback: "கருத்துகளைக் காண்க",
+    feedback: "கருத்து",
+    allBungalows: "அனைத்து பங்களாக்கள்",
+    mainBungalowShort: "முக்கிய",
+    lowerGardenSuiteShort: "கீழ் தோட்டம் சூட்",
+    tableBungalow: "பங்களா",
+    tableStatus: "நிலை",
+    tableGuest: "விருந்தினர்",
+    tableGuestCount: "விருந்தினர் எண்ணிக்கை",
+    tableCheckInOut: "சேர்க்கை/வெளியேறுதல்",
+    tableActions: "செயல்கள்",
+    cardReservation: "முன்பதிவு",
+    cardGuest: "விருந்தினர்",
+    cardCheckIn: "சேர்க்கை",
+    cardCheckOut: "வெளியேறுதல்",
+    loadingData: "பங்களா தரவு ஏற்றப்படுகிறது...",
+    noResultsFound: "முடிவுகள் எதுவும் கிடைக்கவில்லை",
+    noBungalowsMatch: "உங்கள் தேடல் அளவுகோல்களுடன் பொருந்தக்கூடிய பங்களாக்கள் இல்லை. உங்கள் தேடல் விதிமுறைகளை சரிசெய்ய முயற்சிக்கவும்.",
+    noPendingReservations: "நிலுவையில் உள்ள முன்பதிவுகள் எதுவும் கிடைக்கவில்லை.",
+    noBungalowReservations: "பங்களா முன்பதிவுகள் எதுவும் கிடைக்கவில்லை.",
+    overCapacity: "திறன் மீறியது!",
+
+    // Status translations
+    confirmed: "உறுதிப்படுத்தப்பட்டது",
+    checkedIn: "சேர்ந்துவிட்டது",
+    checkedOut: "வெளியேறியது",
+    pending: "நிலுவையில்",
+    maintenanceNeeded: "பராமரிப்பு தேவை",
+
+    badCondition: "மோசமான",
+    agreed: "ஏற்றுக்கொள்ளப்பட்டது",
+    guestFeedback: "விருந்தினர் கருத்து",
+    caregiverResponse: "காப்பாளர் பதில்",
+    noGuestFeedback: "விருந்தினர் கருத்து வழங்கப்படவில்லை",
+    noCaregiverResponse: "காப்பாளர் பதில் இன்னும் இல்லை",
+    guestFeedbackTitle: "விருந்தினர் கருத்து",
+    reservation: "முன்பதிவு",
+    loadingFeedback: "கருத்து விவரங்கள் ஏற்றப்படுகின்றன...",
+    errorLoading: "கருத்தை ஏற்றுவதில் பிழை",
+    totalFeedbackEntries: "மொத்த கருத்து உள்ளீடுகள்",
+    reviewExperience: "விருந்தினர் அனுபவம் மற்றும் பதில்களை மதிப்பாய்வு செய்க",
+    checkOutGuest: "விருந்தினர் வெளியேறுதல்",
+    noFeedbackAvailable: "கருத்து இல்லை",
+    noFeedbackDescription: "இந்த முன்பதிவிற்கு தற்போது கருத்து உள்ளீடுகள் இல்லை.",
+    close: "மூடு",
+    feedback: "கருத்து",
+    viewfeadback: "கருத்துக்களைப் பார்க்கவும்",
   },
   hi: {
     reservationDetails: "आरक्षण विवरण",
@@ -129,7 +304,67 @@ export const caregiverTranslations = {
     processing: "प्रक्रिया कर रहा है...",
     na: "नहीं",
     mainBungalow: "मुख्य बंगला",
-    lowerGardenSuite: "लोअर गार्डन सूट बंगला"
+    lowerGardenSuite: "लोअर गार्डन सूट बंगला",
+
+    // new
+
+    pageTitle: "बंगला केयरटेकर पोर्टल",
+    pageSubtitle: "बंगला चेक-इन और चेक-आउट संचालन प्रबंधित करें",
+    refresh: "ताज़ा करें",
+    cardView: "कार्ड दृश्य",
+    listView: "सूची दृश्य",
+    back: "वापस",
+    checkIn: "चेक-इन",
+    checkOut: "चेक-आउट",
+    viewFeedback: "प्रतिक्रिया देखें",
+    feedback: "प्रतिक्रिया",
+    allBungalows: "सभी बंगले",
+    mainBungalowShort: "मुख्य",
+    lowerGardenSuiteShort: "लोअर गार्डन सूट",
+    tableBungalow: "बंगला",
+    tableStatus: "स्थिति",
+    tableGuest: "अतिथि",
+    tableGuestCount: "अतिथि गणना",
+    tableCheckInOut: "चेक-इन/आउट",
+    tableActions: "कार्य",
+    cardReservation: "आरक्षण",
+    cardGuest: "अतिथि",
+    cardCheckIn: "चेक-इन",
+    cardCheckOut: "चेक-आउट",
+    loadingData: "बंगला डेटा लोड हो रहा है...",
+    noResultsFound: "कोई परिणाम नहीं मिला",
+    noBungalowsMatch: "आपकी खोज मापदंडों से मेल खाने वाला कोई बंगला नहीं मिला। अपनी खोज शर्तों को समायोजित करने का प्रयास करें।",
+    noPendingReservations: "कोई लंबित आरक्षण नहीं मिला।",
+    noBungalowReservations: "कोई बंगला आरक्षण नहीं मिला।",
+    overCapacity: "क्षमता से अधिक!",
+
+
+
+    // Status translations
+    confirmed: "पुष्टि की गई",
+    checkedIn: "चेक-इन किया गया",
+    checkedOut: "चेक-आउट किया गया",
+    pending: "लंबित",
+    maintenanceNeeded: "रखरखाव आवश्यक",
+
+    badCondition: "खराब",
+    agreed: "सहमत",
+    guestFeedback: "अतिथि प्रतिक्रिया",
+    caregiverResponse: "कर्ता प्रतिक्रिया",
+    noGuestFeedback: "कोई अतिथि प्रतिक्रिया प्रदान नहीं की गई",
+    noCaregiverResponse: "अभी तक कोई करता प्रतिक्रिया नहीं",
+    guestFeedbackTitle: "अतिथि प्रतिक्रिया",
+    reservation: "आरक्षण",
+    loadingFeedback: "प्रतिक्रिया विवरण लोड हो रहा है...",
+    errorLoading: "प्रतिक्रिया लोड करने में त्रुटि",
+    totalFeedbackEntries: "कुल प्रतिक्रिया प्रविष्टियाँ",
+    reviewExperience: "अतिथि अनुभव और प्रतिक्रियाओं की समीक्षा करें",
+    checkOutGuest: "अतिथि चेक-आउट",
+    noFeedbackAvailable: "कोई प्रतिक्रिया उपलब्ध नहीं",
+    noFeedbackDescription: "इस आरक्षण के लिए वर्तमान में कोई प्रतिक्रिया प्रविष्टियाँ नहीं हैं।",
+    close: "बंद करें",
+    feedback: "प्रतिक्रिया",
+    viewfeadback: "प्रतिक्रिया देखें",
   }
 };
 
@@ -184,7 +419,7 @@ export const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
           </Box>
         </IconButton>
       </Box>
-      
+
       <Menu
         anchorEl={anchorEl}
         open={open}
@@ -228,7 +463,7 @@ export const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
               </Box>
             )}
           </MenuItem>
-        ))} 
+        ))}
       </Menu>
     </Box>
   );
@@ -259,7 +494,7 @@ export const SimpleLanguageSelector = ({ currentLanguage, onLanguageChange }) =>
             color={currentLanguage === lang.code ? 'primary' : 'default'}
             variant={currentLanguage === lang.code ? 'filled' : 'outlined'}
             size="medium"
-            sx={{ 
+            sx={{
               cursor: 'pointer',
               minWidth: 100,
               justifyContent: 'center'
@@ -306,7 +541,7 @@ export const ButtonLanguageSelector = ({ currentLanguage, onLanguageChange }) =>
         variant="outlined"
         sx={{ cursor: 'pointer', mb: 2 }}
       />
-      
+
       <Menu
         anchorEl={anchorEl}
         open={open}

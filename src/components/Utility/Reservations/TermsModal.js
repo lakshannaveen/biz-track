@@ -103,7 +103,7 @@ const TermsModal = ({ open, handleClose }) => {
         </Header>
 
         <Content>
-          {/* <Section>
+          <Section>
             <SectionTitle variant="subtitle1">
               Bungalow Reservation
             </SectionTitle>
@@ -158,13 +158,13 @@ const TermsModal = ({ open, handleClose }) => {
                 arrival date and time and departure date and time.
               </p>
             </Typography>
-          </Section> */}
+          </Section>
 
 
           <Section>
-  <SectionTitle variant="subtitle1">
+  {/* <SectionTitle variant="subtitle1">
     General Guidelines & Rules
-  </SectionTitle>
+  </SectionTitle> */}
 
   <Typography variant="body1" color="text.secondary">
     <b>Before Planning Your Visit</b>

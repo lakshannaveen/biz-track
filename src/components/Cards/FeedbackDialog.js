@@ -41,49 +41,58 @@ const bungalowTypeMap = {
   "2": "Family Bungalow",
 };
 
-const FeedbackDialog = ({ 
-  open, 
-  onClose, 
-  reservationNo, 
-  data, 
-  feedbackData, 
-  feedbackLoadingById, 
-  feedbackErrorById, 
+const FeedbackDialog = ({
+  open,
+  onClose,
+  reservationNo,
+  data,
+  feedbackData,
+  feedbackLoadingById,
+  feedbackErrorById,
   onCheckout,
   isMobile,
-  theme 
+  theme,
+  language,
+  t
 }) => {
   const muiTheme = useTheme();
   const isSmallMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
-  
+
   const reservation = data?.find(item => item.Res_no === reservationNo);
-  
+
   const canUpdateStatus = (reservation) => {
     const disallowedStatuses = ["Check Out", "O", "Completed", "Closed"];
     return !disallowedStatuses.includes(reservation.Res_CheckStatus);
   };
-  
+
   const canCheckout = reservation && canUpdateStatus(reservation);
+
+  // Helper function to get bungalow name
+  const getBungalowName = (bungalowId) => {
+    if (bungalowId === "1") return t('mainBungalow');
+    if (bungalowId === "2") return t('lowerGardenSuite');
+    return `${t('bungalow')} ${bungalowId}`;
+  };
 
   const getStatusConfig = (status) => {
     switch (status) {
       case 'B':
         return {
-          label: 'Bad',
+          label: t('badCondition'),
           color: 'error',
           icon: <ThumbDownIcon sx={{ fontSize: isMobile ? 14 : 16 }} />,
           bgColor: '#ffebee'
         };
       case 'A':
         return {
-          label: 'Agree',
+          label: t('agreed'),
           color: 'success',
           icon: <ThumbUpIcon sx={{ fontSize: isMobile ? 14 : 16 }} />,
           bgColor: '#e8f5e8'
         };
       default:
         return {
-          label: 'Pending',
+          label: t('pending'),
           color: 'default',
           icon: <InfoIcon sx={{ fontSize: isMobile ? 14 : 16 }} />,
           bgColor: '#f5f5f5'
@@ -93,12 +102,12 @@ const FeedbackDialog = ({
 
   const FeedbackCard = ({ feedback, index }) => {
     const statusConfig = getStatusConfig(feedback.Feed_CareTStatus);
-    
+
     return (
       <Fade in={true} timeout={300 * (index + 1)}>
-        <Card 
-          sx={{ 
-            mb: isMobile ? 1.5 : 2, 
+        <Card
+          sx={{
+            mb: isMobile ? 1.5 : 2,
             borderRadius: isMobile ? 2 : 3,
             boxShadow: isMobile ? '0 1px 6px rgba(0,0,0,0.06)' : '0 2px 12px rgba(0,0,0,0.08)',
             border: '1px solid #f0f0f0',
@@ -111,19 +120,19 @@ const FeedbackDialog = ({
         >
           <CardContent sx={{ p: isMobile ? 2 : 3 }}>
             {/* Header */}
-            <Box sx={{ 
-              display: 'flex', 
+            <Box sx={{
+              display: 'flex',
               flexDirection: isSmallMobile ? 'column' : 'row',
-              justifyContent: 'space-between', 
-              alignItems: isSmallMobile ? 'flex-start' : 'center', 
+              justifyContent: 'space-between',
+              alignItems: isSmallMobile ? 'flex-start' : 'center',
               mb: 2,
               gap: isSmallMobile ? 1 : 0
             }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <Avatar 
-                  sx={{ 
-                    bgcolor: theme.palette.primary.main, 
-                    width: isMobile ? 28 : 32, 
+                <Avatar
+                  sx={{
+                    bgcolor: theme.palette.primary.main,
+                    width: isMobile ? 28 : 32,
                     height: isMobile ? 28 : 32,
                     fontSize: isMobile ? '0.75rem' : '0.875rem'
                   }}
@@ -131,27 +140,27 @@ const FeedbackDialog = ({
                   #{feedback.Feed_Id}
                 </Avatar>
                 <Box>
-                  <Typography variant="h6" sx={{ 
-                    fontWeight: 600, 
-                    fontSize: isMobile ? '1rem' : '1.1rem' 
+                  <Typography variant="h6" sx={{
+                    fontWeight: 600,
+                    fontSize: isMobile ? '1rem' : '1.1rem'
                   }}>
-                    Feedback #{feedback.Feed_Id}
+                    {t('feedback')} #{feedback.Feed_Id}
                   </Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.5 }}>
                     <HomeIcon sx={{ fontSize: isMobile ? 14 : 16, color: 'text.secondary' }} />
                     <Typography variant="body2" color="text.secondary" sx={{ fontSize: isMobile ? '0.75rem' : '0.875rem' }}>
-                      {bungalowTypeMap[feedback.Feed_Banglowid] || `Bungalow ${feedback.Feed_Banglowid}`}
+                      {getBungalowName(feedback.Feed_Banglowid)}
                     </Typography>
                   </Box>
                 </Box>
               </Box>
-              
+
               <Chip
                 icon={statusConfig.icon}
                 label={statusConfig.label}
                 color={statusConfig.color}
                 size={isMobile ? "small" : "medium"}
-                sx={{ 
+                sx={{
                   fontWeight: 500,
                   px: 1,
                   mt: isSmallMobile ? 0.5 : 0,
@@ -170,25 +179,25 @@ const FeedbackDialog = ({
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <PersonIcon sx={{ fontSize: isMobile ? 16 : 18, color: theme.palette.primary.main }} />
-                  <Typography variant="subtitle2" sx={{ 
-                    fontWeight: 600, 
+                  <Typography variant="subtitle2" sx={{
+                    fontWeight: 600,
                     color: theme.palette.primary.main,
                     fontSize: isMobile ? '0.875rem' : '1rem'
                   }}>
-                    Guest Feedback
+                    {t('guestFeedback')}
                   </Typography>
                 </Box>
-                <Box sx={{ 
-                  bgcolor: '#f8f9fa', 
-                  borderRadius: isMobile ? 1.5 : 2, 
+                <Box sx={{
+                  bgcolor: '#f8f9fa',
+                  borderRadius: isMobile ? 1.5 : 2,
                   p: isMobile ? 1.5 : 2,
                   borderLeft: `4px solid ${theme.palette.primary.main}`
                 }}>
-                  <Typography variant="body2" sx={{ 
+                  <Typography variant="body2" sx={{
                     lineHeight: 1.6,
                     fontSize: isMobile ? '0.875rem' : '1rem'
                   }}>
-                    {feedback.Feed_EmpComm || 'No guest feedback provided'}
+                    {feedback.Feed_EmpComm || t('noGuestFeedback')}
                   </Typography>
                 </Box>
               </Box>
@@ -197,26 +206,26 @@ const FeedbackDialog = ({
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <AssignmentIcon sx={{ fontSize: isMobile ? 16 : 18, color: theme.palette.secondary.main }} />
-                  <Typography variant="subtitle2" sx={{ 
-                    fontWeight: 600, 
+                  <Typography variant="subtitle2" sx={{
+                    fontWeight: 600,
                     color: theme.palette.secondary.main,
                     fontSize: isMobile ? '0.875rem' : '1rem'
                   }}>
-                    Caregiver Response
+                    {t('caregiverResponse')}
                   </Typography>
                 </Box>
-                <Box sx={{ 
-                  bgcolor: statusConfig.bgColor, 
-                  borderRadius: isMobile ? 1.5 : 2, 
+                <Box sx={{
+                  bgcolor: statusConfig.bgColor,
+                  borderRadius: isMobile ? 1.5 : 2,
                   p: isMobile ? 1.5 : 2,
-                  borderLeft: `4px solid ${statusConfig.color === 'error' ? theme.palette.error.main : 
+                  borderLeft: `4px solid ${statusConfig.color === 'error' ? theme.palette.error.main :
                     statusConfig.color === 'success' ? theme.palette.success.main : theme.palette.grey[400]}`
                 }}>
-                  <Typography variant="body2" sx={{ 
+                  <Typography variant="body2" sx={{
                     lineHeight: 1.6,
                     fontSize: isMobile ? '0.875rem' : '1rem'
                   }}>
-                    {feedback.Feed_CareTReport || 'No caregiver response yet'}
+                    {feedback.Feed_CareTReport || t('noCaregiverResponse')}
                   </Typography>
                 </Box>
               </Box>
@@ -244,12 +253,12 @@ const FeedbackDialog = ({
       }}
     >
       {/* Header */}
-      <DialogTitle 
+      <DialogTitle
         sx={{
           background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
           color: 'white',
           py: isMobile ? 2 : 2.5,
-          pr: isMobile ? 1 : 3,  
+          pr: isMobile ? 1 : 3,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -266,16 +275,16 @@ const FeedbackDialog = ({
           }
         }}
       >
-        <Box sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: isMobile ? 1 : 1.5, 
-          position: 'relative', 
+        <Box sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: isMobile ? 1 : 1.5,
+          position: 'relative',
           zIndex: 1,
           maxWidth: isMobile ? '80%' : '100%'
         }}>
-          <Avatar sx={{ 
-            bgcolor: 'rgba(255,255,255,0.2)', 
+          <Avatar sx={{
+            bgcolor: 'rgba(255,255,255,0.2)',
             color: 'white',
             width: isMobile ? 32 : 40,
             height: isMobile ? 32 : 40
@@ -283,24 +292,24 @@ const FeedbackDialog = ({
             <CommentIcon fontSize={isMobile ? "small" : "medium"} />
           </Avatar>
           <Box sx={{ overflow: 'hidden' }}>
-            <Typography variant={isMobile ? "h6" : "h5"} sx={{ 
-              fontWeight: 600, 
+            <Typography variant={isMobile ? "h6" : "h5"} sx={{
+              fontWeight: 600,
               mb: 0.5,
               lineHeight: 1.2
             }}>
-              Guest Feedback
+              {t('guestFeedbackTitle')}
             </Typography>
-            <Typography variant="body2" sx={{ 
+            <Typography variant="body2" sx={{
               opacity: 0.9,
               fontSize: isMobile ? '0.75rem' : '0.875rem'
             }}>
-              Reservation #{reservationNo}
+              {t('reservation')} #{reservationNo}
             </Typography>
           </Box>
         </Box>
-        <IconButton 
-          onClick={onClose} 
-          sx={{ 
+        <IconButton
+          onClick={onClose}
+          sx={{
             color: 'white',
             position: 'relative',
             zIndex: 1,
@@ -312,47 +321,47 @@ const FeedbackDialog = ({
           <CloseIcon fontSize={isMobile ? "small" : "medium"} />
         </IconButton>
       </DialogTitle>
-      
+
       {/* Content */}
-      <DialogContent sx={{ 
-        p: 0, 
+      <DialogContent sx={{
+        p: 0,
         bgcolor: '#fafafa',
-        overflow: 'hidden' // Prevent double scrollbars on mobile
+        overflow: 'hidden'
       }}>
         <Box sx={{ p: isMobile ? 1.5 : 3 }}>
           {feedbackLoadingById[reservationNo] ? (
-            <Box sx={{ 
-              display: 'flex', 
+            <Box sx={{
+              display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'center', 
+              justifyContent: 'center',
               alignItems: 'center',
               p: isMobile ? 4 : 6,
               gap: 2
             }}>
               <CircularProgress size={isMobile ? 36 : 48} thickness={4} />
-              <Typography variant="body1" color="text.secondary" sx={{ 
+              <Typography variant="body1" color="text.secondary" sx={{
                 fontWeight: 500,
                 fontSize: isMobile ? '0.875rem' : '1rem'
               }}>
-                Loading feedback details...
+                {t('loadingFeedback')}
               </Typography>
             </Box>
           ) : feedbackErrorById[reservationNo] ? (
-            <Card sx={{ 
-              bgcolor: '#ffebee', 
-              borderLeft: '4px solid #f44336', 
-              borderRadius: isMobile ? 1.5 : 2 
+            <Card sx={{
+              bgcolor: '#ffebee',
+              borderLeft: '4px solid #f44336',
+              borderRadius: isMobile ? 1.5 : 2
             }}>
-              <CardContent sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
+              <CardContent sx={{
+                display: 'flex',
+                alignItems: 'center',
                 gap: 2,
                 p: isMobile ? 2 : 3
               }}>
                 <ErrorIcon color="error" fontSize={isMobile ? "small" : "medium"} />
                 <Box>
                   <Typography variant={isMobile ? "subtitle1" : "h6"} color="error" gutterBottom>
-                    Error Loading Feedback
+                    {t('errorLoading')}
                   </Typography>
                   <Typography variant="body2" color="error" sx={{ fontSize: isMobile ? '0.75rem' : '0.875rem' }}>
                     {feedbackErrorById[reservationNo]}
@@ -363,35 +372,35 @@ const FeedbackDialog = ({
           ) : feedbackData[reservationNo]?.length > 0 ? (
             <Box>
               {/* Stats Header */}
-              <Card sx={{ 
-                mb: isMobile ? 2 : 3, 
-                bgcolor: 'white', 
-                borderRadius: isMobile ? 2 : 3, 
-                boxShadow: isMobile ? '0 1px 6px rgba(0,0,0,0.06)' : '0 2px 12px rgba(0,0,0,0.08)' 
+              <Card sx={{
+                mb: isMobile ? 2 : 3,
+                bgcolor: 'white',
+                borderRadius: isMobile ? 2 : 3,
+                boxShadow: isMobile ? '0 1px 6px rgba(0,0,0,0.06)' : '0 2px 12px rgba(0,0,0,0.08)'
               }}>
                 <CardContent sx={{ p: isMobile ? 2 : 3 }}>
-                  <Box sx={{ 
-                    display: 'flex', 
+                  <Box sx={{
+                    display: 'flex',
                     flexDirection: isSmallMobile ? 'column' : 'row',
-                    alignItems: isSmallMobile ? 'flex-start' : 'center', 
+                    alignItems: isSmallMobile ? 'flex-start' : 'center',
                     justifyContent: 'space-between',
                     gap: isSmallMobile ? 2 : 0
                   }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Badge badgeContent={feedbackData[reservationNo].length} color="primary">
-                        <StarIcon sx={{ 
-                          fontSize: isMobile ? 24 : 28, 
-                          color: theme.palette.primary.main 
+                        <StarIcon sx={{
+                          fontSize: isMobile ? 24 : 28,
+                          color: theme.palette.primary.main
                         }} />
                       </Badge>
                       <Box>
                         <Typography variant={isMobile ? "subtitle1" : "h6"} sx={{ fontWeight: 600 }}>
-                          Total Feedback Entries
+                          {t('totalFeedbackEntries')}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ 
-                          fontSize: isMobile ? '0.75rem' : '0.875rem' 
+                        <Typography variant="body2" color="text.secondary" sx={{
+                          fontSize: isMobile ? '0.75rem' : '0.875rem'
                         }}>
-                          Review guest experience and responses
+                          {t('reviewExperience')}
                         </Typography>
                       </Box>
                     </Box>
@@ -401,8 +410,8 @@ const FeedbackDialog = ({
                         onClick={onCheckout}
                         startIcon={<ExitToAppIcon />}
                         size={isMobile ? "small" : "medium"}
-                        sx={{ 
-                          textTransform: 'none', 
+                        sx={{
+                          textTransform: 'none',
                           borderRadius: 3,
                           px: isMobile ? 2 : 3,
                           py: isMobile ? 0.75 : 1.2,
@@ -415,7 +424,7 @@ const FeedbackDialog = ({
                           mt: isSmallMobile ? 1 : 0
                         }}
                       >
-                        Check Out Guest
+                        {t('checkOutGuest')}
                       </Button>
                     )}
                   </Box>
@@ -423,11 +432,10 @@ const FeedbackDialog = ({
               </Card>
 
               {/* Feedback Cards */}
-              <Box sx={{ 
-                maxHeight: isMobile ? 'calc(100vh - 280px)' : '60vh', 
-                overflowY: 'auto', 
+              <Box sx={{
+                maxHeight: isMobile ? 'calc(100vh - 280px)' : '60vh',
+                overflowY: 'auto',
                 pr: isMobile ? 0 : 1,
-                // Improve scrolling on iOS
                 WebkitOverflowScrolling: 'touch'
               }}>
                 {feedbackData[reservationNo].map((feedback, index) => (
@@ -436,28 +444,28 @@ const FeedbackDialog = ({
               </Box>
             </Box>
           ) : (
-            <Card sx={{ 
-              textAlign: 'center', 
-              bgcolor: 'white', 
-              borderRadius: isMobile ? 2 : 3, 
-              boxShadow: isMobile ? '0 1px 6px rgba(0,0,0,0.06)' : '0 2px 12px rgba(0,0,0,0.08)' 
+            <Card sx={{
+              textAlign: 'center',
+              bgcolor: 'white',
+              borderRadius: isMobile ? 2 : 3,
+              boxShadow: isMobile ? '0 1px 6px rgba(0,0,0,0.06)' : '0 2px 12px rgba(0,0,0,0.08)'
             }}>
               <CardContent sx={{ p: isMobile ? 3 : 4 }}>
-                <InfoIcon sx={{ 
-                  fontSize: isMobile ? 36 : 48, 
-                  color: theme.palette.info.main, 
-                  mb: 2 
+                <InfoIcon sx={{
+                  fontSize: isMobile ? 36 : 48,
+                  color: theme.palette.info.main,
+                  mb: 2
                 }} />
                 <Typography variant={isMobile ? "subtitle1" : "h6"} gutterBottom sx={{ fontWeight: 600 }}>
-                  No Feedback Available
+                  {t('noFeedbackAvailable')}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ 
-                  mb: 3, 
-                  maxWidth: 400, 
+                <Typography variant="body2" color="text.secondary" sx={{
+                  mb: 3,
+                  maxWidth: 400,
                   mx: 'auto',
                   fontSize: isMobile ? '0.875rem' : '1rem'
                 }}>
-                  There are currently no feedback entries for this reservation.
+                  {t('noFeedbackDescription')}
                 </Typography>
                 {canCheckout && (
                   <Button
@@ -465,15 +473,15 @@ const FeedbackDialog = ({
                     onClick={onCheckout}
                     startIcon={<ExitToAppIcon />}
                     size={isMobile ? "small" : "medium"}
-                    sx={{ 
-                      textTransform: 'none', 
+                    sx={{
+                      textTransform: 'none',
                       borderRadius: 3,
                       px: isMobile ? 2 : 3,
                       py: isMobile ? 0.75 : 1.2,
                       boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
                     }}
                   >
-                    Check Out Guest
+                    {t('checkOutGuest')}
                   </Button>
                 )}
               </CardContent>
@@ -481,18 +489,18 @@ const FeedbackDialog = ({
           )}
         </Box>
       </DialogContent>
-      
+
       {/* Footer */}
-      <DialogActions sx={{ 
-        p: isMobile ? 2 : 3, 
+      <DialogActions sx={{
+        p: isMobile ? 2 : 3,
         bgcolor: 'white',
         borderTop: '1px solid #f0f0f0'
       }}>
-        <Button 
+        <Button
           onClick={onClose}
           variant="outlined"
           size={isMobile ? "small" : "medium"}
-          sx={{ 
+          sx={{
             borderRadius: 3,
             px: 3,
             py: isMobile ? 0.5 : 1,
@@ -501,7 +509,7 @@ const FeedbackDialog = ({
             minWidth: 100
           }}
         >
-          Close
+          {t('close')}
         </Button>
       </DialogActions>
     </Dialog>

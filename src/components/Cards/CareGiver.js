@@ -103,7 +103,7 @@
 //     feedbackLoadingById, 
 //     feedbackErrorById 
 //   } = useSelector(state => state.caregiver);
-  
+
 //   const [filteredData, setFilteredData] = useState([]);
 //   const [searchTerm, setSearchTerm] = useState("");
 //   const [showOnlyPending, setShowOnlyPending] = useState(false);
@@ -267,7 +267,7 @@
 //       setValidationError('Feedback is required when reporting issues with the bungalow.');
 //       return false;
 //     }
-    
+
 //     if (caregiverStatus === "O" && feedbackType === "bad" && caregiverComment.trim().length < 10) {
 //       setValidationError('Please provide more detailed feedback about the issues (minimum 10 characters).');
 //       return false;
@@ -285,7 +285,7 @@
 //     }
 
 //     setIsSubmitting(true);
-    
+
 //     try {
 //       if (caregiverStatus === "I") {
 //         await dispatch(updateCheckStatus(selectedReservation.Res_no, caregiverStatus));
@@ -301,17 +301,17 @@
 //             caregiverComment.trim(), 
 //             "B"
 //           ));
-          
+
 //           // Also update the main status to "B"
 //           await dispatch(updateCheckStatus(selectedReservation.Res_no, "B"));
-          
+
 //           showSuccessAlert("Feedback submitted successfully! Maintenance has been notified.");
 //         }
 //       }
-      
+
 //       handleCloseDialog();
 //       dispatch(fetchCaregiverData());
-      
+
 //     } catch (error) {
 //       console.error('Error updating status:', error);
 //       showErrorAlert(`Error: ${error.message || 'Please try again.'}`);
@@ -325,10 +325,10 @@
 //       if (!feedbackData[reservationNo]) {
 //         await dispatch(fetchCaretFeedbackDetails(reservationNo));
 //       }
-      
+
 //       setSelectedFeedbackReservation(reservationNo);
 //       setFeedbackDialogOpen(true);
-      
+
 //     } catch (error) {
 //       console.error('Error fetching feedback:', error);
 //       showErrorAlert(`Error loading feedback: ${error.message || 'Please try again.'}`);
@@ -368,7 +368,7 @@
 //         if (feedbackId) {
 //           await dispatch(updateCaretStatus(feedbackId, "P", selectedFeedbackReservation));
 //         } 
-        
+
 //         // Update main status to "O" (Checked Out)
 //         await dispatch(updateCheckStatus(selectedFeedbackReservation, "O"));
 //         showSuccessAlert("Guest checked out successfully! Status updated.");
@@ -378,7 +378,7 @@
 //         if (feedbackId) {
 //           // Update existing feedback to "B" status
 //           await dispatch(updateCaretStatus(feedbackId, "B", selectedFeedbackReservation));
-          
+
 //           // Add new feedback comment
 //           await dispatch(addCaretFeedback(
 //             selectedFeedbackReservation,
@@ -473,7 +473,7 @@
 //               </Typography>
 //             </Box>
 //           </Box> 
-          
+
 //           <Box sx={{ display: "flex", gap: 1, flexWrap: 'wrap' }}>
 //             <Button
 //               variant="outlined"
@@ -517,7 +517,7 @@
 //             </Button>
 //           </Box>
 //         </Box> 
-        
+
 //         <Divider sx={{ mb: 3 }} />
 
 //         {/* Tabs */}
@@ -722,18 +722,18 @@
 //                         icon={statusMap[reservation.Res_CheckStatus]?.icon}
 //                       />
 //                     </Box>
-                    
+
 //                     <Typography variant="body2" color="text.secondary" gutterBottom>
 //                       Reservation: #{reservation.Res_no}
 //                     </Typography>
-                    
+
 //                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
 //                       <PersonIcon fontSize="small" color="action" />
 //                       <Typography variant="body2" color="text.secondary">
 //                         Guest: {reservation.Res_Guest_Name || 'N/A'}
 //                       </Typography>
 //                     </Box>
-                    
+
 //                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
 //                       <ScheduleIcon fontSize="small" color="action" />
 //                       <Box>
@@ -745,7 +745,7 @@
 //                         </Typography>
 //                       </Box>
 //                     </Box>
-                    
+
 //                     {reservation.Res_Remarks && (
 //                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mb: 2 }}>
 //                         <CommentIcon fontSize="small" color="action" sx={{ mt: 0.5 }} />
@@ -755,7 +755,7 @@
 //                       </Box>
 //                     )}
 //                   </CardContent>
-                  
+
 //                   <Box sx={{ p: 2, display: 'flex', justifyContent: 'center', gap: 1, flexWrap: 'wrap' }}>
 //                     <Button
 //                       variant="contained"
@@ -810,7 +810,7 @@
 //             </IconButton>
 //           )}
 //         </DialogTitle>
-        
+
 //         <DialogContent sx={{ p: isMobile ? 2 : 3 }}>
 //           {selectedReservation && (
 //             <Box sx={{ mt: 1 }}>
@@ -818,7 +818,7 @@
 //                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>
 //                   Reservation Details
 //                 </Typography>
-                
+
 //                 <Box sx={{ display: 'grid', gap: 1, gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
 //                   <Box>
 //                     <Typography variant="caption" color="text.secondary">
@@ -828,7 +828,7 @@
 //                       #{selectedReservation.Res_no}
 //                     </Typography>
 //                   </Box>
-                  
+
 //                   <Box>
 //                     <Typography variant="caption" color="text.secondary">
 //                       Bungalow
@@ -837,7 +837,7 @@
 //                       {bungalowTypeMap[selectedReservation.Res_Bang_Id]} Bungalow
 //                     </Typography>
 //                   </Box>
-                  
+
 //                   <Box>
 //                     <Typography variant="caption" color="text.secondary">
 //                       Guest Name
@@ -846,7 +846,7 @@
 //                       {selectedReservation.Res_Guest_Name || 'N/A'}
 //                     </Typography>
 //                   </Box>
-                  
+
 //                   <Box>
 //                     <Typography variant="caption" color="text.secondary">
 //                       Current Status
@@ -922,7 +922,7 @@
 //                         Bungalow Condition After Checkout
 //                       </Typography>
 //                     </Box>
-                    
+
 //                     <FormControl component="fieldset" sx={{ mb: 2 }}>
 //                       <FormLabel component="legend">How is the bungalow condition?</FormLabel>
 //                       <RadioGroup
@@ -952,14 +952,14 @@
 //                         />
 //                       </RadioGroup>
 //                     </FormControl>
-                    
+
 //                     {feedbackType === "bad" && (
 //                       <>
 //                         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
 //                           Please provide detailed feedback about the bungalow condition, 
 //                           cleanliness, and any issues that need attention for maintenance.
 //                         </Typography>
-                        
+
 //                         <TextField
 //                           fullWidth
 //                           label="Bungalow Issues & Feedback *"
@@ -992,7 +992,7 @@
 //             </Box>
 //           )}
 //         </DialogContent>
-        
+
 //         <DialogActions sx={{ p: 3, borderTop: `1px solid ${theme.palette.divider}`, gap: 1 }}>
 //           <Button
 //             onClick={handleCloseDialog}
@@ -1027,7 +1027,7 @@
 //           </Button>
 //         </DialogActions>
 //       </Dialog>
- 
+
 //       <FeedbackDialog
 //         open={feedbackDialogOpen}
 //         onClose={() => setFeedbackDialogOpen(false)}
@@ -1190,7 +1190,7 @@
 //     feedbackLoadingById, 
 //     feedbackErrorById 
 //   } = useSelector(state => state.caregiver);
-  
+
 //   const [filteredData, setFilteredData] = useState([]);
 //   const [searchTerm, setSearchTerm] = useState("");
 //   const [showOnlyPending, setShowOnlyPending] = useState(false);
@@ -1239,17 +1239,17 @@
 //   const showWarningAlert = (message) => {
 //     showAlert('Warning', message, 'warning');
 //   };
- 
+
 //   const validateCapacity = (reservation) => {
 //     if (!reservation) return { isValid: true, error: '' };
-    
+
 //     const bungalowId = reservation.Res_Bang_Id;
 //     const capacityConfig = bungalowCapacity[bungalowId];
-    
+
 //     if (!capacityConfig) {
 //       return { isValid: true, error: '' };  
 //     }
- 
+
 //     const adultsCount = reservation.Res_AdultCount || reservation.Res_AdultCount || 0;
 //     const childrenCount = reservation.Res_ChildCount || reservation.Res_ChildCount || 0;
 //     const totalGuests = adultsCount + childrenCount;
@@ -1361,7 +1361,7 @@
 
 //   const handleOpenDialog = (reservation) => {
 //     setSelectedReservation(reservation);
-     
+
 //     if (reservation.Res_CheckStatus === "Pending" || reservation.Res_CheckStatus === "Confirm") {
 //       setCaregiverStatus("I");
 //     } else if (reservation.Res_CheckStatus === "Check In" || reservation.Res_CheckStatus === "I") {
@@ -1369,7 +1369,7 @@
 //     } else {
 //       setCaregiverStatus(reservation.Res_CheckStatus);
 //     }
-    
+
 //     setCaregiverComment(reservation.Res_Remarks || "");
 //     setFeedbackType("good");
 //     setValidationError('');
@@ -1395,7 +1395,7 @@
 //       }
 //     }
 
-     
+
 //     setValidationError('');
 //     setCapacityError('');
 //     return true;
@@ -1409,7 +1409,7 @@
 //     }
 
 //     setIsSubmitting(true);
-    
+
 //     try {
 //       if (caregiverStatus === "I") {
 //         await dispatch(updateCheckStatus(selectedReservation.Res_no, caregiverStatus));
@@ -1428,10 +1428,10 @@
 //           showSuccessAlert("Guest checked out and maintenance feedback submitted!");
 //         }
 //       }
-      
+
 //       handleCloseDialog();
 //       dispatch(fetchCaregiverData());
-      
+
 //     } catch (error) {
 //       console.error('Error updating status:', error);
 //       showErrorAlert(`Error: ${error.message || 'Please try again.'}`);
@@ -1445,10 +1445,10 @@
 //       if (!feedbackData[reservationNo]) {
 //         await dispatch(fetchCaretFeedbackDetails(reservationNo));
 //       }
-      
+
 //       setSelectedFeedbackReservation(reservationNo);
 //       setFeedbackDialogOpen(true);
-      
+
 //     } catch (error) {
 //       console.error('Error fetching feedback:', error);
 //       showErrorAlert(`Error loading feedback: ${error.message || 'Please try again.'}`);
@@ -1462,7 +1462,7 @@
 //   const handleCheckoutSubmit = async () => {
 //     if (!selectedFeedbackReservation) return;
 
- 
+
 //     if (checkoutFeedbackType === "bad") {
 //       if (!checkoutComment.trim()) {
 //         setValidationError('Feedback is required when reporting issues with the bungalow.');
@@ -1478,21 +1478,21 @@
 //     setIsSubmitting(true);
 
 //     try {
-       
+
 //       const currentReservation = data.find(item => item.Res_no === selectedFeedbackReservation);
-      
+
 //       if (checkoutFeedbackType === "good") {
-         
+
 //         await dispatch(updateCheckStatus(selectedFeedbackReservation, "O"));
 //         showSuccessAlert("Guest checked out successfully! Bungalow is in good condition.");
 //       } else {
-         
+
 //         await dispatch(addCaretFeedback(
 //           selectedFeedbackReservation,
 //           checkoutComment.trim(),
 //           "B"
 //         ));
-         
+
 //         await dispatch(updateCheckStatus(selectedFeedbackReservation, "O"));
 //         showSuccessAlert("Guest checked out and maintenance feedback submitted!");
 //       }
@@ -1532,22 +1532,22 @@
 //     const disallowedStatuses = ["Check Out", "O", "Completed", "Closed"];
 //     return !disallowedStatuses.includes(reservation.Res_CheckStatus);
 //   };
- 
+
 //   const shouldShowCheckoutInFeedback = (reservationNo) => {
 //     if (!reservationNo || !data) return false;
-    
+
 //     const reservation = data.find(item => item.Res_no === reservationNo);
 //     if (!reservation) return false;
-     
+
 //     const allowedStatuses = ["Check In", "I", "Pending", "Confirm", "B"];
 //     return allowedStatuses.includes(reservation.Res_CheckStatus);
 //   };
- 
+
 //   const getCurrentReservation = () => {
 //     if (!selectedFeedbackReservation || !data) return null;
 //     return data.find(item => item.Res_no === selectedFeedbackReservation);
 //   };
- 
+
 //   const getGuestCounts = (reservation) => {
 //     const adults = reservation.Res_Adults || reservation.Res_No_Adults || 0;
 //     const children = reservation.Res_Children || reservation.Res_No_Children || 0;
@@ -1556,7 +1556,7 @@
 
 //   return (
 //      <div>
-      
+
 //       {isLoading ? (
 //         <Loader />
 //       ) : (
@@ -1602,7 +1602,7 @@
 //               </Typography>
 //             </Box>
 //           </Box> 
-          
+
 //           <Box sx={{ display: "flex", gap: 1, flexWrap: 'wrap' }}>
 //             <Button
 //               variant="outlined"
@@ -1646,7 +1646,7 @@
 //             </Button>
 //           </Box>
 //         </Box> 
-        
+
 //         <Divider sx={{ mb: 3 }} />
 
 //         {/* Tabs */}
@@ -1760,7 +1760,7 @@
 //                   const guestCounts = getGuestCounts(reservation);
 //                   const capacityConfig = bungalowCapacity[reservation.Res_Bang_Id];
 //                   const isOverCapacity = guestCounts.total > (capacityConfig?.totalCapacity || 0);
-                  
+
 //                   return (
 //                     <TableRow 
 //                       key={reservation.Res_no} 
@@ -1864,7 +1864,7 @@
 //               const guestCounts = getGuestCounts(reservation);
 //               const capacityConfig = bungalowCapacity[reservation.Res_Bang_Id];
 //               const isOverCapacity = guestCounts.total > (capacityConfig?.totalCapacity || 0);
-              
+
 //               return (
 //                 <Grid item xs={12} sm={6} md={4} key={reservation.Res_no}>
 //                   <Card sx={{ 
@@ -1890,18 +1890,18 @@
 //                           icon={statusMap[reservation.Res_CheckStatus]?.icon}
 //                         />
 //                       </Box>
-                      
+
 //                       <Typography variant="body2" color="text.secondary" gutterBottom>
 //                         Reservation: #{reservation.Res_no}
 //                       </Typography>
-                      
+
 //                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
 //                         <PersonIcon fontSize="small" color="action" />
 //                         <Typography variant="body2" color="text.secondary">
 //                           Guest: {reservation.Res_Guest_Name || 'N/A'}
 //                         </Typography>
 //                       </Box>
-                      
+
 //                       {/* Guest Counts */}
 //                       <Box sx={{ mb: 2, p: 1, backgroundColor: isOverCapacity ? '#ffebee' : '#f5f5f5', borderRadius: 1 }}>
 //                         <Typography variant="subtitle2" color={isOverCapacity ? 'error' : 'text.secondary'} gutterBottom>
@@ -1924,7 +1924,7 @@
 //                           </Typography>
 //                         )}
 //                       </Box>
-                      
+
 //                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
 //                         <ScheduleIcon fontSize="small" color="action" />
 //                         <Box>
@@ -1936,7 +1936,7 @@
 //                           </Typography>
 //                         </Box>
 //                       </Box>
-                      
+
 //                       {reservation.Res_Remarks && (
 //                         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mb: 2 }}>
 //                           <CommentIcon fontSize="small" color="action" sx={{ mt: 0.5 }} />
@@ -1946,7 +1946,7 @@
 //                         </Box>
 //                       )}
 //                     </CardContent>
-                    
+
 //                     <Box sx={{ p: 2, display: 'flex', justifyContent: 'center', gap: 1, flexWrap: 'wrap' }}>
 //                       <Button
 //                         variant="contained"
@@ -2002,7 +2002,7 @@
 //             </IconButton>
 //           )}
 //         </DialogTitle>
-        
+
 
 
 
@@ -2014,7 +2014,7 @@
 //                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>
 //                   Reservation Details
 //                 </Typography>
-                
+
 //                 <Box sx={{ display: 'grid', gap: 1, gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
 //                   <Box>
 //                     <Typography variant="caption" color="text.secondary">
@@ -2024,7 +2024,7 @@
 //                       #{selectedReservation.Res_no}
 //                     </Typography>
 //                   </Box>
-                  
+
 //                   <Box>
 //                     <Typography variant="caption" color="text.secondary">
 //                       Bungalow
@@ -2033,7 +2033,7 @@
 //                       {bungalowTypeMap[selectedReservation.Res_Bang_Id]} Bungalow
 //                     </Typography>
 //                   </Box>
-                  
+
 //                   <Box>
 //                     <Typography variant="caption" color="text.secondary">
 //                       Guest Name
@@ -2042,7 +2042,7 @@
 //                       {selectedReservation.Res_Guest_Name || 'N/A'}
 //                     </Typography>
 //                   </Box>
-                  
+
 //                   <Box>
 //                     <Typography variant="caption" color="text.secondary">
 //                       Current Status
@@ -2065,7 +2065,7 @@
 //                   {(() => {
 //                     const guestCounts = getGuestCounts(selectedReservation);
 //                     const capacityValidation = validateCapacity(selectedReservation);
-                    
+
 //                     return (
 //                       <>
 //                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
@@ -2082,7 +2082,7 @@
 //                         <Typography variant="caption" color="text.secondary">
 //                           Capacity: {bungalowCapacity[selectedReservation.Res_Bang_Id]?.totalCapacity} guests maximum
 //                         </Typography>
-                        
+
 //                       </>
 //                     );
 //                   })()}
@@ -2153,7 +2153,7 @@
 //                         Bungalow Condition After Checkout
 //                       </Typography>
 //                     </Box>
-                    
+
 //                     <FormControl component="fieldset" sx={{ mb: 2 }}>
 //                       <FormLabel component="legend">How is the bungalow condition?</FormLabel>
 //                       <RadioGroup
@@ -2183,13 +2183,13 @@
 //                         />
 //                       </RadioGroup>
 //                     </FormControl>
-                    
+
 //                     {feedbackType === "bad" && (
 //                       <>
 //                         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
 //                           If You have any issues, Please Contact Mr. Kumara.
 //                         </Typography>
-                        
+
 //                         {/* <TextField
 //                           fullWidth
 //                           label="Bungalow Issues & Feedback *"
@@ -2223,7 +2223,7 @@
 //             </Box>
 //           )}
 //         </DialogContent>
-        
+
 //         <DialogActions sx={{ p: 3, borderTop: `1px solid ${theme.palette.divider}`, gap: 1 }}>
 //           <Button
 //             onClick={handleCloseDialog}
@@ -2258,7 +2258,7 @@
 //           </Button>
 //         </DialogActions>
 //       </Dialog>
- 
+
 //       <FeedbackDialog
 //         open={feedbackDialogOpen}
 //         onClose={() => setFeedbackDialogOpen(false)}
@@ -2352,8 +2352,8 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 import Loader from "../../components/Utility/Loader";
 import { caregiverTranslations, LanguageSelector } from './translations';
-import { 
-  Language as LanguageIcon,  
+import {
+  Language as LanguageIcon,
 } from "@mui/icons-material";
 import PublicIcon from "@mui/icons-material/Public";
 
@@ -2377,61 +2377,69 @@ import {
   ThumbUp as ThumbUpIcon,
   ThumbDown as ThumbDownIcon,
   ExitToApp as ExitToAppIcon,
-    Assignment,
-  Error as ErrorIcon, 
+  Assignment,
+  Error as ErrorIcon,
   Warning as WarningIcon
 } from "@mui/icons-material";
- import CheckoutDialog from "../../components/Cards/CheckoutDialog";
-import { 
-  fetchCaregiverData, 
-  updateCheckStatus, 
+import CheckoutDialog from "../../components/Cards/CheckoutDialog";
+import {
+  fetchCaregiverData,
+  updateCheckStatus,
   addCaretFeedback,
-  fetchCaretFeedbackDetails ,
+  fetchCaretFeedbackDetails,
   updateCaretStatus
 } from "../../action/caregiverActions";
 
 import FeedbackDialog from "../../components/Cards/FeedbackDialog";
 
-const statusMap = {
-  "Confirm": { label: "Confirmed", color: "info", icon: <CheckCircleIcon fontSize="small" /> },
-  "Check In": { label: "Checked In", color: "success", icon: <DoneIcon fontSize="small" /> },
-  "Check Out": { label: "Checked Out", color: "primary", icon: <DoneIcon fontSize="small" /> },
-  "Pending": { label: "Pending", color: "warning", icon: <HourglassEmptyIcon fontSize="small" /> },
-  "I": { label: "Check In", color: "success", icon: <CheckCircleIcon fontSize="small" /> },
-  "O": { label: "Check Out", color: "primary", icon: <DoneIcon fontSize="small" /> },
-  "B": { label: "Maintenance Needed", color: "error", icon: <WarningIcon fontSize="small" /> },
-};
+
+// change 2026-01-06
+
+// const statusMap = {
+//   "Confirm": { label: "Confirmed", color: "info", icon: <CheckCircleIcon fontSize="small" /> },
+//   "Check In": { label: "Checked In", color: "success", icon: <DoneIcon fontSize="small" /> },
+//   "Check Out": { label: "Checked Out", color: "primary", icon: <DoneIcon fontSize="small" /> },
+//   "Pending": { label: "Pending", color: "warning", icon: <HourglassEmptyIcon fontSize="small" /> },
+//   "I": { label: "Check In", color: "success", icon: <CheckCircleIcon fontSize="small" /> },
+//   "O": { label: "Check Out", color: "primary", icon: <DoneIcon fontSize="small" /> },
+//   "B": { label: "Maintenance Needed", color: "error", icon: <WarningIcon fontSize="small" /> },
+// };
+
+
+
+
+
+
 
 const bungalowTypeMap = {
   "1": "Main",
   "2": "Lower Garden Suite",
 };
 
-
 const bungalowCapacity = {
-  "1": { 
+  "1": {
     maxAdults: 12,
-    maxChildren: 12, 
+    maxChildren: 12,
     totalCapacity: 12
   },
-  "2": {  
+  "2": {
     maxAdults: 5,
-    maxChildren: 5,  
+    maxChildren: 5,
     totalCapacity: 5
   }
 };
 
 const CaregiverPage = () => {
   const dispatch = useDispatch();
-  const { 
-    loading, 
-    data, 
-    error, 
-    feedbackData, 
-    feedbackLoadingById, 
-    feedbackErrorById 
+  const {
+    loading,
+    data,
+    error,
+    feedbackData,
+    feedbackLoadingById,
+    feedbackErrorById
   } = useSelector(state => state.caregiver);
-  
+
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showOnlyPending, setShowOnlyPending] = useState(false);
@@ -2451,10 +2459,11 @@ const CaregiverPage = () => {
   const [validationError, setValidationError] = useState('');
   const [capacityError, setCapacityError] = useState('');
   const [language, setLanguage] = useState('en');
-const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
+
 
   const showAlert = (title, message, icon = 'success') => {
     Swal.fire({
@@ -2466,10 +2475,51 @@ const [isLoading, setIsLoading] = useState(false);
     });
   };
 
-    const t = (key) => {
+  const t = (key) => {
     return caregiverTranslations[language]?.[key] || caregiverTranslations.en[key] || key;
   };
-   
+
+
+
+  const statusMap = React.useMemo(() => ({
+    "Confirm": {
+      label: t('confirmed'),
+      color: "info",
+      icon: <CheckCircleIcon fontSize="small" />
+    },
+    "Check In": {
+      label: t('checkedIn'),
+      color: "success",
+      icon: <DoneIcon fontSize="small" />
+    },
+    "Check Out": {
+      label: t('checkedOut'),
+      color: "primary",
+      icon: <DoneIcon fontSize="small" />
+    },
+    "Pending": {
+      label: t('pending'),
+      color: "warning",
+      icon: <HourglassEmptyIcon fontSize="small" />
+    },
+    "I": {
+      label: t('checkIn'),
+      color: "success",
+      icon: <CheckCircleIcon fontSize="small" />
+    },
+    "O": {
+      label: t('checkOut'),
+      color: "primary",
+      icon: <DoneIcon fontSize="small" />
+    },
+    "B": {
+      label: t('maintenanceNeeded'),
+      color: "error",
+      icon: <WarningIcon fontSize="small" />
+    },
+  }), [language]);
+
+
   const getBungalowName = (bungalowId) => {
     if (bungalowId === "1") return t('mainBungalow');
     if (bungalowId === "2") return t('lowerGardenSuite');
@@ -2491,17 +2541,17 @@ const [isLoading, setIsLoading] = useState(false);
   const showWarningAlert = (message) => {
     showAlert('Warning', message, 'warning');
   };
- 
+
   const validateCapacity = (reservation) => {
     if (!reservation) return { isValid: true, error: '' };
-    
+
     const bungalowId = reservation.Res_Bang_Id;
     const capacityConfig = bungalowCapacity[bungalowId];
-    
+
     if (!capacityConfig) {
-      return { isValid: true, error: '' };  
+      return { isValid: true, error: '' };
     }
- 
+
     const adultsCount = reservation.Res_AdultCount || reservation.Res_AdultCount || 0;
     const childrenCount = reservation.Res_ChildCount || reservation.Res_ChildCount || 0;
     const totalGuests = adultsCount + childrenCount;
@@ -2613,7 +2663,7 @@ const [isLoading, setIsLoading] = useState(false);
 
   const handleOpenDialog = (reservation) => {
     setSelectedReservation(reservation);
-     
+
     if (reservation.Res_CheckStatus === "Pending" || reservation.Res_CheckStatus === "Confirm") {
       setCaregiverStatus("I");
     } else if (reservation.Res_CheckStatus === "Check In" || reservation.Res_CheckStatus === "I") {
@@ -2621,7 +2671,7 @@ const [isLoading, setIsLoading] = useState(false);
     } else {
       setCaregiverStatus(reservation.Res_CheckStatus);
     }
-    
+
     setCaregiverComment(reservation.Res_Remarks || "");
     setFeedbackType("good");
     setValidationError('');
@@ -2638,7 +2688,7 @@ const [isLoading, setIsLoading] = useState(false);
     setCapacityError('');
   };
 
-  const validateForm = () => { 
+  const validateForm = () => {
     if (caregiverStatus === "I") {
       const capacityValidation = validateCapacity(selectedReservation);
       if (!capacityValidation.isValid) {
@@ -2647,7 +2697,7 @@ const [isLoading, setIsLoading] = useState(false);
       }
     }
 
-     
+
     setValidationError('');
     setCapacityError('');
     return true;
@@ -2661,29 +2711,29 @@ const [isLoading, setIsLoading] = useState(false);
     }
 
     setIsSubmitting(true);
-    
+
     try {
       if (caregiverStatus === "I") {
         await dispatch(updateCheckStatus(selectedReservation.Res_no, caregiverStatus));
         showSuccessAlert("Guest successfully checked in!");
       } else if (caregiverStatus === "O") {
-        if (feedbackType === "good") { 
+        if (feedbackType === "good") {
           await dispatch(updateCheckStatus(selectedReservation.Res_no, caregiverStatus));
           showSuccessAlert("Guest successfully checked out! Bungalow is in good condition.");
-        } else { 
+        } else {
           await dispatch(addCaretFeedback(
-            selectedReservation.Res_no, 
-            caregiverComment.trim(), 
+            selectedReservation.Res_no,
+            caregiverComment.trim(),
             "B"
           ));
           await dispatch(updateCheckStatus(selectedReservation.Res_no, "O"));
           showSuccessAlert("Guest checked out and maintenance feedback submitted!");
         }
       }
-      
+
       handleCloseDialog();
       dispatch(fetchCaregiverData());
-      
+
     } catch (error) {
       console.error('Error updating status:', error);
       showErrorAlert(`Error: ${error.message || 'Please try again.'}`);
@@ -2697,10 +2747,10 @@ const [isLoading, setIsLoading] = useState(false);
       if (!feedbackData[reservationNo]) {
         await dispatch(fetchCaretFeedbackDetails(reservationNo));
       }
-      
+
       setSelectedFeedbackReservation(reservationNo);
       setFeedbackDialogOpen(true);
-      
+
     } catch (error) {
       console.error('Error fetching feedback:', error);
       showErrorAlert(`Error loading feedback: ${error.message || 'Please try again.'}`);
@@ -2714,7 +2764,7 @@ const [isLoading, setIsLoading] = useState(false);
   const handleCheckoutSubmit = async () => {
     if (!selectedFeedbackReservation) return;
 
- 
+
     if (checkoutFeedbackType === "bad") {
       if (!checkoutComment.trim()) {
         setValidationError('Feedback is required when reporting issues with the bungalow.');
@@ -2730,21 +2780,21 @@ const [isLoading, setIsLoading] = useState(false);
     setIsSubmitting(true);
 
     try {
-       
+
       const currentReservation = data.find(item => item.Res_no === selectedFeedbackReservation);
-      
+
       if (checkoutFeedbackType === "good") {
-         
+
         await dispatch(updateCheckStatus(selectedFeedbackReservation, "O"));
         showSuccessAlert("Guest checked out successfully! Bungalow is in good condition.");
       } else {
-         
+
         await dispatch(addCaretFeedback(
           selectedFeedbackReservation,
           checkoutComment.trim(),
           "B"
         ));
-         
+
         await dispatch(updateCheckStatus(selectedFeedbackReservation, "O"));
         showSuccessAlert("Guest checked out and maintenance feedback submitted!");
       }
@@ -2781,25 +2831,63 @@ const [isLoading, setIsLoading] = useState(false);
   };
 
   const canUpdateStatus = (reservation) => {
+    //   const disallowedStatuses = ["Check Out", "O", "Completed", "Closed"];
+    //   return !disallowedStatuses.includes(reservation.Res_CheckStatus);
+    // };
+
+
+    if (!reservation) return false;
+
+    const currentStatus = reservation.Res_CheckStatus?.trim() || "";
+
+
+    const showCheckInStatuses = ["", "Pending", "Confirm", "B"];
+    const showCheckOutStatuses = ["Check In", "I"];
+
+
+    const allowedStatuses = [...showCheckInStatuses, ...showCheckOutStatuses];
     const disallowedStatuses = ["Check Out", "O", "Completed", "Closed"];
-    return !disallowedStatuses.includes(reservation.Res_CheckStatus);
+
+    return allowedStatuses.includes(currentStatus) &&
+      !disallowedStatuses.includes(currentStatus);
   };
- 
+
+
+  // const getButtonText = (reservation) => {
+  //   if (!reservation) return "Check In";
+
+  //   const currentStatus = reservation.Res_CheckStatus?.trim() || "";
+  //   const showCheckOutStatuses = ["Check In", "I"];
+
+  //   return showCheckOutStatuses.includes(currentStatus) ?
+  //     "Check Out" : "Check In";
+  // };
+
+  const getButtonText = (reservation) => {
+    if (!reservation) return t('checkIn');
+
+    const currentStatus = reservation.Res_CheckStatus?.trim() || "";
+    const showCheckOutStatuses = ["Check In", "I"];
+
+    return showCheckOutStatuses.includes(currentStatus) ?
+      t('checkOut') : t('checkIn');
+  };
+
   const shouldShowCheckoutInFeedback = (reservationNo) => {
     if (!reservationNo || !data) return false;
-    
+
     const reservation = data.find(item => item.Res_no === reservationNo);
     if (!reservation) return false;
-     
+
     const allowedStatuses = ["Check In", "I", "Pending", "Confirm", "B"];
     return allowedStatuses.includes(reservation.Res_CheckStatus);
   };
- 
+
   const getCurrentReservation = () => {
     if (!selectedFeedbackReservation || !data) return null;
     return data.find(item => item.Res_no === selectedFeedbackReservation);
   };
- 
+
   const getGuestCounts = (reservation) => {
     const adults = reservation.Res_Adults || reservation.Res_No_Adults || 0;
     const children = reservation.Res_Children || reservation.Res_No_Children || 0;
@@ -2807,281 +2895,591 @@ const [isLoading, setIsLoading] = useState(false);
   };
 
   return (
-     <div>
-      
+    <div>
+
       {isLoading ? (
         <Loader />
       ) : (
-    <Box sx={{ p: isMobile ? 1 : 3 }}>
-      <Paper sx={{
-        p: isMobile ? 1 : 3,
-        borderRadius: 2,
-        boxShadow: isMobile ? 'none' : theme.shadows[3]
-      }}>
-        {/* Header Section */}
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            mb: 2,
-            flexDirection: isMobile ? "column" : "row",
-            width: "100%",
-            gap: isMobile ? 2 : 0
-          }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Avatar
+        <Box sx={{ p: isMobile ? 1 : 3 }}>
+          <Paper sx={{
+            p: isMobile ? 1 : 3,
+            borderRadius: 2,
+            boxShadow: isMobile ? 'none' : theme.shadows[3]
+          }}>
+            {/* Header Section */}
+            <Box
               sx={{
-                bgcolor: "primary.main",
-                mr: 2,
-                width: isMobile ? 40 : 48,
-                height: isMobile ? 40 : 48
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                mb: 2,
+                flexDirection: isMobile ? "column" : "row",
+                width: "100%",
+                gap: isMobile ? 2 : 0
               }}
             >
-              <CleaningServicesIcon fontSize={isMobile ? "medium" : "large"} />
-            </Avatar>
-            <Box>
-              <Typography
-                variant={isMobile ? "h6" : "h5"}
-                component="h1"
-                fontWeight="bold"
-              >
-                Bungalow Caretaker Portal
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Manage bungalow check-in and checkout operations
-              </Typography>
-            </Box>
-          </Box> 
-          
-          <Box sx={{ display: "flex", gap: 1, flexWrap: 'wrap' }}>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleRefresh}
-              startIcon={<RefreshIcon />}
-              disabled={loading}
-              sx={{
-                textTransform: "none",
-                height: "40px"
-              }}
-              size={isMobile ? "small" : "medium"}
-            >
-              Refresh
-            </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={toggleViewMode}
-              startIcon={viewMode === 'list' ? <VisibilityIcon /> : <InventoryIcon />}
-              sx={{
-                textTransform: "none",
-                height: "40px"
-              }}
-              size={isMobile ? "small" : "medium"}
-            >
-              {viewMode === 'list' ? 'Card View' : 'List View'}
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate(-1)}
-              startIcon={<ArrowBackIcon />}
-              sx={{
-                textTransform: "none",
-                height: "40px"
-              }}
-              size={isMobile ? "small" : "medium"}
-            >
-              Back
-            </Button>
-          </Box>
-        </Box> 
-        
-        <Divider sx={{ mb: 3 }} />
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Avatar
+                  sx={{
+                    bgcolor: "primary.main",
+                    mr: 2,
+                    width: isMobile ? 40 : 48,
+                    height: isMobile ? 40 : 48
+                  }}
+                >
+                  <CleaningServicesIcon fontSize={isMobile ? "medium" : "large"} />
+                </Avatar>
+                {/* <Box>
+                  <Typography
+                    variant={isMobile ? "h6" : "h5"}
+                    component="h1"
+                    fontWeight="bold"
+                  >
+                    Bungalow Caretaker Portal
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Manage bungalow check-in and checkout operations
+                  </Typography>
+                </Box> */}
 
-        {/* Tabs */}
-        <Box sx={{ 
-          borderBottom: 1, 
-          borderColor: 'divider',
-          mb: 2
-        }}>
-          <Tabs
-            value={tabValue}
-            onChange={handleTabChange}
-            variant={isMobile ? "scrollable" : "standard"}
-            scrollButtons={isMobile ? "auto" : false}
-            allowScrollButtonsMobile
-          >
-            <Tab 
-              label={`All Bungalows (${data ? data.length : 0})`} 
-              value="all" 
-              sx={{ textTransform: 'none' }} 
-            />
-            <Tab 
-              label={`Main (${data ? data.filter(item => item.Res_Bang_Id === "1").length : 0})`} 
-              value="1" 
-              sx={{ textTransform: 'none' }} 
-            />
-            {/* <Tab 
+                <Box>
+                  <Typography
+                    variant={isMobile ? "h6" : "h5"}
+                    component="h1"
+                    fontWeight="bold"
+                  >
+                    {t('pageTitle')}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {t('pageSubtitle')}
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Box sx={{ display: "flex", gap: 1, flexWrap: 'wrap' }}>
+                {/* <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleRefresh}
+                  startIcon={<RefreshIcon />}
+                  disabled={loading}
+                  sx={{
+                    textTransform: "none",
+                    height: "40px"
+                  }}
+                  size={isMobile ? "small" : "medium"}
+                >
+                  Refresh
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={toggleViewMode}
+                  startIcon={viewMode === 'list' ? <VisibilityIcon /> : <InventoryIcon />}
+                  sx={{
+                    textTransform: "none",
+                    height: "40px"
+                  }}
+                  size={isMobile ? "small" : "medium"}
+                >
+                  {viewMode === 'list' ? 'Card View' : 'List View'}
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => navigate(-1)}
+                  startIcon={<ArrowBackIcon />}
+                  sx={{
+                    textTransform: "none",
+                    height: "40px"
+                  }}
+                  size={isMobile ? "small" : "medium"}
+                >
+                  Back
+                </Button> */}
+
+                {/* <Button
+  variant="outlined"
+  color="primary"
+  onClick={handleRefresh}
+  startIcon={<RefreshIcon />}
+  disabled={loading}
+  sx={{ textTransform: "none", height: "40px" }}
+  size={isMobile ? "small" : "medium"}
+>
+  {t('refresh')}
+</Button> */}
+
+
+                {/* <Button
+  variant="outlined"
+  color="primary"
+  onClick={handleRefresh}
+  startIcon={<RefreshIcon />}
+  disabled={loading}
+  sx={{ textTransform: "none", height: "40px" }}
+  size={isMobile ? "small" : "medium"}
+>
+  {t('refresh')}
+</Button> */}
+                <Chip
+                  icon={<PublicIcon sx={{ color: 'white', fontSize: 16 }} />}
+                  label={language === 'en' ? 'ENGLISH' :
+                    language === 'si' ? 'SINHALA' :
+                      language === 'ta' ? 'TAMIL' : 'HINDI'}
+                  onClick={() => {
+                    const nextLang = language === 'en' ? 'si' :
+                      language === 'si' ? 'ta' :
+                        language === 'ta' ? 'hi' : 'en';
+                    setLanguage(nextLang);
+                  }}
+                  size="small"
+                  sx={{
+                    color: 'white',
+                    bgcolor: 'rgba(38, 187, 100, 0.99)',
+                    cursor: 'pointer',
+                    height: '40px',
+                    '&:hover': {
+                      bgcolor: 'rgba(33, 199, 42, 0.99)'
+                    }
+                  }}
+                />
+
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={toggleViewMode}
+                  startIcon={viewMode === 'list' ? <VisibilityIcon /> : <InventoryIcon />}
+                  sx={{ textTransform: "none", height: "40px" }}
+                  size={isMobile ? "small" : "medium"}
+                >
+                  {viewMode === 'list' ? t('cardView') : t('listView')}
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => navigate(-1)}
+                  startIcon={<ArrowBackIcon />}
+                  sx={{ textTransform: "none", height: "40px" }}
+                  size={isMobile ? "small" : "medium"}
+                >
+                  {t('back')}
+                </Button>
+              </Box>
+            </Box>
+
+            <Divider sx={{ mb: 3 }} />
+
+            {/* Tabs */}
+            <Box sx={{
+              borderBottom: 1,
+              borderColor: 'divider',
+              mb: 2
+            }}>
+              {/* <Tabs
+                value={tabValue}
+                onChange={handleTabChange}
+                variant={isMobile ? "scrollable" : "standard"}
+                scrollButtons={isMobile ? "auto" : false}
+                allowScrollButtonsMobile
+              >
+                <Tab
+                  label={`All Bungalows (${data ? data.length : 0})`}
+                  value="all"
+                  sx={{ textTransform: 'none' }}
+                />
+                <Tab
+                  label={`Main (${data ? data.filter(item => item.Res_Bang_Id === "1").length : 0})`}
+                  value="1"
+                  sx={{ textTransform: 'none' }}
+                />
+                { <Tab 
               label={`Lower Garden Suite (${data ? data.filter(item => item.Res_Bang_Id === "2").length : 0})`} 
               value="2" 
               sx={{ textTransform: 'none' }} 
-            /> */}
-          </Tabs>
-        </Box>
+            /> }
+              </Tabs> */}
 
-        {error && (
-          <Box sx={{ mb: 3, p: 2, backgroundColor: '#ffebee', borderRadius: 2 }}>
-            <Typography variant="body1" color="error" gutterBottom>
-              Error
-            </Typography>
-            <Typography variant="body2" color="error">
-              {error}
-            </Typography>
-          </Box>
-        )}
+              <Tabs
+                value={tabValue}
+                onChange={handleTabChange}
+                variant={isMobile ? "scrollable" : "standard"}
+                scrollButtons={isMobile ? "auto" : false}
+                allowScrollButtonsMobile
+              >
+                <Tab
+                  label={`${t('allBungalows')} (${data ? data.length : 0})`}
+                  value="all"
+                  sx={{ textTransform: 'none' }}
+                />
+                <Tab
+                  label={`${t('mainBungalowShort')} (${data ? data.filter(item => item.Res_Bang_Id === "1").length : 0})`}
+                  value="1"
+                  sx={{ textTransform: 'none' }}
+                />
 
-        {loading ? (
-          <Box sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: '200px',
-            flexDirection: 'column',
-            gap: 2
-          }}>
-            <CircularProgress size={isMobile ? 40 : 60} />
-            <Typography variant="body2" color="text.secondary">
-              Loading bungalow data...
-            </Typography>
-          </Box>
-        ) : filteredData.length === 0 ? (
-          <Box sx={{ mb: 3, p: 2, backgroundColor: '#e3f2fd', borderRadius: 2 }}>
-            <Typography variant="body1" color="info" gutterBottom>
-              No Results Found
-            </Typography>
-            <Typography variant="body2" color="info">
-              {searchTerm 
-                ? "No bungalows match your search criteria. Try adjusting your search terms."
-                : showOnlyPending 
-                  ? "No pending reservations found."
-                  : "No bungalow reservations found."
-              }
-            </Typography>
-          </Box>
-        ) : viewMode === 'list' ? (
-          /* List View */
-          <TableContainer
-            component={Paper}
-            sx={{
-              boxShadow: "none",
-              maxHeight: isMobile ? "calc(100vh - 400px)" : "calc(100vh - 350px)",
-              overflow: "auto",
-              borderRadius: 2,
-              border: `1px solid ${theme.palette.divider}`
-            }}
-          >
-            <Table stickyHeader size={isMobile ? "small" : "medium"}>
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
-                    Bungalow
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
-                    Status
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
-                    Guest
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
-                    Guest Count
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
-                    Check-In/Out
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
-                    Actions
-                  </TableCell>
-                </TableRow>
-              </TableHead>
+                {/* <Tab 
+    label={`${t('lowerGardenSuiteShort')} (${data ? data.filter(item => item.Res_Bang_Id === "2").length : 0})`} 
+    value="2" 
+    sx={{ textTransform: 'none' }} 
+  /> */}
+              </Tabs>
+            </Box>
 
-              <TableBody>
+            {error && (
+              <Box sx={{ mb: 3, p: 2, backgroundColor: '#ffebee', borderRadius: 2 }}>
+                {/* <Typography variant="body1" color="error" gutterBottom>
+                  Error
+                </Typography> */}
+                <Typography variant="body1" color="error" gutterBottom>
+                  {t('noResultsFound')}
+                </Typography>
+                <Typography variant="body2" color="info">
+                  {searchTerm
+                    ? t('noBungalowsMatch')
+                    : showOnlyPending
+                      ? t('noPendingReservations')
+                      : t('noBungalowReservations')
+                  }
+                </Typography>
+
+                <Typography variant="body2" color="error">
+                  {error}
+                </Typography>
+              </Box>
+            )}
+
+            {loading ? (
+              <Box sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: '200px',
+                flexDirection: 'column',
+                gap: 2
+              }}>
+                <CircularProgress size={isMobile ? 40 : 60} />
+                {/* <Typography variant="body2" color="text.secondary">
+                  Loading bungalow data...
+                </Typography> */}
+
+                <Typography variant="body2" color="text.secondary">
+                  {t('loadingData')}
+                </Typography>
+              </Box>
+            ) : filteredData.length === 0 ? (
+              <Box sx={{ mb: 3, p: 2, backgroundColor: '#e3f2fd', borderRadius: 2 }}>
+                <Typography variant="body1" color="info" gutterBottom>
+                  No Results Found
+                </Typography>
+                <Typography variant="body2" color="info">
+                  {searchTerm
+                    ? "No bungalows match your search criteria. Try adjusting your search terms."
+                    : showOnlyPending
+                      ? "No pending reservations found."
+                      : "No bungalow reservations found."
+                  }
+                </Typography>
+              </Box>
+            ) : viewMode === 'list' ? (
+              /* List View */
+              <TableContainer
+                component={Paper}
+                sx={{
+                  boxShadow: "none",
+                  maxHeight: isMobile ? "calc(100vh - 400px)" : "calc(100vh - 350px)",
+                  overflow: "auto",
+                  borderRadius: 2,
+                  border: `1px solid ${theme.palette.divider}`
+                }}
+              >
+                <Table stickyHeader size={isMobile ? "small" : "medium"}>
+                  {/* <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
+                        Bungalow
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
+                        Status
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
+                        Guest
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
+                        Guest Count
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
+                        Check-In/Out
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
+                        Actions
+                      </TableCell>
+                    </TableRow>
+                  </TableHead> */}
+
+
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
+                        {t('tableBungalow')}
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
+                        {t('tableStatus')}
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
+                        {t('tableGuest')}
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
+                        {t('tableGuestCount')}
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
+                        {t('tableCheckInOut')}
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
+                        {t('tableActions')}
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+
+                  <TableBody>
+                    {filteredData.map((reservation) => {
+                      const guestCounts = getGuestCounts(reservation);
+                      const capacityConfig = bungalowCapacity[reservation.Res_Bang_Id];
+                      const isOverCapacity = guestCounts.total > (capacityConfig?.totalCapacity || 0);
+
+                      return (
+                        <TableRow
+                          key={reservation.Res_no}
+                          hover
+                          sx={{
+                            backgroundColor: isOverCapacity ? '#ffebee' : 'inherit'
+                          }}
+                        >
+                          <TableCell>
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                              <HomeWorkIcon fontSize="small" sx={{ mr: 1, color: theme.palette.primary.main }} />
+                              <Box>
+                                <Typography variant="body2" fontWeight="medium">
+                                  {bungalowTypeMap[reservation.Res_Bang_Id] || `Bungalow ${reservation.Res_Bang_Id}`}
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                  #{reservation.Res_no}
+                                </Typography>
+                                {isOverCapacity && (
+                                  // <Typography variant="caption" color="error" display="block">
+                                  //   Over Capacity!
+                                  // </Typography>
+                                  <Typography variant="caption" color="error" display="block">
+                                    {t('overCapacity')}
+                                  </Typography>
+                                )}
+                              </Box>
+                            </Box>
+                          </TableCell>
+                          <TableCell>
+                            <Chip
+                              label={statusMap[reservation.Res_CheckStatus]?.label || reservation.Res_CheckStatus}
+                              color={statusMap[reservation.Res_CheckStatus]?.color || "default"}
+                              size="small"
+                              icon={statusMap[reservation.Res_CheckStatus]?.icon}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <PersonIcon fontSize="small" color="action" />
+                              <Typography variant="body2">
+                                {reservation.Res_Guest_Name || 'N/A'}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+                          <TableCell>
+                            <Box>
+                              {/* <Typography variant="body2" fontSize="0.8rem">
+                                Adults:{reservation.Res_AdultCount}
+                              </Typography> */}
+                              <Typography variant="body2" fontSize="0.8rem">
+                                {t('adults')}:{reservation.Res_AdultCount}
+                              </Typography>
+                              <Typography variant="body2" fontSize="0.8rem">
+                                {t('children')}: {reservation.Res_ChildCount}
+                              </Typography>
+                              <Typography variant="body2" fontSize="0.8rem" fontWeight="bold">
+                                {t('total')}: {guestCounts.total}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+                          <TableCell>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <Box>
+                                <Typography variant="body2" fontSize="0.8rem">
+                                  In: {reservation.Res_Check_In}
+                                </Typography>
+                                <Typography variant="body2" fontSize="0.8rem">
+                                  Out: {reservation.Res_Check_Out}
+                                </Typography>
+                              </Box>
+                            </Box>
+                          </TableCell>
+                          <TableCell>
+                            <Box sx={{ display: 'flex', gap: 1, flexDirection: isMobile ? 'column' : 'row' }}>
+                              {/* <Button
+                                variant="contained"
+                                size="small"
+                                onClick={() => handleOpenDialog(reservation)}
+                                startIcon={<PersonIcon />}
+                                disabled={!canUpdateStatus(reservation)}
+                                sx={{ textTransform: "none", borderRadius: 2 }}
+                              >
+                                {reservation.Res_CheckStatus === "Check In" || reservation.Res_CheckStatus === "I" ? "Check Out" : "Check In"}
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                size="small"
+                                onClick={() => handleViewFeedback(reservation.Res_no)}
+                                startIcon={<VisibilityIcon />}
+                                sx={{ textTransform: "none", borderRadius: 2 }}
+                              >
+                                Feedback
+                              </Button> */}
+
+
+                              <Button
+                                variant="contained"
+                                size="small"
+                                onClick={() => handleOpenDialog(reservation)}
+                                startIcon={<PersonIcon />}
+                                disabled={!canUpdateStatus(reservation)}
+                                sx={{ textTransform: "none", borderRadius: 2 }}
+                              >
+                                {getButtonText(reservation)}
+                              </Button>
+
+                              {/* Feedback Button */}
+                              <Button
+                                variant="outlined"
+                                size="small"
+                                onClick={() => handleViewFeedback(reservation.Res_no)}
+                                startIcon={<VisibilityIcon />}
+                                sx={{ textTransform: "none", borderRadius: 2 }}
+                              >
+                                {t('viewFeedback')}
+                              </Button>
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              /* Card View */
+              <Grid container spacing={2}>
                 {filteredData.map((reservation) => {
                   const guestCounts = getGuestCounts(reservation);
                   const capacityConfig = bungalowCapacity[reservation.Res_Bang_Id];
                   const isOverCapacity = guestCounts.total > (capacityConfig?.totalCapacity || 0);
-                  
+
                   return (
-                    <TableRow 
-                      key={reservation.Res_no} 
-                      hover
-                      sx={{
-                        backgroundColor: isOverCapacity ? '#ffebee' : 'inherit'
-                      }}
-                    >
-                      <TableCell>
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <HomeWorkIcon fontSize="small" sx={{ mr: 1, color: theme.palette.primary.main }} />
-                          <Box>
-                            <Typography variant="body2" fontWeight="medium">
-                              {bungalowTypeMap[reservation.Res_Bang_Id] || `Bungalow ${reservation.Res_Bang_Id}`}
+                    <Grid item xs={12} sm={6} md={4} key={reservation.Res_no}>
+                      <Card sx={{
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        border: isOverCapacity ? '2px solid #f44336' :
+                          reservation.Res_CheckStatus === "Pending" ? '2px solid #ed6c02' : '1px solid #e0e0e0',
+                        borderColor: reservation.Res_CheckStatus === "B" ? 'error.main' : undefined
+                      }}>
+                        <CardContent sx={{ flexGrow: 1 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <HomeWorkIcon color="primary" sx={{ mr: 1 }} />
+                              <Typography variant="h6" component="h2">
+                                {bungalowTypeMap[reservation.Res_Bang_Id] || `Bungalow ${reservation.Res_Bang_Id}`}
+                              </Typography>
+                            </Box>
+                            <Chip
+                              label={statusMap[reservation.Res_CheckStatus]?.label || reservation.Res_CheckStatus}
+                              color={statusMap[reservation.Res_CheckStatus]?.color || "default"}
+                              size="small"
+                              icon={statusMap[reservation.Res_CheckStatus]?.icon}
+                            />
+                          </Box>
+
+                          {/* <Typography variant="body2" color="text.secondary" gutterBottom>
+                            Reservation: #{reservation.Res_no}
+                          </Typography> */}
+                          <Typography variant="body2" color="text.secondary" gutterBottom>
+                            {t('cardReservation')}: #{reservation.Res_no}
+                          </Typography>
+
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                            <PersonIcon fontSize="small" color="action" />
+                            {/* <Typography variant="body2" color="text.secondary">
+                              Guest: {reservation.Res_Guest_Name || 'N/A'}
+                            </Typography> */}
+                            <Typography variant="body2" color="text.secondary">
+                              {t('cardGuest')}: {reservation.Res_Guest_Name || 'N/A'}
                             </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                              #{reservation.Res_no}
+                          </Box>
+
+                          {/* Guest Counts */}
+                          <Box sx={{ mb: 2, p: 1, backgroundColor: isOverCapacity ? '#ffebee' : '#f5f5f5', borderRadius: 1 }}>
+                            <Typography variant="subtitle2" color={isOverCapacity ? 'error' : 'text.secondary'} gutterBottom>
+                              {t('guestCount')}:
                             </Typography>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                              {/* <Typography variant="body2">
+                                Adults: {reservation.Res_AdultCount}
+                              </Typography> */}
+                              <Typography variant="body2" fontSize="0.8rem">
+                                {t('adults')}:{reservation.Res_AdultCount}
+                              </Typography>
+                              <Typography variant="body2">
+                                {t('children')}: {reservation.Res_ChildCount}
+                              </Typography>
+                              <Typography variant="body2" fontWeight="bold">
+                                {t('total')}: {Number(reservation.Res_AdultCount) + Number(reservation.Res_ChildCount)}
+                              </Typography>
+                            </Box>
                             {isOverCapacity && (
-                              <Typography variant="caption" color="error" display="block">
-                                Over Capacity!
+                              <Typography variant="caption" color="error" sx={{ mt: 0.5, display: 'block' }}>
+                                ⚠️ Over capacity! Max: {capacityConfig?.totalCapacity}
                               </Typography>
                             )}
                           </Box>
-                        </Box>
-                      </TableCell>
-                      <TableCell>
-                        <Chip
-                          label={statusMap[reservation.Res_CheckStatus]?.label || reservation.Res_CheckStatus}
-                          color={statusMap[reservation.Res_CheckStatus]?.color || "default"}
-                          size="small"
-                          icon={statusMap[reservation.Res_CheckStatus]?.icon}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <PersonIcon fontSize="small" color="action" />
-                          <Typography variant="body2">
-                            {reservation.Res_Guest_Name || 'N/A'}
-                          </Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell>
-                        <Box>
-                          <Typography variant="body2" fontSize="0.8rem">
-                            Adults:{reservation.Res_AdultCount}
-                          </Typography>
-                          <Typography variant="body2" fontSize="0.8rem">
-                            Children: {reservation.Res_ChildCount}
-                          </Typography>
-                          <Typography variant="body2" fontSize="0.8rem" fontWeight="bold">
-                            Total: 
-                          </Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <Box>
-                            <Typography variant="body2" fontSize="0.8rem">
-                              In: {reservation.Res_Check_In}
-                            </Typography>
-                            <Typography variant="body2" fontSize="0.8rem">
-                              Out: {reservation.Res_Check_Out}
-                            </Typography>
+
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                            <ScheduleIcon fontSize="small" color="action" />
+                            <Box>
+                              {/* <Typography variant="body2" color="text.secondary">
+                                Check-In: {reservation.Res_Check_In}
+                              </Typography> */}
+                              <Typography variant="body2" color="text.secondary">
+                                {t('cardCheckIn')}: {reservation.Res_Check_In}
+                              </Typography>
+
+                              {/* <Typography variant="body2" color="text.secondary">
+                                Check-Out: {reservation.Res_Check_Out}
+                              </Typography> */}
+                              <Typography variant="body2" color="text.secondary">
+                                {t('cardCheckOut')}: {reservation.Res_Check_Out}
+                              </Typography>
+                            </Box>
                           </Box>
-                        </Box>
-                      </TableCell>
-                      <TableCell>
-                        <Box sx={{ display: 'flex', gap: 1, flexDirection: isMobile ? 'column' : 'row' }}>
+
+                          {reservation.Res_Remarks && (
+                            <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mb: 2 }}>
+                              <CommentIcon fontSize="small" color="action" sx={{ mt: 0.5 }} />
+                              <Typography variant="body2" sx={{ mt: 0.5 }}>
+                                <ReadMoreText text={reservation.Res_Remarks} wordLimit={10} />
+                              </Typography>
+                            </Box>
+                          )}
+                        </CardContent>
+
+                        <Box sx={{ p: 2, display: 'flex', justifyContent: 'center', gap: 1, flexWrap: 'wrap' }}>
                           <Button
                             variant="contained"
                             size="small"
@@ -3090,7 +3488,7 @@ const [isLoading, setIsLoading] = useState(false);
                             disabled={!canUpdateStatus(reservation)}
                             sx={{ textTransform: "none", borderRadius: 2 }}
                           >
-                            {reservation.Res_CheckStatus === "Check In" || reservation.Res_CheckStatus === "I" ? "Check Out" : "Check In"}
+                            {reservation.Res_CheckStatus === "Check In" || reservation.Res_CheckStatus === "I" ? t('checkOut') : t('checkIn')}
                           </Button>
                           <Button
                             variant="outlined"
@@ -3099,259 +3497,142 @@ const [isLoading, setIsLoading] = useState(false);
                             startIcon={<VisibilityIcon />}
                             sx={{ textTransform: "none", borderRadius: 2 }}
                           >
-                            Feedback
+
+                            {t('viewfeadback')}
                           </Button>
                         </Box>
-                      </TableCell>
-                    </TableRow>
+                      </Card>
+                    </Grid>
                   );
                 })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        ) : (
-          /* Card View */
-          <Grid container spacing={2}>
-            {filteredData.map((reservation) => {
-              const guestCounts = getGuestCounts(reservation);
-              const capacityConfig = bungalowCapacity[reservation.Res_Bang_Id];
-              const isOverCapacity = guestCounts.total > (capacityConfig?.totalCapacity || 0);
-              
-              return (
-                <Grid item xs={12} sm={6} md={4} key={reservation.Res_no}>
-                  <Card sx={{ 
-                    height: '100%', 
-                    display: 'flex', 
-                    flexDirection: 'column',
-                    border: isOverCapacity ? '2px solid #f44336' : 
-                            reservation.Res_CheckStatus === "Pending" ? '2px solid #ed6c02' : '1px solid #e0e0e0',
-                    borderColor: reservation.Res_CheckStatus === "B" ? 'error.main' : undefined
+              </Grid>
+            )}
+          </Paper>
+
+          {/* ------------------------------------------------------------Status Update Dialog-------------------------------------------------- */}
+          <Dialog
+            open={openDialog}
+            onClose={handleCloseDialog}
+            maxWidth="sm"
+            fullWidth
+            fullScreen={isMobile}
+            PaperProps={{
+              sx: {
+                borderRadius: isMobile ? 0 : 2,
+                maxHeight: isMobile ? '100vh' : '85vh'
+              }
+            }}
+          >
+            {/* Simple Header */}
+            <DialogTitle sx={{
+              backgroundColor: theme.palette.primary.main,
+              color: 'white',
+              py: isMobile ? 1.5 : 2,
+              px: isMobile ? 2 : 3,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              position: 'sticky',
+              top: 0,
+              zIndex: 1
+            }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <PersonIcon fontSize={isMobile ? "small" : "medium"} />
+                <Typography variant={isMobile ? "subtitle1" : "h6"} fontWeight="bold">
+                  Update Status
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {/* Simple Language Toggle */}
+                <Chip
+                  icon={<PublicIcon sx={{ color: 'white', fontSize: 16 }} />}
+                  label={language === 'en' ? 'ENGLISH' :
+                    language === 'si' ? 'SINHALA' :
+                      language === 'ta' ? 'TAMIL' : 'HINDI'}
+                  onClick={() => {
+                    const nextLang = language === 'en' ? 'si' :
+                      language === 'si' ? 'ta' :
+                        language === 'ta' ? 'hi' : 'en';
+                    setLanguage(nextLang);
+                  }}
+                  size="small"
+                  sx={{
+                    color: 'white',
+                    bgcolor: 'rgba(33, 199, 42, 0.99)',
+                    cursor: 'pointer',
+                    height: '24px',
+                    '&:hover': {
+                      bgcolor: 'rgba(33, 199, 42, 0.99)'
+                    }
+                  }}
+                />
+                <IconButton
+                  onClick={handleCloseDialog}
+                  sx={{
+                    color: 'white',
+                    p: 0.5
+                  }}
+                  size="small"
+                >
+                  <CloseIcon fontSize={isMobile ? "small" : "medium"} />
+                </IconButton>
+              </Box>
+            </DialogTitle>
+
+            <DialogContent sx={{
+              p: isMobile ? 2 : 3,
+              backgroundColor: '#fafafa'
+            }}>
+              {selectedReservation && (
+                <Box sx={{ mt: 1 }}>
+                  {/* Reservation Summary */}
+                  <Box sx={{
+                    p: 2,
+                    mb: 3,
+                    backgroundColor: 'white',
+                    borderRadius: 1,
+                    border: '1px solid #e0e0e0'
                   }}>
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <HomeWorkIcon color="primary" sx={{ mr: 1 }} />
-                          <Typography variant="h6" component="h2">
-                            {bungalowTypeMap[reservation.Res_Bang_Id] || `Bungalow ${reservation.Res_Bang_Id}`}
-                          </Typography>
-                        </Box>
-                        <Chip
-                          label={statusMap[reservation.Res_CheckStatus]?.label || reservation.Res_CheckStatus}
-                          color={statusMap[reservation.Res_CheckStatus]?.color || "default"}
-                          size="small"
-                          icon={statusMap[reservation.Res_CheckStatus]?.icon}
-                        />
-                      </Box>
-                      
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        Reservation: #{reservation.Res_no}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                      <Assignment color="primary" fontSize="small" />
+                      <Typography variant="subtitle2" fontWeight="medium">
+                        {t('reservationDetails')}
                       </Typography>
-                      
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                        <PersonIcon fontSize="small" color="action" />
-                        <Typography variant="body2" color="text.secondary">
-                          Guest: {reservation.Res_Guest_Name || 'N/A'}
-                        </Typography>
-                      </Box>
-                      
-                      {/* Guest Counts */}
-                      <Box sx={{ mb: 2, p: 1, backgroundColor: isOverCapacity ? '#ffebee' : '#f5f5f5', borderRadius: 1 }}>
-                        <Typography variant="subtitle2" color={isOverCapacity ? 'error' : 'text.secondary'} gutterBottom>
-                          Guest Count:
-                        </Typography>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                          <Typography variant="body2">
-                            Adults: {reservation.Res_AdultCount}
-                          </Typography>
-                          <Typography variant="body2">
-                            Children: {reservation.Res_ChildCount}
-                          </Typography>
-                          <Typography variant="body2" fontWeight="bold">
-                            Total: {Number(reservation.Res_AdultCount) + Number(reservation.Res_ChildCount)}
-                          </Typography>
-                        </Box>
-                        {isOverCapacity && (
-                          <Typography variant="caption" color="error" sx={{ mt: 0.5, display: 'block' }}>
-                            ⚠️ Over capacity! Max: {capacityConfig?.totalCapacity}
-                          </Typography>
-                        )}
-                      </Box>
-                      
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                        <ScheduleIcon fontSize="small" color="action" />
-                        <Box>
-                          <Typography variant="body2" color="text.secondary">
-                            Check-In: {reservation.Res_Check_In}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            Check-Out: {reservation.Res_Check_Out}
-                          </Typography>
-                        </Box>
-                      </Box>
-                      
-                      {reservation.Res_Remarks && (
-                        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mb: 2 }}>
-                          <CommentIcon fontSize="small" color="action" sx={{ mt: 0.5 }} />
-                          <Typography variant="body2" sx={{ mt: 0.5 }}>
-                            <ReadMoreText text={reservation.Res_Remarks} wordLimit={10} />
-                          </Typography>
-                        </Box>
-                      )}
-                    </CardContent>
-                    
-                    <Box sx={{ p: 2, display: 'flex', justifyContent: 'center', gap: 1, flexWrap: 'wrap' }}>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        onClick={() => handleOpenDialog(reservation)}
-                        startIcon={<PersonIcon />}
-                        disabled={!canUpdateStatus(reservation)}
-                        sx={{ textTransform: "none", borderRadius: 2 }}
-                      >
-                        {reservation.Res_CheckStatus === "Check In" || reservation.Res_CheckStatus === "I" ? "Check Out" : "Check In"}
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={() => handleViewFeedback(reservation.Res_no)}
-                        startIcon={<VisibilityIcon />}
-                        sx={{ textTransform: "none", borderRadius: 2 }}
-                      >
-                        View Feedback
-                      </Button>
                     </Box>
-                  </Card>
-                </Grid>
-              );
-            })}
-          </Grid>
-        )}
-      </Paper>
 
-      {/* ------------------------------------------------------------Status Update Dialog-------------------------------------------------- */}
-      <Dialog
-  open={openDialog}
-  onClose={handleCloseDialog}
-  maxWidth="sm"
-  fullWidth
-  fullScreen={isMobile}
-  PaperProps={{
-    sx: {
-      borderRadius: isMobile ? 0 : 2,
-      maxHeight: isMobile ? '100vh' : '85vh'
-    }
-  }}
->
-  {/* Simple Header */}
-  <DialogTitle sx={{
-    backgroundColor: theme.palette.primary.main,
-    color: 'white',
-    py: isMobile ? 1.5 : 2,
-    px: isMobile ? 2 : 3,
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    position: 'sticky',
-    top: 0,
-    zIndex: 1
-  }}>
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <PersonIcon fontSize={isMobile ? "small" : "medium"} />
-      <Typography variant={isMobile ? "subtitle1" : "h6"} fontWeight="bold">
-        Update Status
-      </Typography>
-    </Box>
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      {/* Simple Language Toggle */}
-      <Chip
-        icon={<PublicIcon sx={{ color: 'white', fontSize: 16 }} />}
-        label={language === 'en' ? 'ENGLISH' : 
-               language === 'si' ? 'SINHALA' : 
-               language === 'ta' ? 'TAMIL' : 'HINDI'}
-        onClick={() => {
-          const nextLang = language === 'en' ? 'si' : 
-                         language === 'si' ? 'ta' : 
-                         language === 'ta' ? 'hi' : 'en';
-          setLanguage(nextLang);
-        }}
-        size="small"
-        sx={{ 
-          color: 'white',
-          bgcolor: 'rgba(33, 199, 42, 0.99)',
-          cursor: 'pointer',
-          height: '24px',
-          '&:hover': {
-            bgcolor: 'rgba(33, 199, 42, 0.99)'
-          }
-        }}
-      />
-      <IconButton 
-        onClick={handleCloseDialog} 
-        sx={{ 
-          color: 'white',
-          p: 0.5
-        }}
-        size="small"
-      >
-        <CloseIcon fontSize={isMobile ? "small" : "medium"} />
-      </IconButton>
-    </Box>
-  </DialogTitle>
+                    <Box sx={{ display: 'grid', gap: 1.5 }}>
+                      {/* Row 1 */}
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography variant="caption" color="text.secondary">
+                          {t('reservationNumber')}
+                        </Typography>
+                        <Typography variant="body2" fontWeight="medium">
+                          #{selectedReservation.Res_no}
+                        </Typography>
+                      </Box>
 
-  <DialogContent sx={{ 
-    p: isMobile ? 2 : 3,
-    backgroundColor: '#fafafa'
-  }}>
-    {selectedReservation && (
-      <Box sx={{ mt: 1 }}>
-        {/* Reservation Summary */}
-        <Box sx={{ 
-          p: 2, 
-          mb: 3, 
-          backgroundColor: 'white',
-          borderRadius: 1,
-          border: '1px solid #e0e0e0'
-        }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-            <Assignment color="primary" fontSize="small" />
-            <Typography variant="subtitle2" fontWeight="medium">
-              {t('reservationDetails')}
-            </Typography>
-          </Box>
-          
-          <Box sx={{ display: 'grid', gap: 1.5 }}>
-            {/* Row 1 */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="caption" color="text.secondary">
-                {t('reservationNumber')}
-              </Typography>
-              <Typography variant="body2" fontWeight="medium">
-                #{selectedReservation.Res_no}
-              </Typography>
-            </Box>
-            
-            {/* Row 2 */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="caption" color="text.secondary">
-                {t('bungalow')}
-              </Typography>
-              <Typography variant="body2" fontWeight="medium">
-                {getBungalowName(selectedReservation.Res_Bang_Id)}
-              </Typography>
-            </Box>
-            
-            {/* Row 3 */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="caption" color="text.secondary">
-                {t('guestName')}
-              </Typography>
-              <Typography variant="body2" fontWeight="medium">
-                {selectedReservation.Res_Guest_Name || t('na')}
-              </Typography>
-            </Box>
-            
-            {/* Row 4 */}
-            {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      {/* Row 2 */}
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography variant="caption" color="text.secondary">
+                          {t('bungalow')}
+                        </Typography>
+                        <Typography variant="body2" fontWeight="medium">
+                          {getBungalowName(selectedReservation.Res_Bang_Id)}
+                        </Typography>
+                      </Box>
+
+                      {/* Row 3 */}
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography variant="caption" color="text.secondary">
+                          {t('guestName')}
+                        </Typography>
+                        <Typography variant="body2" fontWeight="medium">
+                          {selectedReservation.Res_Guest_Name || t('na')}
+                        </Typography>
+                      </Box>
+
+                      {/* Row 4 */}
+                      {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Typography variant="caption" color="text.secondary">
                 {t('currentStatus')}
               </Typography>
@@ -3362,86 +3643,86 @@ const [isLoading, setIsLoading] = useState(false);
                 sx={{ fontSize: '0.75rem' }}
               />
             </Box> */}
-          </Box>
-        </Box>
+                    </Box>
+                  </Box>
 
-        {/* Guest Counts */}
-        <Box sx={{ 
-          p: 2, 
-          mb: 3, 
-          backgroundColor: 'white',
-          borderRadius: 1,
-          border: '1px solid #e0e0e0'
-        }}>
-          <Typography variant="subtitle2" fontWeight="medium" gutterBottom>
-            {t('guestCount')}
-          </Typography>
-          
-          <Box sx={{ display: 'flex', gap: 2, mb: 1 }}>
-            <Box sx={{ flex: 1, textAlign: 'center' }}>
-              <Typography variant="caption" color="text.secondary" display="block">
-                {t('adults')}
-              </Typography>
-              <Typography variant="h6" color="primary.main">
-                {selectedReservation.Res_AdultCount || 0}
-              </Typography>
-            </Box>
-            
-            <Box sx={{ flex: 1, textAlign: 'center' }}>
-              <Typography variant="caption" color="text.secondary" display="block">
-                {t('children')}
-              </Typography>
-              <Typography variant="h6" color="secondary.main">
-                {selectedReservation.Res_ChildCount || 0}
-              </Typography>
-            </Box>
-            
-            <Box sx={{ flex: 1, textAlign: 'center' }}>
-              <Typography variant="caption" color="text.secondary" display="block">
-                {t('total')}
-              </Typography>
-              <Typography variant="h6" color="success.main">
-                {Number(selectedReservation.Res_AdultCount) + Number(selectedReservation.Res_ChildCount)}
-              </Typography>
-            </Box>
-          </Box>
-          
-          <Typography variant="caption" color="text.secondary">
-            {t('capacity')}: {bungalowCapacity[selectedReservation.Res_Bang_Id]?.totalCapacity} {t('guestsMaximum')}
-          </Typography>
-        </Box>
+                  {/* Guest Counts */}
+                  <Box sx={{
+                    p: 2,
+                    mb: 3,
+                    backgroundColor: 'white',
+                    borderRadius: 1,
+                    border: '1px solid #e0e0e0'
+                  }}>
+                    <Typography variant="subtitle2" fontWeight="medium" gutterBottom>
+                      {t('guestCount')}
+                    </Typography>
 
-        {/* Error Messages - Simple */}
-        {capacityError && (
-          <Box sx={{ 
-            p: 2, 
-            mb: 2, 
-            backgroundColor: '#ffebee', 
-            borderRadius: 1,
-            borderLeft: '4px solid #f44336'
-          }}>
-            <Typography variant="body2" color="error">
-              {capacityError}
-            </Typography>
-          </Box>
-        )}
+                    <Box sx={{ display: 'flex', gap: 2, mb: 1 }}>
+                      <Box sx={{ flex: 1, textAlign: 'center' }}>
+                        <Typography variant="caption" color="text.secondary" display="block">
+                          {t('adults')}
+                        </Typography>
+                        <Typography variant="h6" color="primary.main">
+                          {selectedReservation.Res_AdultCount || 0}
+                        </Typography>
+                      </Box>
 
-        {validationError && (
-          <Box sx={{ 
-            p: 2, 
-            mb: 2, 
-            backgroundColor: '#fff3e0', 
-            borderRadius: 1,
-            borderLeft: '4px solid #ff9800'
-          }}>
-            <Typography variant="body2" color="warning.dark">
-              {validationError}
-            </Typography>
-          </Box>
-        )}
+                      <Box sx={{ flex: 1, textAlign: 'center' }}>
+                        <Typography variant="caption" color="text.secondary" display="block">
+                          {t('children')}
+                        </Typography>
+                        <Typography variant="h6" color="secondary.main">
+                          {selectedReservation.Res_ChildCount || 0}
+                        </Typography>
+                      </Box>
 
-        {/* Status Selection */}
-        <Box sx={{ mb: 3 }}>
+                      <Box sx={{ flex: 1, textAlign: 'center' }}>
+                        <Typography variant="caption" color="text.secondary" display="block">
+                          {t('total')}
+                        </Typography>
+                        <Typography variant="h6" color="success.main">
+                          {Number(selectedReservation.Res_AdultCount) + Number(selectedReservation.Res_ChildCount)}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    <Typography variant="caption" color="text.secondary">
+                      {t('capacity')}: {bungalowCapacity[selectedReservation.Res_Bang_Id]?.totalCapacity} {t('guestsMaximum')}
+                    </Typography>
+                  </Box>
+
+                  {/* Error Messages - Simple */}
+                  {capacityError && (
+                    <Box sx={{
+                      p: 2,
+                      mb: 2,
+                      backgroundColor: '#ffebee',
+                      borderRadius: 1,
+                      borderLeft: '4px solid #f44336'
+                    }}>
+                      <Typography variant="body2" color="error">
+                        {capacityError}
+                      </Typography>
+                    </Box>
+                  )}
+
+                  {validationError && (
+                    <Box sx={{
+                      p: 2,
+                      mb: 2,
+                      backgroundColor: '#fff3e0',
+                      borderRadius: 1,
+                      borderLeft: '4px solid #ff9800'
+                    }}>
+                      <Typography variant="body2" color="warning.dark">
+                        {validationError}
+                      </Typography>
+                    </Box>
+                  )}
+
+                  {/* Status Selection */}
+                  {/* <Box sx={{ mb: 3 }}>
           <Typography variant="subtitle2" fontWeight="medium" gutterBottom>
             {t('updateStatus')}
           </Typography>
@@ -3483,165 +3764,227 @@ const [isLoading, setIsLoading] = useState(false);
           <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
             {t('selectAction')}
           </Typography>
-        </Box>
+        </Box> */}
 
-        {/* Bungalow Condition - Only show when Check Out selected */}
-        {caregiverStatus === "O" && (
-          <Box sx={{ 
-            p: 2, 
-            mb: 2, 
-            backgroundColor: 'white',
-            borderRadius: 1,
-            border: '1px solid #e0e0e0'
-          }}>
-            <Typography variant="subtitle2" fontWeight="medium" gutterBottom>
-              {t('bungalowCondition')}
-            </Typography>
-            
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              {t('bungalowConditionQuestion')}
-            </Typography>
-            
-            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-              <Button
-                variant={feedbackType === "good" ? "contained" : "outlined"}
-                color="success"
-                onClick={() => setFeedbackType("good")}
-                fullWidth
-                size="small"
-                startIcon={<ThumbUpIcon />}
-                sx={{ 
-                  borderRadius: 1,
-                  py: 1,
-                  textTransform: 'none'
-                }}
-              >
-                {t('checkedOutWithoutIssue')}
-              </Button>
-              
-              <Button
-                variant={feedbackType === "bad" ? "contained" : "outlined"}
-                color="error"
-                onClick={() => setFeedbackType("bad")}
-                fullWidth
-                size="small"
-                startIcon={<ThumbDownIcon />}
-                sx={{ 
-                  borderRadius: 1,
-                  py: 1,
-                  textTransform: 'none'
-                }}
-              >
-                {t('checkedOutWithIssues')}
-              </Button>
-            </Box>
-            
-            {feedbackType === "bad" && (
-              <Box sx={{ 
-                mt: 2, 
-                p: 2, 
-                backgroundColor: '#fff3e0', 
-                borderRadius: 2,
-                border: '1px dashed #ff9800'
-              }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                  <WarningIcon color="warning" fontSize="small" />
-                  <Typography variant="body2" color="warning.dark" fontWeight="medium">
-                    Important Notice
-                  </Typography>
+
+                  {/* Status Selection */}
+                  <Box sx={{ mb: 3 }}>
+                    <Typography variant="subtitle2" fontWeight="medium" gutterBottom>
+                      {t('updateStatus')}
+                    </Typography>
+
+
+                    {selectedReservation && (
+                      <Box sx={{ display: 'flex', gap: 2 }}>
+
+                        {(!selectedReservation.Res_CheckStatus ||
+                          selectedReservation.Res_CheckStatus.trim() === "" ||
+                          selectedReservation.Res_CheckStatus.trim() === "Pending" ||
+                          selectedReservation.Res_CheckStatus.trim() === "Confirm" ||
+                          selectedReservation.Res_CheckStatus.trim() === "B") && (
+                            <Button
+                              variant={caregiverStatus === "I" ? "contained" : "outlined"}
+                              color="success"
+                              onClick={() => setCaregiverStatus("I")}
+                              fullWidth
+                              size={isMobile ? "medium" : "large"}
+                              startIcon={<CheckCircleIcon />}
+                              sx={{
+                                borderRadius: 1,
+                                py: isMobile ? 1 : 1.5,
+                                textTransform: 'none'
+                              }}
+                            >
+                              {t('checkInGuest')}
+                            </Button>
+                          )}
+
+
+                        {(selectedReservation.Res_CheckStatus.trim() === "Check In" ||
+                          selectedReservation.Res_CheckStatus.trim() === "I") && (
+                            <Button
+                              variant={caregiverStatus === "O" ? "contained" : "outlined"}
+                              color="primary"
+                              onClick={() => setCaregiverStatus("O")}
+                              fullWidth
+                              size={isMobile ? "medium" : "large"}
+                              startIcon={<DoneIcon />}
+                              sx={{
+                                borderRadius: 1,
+                                py: isMobile ? 1 : 1.5,
+                                textTransform: 'none'
+                              }}
+                            >
+                              {t('checkOutGuest')}
+                            </Button>
+                          )}
+                      </Box>
+                    )}
+
+                    <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+                      {t('selectAction')}
+                    </Typography>
+                  </Box>
+
+                  {/* Bungalow Condition - Only show when Check Out selected */}
+                  {caregiverStatus === "O" && (
+                    <Box sx={{
+                      p: 2,
+                      mb: 2,
+                      backgroundColor: 'white',
+                      borderRadius: 1,
+                      border: '1px solid #e0e0e0'
+                    }}>
+                      <Typography variant="subtitle2" fontWeight="medium" gutterBottom>
+                        {t('bungalowCondition')}
+                      </Typography>
+
+                      <Typography variant="body2" color="text.secondary" gutterBottom>
+                        {t('bungalowConditionQuestion')}
+                      </Typography>
+
+                      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                        <Button
+                          variant={feedbackType === "good" ? "contained" : "outlined"}
+                          color="success"
+                          onClick={() => setFeedbackType("good")}
+                          fullWidth
+                          size="small"
+                          startIcon={<ThumbUpIcon />}
+                          sx={{
+                            borderRadius: 1,
+                            py: 1,
+                            textTransform: 'none'
+                          }}
+                        >
+                          {t('checkedOutWithoutIssue')}
+                        </Button>
+
+                        <Button
+                          variant={feedbackType === "bad" ? "contained" : "outlined"}
+                          color="error"
+                          onClick={() => setFeedbackType("bad")}
+                          fullWidth
+                          size="small"
+                          startIcon={<ThumbDownIcon />}
+                          sx={{
+                            borderRadius: 1,
+                            py: 1,
+                            textTransform: 'none'
+                          }}
+                        >
+                          {t('checkedOutWithIssues')}
+                        </Button>
+                      </Box>
+
+                      {feedbackType === "bad" && (
+                        <Box sx={{
+                          mt: 2,
+                          p: 2,
+                          backgroundColor: '#fff3e0',
+                          borderRadius: 2,
+                          border: '1px dashed #ff9800'
+                        }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                            <WarningIcon color="warning" fontSize="small" />
+                            <Typography variant="body2" color="warning.dark" fontWeight="medium">
+                              Important Notice
+                            </Typography>
+                          </Box>
+                          <Typography variant="body2" color="text.secondary">
+                            {t('contactInstructions')}
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
+                  )}
                 </Box>
-                <Typography variant="body2" color="text.secondary">
-                  {t('contactInstructions')}
-                </Typography>
-              </Box>
-            )}
-          </Box>
-        )}
-      </Box>
-    )}
-  </DialogContent>
-  
-  {/* Simple Dialog Actions */}
-  <DialogActions sx={{ 
-    p: isMobile ? 2 : 3, 
-    borderTop: `1px solid ${theme.palette.divider}`,
-    gap: 2,
-    backgroundColor: 'white'
-  }}>
-    <Button
-      onClick={handleCloseDialog}
-      disabled={isSubmitting}
-      variant="outlined"
-      fullWidth={isMobile}
-      sx={{ 
-        borderRadius: 1,
-        textTransform: 'none',
-        flex: isMobile ? 1 : 'none'
-      }}
-    >
-      {t('cancel')}
-    </Button>
-    <Button
-      variant="contained"
-      onClick={handleUpdateStatus}
-      disabled={isSubmitting || !caregiverStatus || (caregiverStatus === "I" && capacityError)}
-      fullWidth={isMobile}
-      sx={{ 
-        borderRadius: 1,
-        textTransform: 'none',
-        flex: isMobile ? 1 : 'none'
-      }}
-    >
-      {isSubmitting ? (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <CircularProgress size={20} color="inherit" />
-          <span>{t('processing')}</span>
-        </Box>
-      ) : caregiverStatus === "I" ? (
-        t('confirmCheckIn')
-      ) : caregiverStatus === "O" ? (
-        t('confirmCheckOut')
-      ) : (
-        t('updateStatusButton')
-      )}
-    </Button>
-  </DialogActions>
-</Dialog>
- 
-      <FeedbackDialog
-        open={feedbackDialogOpen}
-        onClose={() => setFeedbackDialogOpen(false)}
-        reservationNo={selectedFeedbackReservation}
-        data={data}
-        feedbackData={feedbackData}
-        feedbackLoadingById={feedbackLoadingById}
-        feedbackErrorById={feedbackErrorById}
-        onCheckout={handleCheckoutFromFeedback}
-        showCheckout={shouldShowCheckoutInFeedback(selectedFeedbackReservation)}
-        theme={theme}
-      />
+              )}
+            </DialogContent>
 
-      {/* Checkout Dialog */}
-      <CheckoutDialog
-        open={checkoutDialogOpen}
-        onClose={() => {
-          setCheckoutDialogOpen(false);
-          setValidationError('');
-        }}
-        reservationNo={selectedFeedbackReservation}
-        checkoutFeedbackType={checkoutFeedbackType}
-        setCheckoutFeedbackType={setCheckoutFeedbackType}
-        checkoutComment={checkoutComment}
-        setCheckoutComment={setCheckoutComment}
-        validationError={validationError}
-        setValidationError={setValidationError}
-        isSubmitting={isSubmitting}
-        handleCheckoutSubmit={handleCheckoutSubmit}
-        theme={theme}
-        isMobile={isMobile}
-      />
-    </Box>
-     )}
+            {/* Simple Dialog Actions */}
+            <DialogActions sx={{
+              p: isMobile ? 2 : 3,
+              borderTop: `1px solid ${theme.palette.divider}`,
+              gap: 2,
+              backgroundColor: 'white'
+            }}>
+              <Button
+                onClick={handleCloseDialog}
+                disabled={isSubmitting}
+                variant="outlined"
+                fullWidth={isMobile}
+                sx={{
+                  borderRadius: 1,
+                  textTransform: 'none',
+                  flex: isMobile ? 1 : 'none'
+                }}
+              >
+                {t('cancel')}
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleUpdateStatus}
+                disabled={isSubmitting || !caregiverStatus || (caregiverStatus === "I" && capacityError)}
+                fullWidth={isMobile}
+                sx={{
+                  borderRadius: 1,
+                  textTransform: 'none',
+                  flex: isMobile ? 1 : 'none'
+                }}
+              >
+                {isSubmitting ? (
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <CircularProgress size={20} color="inherit" />
+                    <span>{t('processing')}</span>
+                  </Box>
+                ) : caregiverStatus === "I" ? (
+                  t('confirmCheckIn')
+                ) : caregiverStatus === "O" ? (
+                  t('confirmCheckOut')
+                ) : (
+                  t('updateStatusButton')
+                )}
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <FeedbackDialog
+            open={feedbackDialogOpen}
+            onClose={() => setFeedbackDialogOpen(false)}
+            reservationNo={selectedFeedbackReservation}
+            data={data}
+            feedbackData={feedbackData}
+            feedbackLoadingById={feedbackLoadingById}
+            feedbackErrorById={feedbackErrorById}
+            onCheckout={handleCheckoutFromFeedback}
+            showCheckout={shouldShowCheckoutInFeedback(selectedFeedbackReservation)}
+            theme={theme}
+            language={language}  
+            t={t}
+          />
+
+          {/* Checkout Dialog */}
+          <CheckoutDialog
+            open={checkoutDialogOpen}
+            onClose={() => {
+              setCheckoutDialogOpen(false);
+              setValidationError('');
+            }}
+            reservationNo={selectedFeedbackReservation}
+            checkoutFeedbackType={checkoutFeedbackType}
+            setCheckoutFeedbackType={setCheckoutFeedbackType}
+            checkoutComment={checkoutComment}
+            setCheckoutComment={setCheckoutComment}
+            validationError={validationError}
+            setValidationError={setValidationError}
+            isSubmitting={isSubmitting}
+            handleCheckoutSubmit={handleCheckoutSubmit}
+            theme={theme}
+            isMobile={isMobile}
+          />
+        </Box>
+      )}
     </div>
   );
 };

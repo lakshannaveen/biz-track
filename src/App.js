@@ -552,7 +552,8 @@ import File_Attachments from "./layouts/file_attachments/File_Attachments";
 import Notifications from "./layouts/notifications/Notifications";
 import NotificationMessage from "./layouts/notifications/NotificationMessage";
 import MaintenancePage from "../src/components/Cards/maintenance";
-import Caregiver from "../src/components/Cards/CareGiver"
+import Caregiver from "../src/components/Cards/CareGiver";
+import Manager from "../src/layouts/reservations/Managers";
 
 // import useMediaQuery from "@material-ui/core/useMediaQuery";
 // const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -574,7 +575,7 @@ function App() {
   }, [isOnline]);
 
     useEffect(() => {
-    // Check for new version every 30 minutes
+     
     const checkVersion = async () => {
       try {
         const response = await fetch('/version.json?t=' + Date.now());
@@ -582,7 +583,7 @@ function App() {
         
         if (data.version !== versionInfo.version) {
           if (window.confirm('A new version is available! Would you like to update?')) {
-            // Clear everything and reload
+             
             if ('caches' in window) {
               const cacheNames = await caches.keys();
               await Promise.all(cacheNames.map(name => caches.delete(name)));
@@ -602,7 +603,7 @@ function App() {
     };
 
     checkVersion();
-    const interval = setInterval(checkVersion, 30 * 60 * 1000); // Check every 30 min
+    const interval = setInterval(checkVersion, 30 * 60 * 1000);  
     
     return () => clearInterval(interval);
   }, []);
@@ -664,6 +665,7 @@ function App() {
                       <Route element={<Telephone />} path="/telephone" />
                       <Route element={<Jobs />} path="/jobs" />
                       <Route element={<MaintenancePage />} path="/MaintenancePage" /> 
+                      <Route element={<Manager />} path="/ManagerPage" /> 
 
                       <Route element={<EMPDetails />} path="/empdetails" />
                       <Route element={<Outstanding_Tools />} path="/tools" />

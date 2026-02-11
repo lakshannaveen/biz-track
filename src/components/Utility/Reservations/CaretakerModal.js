@@ -1964,7 +1964,9 @@ const CaretakerModal = ({ open, handleClose, reservation }) => {
                     "Pending": { label: "Pending", color: "warning" }
                   };
 
-                  const statusInfo = statusConfig[item.Res_Status] || { label: item.Res_Status, color: "default" };
+                  const statusInfo =
+  statusConfig[item.Res_Status] || { label: item.Res_Status, color: "primary" };
+
                   
                   // Calculate days until check-in
                   const checkInDate = new Date(item.Check_In);
