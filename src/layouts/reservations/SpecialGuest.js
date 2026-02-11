@@ -166,7 +166,7 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
     "Bangladesh", "Belgium", "Brazil", "Canada", "China", "Colombia",
     "Denmark", "Egypt", "Finland", "France", "Germany", "Greece",
     "India", "Indonesia", "Ireland", "Italy", "Japan", "Jordan",
-    "Kenya", "South Korea", "Kuwait", "Lebanon", "Malaysia", "Mexico",
+    "Kenya", "South Korea", "Sri Lanka", "Kuwait", "Lebanon", "Malaysia", "Mexico",
     "Morocco", "Netherlands", "New Zealand", "Norway", "Oman", "Pakistan",
     "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania",
     "Russia", "Saudi Arabia", "Singapore", "South Africa", "Spain",
