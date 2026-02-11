@@ -17,6 +17,7 @@ import {
   FormControl,
   InputLabel,
   Select,
+  Autocomplete,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -158,6 +159,20 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
     label: `+${getCountryCallingCode(country)} (${country})`,
     code: getCountryCallingCode(country),
   }));
+
+  // Countries list for country dropdown
+  const countriesList = [
+    "Afghanistan", "Albania", "Algeria", "Argentina", "Australia", "Austria",
+    "Bangladesh", "Belgium", "Brazil", "Canada", "China", "Colombia",
+    "Denmark", "Egypt", "Finland", "France", "Germany", "Greece",
+    "India", "Indonesia", "Ireland", "Italy", "Japan", "Jordan",
+    "Kenya", "South Korea", "Kuwait", "Lebanon", "Malaysia", "Mexico",
+    "Morocco", "Netherlands", "New Zealand", "Norway", "Oman", "Pakistan",
+    "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania",
+    "Russia", "Saudi Arabia", "Singapore", "South Africa", "Spain",
+    "Sweden", "Switzerland", "Thailand", "Turkey", "Ukraine",
+    "United Arab Emirates", "United Kingdom", "United States", "Vietnam", "Other"
+  ];
 
   // Update phoneNumber when country or input changes
   useEffect(() => {
@@ -806,100 +821,35 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
                       <PublicIcon sx={{ mr: 1, color: '#1976d2' }} />
                       <Typography variant="body2" sx={{ fontWeight: '500' }}>Country</Typography>
                     </Box>
-                    <Box sx={{
-                      position: 'relative',
-                      '& .country-dropdown': {
-                        width: '100%',
-                        padding: '16.5px 14px',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        fontSize: '16px',
-                        backgroundColor: loading ? '#f5f5f5' : 'white',
-                        cursor: loading ? 'not-allowed' : 'pointer',
-                        transition: 'border-color 0.2s',
-                        '&:hover': {
-                          borderColor: '#1976d2',
-                        },
-                        '&:focus': {
-                          borderColor: '#1976d2',
-                          outline: 'none',
-                          boxShadow: '0 0 0 2px rgba(25, 118, 210, 0.2)',
-                        },
-                      },
-                      '& .country-dropdown option': {
-                        padding: '8px',
-                      },
-                    }}>
-                      <FormControl fullWidth disabled={loading}>
-                        <InputLabel>Country</InputLabel>
-                        <Select
-                          value={country}
-                          onChange={(e) => setCountry(e.target.value)}
+                    <Autocomplete
+                      value={country}
+                      onChange={(event, newValue) => {
+                        setCountry(newValue || "");
+                      }}
+                      options={countriesList}
+                      disabled={loading}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
                           label="Country"
-                        >
-                          <MenuItem value="">
-                            <em>Select Country</em>
-                          </MenuItem>
-                          <MenuItem value="Afghanistan">Afghanistan</MenuItem>
-                          <MenuItem value="Albania">Albania</MenuItem>
-                          <MenuItem value="Algeria">Algeria</MenuItem>
-                          <MenuItem value="Argentina">Argentina</MenuItem>
-                          <MenuItem value="Australia">Australia</MenuItem>
-                          <MenuItem value="Austria">Austria</MenuItem>
-                          <MenuItem value="Bangladesh">Bangladesh</MenuItem>
-                          <MenuItem value="Belgium">Belgium</MenuItem>
-                          <MenuItem value="Brazil">Brazil</MenuItem>
-                          <MenuItem value="Canada">Canada</MenuItem>
-                          <MenuItem value="China">China</MenuItem>
-                          <MenuItem value="Colombia">Colombia</MenuItem>
-                          <MenuItem value="Denmark">Denmark</MenuItem>
-                          <MenuItem value="Egypt">Egypt</MenuItem>
-                          <MenuItem value="Finland">Finland</MenuItem>
-                          <MenuItem value="France">France</MenuItem>
-                          <MenuItem value="Germany">Germany</MenuItem>
-                          <MenuItem value="Greece">Greece</MenuItem>
-                          <MenuItem value="India">India</MenuItem>
-                          <MenuItem value="Indonesia">Indonesia</MenuItem>
-                          <MenuItem value="Ireland">Ireland</MenuItem>
-                          <MenuItem value="Italy">Italy</MenuItem>
-                          <MenuItem value="Japan">Japan</MenuItem>
-                          <MenuItem value="Jordan">Jordan</MenuItem>
-                          <MenuItem value="Kenya">Kenya</MenuItem>
-                          <MenuItem value="South Korea">South Korea</MenuItem>
-                          <MenuItem value="Kuwait">Kuwait</MenuItem>
-                          <MenuItem value="Lebanon">Lebanon</MenuItem>
-                          <MenuItem value="Malaysia">Malaysia</MenuItem>
-                          <MenuItem value="Mexico">Mexico</MenuItem>
-                          <MenuItem value="Morocco">Morocco</MenuItem>
-                          <MenuItem value="Netherlands">Netherlands</MenuItem>
-                          <MenuItem value="New Zealand">New Zealand</MenuItem>
-                          <MenuItem value="Norway">Norway</MenuItem>
-                          <MenuItem value="Oman">Oman</MenuItem>
-                          <MenuItem value="Pakistan">Pakistan</MenuItem>
-                          <MenuItem value="Peru">Peru</MenuItem>
-                          <MenuItem value="Philippines">Philippines</MenuItem>
-                          <MenuItem value="Poland">Poland</MenuItem>
-                          <MenuItem value="Portugal">Portugal</MenuItem>
-                          <MenuItem value="Qatar">Qatar</MenuItem>
-                          <MenuItem value="Romania">Romania</MenuItem>
-                          <MenuItem value="Russia">Russia</MenuItem>
-                          <MenuItem value="Saudi Arabia">Saudi Arabia</MenuItem>
-                          <MenuItem value="Singapore">Singapore</MenuItem>
-                          <MenuItem value="South Africa">South Africa</MenuItem>
-                          <MenuItem value="Spain">Spain</MenuItem>
-                          <MenuItem value="Sweden">Sweden</MenuItem>
-                          <MenuItem value="Switzerland">Switzerland</MenuItem>
-                          <MenuItem value="Thailand">Thailand</MenuItem>
-                          <MenuItem value="Turkey">Turkey</MenuItem>
-                          <MenuItem value="Ukraine">Ukraine</MenuItem>
-                          <MenuItem value="United Arab Emirates">United Arab Emirates</MenuItem>
-                          <MenuItem value="United Kingdom">United Kingdom</MenuItem>
-                          <MenuItem value="United States">United States</MenuItem>
-                          <MenuItem value="Vietnam">Vietnam</MenuItem>
-                          <MenuItem value="Other">Other</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
+                          variant="outlined"
+                          fullWidth
+                          disabled={loading}
+                        />
+                      )}
+                      disableClearable={false}
+                      freeSolo={false}
+                      slotProps={{
+                        popper: {
+                          placement: 'bottom-start',
+                        },
+                      }}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          backgroundColor: loading ? '#f5f5f5' : 'white',
+                        },
+                      }}
+                    />
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
