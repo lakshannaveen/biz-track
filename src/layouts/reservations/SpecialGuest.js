@@ -18,6 +18,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import HomeIcon from "@mui/icons-material/Home";
+import PublicIcon from "@mui/icons-material/Public";
 import PersonIcon from "@mui/icons-material/Person";
 import NoteIcon from "@mui/icons-material/Note";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
@@ -172,6 +173,8 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [guestName, setGuestName] = useState("");
+  const [address, setAddress] = useState("");
+  const [country, setCountry] = useState("");
   const [remarks, setRemarks] = useState("");
   const [capacityError, setCapacityError] = useState("");
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
@@ -341,6 +344,8 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
     setAdults(1);
     setChildren(0);
     setGuestName("");
+    setAddress("");
+    setCountry("");
     setRemarks("");
     setCapacityError("");
     handleClose();
@@ -418,6 +423,8 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
       setAdults(1);
       setChildren(0);
       setGuestName("");
+      setAddress("");
+      setCountry("");
       setRemarks("");
       setCapacityError("");
       setLoading(false);
@@ -571,7 +578,7 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
         const logId = localStorage.getItem("logId");
 
         const response = await axios.post(
-          `Reservation/PostBooking?P_BUNGALOW_ID=${bungalowType}&P_CHECK_IN=${formattedCheckIn}&P_CHECK_OUT=${formattedCheckOut}&P_ADULT_COUNT=${adults}&P_CHILD_COUNT=${children}&P_LOG_ID=${logId}&P_SERIAL_NO=${sno}`,
+          `Reservation/PostBooking?P_BUNGALOW_ID=${bungalowType}&P_CHECK_IN=${formattedCheckIn}&P_CHECK_OUT=${formattedCheckOut}&P_ADULT_COUNT=${adults}&P_CHILD_COUNT=${children}&P_GUEST_NAME=${encodeURIComponent(guestName)}&P_ADDRESS=${encodeURIComponent(address)}&P_COUNTRY=${encodeURIComponent(country)}&P_LOG_ID=${logId}&P_SERIAL_NO=${sno}`,
           {},
           {
             headers: {
@@ -870,6 +877,64 @@ const SpecialModal = ({ open, handleClose, maintenanceDates = new Set() }) => {
                     </Alert>
                   )}
                 </Box>
+
+                {/* Additional Guest Details */}
+                <Grid container spacing={2} sx={{ mt: 1 }}>
+                  <Grid item xs={12} sm={4}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                      <PersonIcon sx={{ mr: 1, color: '#1976d2' }} />
+                      <Typography variant="body2" sx={{ fontWeight: '500' }}>Name</Typography>
+                    </Box>
+                    <TextField
+                      fullWidth
+                      placeholder="Enter guest name"
+                      value={guestName}
+                      onChange={(e) => setGuestName(e.target.value)}
+                      disabled={loading}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: 2,
+                        },
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                      <HomeIcon sx={{ mr: 1, color: '#1976d2' }} />
+                      <Typography variant="body2" sx={{ fontWeight: '500' }}>Address</Typography>
+                    </Box>
+                    <TextField
+                      fullWidth
+                      placeholder="Enter address"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      disabled={loading}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: 2,
+                        },
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                      <PublicIcon sx={{ mr: 1, color: '#1976d2' }} />
+                      <Typography variant="body2" sx={{ fontWeight: '500' }}>Country</Typography>
+                    </Box>
+                    <TextField
+                      fullWidth
+                      placeholder="Enter country"
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
+                      disabled={loading}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: 2,
+                        },
+                      }}
+                    />
+                  </Grid>
+                </Grid>
               </Box>
             )}
 
