@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import NewCarousel from "../../components/Carousel/NewCarousel";
 import HeaderComponent from "../../components/Cards/HeaderComponent";
+import Dashboard from "./Dashboard";
 const Home = () => {
   useEffect(() => {
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
@@ -60,6 +61,13 @@ const Home = () => {
           }}
         >
           <HeaderComponent />
+        </Box>
+        <Box
+          sx={{
+            marginTop: 2,
+          }}
+        >
+          <Dashboard />
         </Box>
       </Box>
     </Box>
