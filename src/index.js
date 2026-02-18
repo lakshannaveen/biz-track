@@ -5,6 +5,8 @@ import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 import LandingDashboard from "./components/Cards/LandingDashboard";
+import SignIn from "./layouts/authentication/sign-in";
+import { Routes, Route } from "react-router-dom";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
@@ -22,13 +24,16 @@ import { AuthContextProvider } from "./context/AuthContext";
 // axios.defaults.headers.get["Accept"] = "application/json";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-const showDashboard = typeof window !== 'undefined' && localStorage.getItem('showDashboard') === '1';
 
 root.render(
   <Provider store={store}>
     <BrowserRouter>
       <AuthContextProvider>
-        {showDashboard ? <LandingDashboard /> : <App />}
+        <Routes>
+          <Route path="/" element={<LandingDashboard />} />
+          <Route path="/login" element={<SignIn />} />
+          <Route path="/*" element={<App />} />
+        </Routes>
       </AuthContextProvider>
     </BrowserRouter>
   </Provider>

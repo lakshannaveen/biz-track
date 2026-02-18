@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Card,
@@ -15,7 +16,10 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Button,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import {
   BarChart,
   Bar,
@@ -45,6 +49,7 @@ import {
   ShoppingCart,
   Phone,
   Notifications,
+  Login,
 } from "@mui/icons-material";
 import AttendanceService from "../../service/AttendanceService";
 import LeaveService from "../../service/LeaveService";
@@ -296,6 +301,10 @@ const Dashboard = () => {
     </Paper>
   );
 
+  const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   if (loading) {
     return (
       <Box
@@ -313,14 +322,36 @@ const Dashboard = () => {
 
   return (
     <Box sx={{ p: 2, backgroundColor: "#f5f5f5", minHeight: "100vh" }}>
-      {/* Header */}
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, color: "#333", mb: 1 }}>
-           Dashboard
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          Overview of your attendance, leave, and performance metrics
-        </Typography>
+      {/* Top header with project name and sign-in (responsive) */}
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+        <Box>
+          <Typography variant="h5" sx={{ fontWeight: 800, color: colors.primary }}>
+            BizTrack
+          </Typography>
+          <Typography variant="caption" color="textSecondary">
+            Overview of attendance, leave and performance
+          </Typography>
+        </Box>
+        <Box>
+          {isMobile ? (
+            <IconButton
+              aria-label="sign in"
+              onClick={() => navigate("/login") }
+              sx={{ bgcolor: colors.primary, color: "#fff" }}
+            >
+              <Login />
+            </IconButton>
+          ) : (
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => navigate("/login") }
+              sx={{ backgroundColor: colors.primary }}
+            >
+              Sign In
+            </Button>
+          )}
+        </Box>
       </Box>
 
       {/* Stats Cards */}
