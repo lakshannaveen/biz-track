@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
+import LandingDashboard from "./components/Cards/LandingDashboard";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
@@ -21,11 +22,13 @@ import { AuthContextProvider } from "./context/AuthContext";
 // axios.defaults.headers.get["Accept"] = "application/json";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const showDashboard = typeof window !== 'undefined' && localStorage.getItem('showDashboard') === '1';
+
 root.render(
   <Provider store={store}>
     <BrowserRouter>
       <AuthContextProvider>
-        <App />
+        {showDashboard ? <LandingDashboard /> : <App />}
       </AuthContextProvider>
     </BrowserRouter>
   </Provider>

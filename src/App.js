@@ -554,6 +554,7 @@ import NotificationMessage from "./layouts/notifications/NotificationMessage";
 import MaintenancePage from "../src/components/Cards/maintenance";
 import Caregiver from "../src/components/Cards/CareGiver";
 import Manager from "../src/layouts/reservations/Managers";
+import LandingDashboard from './components/Cards/LandingDashboard';
 
 // import useMediaQuery from "@material-ui/core/useMediaQuery";
 // const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -622,6 +623,9 @@ function App() {
         pauseOnHover
         theme="colored"
       />
+      <Routes>
+        <Route path="/landingpage" element={<LandingDashboard />} />
+      </Routes>
       {isOnline ? (
         <Fragment>
           {loading ? (
