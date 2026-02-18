@@ -6,7 +6,7 @@ This update enhances the landing dashboard (Home.js) with a comprehensive HR Das
 ## Changes Made
 
 ### 1. **New Dependencies**
-- **recharts** (v2.x): A composable charting library built on React components for creating beautiful, responsive charts
+- **recharts** (v3.7.0): A composable charting library built on React components for creating beautiful, responsive charts
 
 ### 2. **New Components**
 

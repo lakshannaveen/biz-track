@@ -38,12 +38,9 @@ import dayjs from "dayjs";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
-  // eslint-disable-next-line no-unused-vars
   const [attendanceData, setAttendanceData] = useState(null);
   const [leaveBalance, setLeaveBalance] = useState(null);
-  // eslint-disable-next-line no-unused-vars
   const [punctuality, setPunctuality] = useState(null);
-  // eslint-disable-next-line no-unused-vars
   const [leaveSummary, setLeaveSummary] = useState(null);
 
   // Color palette matching the project theme
@@ -106,6 +103,15 @@ const Dashboard = () => {
 
   // Prepare data for charts
   const getMonthlyAttendanceData = () => {
+    // Use actual attendance data if available, otherwise sample data
+    if (attendanceData && Array.isArray(attendanceData)) {
+      return attendanceData.map((item) => ({
+        month: item.Month || item.month || "N/A",
+        present: item.Present || item.present || 0,
+        absent: item.Absent || item.absent || 0,
+        late: item.Late || item.late || 0,
+      }));
+    }
     // Sample data structure - adjust based on actual API response
     return [
       { month: "Jan", present: 22, absent: 2, late: 1 },
@@ -134,6 +140,14 @@ const Dashboard = () => {
   };
 
   const getPunctualityTrendData = () => {
+    // Use actual punctuality data if available, otherwise sample data
+    if (punctuality && Array.isArray(punctuality)) {
+      return punctuality.map((item) => ({
+        month: item.Month || item.month || "N/A",
+        onTime: item.OnTime || item.onTime || 0,
+        late: item.Late || item.late || 0,
+      }));
+    }
     // Sample data - adjust based on actual API response
     return [
       { month: "Jan", onTime: 95, late: 5 },
@@ -146,6 +160,15 @@ const Dashboard = () => {
   };
 
   const getLeaveTrendsData = () => {
+    // Use actual leave summary data if available, otherwise sample data
+    if (leaveSummary && Array.isArray(leaveSummary)) {
+      return leaveSummary.map((item) => ({
+        month: item.Month || item.month || "N/A",
+        approved: item.Approved || item.approved || 0,
+        pending: item.Pending || item.pending || 0,
+        rejected: item.Rejected || item.rejected || 0,
+      }));
+    }
     // Sample data - adjust based on actual API response
     return [
       { month: "Jan", approved: 3, pending: 1, rejected: 0 },
