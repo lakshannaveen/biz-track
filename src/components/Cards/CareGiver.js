@@ -1,4 +1,3 @@
-
 // import React, { useState, useEffect } from "react";
 // import { useSelector, useDispatch } from "react-redux";
 // import {
@@ -63,13 +62,13 @@
 //   ThumbDown as ThumbDownIcon,
 //   ExitToApp as ExitToAppIcon,
 //   Assignment,
-//   Error as ErrorIcon, 
+//   Error as ErrorIcon,
 //   Warning as WarningIcon
 // } from "@mui/icons-material";
 // import CheckoutDialog from "../../components/Cards/CheckoutDialog";
-// import { 
-//   fetchCaregiverData, 
-//   updateCheckStatus, 
+// import {
+//   fetchCaregiverData,
+//   updateCheckStatus,
 //   addCaretFeedback,
 //   fetchCaretFeedbackDetails ,
 //   updateCaretStatus
@@ -95,13 +94,13 @@
 
 // const CaregiverPage = () => {
 //   const dispatch = useDispatch();
-//   const { 
-//     loading, 
-//     data, 
-//     error, 
-//     feedbackData, 
-//     feedbackLoadingById, 
-//     feedbackErrorById 
+//   const {
+//     loading,
+//     data,
+//     error,
+//     feedbackData,
+//     feedbackLoadingById,
+//     feedbackErrorById
 //   } = useSelector(state => state.caregiver);
 
 //   const [filteredData, setFilteredData] = useState([]);
@@ -297,8 +296,8 @@
 //         } else {
 //           // For bad feedback, set status to "B" (maintenance needed)
 //           await dispatch(addCaretFeedback(
-//             selectedReservation.Res_no, 
-//             caregiverComment.trim(), 
+//             selectedReservation.Res_no,
+//             caregiverComment.trim(),
 //             "B"
 //           ));
 
@@ -359,15 +358,15 @@
 
 //     try {
 //       const feedbackItems = feedbackData[selectedFeedbackReservation];
-//       const feedbackId = feedbackItems && feedbackItems.length > 0 
-//         ? feedbackItems[0].Feed_Id 
+//       const feedbackId = feedbackItems && feedbackItems.length > 0
+//         ? feedbackItems[0].Feed_Id
 //         : null;
 
 //       if (checkoutFeedbackType === "good") {
 //         // Good condition checkout
 //         if (feedbackId) {
 //           await dispatch(updateCaretStatus(feedbackId, "P", selectedFeedbackReservation));
-//         } 
+//         }
 
 //         // Update main status to "O" (Checked Out)
 //         await dispatch(updateCheckStatus(selectedFeedbackReservation, "O"));
@@ -383,14 +382,14 @@
 //           await dispatch(addCaretFeedback(
 //             selectedFeedbackReservation,
 //             checkoutComment.trim(),
-//             "B" 
+//             "B"
 //           ));
 //         } else {
 //           // Create new feedback with "B" status
 //           await dispatch(addCaretFeedback(
 //             selectedFeedbackReservation,
 //             checkoutComment.trim(),
-//             "B" 
+//             "B"
 //           ));
 //         }
 
@@ -472,7 +471,7 @@
 //                 Manage bungalow check-in and checkout operations
 //               </Typography>
 //             </Box>
-//           </Box> 
+//           </Box>
 
 //           <Box sx={{ display: "flex", gap: 1, flexWrap: 'wrap' }}>
 //             <Button
@@ -516,13 +515,13 @@
 //               Back
 //             </Button>
 //           </Box>
-//         </Box> 
+//         </Box>
 
 //         <Divider sx={{ mb: 3 }} />
 
 //         {/* Tabs */}
-//         <Box sx={{ 
-//           borderBottom: 1, 
+//         <Box sx={{
+//           borderBottom: 1,
 //           borderColor: 'divider',
 //           mb: 2
 //         }}>
@@ -533,20 +532,20 @@
 //             scrollButtons={isMobile ? "auto" : false}
 //             allowScrollButtonsMobile
 //           >
-//             <Tab 
-//               label={`All Bungalows (${data ? data.length : 0})`} 
-//               value="all" 
-//               sx={{ textTransform: 'none' }} 
+//             <Tab
+//               label={`All Bungalows (${data ? data.length : 0})`}
+//               value="all"
+//               sx={{ textTransform: 'none' }}
 //             />
-//             <Tab 
-//               label={`Main (${data ? data.filter(item => item.Res_Bang_Id === "1").length : 0})`} 
-//               value="1" 
-//               sx={{ textTransform: 'none' }} 
+//             <Tab
+//               label={`Main (${data ? data.filter(item => item.Res_Bang_Id === "1").length : 0})`}
+//               value="1"
+//               sx={{ textTransform: 'none' }}
 //             />
-//             <Tab 
-//               label={`Family (${data ? data.filter(item => item.Res_Bang_Id === "2").length : 0})`} 
-//               value="2" 
-//               sx={{ textTransform: 'none' }} 
+//             <Tab
+//               label={`Family (${data ? data.filter(item => item.Res_Bang_Id === "2").length : 0})`}
+//               value="2"
+//               sx={{ textTransform: 'none' }}
 //             />
 //           </Tabs>
 //         </Box>
@@ -582,9 +581,9 @@
 //               No Results Found
 //             </Typography>
 //             <Typography variant="body2" color="info">
-//               {searchTerm 
+//               {searchTerm
 //                 ? "No bungalows match your search criteria. Try adjusting your search terms."
-//                 : showOnlyPending 
+//                 : showOnlyPending
 //                   ? "No pending reservations found."
 //                   : "No bungalow reservations found."
 //               }
@@ -700,11 +699,11 @@
 //           <Grid container spacing={2}>
 //             {filteredData.map((reservation) => (
 //               <Grid item xs={12} sm={6} md={4} key={reservation.Res_no}>
-//                 <Card sx={{ 
-//                   height: '100%', 
-//                   display: 'flex', 
+//                 <Card sx={{
+//                   height: '100%',
+//                   display: 'flex',
 //                   flexDirection: 'column',
-//                   border: reservation.Res_CheckStatus === "Pending" ? '2px solid #ed6c02' : 
+//                   border: reservation.Res_CheckStatus === "Pending" ? '2px solid #ed6c02' :
 //                           reservation.Res_CheckStatus === "B" ? '2px solid #d32f2f' : '1px solid #e0e0e0'
 //                 }}>
 //                   <CardContent sx={{ flexGrow: 1 }}>
@@ -880,7 +879,7 @@
 //                 variant="outlined"
 //                 sx={{ mt: 2 }}
 //                 helperText={
-//                   selectedReservation?.Res_CheckStatus === "B" 
+//                   selectedReservation?.Res_CheckStatus === "B"
 //                     ? "Bungalow requires maintenance. You can still proceed with checkout."
 //                     : "Select the appropriate action for this reservation"
 //                 }
@@ -930,25 +929,25 @@
 //                         onChange={(e) => setFeedbackType(e.target.value)}
 //                         row
 //                       >
-//                         <FormControlLabel 
-//                           value="good" 
-//                           control={<Radio />} 
+//                         <FormControlLabel
+//                           value="good"
+//                           control={<Radio />}
 //                           label={
 //                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
 //                               <ThumbUpIcon color="success" fontSize="small" />
 //                               <Typography variant="body2">Checked out without any issue</Typography>
 //                             </Box>
-//                           } 
+//                           }
 //                         />
-//                         <FormControlLabel 
-//                           value="bad" 
-//                           control={<Radio />} 
+//                         <FormControlLabel
+//                           value="bad"
+//                           control={<Radio />}
 //                           label={
 //                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
 //                               <ThumbDownIcon color="error" fontSize="small" />
 //                               <Typography variant="body2">Checked out with some issues</Typography>
 //                             </Box>
-//                           } 
+//                           }
 //                         />
 //                       </RadioGroup>
 //                     </FormControl>
@@ -956,7 +955,7 @@
 //                     {feedbackType === "bad" && (
 //                       <>
 //                         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-//                           Please provide detailed feedback about the bungalow condition, 
+//                           Please provide detailed feedback about the bungalow condition,
 //                           cleanliness, and any issues that need attention for maintenance.
 //                         </Typography>
 
@@ -972,12 +971,12 @@
 //                           required
 //                           error={!!validationError}
 //                           helperText={
-//                             validationError 
-//                               ? validationError 
+//                             validationError
+//                               ? validationError
 //                               : `${caregiverComment.length}/500 characters`
 //                           }
 //                           inputProps={{ maxLength: 500 }}
-//                           sx={{ 
+//                           sx={{
 //                             backgroundColor: 'white',
 //                             '& .MuiInputBase-root': {
 //                               backgroundColor: 'white'
@@ -1007,17 +1006,17 @@
 //             onClick={handleUpdateStatus}
 //             disabled={isSubmitting || !caregiverStatus}
 //             startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : <VerifiedUserIcon />}
-//             sx={{ 
-//               borderRadius: 2, 
-//               minWidth: 150, 
+//             sx={{
+//               borderRadius: 2,
+//               minWidth: 150,
 //               textTransform: 'none',
 //               '&.Mui-disabled': { backgroundColor: theme.palette.action.disabledBackground }
 //             }}
 //           >
-//             {isSubmitting 
-//               ? "Processing..." 
-//               : caregiverStatus === "I" 
-//                 ? "Confirm Check-In" 
+//             {isSubmitting
+//               ? "Processing..."
+//               : caregiverStatus === "I"
+//                 ? "Confirm Check-In"
 //                 : caregiverStatus === "O"
 //                   ? feedbackType === "good"
 //                     ? "Confirm Check-Out"
@@ -1065,10 +1064,6 @@
 
 // export default CaregiverPage;
 
-
-
-
-
 //-----------------------------------------------------2026-01-05-----------------------------------------------------
 
 // import React, { useState, useEffect } from "react";
@@ -1115,7 +1110,6 @@
 // import Swal from 'sweetalert2';
 // import Loader from "../../components/Utility/Loader";
 
-
 // import {
 //   Refresh as RefreshIcon,
 //   Search as SearchIcon,
@@ -1137,13 +1131,13 @@
 //   ThumbDown as ThumbDownIcon,
 //   ExitToApp as ExitToAppIcon,
 //     Assignment,
-//   Error as ErrorIcon, 
+//   Error as ErrorIcon,
 //   Warning as WarningIcon
 // } from "@mui/icons-material";
 //  import CheckoutDialog from "../../components/Cards/CheckoutDialog";
-// import { 
-//   fetchCaregiverData, 
-//   updateCheckStatus, 
+// import {
+//   fetchCaregiverData,
+//   updateCheckStatus,
 //   addCaretFeedback,
 //   fetchCaretFeedbackDetails ,
 //   updateCaretStatus
@@ -1166,29 +1160,28 @@
 //   "2": "Lower Garden Suite",
 // };
 
-
 // const bungalowCapacity = {
-//   "1": { 
+//   "1": {
 //     maxAdults: 12,
-//     maxChildren: 12, 
+//     maxChildren: 12,
 //     totalCapacity: 12
 //   },
-//   "2": {  
+//   "2": {
 //     maxAdults: 5,
-//     maxChildren: 5,  
+//     maxChildren: 5,
 //     totalCapacity: 5
 //   }
 // };
 
 // const CaregiverPage = () => {
 //   const dispatch = useDispatch();
-//   const { 
-//     loading, 
-//     data, 
-//     error, 
-//     feedbackData, 
-//     feedbackLoadingById, 
-//     feedbackErrorById 
+//   const {
+//     loading,
+//     data,
+//     error,
+//     feedbackData,
+//     feedbackLoadingById,
+//     feedbackErrorById
 //   } = useSelector(state => state.caregiver);
 
 //   const [filteredData, setFilteredData] = useState([]);
@@ -1247,7 +1240,7 @@
 //     const capacityConfig = bungalowCapacity[bungalowId];
 
 //     if (!capacityConfig) {
-//       return { isValid: true, error: '' };  
+//       return { isValid: true, error: '' };
 //     }
 
 //     const adultsCount = reservation.Res_AdultCount || reservation.Res_AdultCount || 0;
@@ -1386,7 +1379,7 @@
 //     setCapacityError('');
 //   };
 
-//   const validateForm = () => { 
+//   const validateForm = () => {
 //     if (caregiverStatus === "I") {
 //       const capacityValidation = validateCapacity(selectedReservation);
 //       if (!capacityValidation.isValid) {
@@ -1394,7 +1387,6 @@
 //         return false;
 //       }
 //     }
-
 
 //     setValidationError('');
 //     setCapacityError('');
@@ -1415,13 +1407,13 @@
 //         await dispatch(updateCheckStatus(selectedReservation.Res_no, caregiverStatus));
 //         showSuccessAlert("Guest successfully checked in!");
 //       } else if (caregiverStatus === "O") {
-//         if (feedbackType === "good") { 
+//         if (feedbackType === "good") {
 //           await dispatch(updateCheckStatus(selectedReservation.Res_no, caregiverStatus));
 //           showSuccessAlert("Guest successfully checked out! Bungalow is in good condition.");
-//         } else { 
+//         } else {
 //           await dispatch(addCaretFeedback(
-//             selectedReservation.Res_no, 
-//           // caregiverComment.trim(), 
+//             selectedReservation.Res_no,
+//           // caregiverComment.trim(),
 //             "B"
 //           ));
 //           await dispatch(updateCheckStatus(selectedReservation.Res_no, "O"));
@@ -1461,7 +1453,6 @@
 
 //   const handleCheckoutSubmit = async () => {
 //     if (!selectedFeedbackReservation) return;
-
 
 //     if (checkoutFeedbackType === "bad") {
 //       if (!checkoutComment.trim()) {
@@ -1601,7 +1592,7 @@
 //                 Manage bungalow check-in and checkout operations
 //               </Typography>
 //             </Box>
-//           </Box> 
+//           </Box>
 
 //           <Box sx={{ display: "flex", gap: 1, flexWrap: 'wrap' }}>
 //             <Button
@@ -1645,13 +1636,13 @@
 //               Back
 //             </Button>
 //           </Box>
-//         </Box> 
+//         </Box>
 
 //         <Divider sx={{ mb: 3 }} />
 
 //         {/* Tabs */}
-//         <Box sx={{ 
-//           borderBottom: 1, 
+//         <Box sx={{
+//           borderBottom: 1,
 //           borderColor: 'divider',
 //           mb: 2
 //         }}>
@@ -1662,20 +1653,20 @@
 //             scrollButtons={isMobile ? "auto" : false}
 //             allowScrollButtonsMobile
 //           >
-//             <Tab 
-//               label={`All Bungalows (${data ? data.length : 0})`} 
-//               value="all" 
-//               sx={{ textTransform: 'none' }} 
+//             <Tab
+//               label={`All Bungalows (${data ? data.length : 0})`}
+//               value="all"
+//               sx={{ textTransform: 'none' }}
 //             />
-//             <Tab 
-//               label={`Main (${data ? data.filter(item => item.Res_Bang_Id === "1").length : 0})`} 
-//               value="1" 
-//               sx={{ textTransform: 'none' }} 
+//             <Tab
+//               label={`Main (${data ? data.filter(item => item.Res_Bang_Id === "1").length : 0})`}
+//               value="1"
+//               sx={{ textTransform: 'none' }}
 //             />
-//             <Tab 
-//               label={`Lower Garden Suite (${data ? data.filter(item => item.Res_Bang_Id === "2").length : 0})`} 
-//               value="2" 
-//               sx={{ textTransform: 'none' }} 
+//             <Tab
+//               label={`Lower Garden Suite (${data ? data.filter(item => item.Res_Bang_Id === "2").length : 0})`}
+//               value="2"
+//               sx={{ textTransform: 'none' }}
 //             />
 //           </Tabs>
 //         </Box>
@@ -1711,9 +1702,9 @@
 //               No Results Found
 //             </Typography>
 //             <Typography variant="body2" color="info">
-//               {searchTerm 
+//               {searchTerm
 //                 ? "No bungalows match your search criteria. Try adjusting your search terms."
-//                 : showOnlyPending 
+//                 : showOnlyPending
 //                   ? "No pending reservations found."
 //                   : "No bungalow reservations found."
 //               }
@@ -1762,8 +1753,8 @@
 //                   const isOverCapacity = guestCounts.total > (capacityConfig?.totalCapacity || 0);
 
 //                   return (
-//                     <TableRow 
-//                       key={reservation.Res_no} 
+//                     <TableRow
+//                       key={reservation.Res_no}
 //                       hover
 //                       sx={{
 //                         backgroundColor: isOverCapacity ? '#ffebee' : 'inherit'
@@ -1812,7 +1803,7 @@
 //                             Children: {reservation.Res_ChildCount}
 //                           </Typography>
 //                           <Typography variant="body2" fontSize="0.8rem" fontWeight="bold">
-//                             Total: 
+//                             Total:
 //                           </Typography>
 //                         </Box>
 //                       </TableCell>
@@ -1867,11 +1858,11 @@
 
 //               return (
 //                 <Grid item xs={12} sm={6} md={4} key={reservation.Res_no}>
-//                   <Card sx={{ 
-//                     height: '100%', 
-//                     display: 'flex', 
+//                   <Card sx={{
+//                     height: '100%',
+//                     display: 'flex',
 //                     flexDirection: 'column',
-//                     border: isOverCapacity ? '2px solid #f44336' : 
+//                     border: isOverCapacity ? '2px solid #f44336' :
 //                             reservation.Res_CheckStatus === "Pending" ? '2px solid #ed6c02' : '1px solid #e0e0e0',
 //                     borderColor: reservation.Res_CheckStatus === "B" ? 'error.main' : undefined
 //                   }}>
@@ -2002,10 +1993,6 @@
 //             </IconButton>
 //           )}
 //         </DialogTitle>
-
-
-
-
 
 //         <DialogContent sx={{ p: isMobile ? 2 : 3 }}>
 //           {selectedReservation && (
@@ -2161,25 +2148,25 @@
 //                         onChange={(e) => setFeedbackType(e.target.value)}
 //                         row
 //                       >
-//                         <FormControlLabel 
-//                           value="good" 
-//                           control={<Radio />} 
+//                         <FormControlLabel
+//                           value="good"
+//                           control={<Radio />}
 //                           label={
 //                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
 //                               <ThumbUpIcon color="success" fontSize="small" />
 //                               <Typography variant="body2">Checked out without any issue</Typography>
 //                             </Box>
-//                           } 
+//                           }
 //                         />
-//                         <FormControlLabel 
-//                           value="bad" 
-//                           control={<Radio />} 
+//                         <FormControlLabel
+//                           value="bad"
+//                           control={<Radio />}
 //                           label={
 //                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
 //                               <ThumbDownIcon color="error" fontSize="small" />
 //                               <Typography variant="body2">Checked out with some issues</Typography>
 //                             </Box>
-//                           } 
+//                           }
 //                         />
 //                       </RadioGroup>
 //                     </FormControl>
@@ -2202,12 +2189,12 @@
 //                           required
 //                           error={!!validationError}
 //                           helperText={
-//                             validationError 
-//                               ? validationError 
+//                             validationError
+//                               ? validationError
 //                               : `${caregiverComment.length}/500 characters`
 //                           }
 //                           inputProps={{ maxLength: 500 }}
-//                           sx={{ 
+//                           sx={{
 //                             backgroundColor: 'white',
 //                             '& .MuiInputBase-root': {
 //                               backgroundColor: 'white'
@@ -2238,17 +2225,17 @@
 //             onClick={handleUpdateStatus}
 //             disabled={isSubmitting || !caregiverStatus || (caregiverStatus === "I" && capacityError)}
 //             startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : <VerifiedUserIcon />}
-//             sx={{ 
-//               borderRadius: 2, 
-//               minWidth: 150, 
+//             sx={{
+//               borderRadius: 2,
+//               minWidth: 150,
 //               textTransform: 'none',
 //               '&.Mui-disabled': { backgroundColor: theme.palette.action.disabledBackground }
 //             }}
 //           >
-//             {isSubmitting 
-//               ? "Processing..." 
-//               : caregiverStatus === "I" 
-//                 ? "Confirm Check-In" 
+//             {isSubmitting
+//               ? "Processing..."
+//               : caregiverStatus === "I"
+//                 ? "Confirm Check-In"
 //                 : caregiverStatus === "O"
 //                   ? feedbackType === "good"
 //                     ? "Confirm Check-Out"
@@ -2299,15 +2286,6 @@
 
 // export default CaregiverPage;
 
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -2346,15 +2324,13 @@ import {
   FormLabel,
   IconButton,
   Fade,
-  Slide
+  Slide,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import Loader from "../../components/Utility/Loader";
-import { caregiverTranslations, LanguageSelector } from './translations';
-import {
-  Language as LanguageIcon,
-} from "@mui/icons-material";
+import { caregiverTranslations, LanguageSelector } from "./translations";
+import { Language as LanguageIcon } from "@mui/icons-material";
 import PublicIcon from "@mui/icons-material/Public";
 
 import {
@@ -2379,7 +2355,7 @@ import {
   ExitToApp as ExitToAppIcon,
   Assignment,
   Error as ErrorIcon,
-  Warning as WarningIcon
+  Warning as WarningIcon,
 } from "@mui/icons-material";
 import CheckoutDialog from "../../components/Cards/CheckoutDialog";
 import {
@@ -2387,11 +2363,10 @@ import {
   updateCheckStatus,
   addCaretFeedback,
   fetchCaretFeedbackDetails,
-  updateCaretStatus
+  updateCaretStatus,
 } from "../../action/caregiverActions";
 
 import FeedbackDialog from "../../components/Cards/FeedbackDialog";
-
 
 // change 2026-01-06
 
@@ -2405,28 +2380,22 @@ import FeedbackDialog from "../../components/Cards/FeedbackDialog";
 //   "B": { label: "Maintenance Needed", color: "error", icon: <WarningIcon fontSize="small" /> },
 // };
 
-
-
-
-
-
-
 const bungalowTypeMap = {
-  "1": "Main",
-  "2": "Lower Garden Suite",
+  1: "Main",
+  2: "Lower Garden Suite",
 };
 
 const bungalowCapacity = {
-  "1": {
-    maxAdults: 12,
-    maxChildren: 12,
-    totalCapacity: 12
+  1: {
+    maxAdults: 16,
+    maxChildren: 16,
+    totalCapacity: 16,
   },
-  "2": {
+  2: {
     maxAdults: 5,
     maxChildren: 5,
-    totalCapacity: 5
-  }
+    totalCapacity: 5,
+  },
 };
 
 const CaregiverPage = () => {
@@ -2437,8 +2406,8 @@ const CaregiverPage = () => {
     error,
     feedbackData,
     feedbackLoadingById,
-    feedbackErrorById
-  } = useSelector(state => state.caregiver);
+    feedbackErrorById,
+  } = useSelector((state) => state.caregiver);
 
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -2449,125 +2418,132 @@ const CaregiverPage = () => {
   const [caregiverComment, setCaregiverComment] = useState("");
   const [feedbackType, setFeedbackType] = useState("good");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [tabValue, setTabValue] = useState('all');
-  const [viewMode, setViewMode] = useState('card');
+  const [tabValue, setTabValue] = useState("all");
+  const [viewMode, setViewMode] = useState("card");
   const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
-  const [selectedFeedbackReservation, setSelectedFeedbackReservation] = useState(null);
+  const [selectedFeedbackReservation, setSelectedFeedbackReservation] =
+    useState(null);
   const [checkoutDialogOpen, setCheckoutDialogOpen] = useState(false);
   const [checkoutFeedbackType, setCheckoutFeedbackType] = useState("good");
   const [checkoutComment, setCheckoutComment] = useState("");
-  const [validationError, setValidationError] = useState('');
-  const [capacityError, setCapacityError] = useState('');
-  const [language, setLanguage] = useState('en');
+  const [validationError, setValidationError] = useState("");
+  const [capacityError, setCapacityError] = useState("");
+  const [language, setLanguage] = useState("en");
   const [isLoading, setIsLoading] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
 
-
-  const showAlert = (title, message, icon = 'success') => {
+  const showAlert = (title, message, icon = "success") => {
     Swal.fire({
       title,
       text: message,
       icon,
-      confirmButtonText: 'OK',
+      confirmButtonText: "OK",
       confirmButtonColor: theme.palette.primary.main,
     });
   };
 
   const t = (key) => {
-    return caregiverTranslations[language]?.[key] || caregiverTranslations.en[key] || key;
+    return (
+      caregiverTranslations[language]?.[key] ||
+      caregiverTranslations.en[key] ||
+      key
+    );
   };
 
-
-
-  const statusMap = React.useMemo(() => ({
-    "Confirm": {
-      label: t('confirmed'),
-      color: "info",
-      icon: <CheckCircleIcon fontSize="small" />
-    },
-    "Check In": {
-      label: t('checkedIn'),
-      color: "success",
-      icon: <DoneIcon fontSize="small" />
-    },
-    "Check Out": {
-      label: t('checkedOut'),
-      color: "primary",
-      icon: <DoneIcon fontSize="small" />
-    },
-    "Pending": {
-      label: t('pending'),
-      color: "warning",
-      icon: <HourglassEmptyIcon fontSize="small" />
-    },
-    "I": {
-      label: t('checkIn'),
-      color: "success",
-      icon: <CheckCircleIcon fontSize="small" />
-    },
-    "O": {
-      label: t('checkOut'),
-      color: "primary",
-      icon: <DoneIcon fontSize="small" />
-    },
-    "B": {
-      label: t('maintenanceNeeded'),
-      color: "error",
-      icon: <WarningIcon fontSize="small" />
-    },
-  }), [language]);
-
+  const statusMap = React.useMemo(
+    () => ({
+      Confirm: {
+        label: t("confirmed"),
+        color: "info",
+        icon: <CheckCircleIcon fontSize="small" />,
+      },
+      "Check In": {
+        label: t("checkedIn"),
+        color: "success",
+        icon: <DoneIcon fontSize="small" />,
+      },
+      "Check Out": {
+        label: t("checkedOut"),
+        color: "primary",
+        icon: <DoneIcon fontSize="small" />,
+      },
+      Pending: {
+        label: t("pending"),
+        color: "warning",
+        icon: <HourglassEmptyIcon fontSize="small" />,
+      },
+      I: {
+        label: t("checkIn"),
+        color: "success",
+        icon: <CheckCircleIcon fontSize="small" />,
+      },
+      O: {
+        label: t("checkOut"),
+        color: "primary",
+        icon: <DoneIcon fontSize="small" />,
+      },
+      B: {
+        label: t("maintenanceNeeded"),
+        color: "error",
+        icon: <WarningIcon fontSize="small" />,
+      },
+    }),
+    [language],
+  );
 
   const getBungalowName = (bungalowId) => {
-    if (bungalowId === "1") return t('mainBungalow');
-    if (bungalowId === "2") return t('lowerGardenSuite');
-    return `${t('bungalow')} ${bungalowId}`;
+    if (bungalowId === "1") return t("mainBungalow");
+    if (bungalowId === "2") return t("lowerGardenSuite");
+    return `${t("bungalow")} ${bungalowId}`;
   };
 
   const showErrorAlert = (message) => {
-    showAlert('Error', message, 'error');
+    showAlert("Error", message, "error");
   };
 
   const showSuccessAlert = (message) => {
-    showAlert('Success', message, 'success');
+    showAlert("Success", message, "success");
   };
 
   const showInfoAlert = (message) => {
-    showAlert('Information', message, 'info');
+    showAlert("Information", message, "info");
   };
 
   const showWarningAlert = (message) => {
-    showAlert('Warning', message, 'warning');
+    showAlert("Warning", message, "warning");
   };
 
   const validateCapacity = (reservation) => {
-    if (!reservation) return { isValid: true, error: '' };
+    if (!reservation) return { isValid: true, error: "" };
 
     const bungalowId = reservation.Res_Bang_Id;
     const capacityConfig = bungalowCapacity[bungalowId];
 
     if (!capacityConfig) {
-      return { isValid: true, error: '' };
+      return { isValid: true, error: "" };
     }
 
-    const adultsCount = reservation.Res_AdultCount || reservation.Res_AdultCount || 0;
-    const childrenCount = reservation.Res_ChildCount || reservation.Res_ChildCount || 0;
+    const adultsCount =
+      reservation.Res_AdultCount || reservation.Res_AdultCount || 0;
+    const childrenCount =
+      reservation.Res_ChildCount || reservation.Res_ChildCount || 0;
     const totalGuests = adultsCount + childrenCount;
 
     // Check individual limits
     if (adultsCount > capacityConfig.maxAdults) {
       return {
         isValid: false,
-        error: `Main Bungalow maximum is ${capacityConfig.maxAdults} adults. Current: ${adultsCount} adults.`
+        error: `Main Bungalow maximum is ${capacityConfig.maxAdults} adults. Current: ${adultsCount} adults.`,
       };
     }
 
     if (childrenCount > capacityConfig.maxChildren) {
       return {
         isValid: false,
-        error: `Main Bungalow maximum is ${capacityConfig.maxChildren} children. Current: ${childrenCount} children.`
+        error: `Main Bungalow maximum is ${capacityConfig.maxChildren} children. Current: ${childrenCount} children.`,
       };
     }
 
@@ -2575,11 +2551,33 @@ const CaregiverPage = () => {
     if (totalGuests > capacityConfig.totalCapacity) {
       return {
         isValid: false,
-        error: `${bungalowTypeMap[bungalowId]} maximum capacity is ${capacityConfig.totalCapacity} guests. Current: ${totalGuests} guests.`
+        error: `${bungalowTypeMap[bungalowId]} maximum capacity is ${capacityConfig.totalCapacity} guests. Current: ${totalGuests} guests.`,
       };
     }
 
-    return { isValid: true, error: '' };
+    return { isValid: true, error: "" };
+  };
+
+  const isReservationPast = (reservation) => {
+    if (!reservation || !reservation.Res_Check_Out) return false;
+
+    try {
+      const checkOutDate = parseDate(reservation.Res_Check_Out);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return checkOutDate < today;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const getDisplayData = () => {
+    if (!data || data.length === 0) return [];
+    if (showHistory) {
+      return data.filter((item) => isReservationPast(item));
+    } else {
+      return data.filter((item) => !isReservationPast(item));
+    }
   };
 
   const ReadMoreText = ({ text, wordLimit = 20 }) => {
@@ -2587,7 +2585,7 @@ const CaregiverPage = () => {
 
     if (!text) return "N/A";
 
-    const words = text.split(' ');
+    const words = text.split(" ");
 
     if (words.length <= wordLimit) {
       return text;
@@ -2600,15 +2598,15 @@ const CaregiverPage = () => {
 
     return isExpanded ? (
       <span>
-        {text}{' '}
+        {text}{" "}
         <Link
           href="#"
           onClick={toggleExpand}
           sx={{
-            color: '#1976d2',
-            fontSize: '11px',
+            color: "#1976d2",
+            fontSize: "11px",
             fontWeight: 500,
-            ml: 0.5
+            ml: 0.5,
           }}
         >
           See less
@@ -2616,15 +2614,15 @@ const CaregiverPage = () => {
       </span>
     ) : (
       <span>
-        {words.slice(0, wordLimit).join(' ')}{' '}
+        {words.slice(0, wordLimit).join(" ")}{" "}
         <Link
           href="#"
           onClick={toggleExpand}
           sx={{
-            color: '#1976d2',
-            fontSize: '11px',
+            color: "#1976d2",
+            fontSize: "11px",
             fontWeight: 500,
-            ml: 0.5
+            ml: 0.5,
           }}
         >
           See more
@@ -2637,36 +2635,191 @@ const CaregiverPage = () => {
     dispatch(fetchCaregiverData());
   }, [dispatch]);
 
+  // useEffect(() => {
+  //   if (data && data.length > 0) {
+  //     let filtered = [...data];
+
+  //     if (tabValue !== 'all') {
+  //       filtered = filtered.filter(item => item.Res_Bang_Id === tabValue);
+  //     }
+
+  //     if (searchTerm) {
+  //       filtered = filtered.filter(item =>
+  //         item.Res_no.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //         (item.Res_Guest_Name && item.Res_Guest_Name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+  //         (item.Res_Remarks && item.Res_Remarks.toLowerCase().includes(searchTerm.toLowerCase()))
+  //       );
+  //     }
+
+  //     if (showOnlyPending) {
+  //       filtered = filtered.filter(item => item.Res_CheckStatus === "Pending");
+  //     }
+
+  //     setFilteredData(filtered);
+  //   }
+  // }, [data, searchTerm, showOnlyPending, tabValue]);
+
   useEffect(() => {
     if (data && data.length > 0) {
       let filtered = [...data];
 
-      if (tabValue !== 'all') {
-        filtered = filtered.filter(item => item.Res_Bang_Id === tabValue);
+      // Separate past from current/future records based on showHistory flag
+      if (showHistory) {
+        filtered = filtered.filter((item) => isReservationPast(item));
+      } else {
+        filtered = filtered.filter((item) => !isReservationPast(item));
+      }
+
+      if (tabValue !== "all") {
+        filtered = filtered.filter((item) => item.Res_Bang_Id === tabValue);
       }
 
       if (searchTerm) {
-        filtered = filtered.filter(item =>
-          item.Res_no.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (item.Res_Guest_Name && item.Res_Guest_Name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          (item.Res_Remarks && item.Res_Remarks.toLowerCase().includes(searchTerm.toLowerCase()))
+        filtered = filtered.filter(
+          (item) =>
+            item.Res_no.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (item.Res_Guest_Name &&
+              item.Res_Guest_Name.toLowerCase().includes(
+                searchTerm.toLowerCase(),
+              )) ||
+            (item.Res_Remarks &&
+              item.Res_Remarks.toLowerCase().includes(
+                searchTerm.toLowerCase(),
+              )),
         );
       }
 
-      if (showOnlyPending) {
-        filtered = filtered.filter(item => item.Res_CheckStatus === "Pending");
+      if (showOnlyPending && !showHistory) {
+        filtered = filtered.filter(
+          (item) => item.Res_CheckStatus === "Pending",
+        );
       }
+
+      filtered.sort((a, b) => {
+        const statusA = a.Res_CheckStatus?.trim() || "";
+        const statusB = b.Res_CheckStatus?.trim() || "";
+
+        const isCheckedInA = ["I", "Check In"].includes(statusA);
+        const isCheckedInB = ["I", "Check In"].includes(statusB);
+        const isPendingA = ["Pending", "Confirm", "B", ""].includes(statusA);
+        const isPendingB = ["Pending", "Confirm", "B", ""].includes(statusB);
+        const isCheckedOutA = [
+          "O",
+          "Check Out",
+          "Completed",
+          "Closed",
+        ].includes(statusA);
+        const isCheckedOutB = [
+          "O",
+          "Check Out",
+          "Completed",
+          "Closed",
+        ].includes(statusB);
+
+        if (isCheckedInA && !isCheckedInB) return -1;
+        if (!isCheckedInA && isCheckedInB) return 1;
+
+        if (isCheckedOutA && !isCheckedOutB) return 1;
+        if (!isCheckedOutA && isCheckedOutB) return -1;
+
+        if (isCheckedInA && isCheckedInB) {
+          const dateA = parseDate(a.Res_Check_In);
+          const dateB = parseDate(b.Res_Check_In);
+          return dateB - dateA;
+        }
+
+        if (isPendingA && isPendingB) {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          const dateA = parseDate(a.Res_Check_In);
+          const dateB = parseDate(b.Res_Check_In);
+
+          const isFutureA = dateA >= today;
+          const isFutureB = dateB >= today;
+          const isPastA = dateA < today;
+          const isPastB = dateB < today;
+
+          if (isFutureA && isPastB) return -1;
+          if (isPastA && isFutureB) return 1;
+
+          if (isFutureA && isFutureB) {
+            return dateA - today - (dateB - today);
+          }
+
+          if (isPastA && isPastB) {
+            return today - dateB - (today - dateA);
+          }
+        }
+
+        return a.Res_no.localeCompare(b.Res_no);
+      });
 
       setFilteredData(filtered);
     }
-  }, [data, searchTerm, showOnlyPending, tabValue]);
+  }, [data, searchTerm, showOnlyPending, tabValue, showHistory]);
+
+  const parseDate = (dateString) => {
+    if (!dateString) return new Date(8640000000000000);
+
+    const date = new Date(dateString);
+
+    if (isNaN(date.getTime())) {
+      const parts = dateString.split(/[-/]/);
+      if (parts.length === 3) {
+        const formats = [
+          `${parts[0]}-${parts[1]}-${parts[2]}`,
+          `${parts[2]}-${parts[0]}-${parts[1]}`,
+          `${parts[2]}-${parts[1]}-${parts[0]}`,
+        ];
+
+        for (const format of formats) {
+          const parsedDate = new Date(format);
+          if (!isNaN(parsedDate.getTime())) {
+            return parsedDate;
+          }
+        }
+      }
+      return new Date(8640000000000000);
+    }
+
+    return date;
+  };
+
+  // const parseDate = (dateString) => {
+  //   if (!dateString) return new Date(0);
+
+  //   const date = new Date(dateString);
+
+  //   if (isNaN(date.getTime())) {
+
+  //     const parts = dateString.split(/[-/]/);
+  //     if (parts.length === 3) {
+
+  //       const possibleDate1 = new Date(`${parts[2]}-${parts[0]}-${parts[1]}`);
+  //       const possibleDate2 = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+
+  //       if (!isNaN(possibleDate1.getTime())) return possibleDate1;
+  //       if (!isNaN(possibleDate2.getTime())) return possibleDate2;
+  //     }
+  //     return new Date(0);
+  //   }
+
+  //   return date;
+  // };
 
   const handleOpenDialog = (reservation) => {
     setSelectedReservation(reservation);
 
-    if (reservation.Res_CheckStatus === "Pending" || reservation.Res_CheckStatus === "Confirm") {
+    if (
+      reservation.Res_CheckStatus === "Pending" ||
+      reservation.Res_CheckStatus === "Confirm"
+    ) {
       setCaregiverStatus("I");
-    } else if (reservation.Res_CheckStatus === "Check In" || reservation.Res_CheckStatus === "I") {
+    } else if (
+      reservation.Res_CheckStatus === "Check In" ||
+      reservation.Res_CheckStatus === "I"
+    ) {
       setCaregiverStatus("O");
     } else {
       setCaregiverStatus(reservation.Res_CheckStatus);
@@ -2674,8 +2827,8 @@ const CaregiverPage = () => {
 
     setCaregiverComment(reservation.Res_Remarks || "");
     setFeedbackType("good");
-    setValidationError('');
-    setCapacityError('');
+    setValidationError("");
+    setCapacityError("");
     setOpenDialog(true);
   };
 
@@ -2684,8 +2837,8 @@ const CaregiverPage = () => {
     setSelectedReservation(null);
     setCaregiverComment("");
     setFeedbackType("good");
-    setValidationError('');
-    setCapacityError('');
+    setValidationError("");
+    setCapacityError("");
   };
 
   const validateForm = () => {
@@ -2697,9 +2850,8 @@ const CaregiverPage = () => {
       }
     }
 
-
-    setValidationError('');
-    setCapacityError('');
+    setValidationError("");
+    setCapacityError("");
     return true;
   };
 
@@ -2714,29 +2866,38 @@ const CaregiverPage = () => {
 
     try {
       if (caregiverStatus === "I") {
-        await dispatch(updateCheckStatus(selectedReservation.Res_no, caregiverStatus));
+        await dispatch(
+          updateCheckStatus(selectedReservation.Res_no, caregiverStatus),
+        );
         showSuccessAlert("Guest successfully checked in!");
       } else if (caregiverStatus === "O") {
         if (feedbackType === "good") {
-          await dispatch(updateCheckStatus(selectedReservation.Res_no, caregiverStatus));
-          showSuccessAlert("Guest successfully checked out! Bungalow is in good condition.");
+          await dispatch(
+            updateCheckStatus(selectedReservation.Res_no, caregiverStatus),
+          );
+          showSuccessAlert(
+            "Guest successfully checked out! Bungalow is in good condition.",
+          );
         } else {
-          await dispatch(addCaretFeedback(
-            selectedReservation.Res_no,
-            caregiverComment.trim(),
-            "B"
-          ));
+          await dispatch(
+            addCaretFeedback(
+              selectedReservation.Res_no,
+              caregiverComment.trim(),
+              "B",
+            ),
+          );
           await dispatch(updateCheckStatus(selectedReservation.Res_no, "O"));
-          showSuccessAlert("Guest checked out and maintenance feedback submitted!");
+          showSuccessAlert(
+            "Guest checked out and maintenance feedback submitted!",
+          );
         }
       }
 
       handleCloseDialog();
       dispatch(fetchCaregiverData());
-
     } catch (error) {
-      console.error('Error updating status:', error);
-      showErrorAlert(`Error: ${error.message || 'Please try again.'}`);
+      console.error("Error updating status:", error);
+      showErrorAlert(`Error: ${error.message || "Please try again."}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -2750,10 +2911,11 @@ const CaregiverPage = () => {
 
       setSelectedFeedbackReservation(reservationNo);
       setFeedbackDialogOpen(true);
-
     } catch (error) {
-      console.error('Error fetching feedback:', error);
-      showErrorAlert(`Error loading feedback: ${error.message || 'Please try again.'}`);
+      console.error("Error fetching feedback:", error);
+      showErrorAlert(
+        `Error loading feedback: ${error.message || "Please try again."}`,
+      );
     }
   };
 
@@ -2764,15 +2926,18 @@ const CaregiverPage = () => {
   const handleCheckoutSubmit = async () => {
     if (!selectedFeedbackReservation) return;
 
-
     if (checkoutFeedbackType === "bad") {
       if (!checkoutComment.trim()) {
-        setValidationError('Feedback is required when reporting issues with the bungalow.');
+        setValidationError(
+          "Feedback is required when reporting issues with the bungalow.",
+        );
         return;
       }
 
       if (checkoutComment.trim().length < 10) {
-        setValidationError('Please provide more detailed feedback about the issues (minimum 10 characters).');
+        setValidationError(
+          "Please provide more detailed feedback about the issues (minimum 10 characters).",
+        );
         return;
       }
     }
@@ -2780,34 +2945,38 @@ const CaregiverPage = () => {
     setIsSubmitting(true);
 
     try {
-
-      const currentReservation = data.find(item => item.Res_no === selectedFeedbackReservation);
+      const currentReservation = data.find(
+        (item) => item.Res_no === selectedFeedbackReservation,
+      );
 
       if (checkoutFeedbackType === "good") {
-
         await dispatch(updateCheckStatus(selectedFeedbackReservation, "O"));
-        showSuccessAlert("Guest checked out successfully! Bungalow is in good condition.");
+        showSuccessAlert(
+          "Guest checked out successfully! Bungalow is in good condition.",
+        );
       } else {
-
-        await dispatch(addCaretFeedback(
-          selectedFeedbackReservation,
-          checkoutComment.trim(),
-          "B"
-        ));
+        await dispatch(
+          addCaretFeedback(
+            selectedFeedbackReservation,
+            checkoutComment.trim(),
+            "B",
+          ),
+        );
 
         await dispatch(updateCheckStatus(selectedFeedbackReservation, "O"));
-        showSuccessAlert("Guest checked out and maintenance feedback submitted!");
+        showSuccessAlert(
+          "Guest checked out and maintenance feedback submitted!",
+        );
       }
 
       setCheckoutDialogOpen(false);
       setFeedbackDialogOpen(false);
       setCheckoutComment("");
-      setValidationError('');
+      setValidationError("");
       dispatch(fetchCaregiverData());
-
     } catch (error) {
-      console.error('Error updating status:', error);
-      showErrorAlert(`Error: ${error.message || 'Please try again.'}`);
+      console.error("Error updating status:", error);
+      showErrorAlert(`Error: ${error.message || "Please try again."}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -2819,7 +2988,7 @@ const CaregiverPage = () => {
 
   const handleRefresh = () => {
     dispatch(fetchCaregiverData());
-    showInfoAlert('Data refreshed successfully!');
+    showInfoAlert("Data refreshed successfully!");
   };
 
   const handleTabChange = (event, newValue) => {
@@ -2827,7 +2996,7 @@ const CaregiverPage = () => {
   };
 
   const toggleViewMode = () => {
-    setViewMode(viewMode === 'list' ? 'card' : 'list');
+    setViewMode(viewMode === "list" ? "card" : "list");
   };
 
   const canUpdateStatus = (reservation) => {
@@ -2835,23 +3004,21 @@ const CaregiverPage = () => {
     //   return !disallowedStatuses.includes(reservation.Res_CheckStatus);
     // };
 
-
     if (!reservation) return false;
 
     const currentStatus = reservation.Res_CheckStatus?.trim() || "";
 
-
     const showCheckInStatuses = ["", "Pending", "Confirm", "B"];
     const showCheckOutStatuses = ["Check In", "I"];
-
 
     const allowedStatuses = [...showCheckInStatuses, ...showCheckOutStatuses];
     const disallowedStatuses = ["Check Out", "O", "Completed", "Closed"];
 
-    return allowedStatuses.includes(currentStatus) &&
-      !disallowedStatuses.includes(currentStatus);
+    return (
+      allowedStatuses.includes(currentStatus) &&
+      !disallowedStatuses.includes(currentStatus)
+    );
   };
-
 
   // const getButtonText = (reservation) => {
   //   if (!reservation) return "Check In";
@@ -2864,19 +3031,20 @@ const CaregiverPage = () => {
   // };
 
   const getButtonText = (reservation) => {
-    if (!reservation) return t('checkIn');
+    if (!reservation) return t("checkIn");
 
     const currentStatus = reservation.Res_CheckStatus?.trim() || "";
     const showCheckOutStatuses = ["Check In", "I"];
 
-    return showCheckOutStatuses.includes(currentStatus) ?
-      t('checkOut') : t('checkIn');
+    return showCheckOutStatuses.includes(currentStatus)
+      ? t("checkOut")
+      : t("checkIn");
   };
 
   const shouldShowCheckoutInFeedback = (reservationNo) => {
     if (!reservationNo || !data) return false;
 
-    const reservation = data.find(item => item.Res_no === reservationNo);
+    const reservation = data.find((item) => item.Res_no === reservationNo);
     if (!reservation) return false;
 
     const allowedStatuses = ["Check In", "I", "Pending", "Confirm", "B"];
@@ -2885,27 +3053,29 @@ const CaregiverPage = () => {
 
   const getCurrentReservation = () => {
     if (!selectedFeedbackReservation || !data) return null;
-    return data.find(item => item.Res_no === selectedFeedbackReservation);
+    return data.find((item) => item.Res_no === selectedFeedbackReservation);
   };
 
   const getGuestCounts = (reservation) => {
     const adults = reservation.Res_Adults || reservation.Res_No_Adults || 0;
-    const children = reservation.Res_Children || reservation.Res_No_Children || 0;
+    const children =
+      reservation.Res_Children || reservation.Res_No_Children || 0;
     return { adults, children, total: adults + children };
   };
 
   return (
     <div>
-
       {isLoading ? (
         <Loader />
       ) : (
         <Box sx={{ p: isMobile ? 1 : 3 }}>
-          <Paper sx={{
-            p: isMobile ? 1 : 3,
-            borderRadius: 2,
-            boxShadow: isMobile ? 'none' : theme.shadows[3]
-          }}>
+          <Paper
+            sx={{
+              p: isMobile ? 1 : 3,
+              borderRadius: 2,
+              boxShadow: isMobile ? "none" : theme.shadows[3],
+            }}
+          >
             {/* Header Section */}
             <Box
               sx={{
@@ -2915,7 +3085,7 @@ const CaregiverPage = () => {
                 mb: 2,
                 flexDirection: isMobile ? "column" : "row",
                 width: "100%",
-                gap: isMobile ? 2 : 0
+                gap: isMobile ? 2 : 0,
               }}
             >
               <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -2924,10 +3094,12 @@ const CaregiverPage = () => {
                     bgcolor: "primary.main",
                     mr: 2,
                     width: isMobile ? 40 : 48,
-                    height: isMobile ? 40 : 48
+                    height: isMobile ? 40 : 48,
                   }}
                 >
-                  <CleaningServicesIcon fontSize={isMobile ? "medium" : "large"} />
+                  <CleaningServicesIcon
+                    fontSize={isMobile ? "medium" : "large"}
+                  />
                 </Avatar>
                 {/* <Box>
                   <Typography
@@ -2948,16 +3120,31 @@ const CaregiverPage = () => {
                     component="h1"
                     fontWeight="bold"
                   >
-                    {t('pageTitle')}
+                    {t("pageTitle")}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {t('pageSubtitle')}
+                    {t("pageSubtitle")}
                   </Typography>
                 </Box>
               </Box>
 
-              <Box sx={{ display: "flex", gap: 1, flexWrap: 'wrap' }}>
-                {/* <Button
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1,
+                  width: "100%",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    flexWrap: "nowrap",
+                    overflowX: "auto",
+                  }}
+                >
+                  {/* <Button
                   variant="outlined"
                   color="primary"
                   onClick={handleRefresh}
@@ -2998,7 +3185,7 @@ const CaregiverPage = () => {
                   Back
                 </Button> */}
 
-                {/* <Button
+                  {/* <Button
   variant="outlined"
   color="primary"
   onClick={handleRefresh}
@@ -3010,8 +3197,7 @@ const CaregiverPage = () => {
   {t('refresh')}
 </Button> */}
 
-
-                {/* <Button
+                  {/* <Button
   variant="outlined"
   color="primary"
   onClick={handleRefresh}
@@ -3022,61 +3208,134 @@ const CaregiverPage = () => {
 >
   {t('refresh')}
 </Button> */}
-                <Chip
-                  icon={<PublicIcon sx={{ color: 'white', fontSize: 16 }} />}
-                  label={language === 'en' ? 'ENGLISH' :
-                    language === 'si' ? 'SINHALA' :
-                      language === 'ta' ? 'TAMIL' : 'HINDI'}
-                  onClick={() => {
-                    const nextLang = language === 'en' ? 'si' :
-                      language === 'si' ? 'ta' :
-                        language === 'ta' ? 'hi' : 'en';
-                    setLanguage(nextLang);
-                  }}
-                  size="small"
-                  sx={{
-                    color: 'white',
-                    bgcolor: 'rgba(38, 187, 100, 0.99)',
-                    cursor: 'pointer',
-                    height: '40px',
-                    '&:hover': {
-                      bgcolor: 'rgba(33, 199, 42, 0.99)'
+                  <Chip
+                    icon={<PublicIcon sx={{ color: "white", fontSize: 15 }} />}
+                    label={
+                      language === "en"
+                        ? "EN"
+                        : language === "si"
+                          ? "SI"
+                          : language === "ta"
+                            ? "TA"
+                            : "HI"
                     }
-                  }}
-                />
+                    onClick={() => {
+                      const nextLang =
+                        language === "en"
+                          ? "si"
+                          : language === "si"
+                            ? "ta"
+                            : language === "ta"
+                              ? "hi"
+                              : "en";
+                      setLanguage(nextLang);
+                    }}
+                    sx={{
+                      color: "white",
+                      bgcolor: "rgba(38, 187, 100, 0.99)",
+                      cursor: "pointer",
+                      height: "44px",
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: language === "ta" ? "0.75rem" : "0.875rem",
+                      "&:hover": {
+                        bgcolor: "rgba(33, 199, 42, 0.99)",
+                      },
+                    }}
+                  />
 
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={toggleViewMode}
-                  startIcon={viewMode === 'list' ? <VisibilityIcon /> : <InventoryIcon />}
-                  sx={{ textTransform: "none", height: "40px" }}
-                  size={isMobile ? "small" : "medium"}
-                >
-                  {viewMode === 'list' ? t('cardView') : t('listView')}
-                </Button>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={toggleViewMode}
+                    startIcon={
+                      viewMode === "list" ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <InventoryIcon />
+                      )
+                    }
+                    sx={{
+                      textTransform: "none",
+                      height: "44px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: language === "ta" ? "0.75rem" : "0.875rem",
+                    }}
+                  >
+                    {viewMode === "list" ? t("cardView") : t("listView")}
+                  </Button>
 
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => navigate(-1)}
-                  startIcon={<ArrowBackIcon />}
-                  sx={{ textTransform: "none", height: "40px" }}
-                  size={isMobile ? "small" : "medium"}
-                >
-                  {t('back')}
-                </Button>
+                  <Button
+                    variant={showHistory ? "contained" : "outlined"}
+                    color="primary"
+                    onClick={() => setShowHistory(!showHistory)}
+                    startIcon={<Assignment />}
+                    sx={{
+                      textTransform: "none",
+                      height: "44px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: language === "ta" ? "0.75rem" : "0.875rem",
+                    }}
+                  >
+                    {showHistory ? t("current") : t("history")}
+                  </Button>
+
+                  {language !== "ta" && (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => navigate(-1)}
+                      startIcon={<ArrowBackIcon />}
+                      sx={{
+                        textTransform: "none",
+                        height: "44px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "0.875rem",
+                      }}
+                    >
+                      {t("back")}
+                    </Button>
+                  )}
+                </Box>
+
+                {language === "ta" && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate(-1)}
+                    startIcon={<ArrowBackIcon />}
+                    sx={{
+                      textTransform: "none",
+                      height: "44px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "0.70rem",
+                      width: "fit-content",
+                    }}
+                  >
+                    {t("back")}
+                  </Button>
+                )}
               </Box>
             </Box>
 
             <Divider sx={{ mb: 3 }} />
 
             {/* Tabs */}
-            <Box sx={{
-              borderBottom: 1,
-              borderColor: 'divider',
-              mb: 2
-            }}>
+            <Box
+              sx={{
+                borderBottom: 1,
+                borderColor: "divider",
+                mb: 2,
+              }}
+            >
               {/* <Tabs
                 value={tabValue}
                 onChange={handleTabChange}
@@ -3109,14 +3368,14 @@ const CaregiverPage = () => {
                 allowScrollButtonsMobile
               >
                 <Tab
-                  label={`${t('allBungalows')} (${data ? data.length : 0})`}
+                  label={`${t("allBungalows")} (${getDisplayData() ? getDisplayData().length : 0})`}
                   value="all"
-                  sx={{ textTransform: 'none' }}
+                  sx={{ textTransform: "none" }}
                 />
                 <Tab
-                  label={`${t('mainBungalowShort')} (${data ? data.filter(item => item.Res_Bang_Id === "1").length : 0})`}
+                  label={`${t("mainBungalowShort")} (${getDisplayData() ? getDisplayData().filter((item) => item.Res_Bang_Id === "1").length : 0})`}
                   value="1"
-                  sx={{ textTransform: 'none' }}
+                  sx={{ textTransform: "none" }}
                 />
 
                 {/* <Tab 
@@ -3128,20 +3387,26 @@ const CaregiverPage = () => {
             </Box>
 
             {error && (
-              <Box sx={{ mb: 3, p: 2, backgroundColor: '#ffebee', borderRadius: 2 }}>
+              <Box
+                sx={{
+                  mb: 3,
+                  p: 2,
+                  backgroundColor: "#ffebee",
+                  borderRadius: 2,
+                }}
+              >
                 {/* <Typography variant="body1" color="error" gutterBottom>
                   Error
                 </Typography> */}
                 <Typography variant="body1" color="error" gutterBottom>
-                  {t('noResultsFound')}
+                  {t("noResultsFound")}
                 </Typography>
                 <Typography variant="body2" color="info">
                   {searchTerm
-                    ? t('noBungalowsMatch')
+                    ? t("noBungalowsMatch")
                     : showOnlyPending
-                      ? t('noPendingReservations')
-                      : t('noBungalowReservations')
-                  }
+                      ? t("noPendingReservations")
+                      : t("noBungalowReservations")}
                 </Typography>
 
                 <Typography variant="body2" color="error">
@@ -3151,25 +3416,34 @@ const CaregiverPage = () => {
             )}
 
             {loading ? (
-              <Box sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: '200px',
-                flexDirection: 'column',
-                gap: 2
-              }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  minHeight: "200px",
+                  flexDirection: "column",
+                  gap: 2,
+                }}
+              >
                 <CircularProgress size={isMobile ? 40 : 60} />
                 {/* <Typography variant="body2" color="text.secondary">
                   Loading bungalow data...
                 </Typography> */}
 
                 <Typography variant="body2" color="text.secondary">
-                  {t('loadingData')}
+                  {t("loadingData")}
                 </Typography>
               </Box>
             ) : filteredData.length === 0 ? (
-              <Box sx={{ mb: 3, p: 2, backgroundColor: '#e3f2fd', borderRadius: 2 }}>
+              <Box
+                sx={{
+                  mb: 3,
+                  p: 2,
+                  backgroundColor: "#e3f2fd",
+                  borderRadius: 2,
+                }}
+              >
                 <Typography variant="body1" color="info" gutterBottom>
                   No Results Found
                 </Typography>
@@ -3178,20 +3452,21 @@ const CaregiverPage = () => {
                     ? "No bungalows match your search criteria. Try adjusting your search terms."
                     : showOnlyPending
                       ? "No pending reservations found."
-                      : "No bungalow reservations found."
-                  }
+                      : "No bungalow reservations found."}
                 </Typography>
               </Box>
-            ) : viewMode === 'list' ? (
+            ) : viewMode === "list" ? (
               /* List View */
               <TableContainer
                 component={Paper}
                 sx={{
                   boxShadow: "none",
-                  maxHeight: isMobile ? "calc(100vh - 400px)" : "calc(100vh - 350px)",
+                  maxHeight: isMobile
+                    ? "calc(100vh - 400px)"
+                    : "calc(100vh - 350px)",
                   overflow: "auto",
                   borderRadius: 2,
-                  border: `1px solid ${theme.palette.divider}`
+                  border: `1px solid ${theme.palette.divider}`,
                 }}
               >
                 <Table stickyHeader size={isMobile ? "small" : "medium"}>
@@ -3218,26 +3493,61 @@ const CaregiverPage = () => {
                     </TableRow>
                   </TableHead> */}
 
-
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
-                        {t('tableBungalow')}
+                      <TableCell
+                        sx={{
+                          fontWeight: "bold",
+                          backgroundColor: theme.palette.primary.main,
+                          color: "white",
+                        }}
+                      >
+                        {t("tableBungalow")}
                       </TableCell>
-                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
-                        {t('tableStatus')}
+                      <TableCell
+                        sx={{
+                          fontWeight: "bold",
+                          backgroundColor: theme.palette.primary.main,
+                          color: "white",
+                        }}
+                      >
+                        {t("tableStatus")}
                       </TableCell>
-                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
-                        {t('tableGuest')}
+                      <TableCell
+                        sx={{
+                          fontWeight: "bold",
+                          backgroundColor: theme.palette.primary.main,
+                          color: "white",
+                        }}
+                      >
+                        {t("tableGuest")}
                       </TableCell>
-                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
-                        {t('tableGuestCount')}
+                      <TableCell
+                        sx={{
+                          fontWeight: "bold",
+                          backgroundColor: theme.palette.primary.main,
+                          color: "white",
+                        }}
+                      >
+                        {t("tableGuestCount")}
                       </TableCell>
-                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
-                        {t('tableCheckInOut')}
+                      <TableCell
+                        sx={{
+                          fontWeight: "bold",
+                          backgroundColor: theme.palette.primary.main,
+                          color: "white",
+                        }}
+                      >
+                        {t("tableCheckInOut")}
                       </TableCell>
-                      <TableCell sx={{ fontWeight: "bold", backgroundColor: theme.palette.primary.main, color: "white" }}>
-                        {t('tableActions')}
+                      <TableCell
+                        sx={{
+                          fontWeight: "bold",
+                          backgroundColor: theme.palette.primary.main,
+                          color: "white",
+                        }}
+                      >
+                        {t("tableActions")}
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -3245,33 +3555,52 @@ const CaregiverPage = () => {
                   <TableBody>
                     {filteredData.map((reservation) => {
                       const guestCounts = getGuestCounts(reservation);
-                      const capacityConfig = bungalowCapacity[reservation.Res_Bang_Id];
-                      const isOverCapacity = guestCounts.total > (capacityConfig?.totalCapacity || 0);
+                      const capacityConfig =
+                        bungalowCapacity[reservation.Res_Bang_Id];
+                      const isOverCapacity =
+                        guestCounts.total >
+                        (capacityConfig?.totalCapacity || 0);
 
                       return (
                         <TableRow
                           key={reservation.Res_no}
                           hover
                           sx={{
-                            backgroundColor: isOverCapacity ? '#ffebee' : 'inherit'
+                            backgroundColor: isOverCapacity
+                              ? "#ffebee"
+                              : "inherit",
                           }}
                         >
                           <TableCell>
                             <Box sx={{ display: "flex", alignItems: "center" }}>
-                              <HomeWorkIcon fontSize="small" sx={{ mr: 1, color: theme.palette.primary.main }} />
+                              <HomeWorkIcon
+                                fontSize="small"
+                                sx={{
+                                  mr: 1,
+                                  color: theme.palette.primary.main,
+                                }}
+                              />
                               <Box>
                                 <Typography variant="body2" fontWeight="medium">
-                                  {bungalowTypeMap[reservation.Res_Bang_Id] || `Bungalow ${reservation.Res_Bang_Id}`}
+                                  {bungalowTypeMap[reservation.Res_Bang_Id] ||
+                                    `Bungalow ${reservation.Res_Bang_Id}`}
                                 </Typography>
-                                <Typography variant="caption" color="text.secondary">
+                                <Typography
+                                  variant="caption"
+                                  color="text.secondary"
+                                >
                                   #{reservation.Res_no}
                                 </Typography>
                                 {isOverCapacity && (
                                   // <Typography variant="caption" color="error" display="block">
                                   //   Over Capacity!
                                   // </Typography>
-                                  <Typography variant="caption" color="error" display="block">
-                                    {t('overCapacity')}
+                                  <Typography
+                                    variant="caption"
+                                    color="error"
+                                    display="block"
+                                  >
+                                    {t("overCapacity")}
                                   </Typography>
                                 )}
                               </Box>
@@ -3279,17 +3608,31 @@ const CaregiverPage = () => {
                           </TableCell>
                           <TableCell>
                             <Chip
-                              label={statusMap[reservation.Res_CheckStatus]?.label || reservation.Res_CheckStatus}
-                              color={statusMap[reservation.Res_CheckStatus]?.color || "default"}
+                              label={
+                                statusMap[reservation.Res_CheckStatus]?.label ||
+                                reservation.Res_CheckStatus
+                              }
+                              color={
+                                statusMap[reservation.Res_CheckStatus]?.color ||
+                                "default"
+                              }
                               size="small"
-                              icon={statusMap[reservation.Res_CheckStatus]?.icon}
+                              icon={
+                                statusMap[reservation.Res_CheckStatus]?.icon
+                              }
                             />
                           </TableCell>
                           <TableCell>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
+                              }}
+                            >
                               <PersonIcon fontSize="small" color="action" />
                               <Typography variant="body2">
-                                {reservation.Res_Guest_Name || 'N/A'}
+                                {reservation.Res_Guest_Name || "N/A"}
                               </Typography>
                             </Box>
                           </TableCell>
@@ -3299,18 +3642,28 @@ const CaregiverPage = () => {
                                 Adults:{reservation.Res_AdultCount}
                               </Typography> */}
                               <Typography variant="body2" fontSize="0.8rem">
-                                {t('adults')}:{reservation.Res_AdultCount}
+                                {t("adults")}:{reservation.Res_AdultCount}
                               </Typography>
                               <Typography variant="body2" fontSize="0.8rem">
-                                {t('children')}: {reservation.Res_ChildCount}
+                                {t("children")}: {reservation.Res_ChildCount}
                               </Typography>
-                              <Typography variant="body2" fontSize="0.8rem" fontWeight="bold">
-                                {t('total')}: {guestCounts.total}
+                              <Typography
+                                variant="body2"
+                                fontSize="0.8rem"
+                                fontWeight="bold"
+                              >
+                                {t("total")}: {guestCounts.total}
                               </Typography>
                             </Box>
                           </TableCell>
                           <TableCell>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
+                              }}
+                            >
                               <Box>
                                 <Typography variant="body2" fontSize="0.8rem">
                                   In: {reservation.Res_Check_In}
@@ -3322,7 +3675,13 @@ const CaregiverPage = () => {
                             </Box>
                           </TableCell>
                           <TableCell>
-                            <Box sx={{ display: 'flex', gap: 1, flexDirection: isMobile ? 'column' : 'row' }}>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                gap: 1,
+                                flexDirection: isMobile ? "column" : "row",
+                              }}
+                            >
                               {/* <Button
                                 variant="contained"
                                 size="small"
@@ -3343,7 +3702,6 @@ const CaregiverPage = () => {
                                 Feedback
                               </Button> */}
 
-
                               <Button
                                 variant="contained"
                                 size="small"
@@ -3359,11 +3717,13 @@ const CaregiverPage = () => {
                               <Button
                                 variant="outlined"
                                 size="small"
-                                onClick={() => handleViewFeedback(reservation.Res_no)}
+                                onClick={() =>
+                                  handleViewFeedback(reservation.Res_no)
+                                }
                                 startIcon={<VisibilityIcon />}
                                 sx={{ textTransform: "none", borderRadius: 2 }}
                               >
-                                {t('viewFeedback')}
+                                {t("viewFeedback")}
                               </Button>
                             </Box>
                           </TableCell>
@@ -3378,108 +3738,208 @@ const CaregiverPage = () => {
               <Grid container spacing={2}>
                 {filteredData.map((reservation) => {
                   const guestCounts = getGuestCounts(reservation);
-                  const capacityConfig = bungalowCapacity[reservation.Res_Bang_Id];
-                  const isOverCapacity = guestCounts.total > (capacityConfig?.totalCapacity || 0);
+                  const capacityConfig =
+                    bungalowCapacity[reservation.Res_Bang_Id];
+                  const isOverCapacity =
+                    guestCounts.total > (capacityConfig?.totalCapacity || 0);
 
                   return (
                     <Grid item xs={12} sm={6} md={4} key={reservation.Res_no}>
-                      <Card sx={{
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        border: isOverCapacity ? '2px solid #f44336' :
-                          reservation.Res_CheckStatus === "Pending" ? '2px solid #ed6c02' : '1px solid #e0e0e0',
-                        borderColor: reservation.Res_CheckStatus === "B" ? 'error.main' : undefined
-                      }}>
+                      <Card
+                        sx={{
+                          height: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                          border: isOverCapacity
+                            ? "2px solid #f44336"
+                            : reservation.Res_CheckStatus === "Pending"
+                              ? "2px solid #ed6c02"
+                              : "1px solid #e0e0e0",
+                          borderColor:
+                            reservation.Res_CheckStatus === "B"
+                              ? "error.main"
+                              : undefined,
+                        }}
+                      >
                         <CardContent sx={{ flexGrow: 1 }}>
-                          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              mb: 2,
+                            }}
+                          >
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
                               <HomeWorkIcon color="primary" sx={{ mr: 1 }} />
                               <Typography variant="h6" component="h2">
-                                {bungalowTypeMap[reservation.Res_Bang_Id] || `Bungalow ${reservation.Res_Bang_Id}`}
+                                {bungalowTypeMap[reservation.Res_Bang_Id] ||
+                                  `Bungalow ${reservation.Res_Bang_Id}`}
                               </Typography>
                             </Box>
                             <Chip
-                              label={statusMap[reservation.Res_CheckStatus]?.label || reservation.Res_CheckStatus}
-                              color={statusMap[reservation.Res_CheckStatus]?.color || "default"}
+                              label={
+                                statusMap[reservation.Res_CheckStatus]?.label ||
+                                reservation.Res_CheckStatus
+                              }
+                              color={
+                                statusMap[reservation.Res_CheckStatus]?.color ||
+                                "default"
+                              }
                               size="small"
-                              icon={statusMap[reservation.Res_CheckStatus]?.icon}
+                              icon={
+                                statusMap[reservation.Res_CheckStatus]?.icon
+                              }
                             />
                           </Box>
 
                           {/* <Typography variant="body2" color="text.secondary" gutterBottom>
                             Reservation: #{reservation.Res_no}
                           </Typography> */}
-                          <Typography variant="body2" color="text.secondary" gutterBottom>
-                            {t('cardReservation')}: #{reservation.Res_no}
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            gutterBottom
+                          >
+                            {t("cardReservation")}: #{reservation.Res_no}
                           </Typography>
 
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                              mb: 1,
+                            }}
+                          >
                             <PersonIcon fontSize="small" color="action" />
                             {/* <Typography variant="body2" color="text.secondary">
                               Guest: {reservation.Res_Guest_Name || 'N/A'}
                             </Typography> */}
                             <Typography variant="body2" color="text.secondary">
-                              {t('cardGuest')}: {reservation.Res_Guest_Name || 'N/A'}
+                              {t("cardGuest")}:{" "}
+                              {reservation.Res_Guest_Name || "N/A"}
                             </Typography>
                           </Box>
 
                           {/* Guest Counts */}
-                          <Box sx={{ mb: 2, p: 1, backgroundColor: isOverCapacity ? '#ffebee' : '#f5f5f5', borderRadius: 1 }}>
-                            <Typography variant="subtitle2" color={isOverCapacity ? 'error' : 'text.secondary'} gutterBottom>
-                              {t('guestCount')}:
+                          <Box
+                            sx={{
+                              mb: 2,
+                              p: 1,
+                              backgroundColor: isOverCapacity
+                                ? "#ffebee"
+                                : "#f5f5f5",
+                              borderRadius: 1,
+                            }}
+                          >
+                            <Typography
+                              variant="subtitle2"
+                              color={
+                                isOverCapacity ? "error" : "text.secondary"
+                              }
+                              gutterBottom
+                            >
+                              {t("guestCount")}:
                             </Typography>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                              }}
+                            >
                               {/* <Typography variant="body2">
                                 Adults: {reservation.Res_AdultCount}
                               </Typography> */}
                               <Typography variant="body2" fontSize="0.8rem">
-                                {t('adults')}:{reservation.Res_AdultCount}
+                                {t("adults")}:{reservation.Res_AdultCount}
                               </Typography>
                               <Typography variant="body2">
-                                {t('children')}: {reservation.Res_ChildCount}
+                                {t("children")}: {reservation.Res_ChildCount}
                               </Typography>
                               <Typography variant="body2" fontWeight="bold">
-                                {t('total')}: {Number(reservation.Res_AdultCount) + Number(reservation.Res_ChildCount)}
+                                {t("total")}:{" "}
+                                {Number(reservation.Res_AdultCount) +
+                                  Number(reservation.Res_ChildCount)}
                               </Typography>
                             </Box>
                             {isOverCapacity && (
-                              <Typography variant="caption" color="error" sx={{ mt: 0.5, display: 'block' }}>
-                                ⚠️ Over capacity! Max: {capacityConfig?.totalCapacity}
+                              <Typography
+                                variant="caption"
+                                color="error"
+                                sx={{ mt: 0.5, display: "block" }}
+                              >
+                                ⚠️ Over capacity! Max:{" "}
+                                {capacityConfig?.totalCapacity}
                               </Typography>
                             )}
                           </Box>
 
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                              mb: 2,
+                            }}
+                          >
                             <ScheduleIcon fontSize="small" color="action" />
                             <Box>
                               {/* <Typography variant="body2" color="text.secondary">
                                 Check-In: {reservation.Res_Check_In}
                               </Typography> */}
-                              <Typography variant="body2" color="text.secondary">
-                                {t('cardCheckIn')}: {reservation.Res_Check_In}
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                              >
+                                {t("cardCheckIn")}: {reservation.Res_Check_In}
                               </Typography>
 
                               {/* <Typography variant="body2" color="text.secondary">
                                 Check-Out: {reservation.Res_Check_Out}
                               </Typography> */}
-                              <Typography variant="body2" color="text.secondary">
-                                {t('cardCheckOut')}: {reservation.Res_Check_Out}
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                              >
+                                {t("cardCheckOut")}: {reservation.Res_Check_Out}
                               </Typography>
                             </Box>
                           </Box>
 
                           {reservation.Res_Remarks && (
-                            <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mb: 2 }}>
-                              <CommentIcon fontSize="small" color="action" sx={{ mt: 0.5 }} />
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                gap: 1,
+                                mb: 2,
+                              }}
+                            >
+                              <CommentIcon
+                                fontSize="small"
+                                color="action"
+                                sx={{ mt: 0.5 }}
+                              />
                               <Typography variant="body2" sx={{ mt: 0.5 }}>
-                                <ReadMoreText text={reservation.Res_Remarks} wordLimit={10} />
+                                <ReadMoreText
+                                  text={reservation.Res_Remarks}
+                                  wordLimit={10}
+                                />
                               </Typography>
                             </Box>
                           )}
                         </CardContent>
 
-                        <Box sx={{ p: 2, display: 'flex', justifyContent: 'center', gap: 1, flexWrap: 'wrap' }}>
+                        <Box
+                          sx={{
+                            p: 2,
+                            display: "flex",
+                            justifyContent: "center",
+                            gap: 1,
+                            flexWrap: "wrap",
+                          }}
+                        >
                           <Button
                             variant="contained"
                             size="small"
@@ -3488,17 +3948,21 @@ const CaregiverPage = () => {
                             disabled={!canUpdateStatus(reservation)}
                             sx={{ textTransform: "none", borderRadius: 2 }}
                           >
-                            {reservation.Res_CheckStatus === "Check In" || reservation.Res_CheckStatus === "I" ? t('checkOut') : t('checkIn')}
+                            {reservation.Res_CheckStatus === "Check In" ||
+                            reservation.Res_CheckStatus === "I"
+                              ? t("checkOut")
+                              : t("checkIn")}
                           </Button>
                           <Button
                             variant="outlined"
                             size="small"
-                            onClick={() => handleViewFeedback(reservation.Res_no)}
+                            onClick={() =>
+                              handleViewFeedback(reservation.Res_no)
+                            }
                             startIcon={<VisibilityIcon />}
                             sx={{ textTransform: "none", borderRadius: 2 }}
                           >
-
-                            {t('viewfeadback')}
+                            {t("viewfeadback")}
                           </Button>
                         </Box>
                       </Card>
@@ -3519,58 +3983,74 @@ const CaregiverPage = () => {
             PaperProps={{
               sx: {
                 borderRadius: isMobile ? 0 : 2,
-                maxHeight: isMobile ? '100vh' : '85vh'
-              }
+                maxHeight: isMobile ? "100vh" : "85vh",
+              },
             }}
           >
             {/* Simple Header */}
-            <DialogTitle sx={{
-              backgroundColor: theme.palette.primary.main,
-              color: 'white',
-              py: isMobile ? 1.5 : 2,
-              px: isMobile ? 2 : 3,
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              position: 'sticky',
-              top: 0,
-              zIndex: 1
-            }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <DialogTitle
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                color: "white",
+                py: isMobile ? 1.5 : 2,
+                px: isMobile ? 2 : 3,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                position: "sticky",
+                top: 0,
+                zIndex: 1,
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <PersonIcon fontSize={isMobile ? "small" : "medium"} />
-                <Typography variant={isMobile ? "subtitle1" : "h6"} fontWeight="bold">
+                <Typography
+                  variant={isMobile ? "subtitle1" : "h6"}
+                  fontWeight="bold"
+                >
                   Update Status
                 </Typography>
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 {/* Simple Language Toggle */}
                 <Chip
-                  icon={<PublicIcon sx={{ color: 'white', fontSize: 16 }} />}
-                  label={language === 'en' ? 'ENGLISH' :
-                    language === 'si' ? 'SINHALA' :
-                      language === 'ta' ? 'TAMIL' : 'HINDI'}
+                  icon={<PublicIcon sx={{ color: "white", fontSize: 16 }} />}
+                  label={
+                    language === "en"
+                      ? "ENGLISH"
+                      : language === "si"
+                        ? "SINHALA"
+                        : language === "ta"
+                          ? "TAMIL"
+                          : "HINDI"
+                  }
                   onClick={() => {
-                    const nextLang = language === 'en' ? 'si' :
-                      language === 'si' ? 'ta' :
-                        language === 'ta' ? 'hi' : 'en';
+                    const nextLang =
+                      language === "en"
+                        ? "si"
+                        : language === "si"
+                          ? "ta"
+                          : language === "ta"
+                            ? "hi"
+                            : "en";
                     setLanguage(nextLang);
                   }}
                   size="small"
                   sx={{
-                    color: 'white',
-                    bgcolor: 'rgba(33, 199, 42, 0.99)',
-                    cursor: 'pointer',
-                    height: '24px',
-                    '&:hover': {
-                      bgcolor: 'rgba(33, 199, 42, 0.99)'
-                    }
+                    color: "white",
+                    bgcolor: "rgba(33, 199, 42, 0.99)",
+                    cursor: "pointer",
+                    height: "24px",
+                    "&:hover": {
+                      bgcolor: "rgba(33, 199, 42, 0.99)",
+                    },
                   }}
                 />
                 <IconButton
                   onClick={handleCloseDialog}
                   sx={{
-                    color: 'white',
-                    p: 0.5
+                    color: "white",
+                    p: 0.5,
                   }}
                   size="small"
                 >
@@ -3579,32 +4059,48 @@ const CaregiverPage = () => {
               </Box>
             </DialogTitle>
 
-            <DialogContent sx={{
-              p: isMobile ? 2 : 3,
-              backgroundColor: '#fafafa'
-            }}>
+            <DialogContent
+              sx={{
+                p: isMobile ? 2 : 3,
+                backgroundColor: "#fafafa",
+              }}
+            >
               {selectedReservation && (
                 <Box sx={{ mt: 1 }}>
                   {/* Reservation Summary */}
-                  <Box sx={{
-                    p: 2,
-                    mb: 3,
-                    backgroundColor: 'white',
-                    borderRadius: 1,
-                    border: '1px solid #e0e0e0'
-                  }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                  <Box
+                    sx={{
+                      p: 2,
+                      mb: 3,
+                      backgroundColor: "white",
+                      borderRadius: 1,
+                      border: "1px solid #e0e0e0",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        mb: 2,
+                      }}
+                    >
                       <Assignment color="primary" fontSize="small" />
                       <Typography variant="subtitle2" fontWeight="medium">
-                        {t('reservationDetails')}
+                        {t("reservationDetails")}
                       </Typography>
                     </Box>
 
-                    <Box sx={{ display: 'grid', gap: 1.5 }}>
+                    <Box sx={{ display: "grid", gap: 1.5 }}>
                       {/* Row 1 */}
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
                         <Typography variant="caption" color="text.secondary">
-                          {t('reservationNumber')}
+                          {t("reservationNumber")}
                         </Typography>
                         <Typography variant="body2" fontWeight="medium">
                           #{selectedReservation.Res_no}
@@ -3612,9 +4108,14 @@ const CaregiverPage = () => {
                       </Box>
 
                       {/* Row 2 */}
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
                         <Typography variant="caption" color="text.secondary">
-                          {t('bungalow')}
+                          {t("bungalow")}
                         </Typography>
                         <Typography variant="body2" fontWeight="medium">
                           {getBungalowName(selectedReservation.Res_Bang_Id)}
@@ -3622,12 +4123,17 @@ const CaregiverPage = () => {
                       </Box>
 
                       {/* Row 3 */}
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
                         <Typography variant="caption" color="text.secondary">
-                          {t('guestName')}
+                          {t("guestName")}
                         </Typography>
                         <Typography variant="body2" fontWeight="medium">
-                          {selectedReservation.Res_Guest_Name || t('na')}
+                          {selectedReservation.Res_Guest_Name || t("na")}
                         </Typography>
                       </Box>
 
@@ -3647,60 +4153,86 @@ const CaregiverPage = () => {
                   </Box>
 
                   {/* Guest Counts */}
-                  <Box sx={{
-                    p: 2,
-                    mb: 3,
-                    backgroundColor: 'white',
-                    borderRadius: 1,
-                    border: '1px solid #e0e0e0'
-                  }}>
-                    <Typography variant="subtitle2" fontWeight="medium" gutterBottom>
-                      {t('guestCount')}
+                  <Box
+                    sx={{
+                      p: 2,
+                      mb: 3,
+                      backgroundColor: "white",
+                      borderRadius: 1,
+                      border: "1px solid #e0e0e0",
+                    }}
+                  >
+                    <Typography
+                      variant="subtitle2"
+                      fontWeight="medium"
+                      gutterBottom
+                    >
+                      {t("guestCount")}
                     </Typography>
 
-                    <Box sx={{ display: 'flex', gap: 2, mb: 1 }}>
-                      <Box sx={{ flex: 1, textAlign: 'center' }}>
-                        <Typography variant="caption" color="text.secondary" display="block">
-                          {t('adults')}
+                    <Box sx={{ display: "flex", gap: 2, mb: 1 }}>
+                      <Box sx={{ flex: 1, textAlign: "center" }}>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          display="block"
+                        >
+                          {t("adults")}
                         </Typography>
                         <Typography variant="h6" color="primary.main">
                           {selectedReservation.Res_AdultCount || 0}
                         </Typography>
                       </Box>
 
-                      <Box sx={{ flex: 1, textAlign: 'center' }}>
-                        <Typography variant="caption" color="text.secondary" display="block">
-                          {t('children')}
+                      <Box sx={{ flex: 1, textAlign: "center" }}>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          display="block"
+                        >
+                          {t("children")}
                         </Typography>
                         <Typography variant="h6" color="secondary.main">
                           {selectedReservation.Res_ChildCount || 0}
                         </Typography>
                       </Box>
 
-                      <Box sx={{ flex: 1, textAlign: 'center' }}>
-                        <Typography variant="caption" color="text.secondary" display="block">
-                          {t('total')}
+                      <Box sx={{ flex: 1, textAlign: "center" }}>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          display="block"
+                        >
+                          {t("total")}
                         </Typography>
                         <Typography variant="h6" color="success.main">
-                          {Number(selectedReservation.Res_AdultCount) + Number(selectedReservation.Res_ChildCount)}
+                          {Number(selectedReservation.Res_AdultCount) +
+                            Number(selectedReservation.Res_ChildCount)}
                         </Typography>
                       </Box>
                     </Box>
 
                     <Typography variant="caption" color="text.secondary">
-                      {t('capacity')}: {bungalowCapacity[selectedReservation.Res_Bang_Id]?.totalCapacity} {t('guestsMaximum')}
+                      {t("capacity")}:{" "}
+                      {
+                        bungalowCapacity[selectedReservation.Res_Bang_Id]
+                          ?.totalCapacity
+                      }{" "}
+                      {t("guestsMaximum")}
                     </Typography>
                   </Box>
 
                   {/* Error Messages - Simple */}
                   {capacityError && (
-                    <Box sx={{
-                      p: 2,
-                      mb: 2,
-                      backgroundColor: '#ffebee',
-                      borderRadius: 1,
-                      borderLeft: '4px solid #f44336'
-                    }}>
+                    <Box
+                      sx={{
+                        p: 2,
+                        mb: 2,
+                        backgroundColor: "#ffebee",
+                        borderRadius: 1,
+                        borderLeft: "4px solid #f44336",
+                      }}
+                    >
                       <Typography variant="body2" color="error">
                         {capacityError}
                       </Typography>
@@ -3708,13 +4240,15 @@ const CaregiverPage = () => {
                   )}
 
                   {validationError && (
-                    <Box sx={{
-                      p: 2,
-                      mb: 2,
-                      backgroundColor: '#fff3e0',
-                      borderRadius: 1,
-                      borderLeft: '4px solid #ff9800'
-                    }}>
+                    <Box
+                      sx={{
+                        p: 2,
+                        mb: 2,
+                        backgroundColor: "#fff3e0",
+                        borderRadius: 1,
+                        borderLeft: "4px solid #ff9800",
+                      }}
+                    >
                       <Typography variant="body2" color="warning.dark">
                         {validationError}
                       </Typography>
@@ -3766,86 +4300,111 @@ const CaregiverPage = () => {
           </Typography>
         </Box> */}
 
-
                   {/* Status Selection */}
                   <Box sx={{ mb: 3 }}>
-                    <Typography variant="subtitle2" fontWeight="medium" gutterBottom>
-                      {t('updateStatus')}
+                    <Typography
+                      variant="subtitle2"
+                      fontWeight="medium"
+                      gutterBottom
+                    >
+                      {t("updateStatus")}
                     </Typography>
 
-
                     {selectedReservation && (
-                      <Box sx={{ display: 'flex', gap: 2 }}>
-
+                      <Box sx={{ display: "flex", gap: 2 }}>
                         {(!selectedReservation.Res_CheckStatus ||
                           selectedReservation.Res_CheckStatus.trim() === "" ||
-                          selectedReservation.Res_CheckStatus.trim() === "Pending" ||
-                          selectedReservation.Res_CheckStatus.trim() === "Confirm" ||
-                          selectedReservation.Res_CheckStatus.trim() === "B") && (
-                            <Button
-                              variant={caregiverStatus === "I" ? "contained" : "outlined"}
-                              color="success"
-                              onClick={() => setCaregiverStatus("I")}
-                              fullWidth
-                              size={isMobile ? "medium" : "large"}
-                              startIcon={<CheckCircleIcon />}
-                              sx={{
-                                borderRadius: 1,
-                                py: isMobile ? 1 : 1.5,
-                                textTransform: 'none'
-                              }}
-                            >
-                              {t('checkInGuest')}
-                            </Button>
-                          )}
+                          selectedReservation.Res_CheckStatus.trim() ===
+                            "Pending" ||
+                          selectedReservation.Res_CheckStatus.trim() ===
+                            "Confirm" ||
+                          selectedReservation.Res_CheckStatus.trim() ===
+                            "B") && (
+                          <Button
+                            variant={
+                              caregiverStatus === "I" ? "contained" : "outlined"
+                            }
+                            color="success"
+                            onClick={() => setCaregiverStatus("I")}
+                            fullWidth
+                            size={isMobile ? "medium" : "large"}
+                            startIcon={<CheckCircleIcon />}
+                            sx={{
+                              borderRadius: 1,
+                              py: isMobile ? 1 : 1.5,
+                              textTransform: "none",
+                            }}
+                          >
+                            {t("checkInGuest")}
+                          </Button>
+                        )}
 
-
-                        {(selectedReservation.Res_CheckStatus.trim() === "Check In" ||
-                          selectedReservation.Res_CheckStatus.trim() === "I") && (
-                            <Button
-                              variant={caregiverStatus === "O" ? "contained" : "outlined"}
-                              color="primary"
-                              onClick={() => setCaregiverStatus("O")}
-                              fullWidth
-                              size={isMobile ? "medium" : "large"}
-                              startIcon={<DoneIcon />}
-                              sx={{
-                                borderRadius: 1,
-                                py: isMobile ? 1 : 1.5,
-                                textTransform: 'none'
-                              }}
-                            >
-                              {t('checkOutGuest')}
-                            </Button>
-                          )}
+                        {(selectedReservation.Res_CheckStatus.trim() ===
+                          "Check In" ||
+                          selectedReservation.Res_CheckStatus.trim() ===
+                            "I") && (
+                          <Button
+                            variant={
+                              caregiverStatus === "O" ? "contained" : "outlined"
+                            }
+                            color="primary"
+                            onClick={() => setCaregiverStatus("O")}
+                            fullWidth
+                            size={isMobile ? "medium" : "large"}
+                            startIcon={<DoneIcon />}
+                            sx={{
+                              borderRadius: 1,
+                              py: isMobile ? 1 : 1.5,
+                              textTransform: "none",
+                            }}
+                          >
+                            {t("checkOutGuest")}
+                          </Button>
+                        )}
                       </Box>
                     )}
 
-                    <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-                      {t('selectAction')}
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ mt: 1, display: "block" }}
+                    >
+                      {t("selectAction")}
                     </Typography>
                   </Box>
 
                   {/* Bungalow Condition - Only show when Check Out selected */}
                   {caregiverStatus === "O" && (
-                    <Box sx={{
-                      p: 2,
-                      mb: 2,
-                      backgroundColor: 'white',
-                      borderRadius: 1,
-                      border: '1px solid #e0e0e0'
-                    }}>
-                      <Typography variant="subtitle2" fontWeight="medium" gutterBottom>
-                        {t('bungalowCondition')}
+                    <Box
+                      sx={{
+                        p: 2,
+                        mb: 2,
+                        backgroundColor: "white",
+                        borderRadius: 1,
+                        border: "1px solid #e0e0e0",
+                      }}
+                    >
+                      <Typography
+                        variant="subtitle2"
+                        fontWeight="medium"
+                        gutterBottom
+                      >
+                        {t("bungalowCondition")}
                       </Typography>
 
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        {t('bungalowConditionQuestion')}
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        {t("bungalowConditionQuestion")}
                       </Typography>
 
-                      <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                      <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
                         <Button
-                          variant={feedbackType === "good" ? "contained" : "outlined"}
+                          variant={
+                            feedbackType === "good" ? "contained" : "outlined"
+                          }
                           color="success"
                           onClick={() => setFeedbackType("good")}
                           fullWidth
@@ -3854,14 +4413,16 @@ const CaregiverPage = () => {
                           sx={{
                             borderRadius: 1,
                             py: 1,
-                            textTransform: 'none'
+                            textTransform: "none",
                           }}
                         >
-                          {t('checkedOutWithoutIssue')}
+                          {t("checkedOutWithoutIssue")}
                         </Button>
 
                         <Button
-                          variant={feedbackType === "bad" ? "contained" : "outlined"}
+                          variant={
+                            feedbackType === "bad" ? "contained" : "outlined"
+                          }
                           color="error"
                           onClick={() => setFeedbackType("bad")}
                           fullWidth
@@ -3870,29 +4431,42 @@ const CaregiverPage = () => {
                           sx={{
                             borderRadius: 1,
                             py: 1,
-                            textTransform: 'none'
+                            textTransform: "none",
                           }}
                         >
-                          {t('checkedOutWithIssues')}
+                          {t("checkedOutWithIssues")}
                         </Button>
                       </Box>
 
                       {feedbackType === "bad" && (
-                        <Box sx={{
-                          mt: 2,
-                          p: 2,
-                          backgroundColor: '#fff3e0',
-                          borderRadius: 2,
-                          border: '1px dashed #ff9800'
-                        }}>
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                        <Box
+                          sx={{
+                            mt: 2,
+                            p: 2,
+                            backgroundColor: "#fff3e0",
+                            borderRadius: 2,
+                            border: "1px dashed #ff9800",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                              mb: 1,
+                            }}
+                          >
                             <WarningIcon color="warning" fontSize="small" />
-                            <Typography variant="body2" color="warning.dark" fontWeight="medium">
+                            <Typography
+                              variant="body2"
+                              color="warning.dark"
+                              fontWeight="medium"
+                            >
                               Important Notice
                             </Typography>
                           </Box>
                           <Typography variant="body2" color="text.secondary">
-                            {t('contactInstructions')}
+                            {t("contactInstructions")}
                           </Typography>
                         </Box>
                       )}
@@ -3903,12 +4477,14 @@ const CaregiverPage = () => {
             </DialogContent>
 
             {/* Simple Dialog Actions */}
-            <DialogActions sx={{
-              p: isMobile ? 2 : 3,
-              borderTop: `1px solid ${theme.palette.divider}`,
-              gap: 2,
-              backgroundColor: 'white'
-            }}>
+            <DialogActions
+              sx={{
+                p: isMobile ? 2 : 3,
+                borderTop: `1px solid ${theme.palette.divider}`,
+                gap: 2,
+                backgroundColor: "white",
+              }}
+            >
               <Button
                 onClick={handleCloseDialog}
                 disabled={isSubmitting}
@@ -3916,34 +4492,38 @@ const CaregiverPage = () => {
                 fullWidth={isMobile}
                 sx={{
                   borderRadius: 1,
-                  textTransform: 'none',
-                  flex: isMobile ? 1 : 'none'
+                  textTransform: "none",
+                  flex: isMobile ? 1 : "none",
                 }}
               >
-                {t('cancel')}
+                {t("cancel")}
               </Button>
               <Button
                 variant="contained"
                 onClick={handleUpdateStatus}
-                disabled={isSubmitting || !caregiverStatus || (caregiverStatus === "I" && capacityError)}
+                disabled={
+                  isSubmitting ||
+                  !caregiverStatus ||
+                  (caregiverStatus === "I" && capacityError)
+                }
                 fullWidth={isMobile}
                 sx={{
                   borderRadius: 1,
-                  textTransform: 'none',
-                  flex: isMobile ? 1 : 'none'
+                  textTransform: "none",
+                  flex: isMobile ? 1 : "none",
                 }}
               >
                 {isSubmitting ? (
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <CircularProgress size={20} color="inherit" />
-                    <span>{t('processing')}</span>
+                    <span>{t("processing")}</span>
                   </Box>
                 ) : caregiverStatus === "I" ? (
-                  t('confirmCheckIn')
+                  t("confirmCheckIn")
                 ) : caregiverStatus === "O" ? (
-                  t('confirmCheckOut')
+                  t("confirmCheckOut")
                 ) : (
-                  t('updateStatusButton')
+                  t("updateStatusButton")
                 )}
               </Button>
             </DialogActions>
@@ -3958,9 +4538,11 @@ const CaregiverPage = () => {
             feedbackLoadingById={feedbackLoadingById}
             feedbackErrorById={feedbackErrorById}
             onCheckout={handleCheckoutFromFeedback}
-            showCheckout={shouldShowCheckoutInFeedback(selectedFeedbackReservation)}
+            showCheckout={shouldShowCheckoutInFeedback(
+              selectedFeedbackReservation,
+            )}
             theme={theme}
-            language={language}  
+            language={language}
             t={t}
           />
 
@@ -3969,7 +4551,7 @@ const CaregiverPage = () => {
             open={checkoutDialogOpen}
             onClose={() => {
               setCheckoutDialogOpen(false);
-              setValidationError('');
+              setValidationError("");
             }}
             reservationNo={selectedFeedbackReservation}
             checkoutFeedbackType={checkoutFeedbackType}

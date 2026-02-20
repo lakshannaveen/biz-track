@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Chip, Menu, MenuItem, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Menu,
+  MenuItem,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import LanguageIcon from "@mui/icons-material/Language";
 
 export const caregiverTranslations = {
@@ -35,7 +42,6 @@ export const caregiverTranslations = {
     mainBungalow: "Main Bungalow",
     lowerGardenSuite: "Lower Garden Suite Bungalow",
 
-
     // new
     pageTitle: "Bungalow Caretaker Portal",
     pageSubtitle: "Manage bungalow check-in and checkout operations",
@@ -43,6 +49,8 @@ export const caregiverTranslations = {
     cardView: "Card View",
     listView: "List View",
     back: "Back",
+    history: "History",
+    current: "Current",
     checkIn: "Check In",
     checkOut: "Check Out",
     viewFeedback: "View Feedback",
@@ -62,11 +70,11 @@ export const caregiverTranslations = {
     cardCheckOut: "Check-Out",
     loadingData: "Loading bungalow data...",
     noResultsFound: "No Results Found",
-    noBungalowsMatch: "No bungalows match your search criteria. Try adjusting your search terms.",
+    noBungalowsMatch:
+      "No bungalows match your search criteria. Try adjusting your search terms.",
     noPendingReservations: "No pending reservations found.",
     noBungalowReservations: "No bungalow reservations found.",
     overCapacity: "Over Capacity!",
-
 
     confirmed: "Confirmed",
     checkedIn: "Checked In",
@@ -89,11 +97,11 @@ export const caregiverTranslations = {
     reviewExperience: "Review guest experience and responses",
     checkOutGuest: "Check Out Guest",
     noFeedbackAvailable: "No Feedback Available",
-    noFeedbackDescription: "There are currently no feedback entries for this reservation.",
+    noFeedbackDescription:
+      "There are currently no feedback entries for this reservation.",
     close: "Close",
     feedback: "Feedback",
     viewfeadback: "View Feedback",
-
   },
   si: {
     reservationDetails: "වෙන්කිරීම් විස්තර",
@@ -127,7 +135,7 @@ export const caregiverTranslations = {
     mainBungalow: "ප්‍රධාන බංගලාව",
     lowerGardenSuite: "පහළ ගෙවතු කාමර බංගලාව",
 
-    // new 
+    // new
 
     pageTitle: "බංගලාවේ රැකවරණ නිලධාරී ද්වාරය",
     pageSubtitle: "බංගලා ඇතුල්වීම් සහ පිටවීම් කටයුතු කළමනාකරණය කරන්න",
@@ -135,6 +143,8 @@ export const caregiverTranslations = {
     cardView: "කාඩ් දර්ශනය",
     listView: "ලැයිස්තු දර්ශනය",
     back: "ආපසු",
+    history: "ඉතිහාසය",
+    current: "වත්මන්",
     checkIn: "ඇතුල්වීම",
     checkOut: "පිටවීම",
     viewFeedback: "ප්‍රතිපෝෂණ බලන්න",
@@ -154,11 +164,11 @@ export const caregiverTranslations = {
     cardCheckOut: "පිටවීම",
     loadingData: "බංගලා දත්ත පූරණය වෙමින්...",
     noResultsFound: "ප්‍රතිපල හමු නොවීය",
-    noBungalowsMatch: "ඔබගේ සෙවුම් නිර්ණායක සමඟ ගැලපෙන බංගලා හමු නොවීය. ඔබගේ සෙවුම් නිර්ණායක සකස් කරන්න.",
+    noBungalowsMatch:
+      "ඔබගේ සෙවුම් නිර්ණායක සමඟ ගැලපෙන බංගලා හමු නොවීය. ඔබගේ සෙවුම් නිර්ණායක සකස් කරන්න.",
     noPendingReservations: "පොරොත්තුවෙන් ඉතිරිව ඇති වෙන්කිරීම් හමු නොවීය.",
     noBungalowReservations: "බංගලා වෙන්කිරීම් හමු නොවීය.",
     overCapacity: "ධාරිතාව ඉක්මවා ඇත!",
-
 
     confirmed: "තහවුරු කරන ලදී",
     checkedIn: "ඇතුල් වී ඇත",
@@ -180,7 +190,8 @@ export const caregiverTranslations = {
     reviewExperience: "අමුත්තාගේ අත්දැකීම් සහ ප්‍රතිචාර සමාලෝචනය කරන්න",
     checkOutGuest: "අමුත්තා පිටවීම",
     noFeedbackAvailable: "ප්‍රතිපෝෂණ නැත",
-    noFeedbackDescription: "මෙම වෙන්කිරීම සඳහා දැනට ප්‍රතිපෝෂණ ඇතුලත් කිරීම් නොමැත.",
+    noFeedbackDescription:
+      "මෙම වෙන්කිරීම සඳහා දැනට ප්‍රතිපෝෂණ ඇතුලත් කිරීම් නොමැත.",
     close: "වසන්න",
     feedback: "ප්‍රතිපෝෂණය",
     viewfeadback: "ප්‍රතිපෝෂණය බලන්න",
@@ -198,7 +209,8 @@ export const caregiverTranslations = {
     capacity: "கொள்ளளவு",
     guestsMaximum: "விருந்தினர்கள் அதிகபட்சம்",
     updateStatus: "நிலையை புதுப்பிக்கவும்",
-    selectAction: "இந்த முன்பதிவுக்கு பொருத்தமான நடவடிக்கையைத் தேர்ந்தெடுக்கவும்",
+    selectAction:
+      "இந்த முன்பதிவுக்கு பொருத்தமான நடவடிக்கையைத் தேர்ந்தெடுக்கவும்",
     checkInGuest: "விருந்தினர் சேர்க்கை",
     checkInDescription: "விருந்தினர் வந்து பங்களாவில் நுழைகிறார்",
     checkOutGuest: "விருந்தினர் வெளியேறுதல்",
@@ -207,7 +219,8 @@ export const caregiverTranslations = {
     bungalowConditionQuestion: "பங்களாவின் நிலை எப்படி?",
     checkedOutWithoutIssue: "எந்த சிக்கலும் இல்லாமல் வெளியேறியது",
     checkedOutWithIssues: "சில சிக்கல்களுடன் வெளியேறியது",
-    contactInstructions: "உங்களுக்கு ஏதேனும் சிக்கல் இருந்தால், திரு. குமாரவை தொடர்பு கொள்ளவும்.",
+    contactInstructions:
+      "உங்களுக்கு ஏதேனும் சிக்கல் இருந்தால், திரு. குமாரவை தொடர்பு கொள்ளவும்.",
     cancel: "ரத்து செய்",
     confirmCheckIn: "சேர்க்கை உறுதி செய்",
     confirmCheckOut: "வெளியேறுதல் உறுதி செய்",
@@ -217,13 +230,16 @@ export const caregiverTranslations = {
     mainBungalow: "முக்கிய பங்களா",
     lowerGardenSuite: "கீழ் தோட்டம் சூட் பங்களா",
 
-    //new 
+    //new
     pageTitle: "பங்களா காப்பாளர் நுழைவாயில்",
-    pageSubtitle: "பங்களா சேர்க்கை மற்றும் வெளியேறல் நடவடிக்கைகளை நிர்வகிக்கவும்",
+    pageSubtitle:
+      "பங்களா சேர்க்கை மற்றும் வெளியேறல் நடவடிக்கைகளை நிர்வகிக்கவும்",
     refresh: "புதுப்பிக்கவும்",
     cardView: "அட்டை காட்சி",
     listView: "பட்டியல் காட்சி",
     back: "பின் செல்ல",
+    history: "வரலாறு",
+    current: "தற்போதைய",
     checkIn: "சேர்க்கை",
     checkOut: "வெளியேறுதல்",
     viewFeedback: "கருத்துகளைக் காண்க",
@@ -243,8 +259,10 @@ export const caregiverTranslations = {
     cardCheckOut: "வெளியேறுதல்",
     loadingData: "பங்களா தரவு ஏற்றப்படுகிறது...",
     noResultsFound: "முடிவுகள் எதுவும் கிடைக்கவில்லை",
-    noBungalowsMatch: "உங்கள் தேடல் அளவுகோல்களுடன் பொருந்தக்கூடிய பங்களாக்கள் இல்லை. உங்கள் தேடல் விதிமுறைகளை சரிசெய்ய முயற்சிக்கவும்.",
-    noPendingReservations: "நிலுவையில் உள்ள முன்பதிவுகள் எதுவும் கிடைக்கவில்லை.",
+    noBungalowsMatch:
+      "உங்கள் தேடல் அளவுகோல்களுடன் பொருந்தக்கூடிய பங்களாக்கள் இல்லை. உங்கள் தேடல் விதிமுறைகளை சரிசெய்ய முயற்சிக்கவும்.",
+    noPendingReservations:
+      "நிலுவையில் உள்ள முன்பதிவுகள் எதுவும் கிடைக்கவில்லை.",
     noBungalowReservations: "பங்களா முன்பதிவுகள் எதுவும் கிடைக்கவில்லை.",
     overCapacity: "திறன் மீறியது!",
 
@@ -269,7 +287,8 @@ export const caregiverTranslations = {
     reviewExperience: "விருந்தினர் அனுபவம் மற்றும் பதில்களை மதிப்பாய்வு செய்க",
     checkOutGuest: "விருந்தினர் வெளியேறுதல்",
     noFeedbackAvailable: "கருத்து இல்லை",
-    noFeedbackDescription: "இந்த முன்பதிவிற்கு தற்போது கருத்து உள்ளீடுகள் இல்லை.",
+    noFeedbackDescription:
+      "இந்த முன்பதிவிற்கு தற்போது கருத்து உள்ளீடுகள் இல்லை.",
     close: "மூடு",
     feedback: "கருத்து",
     viewfeadback: "கருத்துக்களைப் பார்க்கவும்",
@@ -296,7 +315,8 @@ export const caregiverTranslations = {
     bungalowConditionQuestion: "बंगले की स्थिति कैसी है?",
     checkedOutWithoutIssue: "बिना किसी समस्या के चेक-आउट किया",
     checkedOutWithIssues: "कुछ समस्याओं के साथ चेक-आउट किया",
-    contactInstructions: "यदि आपको कोई समस्या है, तो कृपया श्री कुमार से संपर्क करें।",
+    contactInstructions:
+      "यदि आपको कोई समस्या है, तो कृपया श्री कुमार से संपर्क करें।",
     cancel: "रद्द करें",
     confirmCheckIn: "चेक-इन की पुष्टि करें",
     confirmCheckOut: "चेक-आउट की पुष्टि करें",
@@ -314,6 +334,8 @@ export const caregiverTranslations = {
     cardView: "कार्ड दृश्य",
     listView: "सूची दृश्य",
     back: "वापस",
+    history: "इतिहास",
+    current: "वर्तमान",
     checkIn: "चेक-इन",
     checkOut: "चेक-आउट",
     viewFeedback: "प्रतिक्रिया देखें",
@@ -333,12 +355,11 @@ export const caregiverTranslations = {
     cardCheckOut: "चेक-आउट",
     loadingData: "बंगला डेटा लोड हो रहा है...",
     noResultsFound: "कोई परिणाम नहीं मिला",
-    noBungalowsMatch: "आपकी खोज मापदंडों से मेल खाने वाला कोई बंगला नहीं मिला। अपनी खोज शर्तों को समायोजित करने का प्रयास करें।",
+    noBungalowsMatch:
+      "आपकी खोज मापदंडों से मेल खाने वाला कोई बंगला नहीं मिला। अपनी खोज शर्तों को समायोजित करने का प्रयास करें।",
     noPendingReservations: "कोई लंबित आरक्षण नहीं मिला।",
     noBungalowReservations: "कोई बंगला आरक्षण नहीं मिला।",
     overCapacity: "क्षमता से अधिक!",
-
-
 
     // Status translations
     confirmed: "पुष्टि की गई",
@@ -361,11 +382,12 @@ export const caregiverTranslations = {
     reviewExperience: "अतिथि अनुभव और प्रतिक्रियाओं की समीक्षा करें",
     checkOutGuest: "अतिथि चेक-आउट",
     noFeedbackAvailable: "कोई प्रतिक्रिया उपलब्ध नहीं",
-    noFeedbackDescription: "इस आरक्षण के लिए वर्तमान में कोई प्रतिक्रिया प्रविष्टियाँ नहीं हैं।",
+    noFeedbackDescription:
+      "इस आरक्षण के लिए वर्तमान में कोई प्रतिक्रिया प्रविष्टियाँ नहीं हैं।",
     close: "बंद करें",
     feedback: "प्रतिक्रिया",
     viewfeadback: "प्रतिक्रिया देखें",
-  }
+  },
 };
 
 export const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
@@ -373,13 +395,14 @@ export const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
   const open = Boolean(anchorEl);
 
   const languages = [
-    { code: 'en', name: 'English', flag: '🇺🇸', nativeName: 'English' },
-    { code: 'si', name: 'සිංහල', flag: '🇱🇰', nativeName: 'සිංහල' },
-    { code: 'ta', name: 'தமிழ்', flag: '🇱🇰', nativeName: 'தமிழ்' },
-    { code: 'hi', name: 'हिन्दी', flag: '🇮🇳', nativeName: 'हिन्दी' }
+    { code: "en", name: "English", flag: "🇺🇸", nativeName: "English" },
+    { code: "si", name: "සිංහල", flag: "🇱🇰", nativeName: "සිංහල" },
+    { code: "ta", name: "தமிழ்", flag: "🇱🇰", nativeName: "தமிழ்" },
+    { code: "hi", name: "हिन्दी", flag: "🇮🇳", nativeName: "हिन्दी" },
   ];
 
-  const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
+  const currentLang =
+    languages.find((lang) => lang.code === currentLanguage) || languages[0];
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -396,22 +419,29 @@ export const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
 
   return (
     <Box sx={{ mb: 2 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 1,
+        }}
+      >
         <Typography variant="subtitle2" color="text.secondary">
           Select Language
         </Typography>
         <IconButton
           onClick={handleClick}
           sx={{
-            border: '1px solid',
-            borderColor: 'divider',
+            border: "1px solid",
+            borderColor: "divider",
             borderRadius: 1,
             p: 1,
             minWidth: 120,
-            justifyContent: 'space-between'
+            justifyContent: "space-between",
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <LanguageIcon fontSize="small" />
             <Typography variant="body2" sx={{ ml: 1 }}>
               {currentLang.flag} {currentLang.name}
@@ -428,8 +458,8 @@ export const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
           sx: {
             mt: 1,
             minWidth: 150,
-            maxHeight: 300
-          }
+            maxHeight: 300,
+          },
         }}
       >
         {languages.map((lang) => (
@@ -438,19 +468,25 @@ export const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
             onClick={() => handleLanguageSelect(lang.code)}
             selected={currentLanguage === lang.code}
             sx={{
-              display: 'flex',
-              alignItems: 'center',
+              display: "flex",
+              alignItems: "center",
               gap: 2,
               py: 1.5,
-              backgroundColor: currentLanguage === lang.code ? 'action.selected' : 'transparent',
-              '&:hover': {
-                backgroundColor: 'action.hover'
-              }
+              backgroundColor:
+                currentLanguage === lang.code
+                  ? "action.selected"
+                  : "transparent",
+              "&:hover": {
+                backgroundColor: "action.hover",
+              },
             }}
           >
-            <Box sx={{ fontSize: '1.2rem' }}>{lang.flag}</Box>
+            <Box sx={{ fontSize: "1.2rem" }}>{lang.flag}</Box>
             <Box sx={{ flexGrow: 1 }}>
-              <Typography variant="body2" fontWeight={currentLanguage === lang.code ? 600 : 400}>
+              <Typography
+                variant="body2"
+                fontWeight={currentLanguage === lang.code ? 600 : 400}
+              >
                 {lang.name}
               </Typography>
               <Typography variant="caption" color="text.secondary">
@@ -458,9 +494,7 @@ export const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
               </Typography>
             </Box>
             {currentLanguage === lang.code && (
-              <Box sx={{ color: 'primary.main', ml: 1 }}>
-                ✓
-              </Box>
+              <Box sx={{ color: "primary.main", ml: 1 }}>✓</Box>
             )}
           </MenuItem>
         ))}
@@ -470,34 +504,38 @@ export const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
 };
 
 // Alternative: Simple Select Dropdown Version
-export const SimpleLanguageSelector = ({ currentLanguage, onLanguageChange }) => {
+export const SimpleLanguageSelector = ({
+  currentLanguage,
+  onLanguageChange,
+}) => {
   const languages = [
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'si', name: 'සිංහල', flag: '🇱🇰' },
-    { code: 'ta', name: 'தமிழ்', flag: '🇱🇰' },
-    { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' }
+    { code: "en", name: "English", flag: "🇺🇸" },
+    { code: "si", name: "සිංහල", flag: "🇱🇰" },
+    { code: "ta", name: "தமிழ்", flag: "🇱🇰" },
+    { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
   ];
 
-  const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
+  const currentLang =
+    languages.find((lang) => lang.code === currentLanguage) || languages[0];
 
   return (
     <Box sx={{ mb: 2 }}>
       <Typography variant="subtitle2" color="text.secondary" gutterBottom>
         Select Language
       </Typography>
-      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+      <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
         {languages.map((lang) => (
           <Chip
             key={lang.code}
             label={`${lang.flag} ${lang.name}`}
             onClick={() => onLanguageChange(lang.code)}
-            color={currentLanguage === lang.code ? 'primary' : 'default'}
-            variant={currentLanguage === lang.code ? 'filled' : 'outlined'}
+            color={currentLanguage === lang.code ? "primary" : "default"}
+            variant={currentLanguage === lang.code ? "filled" : "outlined"}
             size="medium"
             sx={{
-              cursor: 'pointer',
+              cursor: "pointer",
               minWidth: 100,
-              justifyContent: 'center'
+              justifyContent: "center",
             }}
           />
         ))}
@@ -506,18 +544,22 @@ export const SimpleLanguageSelector = ({ currentLanguage, onLanguageChange }) =>
   );
 };
 
-export const ButtonLanguageSelector = ({ currentLanguage, onLanguageChange }) => {
+export const ButtonLanguageSelector = ({
+  currentLanguage,
+  onLanguageChange,
+}) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
   const languages = [
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'si', name: 'සිංහල', flag: '🇱🇰' },
-    { code: 'ta', name: 'தமிழ்', flag: '🇱🇰' },
-    { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' }
+    { code: "en", name: "English", flag: "🇺🇸" },
+    { code: "si", name: "සිංහල", flag: "🇱🇰" },
+    { code: "ta", name: "தமிழ்", flag: "🇱🇰" },
+    { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
   ];
 
-  const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
+  const currentLang =
+    languages.find((lang) => lang.code === currentLanguage) || languages[0];
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -539,27 +581,21 @@ export const ButtonLanguageSelector = ({ currentLanguage, onLanguageChange }) =>
         label={`${currentLang.flag} ${currentLang.name}`}
         onClick={handleClick}
         variant="outlined"
-        sx={{ cursor: 'pointer', mb: 2 }}
+        sx={{ cursor: "pointer", mb: 2 }}
       />
 
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-      >
+      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         {languages.map((lang) => (
           <MenuItem
             key={lang.code}
             onClick={() => handleLanguageSelect(lang.code)}
             selected={currentLanguage === lang.code}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ fontSize: '1.2rem' }}>{lang.flag}</Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Box sx={{ fontSize: "1.2rem" }}>{lang.flag}</Box>
               <Typography>{lang.name}</Typography>
               {currentLanguage === lang.code && (
-                <Box sx={{ color: 'primary.main', ml: 1 }}>
-                  ✓
-                </Box>
+                <Box sx={{ color: "primary.main", ml: 1 }}>✓</Box>
               )}
             </Box>
           </MenuItem>

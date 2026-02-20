@@ -1274,14 +1274,14 @@ const MaintenanceModal = ({ open, handleClose }) => {
       <Box
         sx={{
           position: "absolute",
-          top: "48%",
+          top: "45%",
           left: "50%",
           transform: "translate(-50%, -50%)",
           width: { xs: "95%", sm: "90%", md: "80%" },
           maxWidth: "1000px",
           bgcolor: "background.paper",
           boxShadow: 24,
-          p: { xs: 2, sm: 3 },
+          p: { xs: 1, sm: 3 },
           borderRadius: 2,
         }}
       >
@@ -1443,7 +1443,7 @@ const MaintenanceModal = ({ open, handleClose }) => {
             </Typography>
 
             <Paper
-              elevation={5}
+              elevation={6}
               sx={{
                 borderRadius: 1,
                 width: "100%",
@@ -1463,13 +1463,13 @@ const MaintenanceModal = ({ open, handleClose }) => {
                           color: "white",
                           borderRight: "1px solid rgba(255, 255, 255, 0.2)",
                           textAlign: "center",
-                          padding: "12px",
-                          fontSize: "12px",
+                          padding: "6px",
+                          fontSize: "11px",
                         },
                       }}
                     >
                       <TableCell>Date</TableCell>
-                      <TableCell>Repoter</TableCell>
+                      {/* <TableCell>Repoter</TableCell> */}
                       <TableCell>Maintenance Report</TableCell>
                       <TableCell>Status</TableCell>
                       <TableCell>Employee comment</TableCell>
@@ -1518,7 +1518,7 @@ const MaintenanceModal = ({ open, handleClose }) => {
                           >
                             <ReadMoreText text={item.created_date || "N/A"} />
                           </TableCell>
-                          <TableCell
+                          {/* <TableCell
                             sx={{
                               textAlign: "left",
                               padding: "12px",
@@ -1526,10 +1526,10 @@ const MaintenanceModal = ({ open, handleClose }) => {
                             }}
                           >
                             <ReadMoreText
-                              text={item.created_Name || "N/A"}
+                              text={item.created_by || "N/A"}
                               wordLimit={4}
                             />
-                          </TableCell>
+                          </TableCell> */}
                           <TableCell
                             sx={{
                               textAlign: "left",

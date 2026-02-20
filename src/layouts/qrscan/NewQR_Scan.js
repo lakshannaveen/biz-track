@@ -6129,55 +6129,70 @@ export default function CustomizedDialogs({ isOpen, isOpenDetailScreen }) {
     const reservationNo = selectedReservation.Res_no;
     const qrPrefix = qrCode.charAt(0);
 
+
+    let actualPrefix = qrPrefix;
+    if (qrCode === "NEHBI001") actualPrefix = "I";
+    if (qrCode === "NEHBO001") actualPrefix = "O";
+    if (qrCode === "NEHBO002") actualPrefix = "B";
+
     try {
       let result1, result2;
 
       if (reservationAction === "checkin") {
-        result1 = await markCheckStatus(reservationNo, "I");
+        console.log("Processing check-in for reservation:", reservationNo);
 
-        if (result1.StatusCode === 200) {
+         
+        result1 = await markCheckStatus(reservationNo, "I");
+        console.log("Check-in API response:", result1);
+
+        if (result1 && result1.StatusCode === 200) {
           toast.success("Check-in successful!");
           handleCloseReservationModal();
+          handleClose(); 
         } else {
-          toast.error("Check-in failed. Please try again.");
+          toast.error(result1?.Message || "Check-in failed. Please try again.");
         }
       }
       else if (reservationAction === "checkout") {
-        if (qrPrefix === "O") {
+        console.log("Processing checkout for reservation:", reservationNo);
+        console.log("QR Prefix:", actualPrefix);
+
+        if (actualPrefix === "O" || actualPrefix === "B") {
+        
           result1 = await markCheckStatus(reservationNo, "O");
+          console.log("Check-out API response:", result1);
 
-          if (result1.StatusCode === 200) {
-            toast.success("Check-out successful!");
-            handleCloseReservationModal();
-          } else {
-            toast.error("Check-out failed. Please try again.");
-          }
-        }
-        else if (qrPrefix === "B") {
-          result1 = await markCheckStatus(reservationNo, "O");
+          if (result1 && result1.StatusCode === 200) {
+             
+            if (actualPrefix === "B") {
+              result2 = await addCaretFeedback(reservationNo, reservationRemarks || "Checked out", "B");
+              console.log("Caret feedback API response:", result2);
 
-          if (result1.StatusCode === 200) {
-            result2 = await addCaretFeedback(reservationNo, reservationRemarks, "B");
-
-            if (result2.StatusCode === 200) {
-              toast.success("Check-out and caret feedback submitted successfully!");
-              handleCloseReservationModal();
+              if (result2 && result2.StatusCode === 200) {
+                toast.success("Check-out and caret feedback submitted successfully!");
+              } else {
+                toast.warning("Check-out successful but caret feedback submission failed.");
+              }
             } else {
-              toast.error("Caret feedback submission failed.");
+              toast.success("Check-out successful!");
             }
+
+            handleCloseReservationModal();
+            handleClose();  
           } else {
-            toast.error("Check-out failed. Please try again.");
+            toast.error(result1?.Message || "Check-out failed. Please try again.");
           }
+        } else {
+          toast.error("Invalid QR code for check-out");
         }
       }
     } catch (error) {
       console.error("Error processing reservation:", error);
-      toast.error("An error occurred. Please try again.");
+      toast.error("An error occurred: " + (error.message || "Please try again."));
     } finally {
       setProcessing(false);
     }
   };
-
   // const handleScan = async (scanData) => {
   //   if (scanData) {
   //     const scannedText = scanData.text.trim();
@@ -6245,15 +6260,31 @@ export default function CustomizedDialogs({ isOpen, isOpenDetailScreen }) {
   const handleScan = async (scanData) => {
     if (!scanData || !isScanning) return;
 
-    setIsScanning(false); // 🔒 stop further scans
+    setIsScanning(false);  
 
     const scannedText = scanData.text.trim();
     setQRCode(scannedText);
 
     // ---------------- I / O / B RESERVATION QR ----------------
-    if (/^[IOB]/.test(scannedText)) {
-      const qrPrefix = scannedText.charAt(0);
-      const serviceNumber = scannedText.substring(1);
+
+    if (scannedText === "NEHBI001" || scannedText === "NEHBO001" || scannedText === "NEHBO002") {
+       
+      let qrPrefix;
+      if (scannedText === "NEHBI001") {
+        qrPrefix = "I";
+      } else if (scannedText === "NEHBO001") {
+        qrPrefix = "O";
+      } else if (scannedText === "NEHBO002") {
+        qrPrefix = "B";
+      }
+
+       
+      const serviceNumber = data?.[0]?.ServiceNo;  
+
+      if (!serviceNumber) {
+        toast.error("Service number not found");
+        return;
+      }
 
       const allReservations = await loadReservationData(serviceNumber);
 

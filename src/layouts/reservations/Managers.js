@@ -35,7 +35,7 @@ import HistoryModal from "../../components/Utility/Reservations/HistoryModal";
 import MaintenanceModal from "../../components/Utility/Reservations/MaintainModal";
 import CloseModal from "../../../src/layouts/reservations/CloseModal";
 import SpecialModal from "../../../src/layouts/reservations/SpecialGuest";
-import { GetLoadResDetails, GetPriorityListByDate, /* PostResvationLog, */ UpdateResStatus } from "../../action/Reservation";
+import { GetLoadResDetails, GetPriorityListByDate, PostResvationLog, UpdateResStatus } from "../../action/Reservation";
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import PrintIcon from '@mui/icons-material/Print';
@@ -523,14 +523,13 @@ const Reservations = () => {
         return getGradeFromRemarks(reservation.Res_Remarks);
     };
 
-    /*
     const handleReserveClick = async () => {
         setReserveLoading(true);
         try {
             const result = await dispatch(PostResvationLog());
 
             if (result && result.success) {
-                setReservationModalOpen(true);
+                setCloseModalOpen(true);
             }
         } catch (error) {
             if (error.response && error.response.data && error.response.data.StatusCode === 500) {
@@ -566,7 +565,50 @@ const Reservations = () => {
             setReserveLoading(false);
         }
     };
-    */
+
+
+        const handleSpecialGuestClick = async () => {
+        setReserveLoading(true);
+        try {
+            const result = await dispatch(PostResvationLog());
+
+            if (result && result.success) {
+                setSpecialModalOpen(true);
+            }
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.StatusCode === 500) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Session Error',
+                    text: error.response.data.Result || 'Someone is already in the reservation session.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#d33',
+                });
+            }
+            else if (error.response && error.response.data && error.response.data.StatusCode !== 200) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Reservation Not Available',
+                    text: error.response.data.Message || 'Someone is already in the reservation session.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3085d6',
+                });
+            }
+
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to check reservation availability. Please try again.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#d33',
+                });
+            }
+
+        } finally {
+            setReserveLoading(false);
+        }
+    };
 
     const handleFeedbackClick = () => {
         setFeedbackModalOpen(true);
@@ -1408,19 +1450,19 @@ const Reservations = () => {
                                         variant="contained"
                                         color="warning"
                                         size="small"
-                                        onClick={handleCloseClick}
+                                        onClick={handleReserveClick}
                                         sx={{ textTransform: "none", fontSize: '0.7rem' }}
                                     >
-                                        Close
+                                        Close Maintenance
                                     </Button>
                                     <Button
                                         variant="contained"
                                         color="success"
                                         size="small"
-                                        onClick={handleSpecialClick}
+                                        onClick={handleSpecialGuestClick}
                                         sx={{ textTransform: "none", fontSize: '0.7rem' }}
                                     >
-                                        Special Guest
+                                        Special Guest Reserve
                                     </Button>
 
                                     {/* <Button
@@ -2076,43 +2118,17 @@ const Reservations = () => {
                         </DialogActions>
                     </Dialog>
 
-                    <ReservationModal
-                        open={reservationModalOpen}
-                        handleClose={() => {
-                            setReservationModalOpen(false);
-                            dispatch(GetLoadResDetails());
-                        }}
-                        maintenanceDates={maintenanceDates}
-                    />
-                    <FeedbackModal
-                        open={feedbackModalOpen}
-                        handleClose={() => setFeedbackModalOpen(false)}
-                    />
-                    <TermsModal
-                        open={termsModalOpen}
-                        handleClose={() => setTermsModalOpen(false)}
-                    />
-                    <HistoryModal
-                        open={historyModalOpen}
-                        handleClose={() => setHistoryModalOpen(false)}
-                    />
-                    <MaintenanceModal
-                        open={maintainModalOpen}
-                        handleClose={() => setMaintainModalOpen(false)}
-                    />
+                     
                     <CloseModal
                         open={closeModalOpen}
-                        handleClose={() => setCloseModalOpen(false)}
+                         handleClose={() => setCloseModalOpen(false)}
+                         
                     />
                     <SpecialModal
                         open={specialModalOpen}
                         handleClose={() => setSpecialModalOpen(false)}
                     />
-                    <CaretakerModal
-                        open={caretakerModalOpen}
-                        handleClose={() => setCaretakerModalOpen(false)}
-                        reservation={selectedReservationForCaretaker || {}}
-                    />
+                    
                 </Container>
             )}
         </div>

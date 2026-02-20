@@ -1864,62 +1864,75 @@ const CaretakerModal = ({ open, handleClose, reservation }) => {
   return (
     <>
       <Modal open={open} onClose={handleClose} closeAfterTransition>
-        <Fade in={open}>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: { xs: "95%", sm: "90%", md: "700px" },
-              maxWidth: "95vw",
-              bgcolor: "background.paper",
-              boxShadow: theme.shadows[10],
-              p: { xs: 2, sm: 3 },
-              borderRadius: 2,
-              maxHeight: "90vh",
-              overflow: "auto",
-              "&::-webkit-scrollbar": {
-                width: "8px",
-              },
-              "&::-webkit-scrollbar-track": {
-                background: "#f1f1f1",
-                borderRadius: "4px",
-              },
-              "&::-webkit-scrollbar-thumb": {
-                background: "#ccc",
-                borderRadius: "4px",
-              },
-              "&::-webkit-scrollbar-thumb:hover": {
-                background: "#aaa",
-              },
-            }}
-          >
-            <Box sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 2,
-              borderBottom: `1px solid ${theme.palette.divider}`,
-              pb: 1
-            }}>
-              <Typography variant="h5" sx={{ fontWeight: "600", color: "primary.main" }}>
-                <Assignment sx={{ mr: 1, verticalAlign: "bottom" }} />
-                My Reservation
-              </Typography>
-              <IconButton
-                aria-label="close"
-                onClick={handleClose}
-                sx={{
-                  color: "text.secondary",
-                  "&:hover": {
-                    backgroundColor: "action.hover",
-                  }
-                }}
-              >
-                <Close />
-              </IconButton>
-            </Box>
+  <Fade in={open}>
+    <Box
+      sx={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: { xs: "95%", sm: "90%", md: "700px" },
+        maxWidth: "95vw",
+        bgcolor: "background.paper",
+        boxShadow: theme.shadows[10],
+        p: { xs: 2, sm: 3 },
+        borderRadius: 2,
+        maxHeight: "90vh",
+        display: "flex",
+        flexDirection: "column",  
+      }}
+    >
+       
+      <Box sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        mb: 2,
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        pb: 1,
+        flexShrink: 0,  
+      }}>
+        <Typography variant="h5" sx={{ fontWeight: "600", color: "primary.main" }}>
+          <Assignment sx={{ mr: 1, verticalAlign: "bottom" }} />
+          My Reservation
+        </Typography>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            color: "text.secondary",
+            "&:hover": {
+              backgroundColor: "action.hover",
+            }
+          }}
+        >
+          <Close />
+        </IconButton>
+      </Box>
+
+      {/* Scrollable Content Section */}
+      <Box
+        sx={{
+          flex: 1, // Take remaining space
+          overflow: "auto", // Scroll only this section
+          minHeight: 0, // Important for flex child scrolling
+          pr: 1, // Add some padding for scrollbar
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "#f1f1f1",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#ccc",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#aaa",
+          },
+        }}
+      >
 
             {loading && !caretakerList.length ? (
               <Box sx={{
@@ -1956,12 +1969,15 @@ const CaretakerModal = ({ open, handleClose, reservation }) => {
               </Alert>
             ) : (
               <>
-                {caretakerList.map((item, index) => {
+                {caretakerList
+                .filter(item => item.Res_Status !== "Closed")
+                .map((item, index) => {
                   const statusConfig = {
                     "Confirm": { label: "Confirmed", color: "success" },
                     "Confirmed": { label: "Confirmed", color: "success" },
                     "Cancelled": { label: "Cancelled", color: "error" },
-                    "Pending": { label: "Pending", color: "warning" }
+                    "Pending": { label: "Pending", color: "warning" },
+                     
                   };
 
                   const statusInfo =
@@ -2184,7 +2200,7 @@ const CaretakerModal = ({ open, handleClose, reservation }) => {
                             </>
                           )}
 
-                          {(item.Res_Status === "Confirm" || item.Res_Status === "Confirmed") && (
+                          {(item.Res_Status === "Confirm" || item.Res_Status === "Confirmed" || item.Res_Status === "Closed") && (
                             <Button
                               variant="outlined"
                               onClick={() => handleFeedbackClick(item)}
@@ -2224,7 +2240,7 @@ const CaretakerModal = ({ open, handleClose, reservation }) => {
                   );
                 })}
 
-                {caretakerList.length === 0 && !loading && (
+                {caretakerList.filter(item => item.Res_Status !== "Closed").length === 0 && !loading && (
                   <Box sx={{
                     textAlign: "center",
                     py: 4,
@@ -2241,6 +2257,7 @@ const CaretakerModal = ({ open, handleClose, reservation }) => {
                 )}
               </>
             )}
+            </Box>
           </Box>
         </Fade>
       </Modal>
