@@ -147,8 +147,6 @@
 
 // export default App;
 
-
-
 // import React, { Fragment, useEffect, useState, useContext } from "react";
 // import { Routes, Route, useNavigate } from "react-router-dom";
 // import "./App.css";
@@ -276,7 +274,6 @@
 //                       <Route element={<Telephone />} path="/telephone" />
 //                       <Route element={<Jobs />} path="/jobs" />
 //                       <Route element={<MaintenancePage />} path="/MaintenancePage" />
-                      
 
 //                       <Route element={<EMPDetails />} path="/empdetails" />
 //                       <Route element={<Outstanding_Tools />} path="/tools" />
@@ -348,7 +345,6 @@
 // }
 
 // export default App;
-
 
 // import React, { Fragment, useEffect, useState, useContext } from "react";
 // import { Routes, Route, useNavigate } from "react-router-dom";
@@ -499,14 +495,13 @@
 
 // export default App;
 
-
-
 import React, { Fragment, useEffect, useState, useContext } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
 import Signin from "./layouts/authentication/sign-in";
 import Verification from "./layouts/authentication/verification";
 import Home from "./layouts/other/Home";
+import Dashboard from "./layouts/other/Dashboard";
 import QR from "./layouts/qrscan/QR";
 import NewQR_Scan from "./layouts/qrscan/NewQR_Scan";
 // import NotFound from "./components/Utility/NotFound";
@@ -523,7 +518,7 @@ import { ToastContainer } from "react-toastify";
 import { loadUser } from "./action/Login";
 import { GetAccessHeadComponent } from "./action/Common";
 import store from "./store";
-import versionInfo from './version.json';
+import versionInfo from "./version.json";
 
 import { useSelector } from "react-redux";
 import Footer from "./route/BottomNavigation";
@@ -561,7 +556,7 @@ import Manager from "../src/layouts/reservations/Managers";
 function App() {
   const { isLoggedIn, loading } = useSelector((state) => state.auth);
   const { isOpen, isOpenDetailScreen } = useSelector(
-    (state) => state.qrVisible
+    (state) => state.qrVisible,
   );
 
   const { isOnline, isAuthenticated } = useAuth();
@@ -574,37 +569,40 @@ function App() {
     }
   }, [isOnline]);
 
-    useEffect(() => {
-     
+  useEffect(() => {
     const checkVersion = async () => {
       try {
-        const response = await fetch('/version.json?t=' + Date.now());
+        const response = await fetch("/version.json?t=" + Date.now());
         const data = await response.json();
-        
+
         if (data.version !== versionInfo.version) {
-          if (window.confirm('A new version is available! Would you like to update?')) {
-             
-            if ('caches' in window) {
+          if (
+            window.confirm(
+              "A new version is available! Would you like to update?",
+            )
+          ) {
+            if ("caches" in window) {
               const cacheNames = await caches.keys();
-              await Promise.all(cacheNames.map(name => caches.delete(name)));
+              await Promise.all(cacheNames.map((name) => caches.delete(name)));
             }
-            
-            if ('serviceWorker' in navigator) {
-              const registrations = await navigator.serviceWorker.getRegistrations();
-              await Promise.all(registrations.map(reg => reg.unregister()));
+
+            if ("serviceWorker" in navigator) {
+              const registrations =
+                await navigator.serviceWorker.getRegistrations();
+              await Promise.all(registrations.map((reg) => reg.unregister()));
             }
-            
+
             window.location.reload(true);
           }
         }
       } catch (error) {
-        console.error('Version check failed:', error);
+        console.error("Version check failed:", error);
       }
     };
 
     checkVersion();
-    const interval = setInterval(checkVersion, 30 * 60 * 1000);  
-    
+    const interval = setInterval(checkVersion, 30 * 60 * 1000);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -652,6 +650,7 @@ function App() {
                     }}
                   >
                     <Routes>
+                      <Route element={<Dashboard />} path="/dashboard" />
                       <Route element={<Home />} path="/*" />
                       <Route element={<BudgetShop />} path="/budgetshop" />
                       <Route element={<Leave />} path="/leave" />
@@ -664,8 +663,11 @@ function App() {
                       <Route element={<Medical />} path="/medical" />
                       <Route element={<Telephone />} path="/telephone" />
                       <Route element={<Jobs />} path="/jobs" />
-                      <Route element={<MaintenancePage />} path="/MaintenancePage" /> 
-                      <Route element={<Manager />} path="/ManagerPage" /> 
+                      <Route
+                        element={<MaintenancePage />}
+                        path="/MaintenancePage"
+                      />
+                      <Route element={<Manager />} path="/ManagerPage" />
 
                       <Route element={<EMPDetails />} path="/empdetails" />
                       <Route element={<Outstanding_Tools />} path="/tools" />
