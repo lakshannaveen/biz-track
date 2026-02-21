@@ -81,6 +81,7 @@
       "last 1 safari version"
     ]
   },
+  "proxy": "https://esystems.cdl.lk/backend-test/BizTrack/",
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/date-fns": "^2.6.3",

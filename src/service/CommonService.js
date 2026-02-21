@@ -13,6 +13,10 @@ const GetAccessHeadComponent = async () => {
 };
 
 const GetUserByServiceNo = async () => {
+  // Hardcoded service number for testing
+  const hardcodedServiceNo = "0004086";
+  localStorage.setItem("ServiceNo", hardcodedServiceNo);
+  
   return axios.post(`login/GetUserByServiceNo`)
     .then((response) => {
 
