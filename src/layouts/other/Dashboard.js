@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { Users, UserCheck, Clock, TrendingUp } from "lucide-react";
 
@@ -8,6 +8,7 @@ import { EmployeeTypeChart } from "../../components/Charts/EmployeeTypeChart";
 import { CDPLCBreakdown } from "../../components/Charts/CDPLCBreakdown";
 import { DivisionBreakdown } from "../../components/Charts/DivisionBreakdown";
 import { TraineesOverview } from "../../components/Charts/TraineesOverview";
+import DashboardTabs from "../../components/Charts/DashboardTabs";
 
 // Simulated sparkline data
 const sparklines = {
@@ -305,6 +306,8 @@ const radialData = cdplcData.map((d) => ({
 
 // Main Dashboard Component
 const Dashboard = () => {
+  const [activeTab, setActiveTab] = useState(0);
+
   useEffect(() => {
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (metaThemeColor) {
@@ -322,120 +325,173 @@ const Dashboard = () => {
         padding: "32px 24px",
       }}
     >
-      {/* Welcome Section */}
-      <Box
-        sx={{
-          background: "linear-gradient(135deg, #004AAD 0%, #0066FF 100%)",
-          color: "white",
-          padding: "32px",
-          borderRadius: "16px",
-          marginBottom: "32px",
-          boxShadow: "0 8px 32px rgba(0, 74, 173, 0.3)",
-        }}
-      >
-        <Typography
-          variant="h4"
+      {/* Dashboard Tabs */}
+      <DashboardTabs activeTab={activeTab} onTabChange={setActiveTab} />
+
+      {/* HR Dashboard */}
+      {activeTab === 0 && (
+        <>
+          {/* Welcome Section */}
+          <Box
+            sx={{
+              background: "linear-gradient(135deg, #004AAD 0%, #0066FF 100%)",
+              color: "white",
+              padding: "32px",
+              borderRadius: "16px",
+              marginBottom: "32px",
+              boxShadow: "0 8px 32px rgba(0, 74, 173, 0.3)",
+            }}
+          >
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                marginBottom: "8px",
+                fontSize: "28px",
+              }}
+            >
+              Welcome to BizTrack Dashboard
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "16px",
+                opacity: 0.9,
+                fontWeight: 400,
+              }}
+            >
+              Real-time workforce analytics and port operations overview.
+            </Typography>
+          </Box>
+
+          {/* KPI Cards Grid */}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(2, 1fr)",
+                md: "repeat(2, 1fr)",
+                lg: "repeat(4, 1fr)",
+              },
+              gap: "16px",
+              marginBottom: "32px",
+            }}
+          >
+            <KpiCard
+              label="Total Employees"
+              target={3891}
+              icon={Users}
+              sparkData={sparklines.total}
+              sparkColor="#3b82f6"
+              trend="+12%"
+              trendPositive={true}
+              delay={0}
+            />
+
+            <KpiCard
+              label="Eligible Strength"
+              target={3331}
+              icon={UserCheck}
+              sparkData={sparklines.eligible}
+              sparkColor="#8b5cf6"
+              trend="85% of total"
+              trendPositive={true}
+              delay={1}
+            />
+
+            <KpiCard
+              label="Total Attendance"
+              target={2579}
+              icon={Clock}
+              sparkData={sparklines.attendance}
+              sparkColor="#10b981"
+              trend="77% rate"
+              trendPositive={true}
+              delay={2}
+            />
+
+            <KpiCard
+              label="Attendance Rate"
+              target={77}
+              suffix="%"
+              icon={TrendingUp}
+              sparkData={sparklines.rate}
+              sparkColor="#06b6d4"
+              trend="+2% vs last week"
+              trendPositive={true}
+              delay={3}
+            />
+          </Box>
+
+          {/* Employee Type Strength vs Attendance Chart */}
+          <Box sx={{ marginTop: "32px" }}>
+            <EmployeeTypeChart employeeTypeData={employeeTypeData} />
+          </Box>
+
+          {/* CDPLC Category Attendance Chart */}
+          <Box sx={{ marginTop: "32px" }}>
+            <CDPLCBreakdown cdplcData={cdplcData} radialData={radialData} />
+          </Box>
+
+          {/* Trainees Overview Charts */}
+          <Box sx={{ marginTop: "32px" }}>
+            <TraineesOverview
+              traineeOverall={traineeOverall}
+              traineeByDivision={traineeByDivision}
+            />
+          </Box>
+
+          {/* Division Attendance Rate Chart */}
+          <Box sx={{ marginTop: "32px" }}>
+            <DivisionBreakdown divisionData={divisionData} />
+          </Box>
+        </>
+      )}
+
+      {/* Financial Dashboard */}
+      {activeTab === 1 && (
+        <Box
           sx={{
-            fontWeight: 700,
-            marginBottom: "8px",
-            fontSize: "28px",
+            background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+            color: "white",
+            padding: "32px",
+            borderRadius: "16px",
+            marginBottom: "32px",
+            boxShadow: "0 8px 32px rgba(16, 185, 129, 0.3)",
           }}
         >
-          Welcome to BizTrack Dashboard
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: "16px",
-            opacity: 0.9,
-            fontWeight: 400,
-          }}
-        >
-          Real-time workforce analytics and port operations overview.
-        </Typography>
-      </Box>
-
-      {/* KPI Cards Grid */}
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            sm: "repeat(2, 1fr)",
-            md: "repeat(2, 1fr)",
-            lg: "repeat(4, 1fr)",
-          },
-          gap: "16px",
-          marginBottom: "32px",
-        }}
-      >
-        <KpiCard
-          label="Total Employees"
-          target={3891}
-          icon={Users}
-          sparkData={sparklines.total}
-          sparkColor="#3b82f6"
-          trend="+12%"
-          trendPositive={true}
-          delay={0}
-        />
-
-        <KpiCard
-          label="Eligible Strength"
-          target={3331}
-          icon={UserCheck}
-          sparkData={sparklines.eligible}
-          sparkColor="#8b5cf6"
-          trend="85% of total"
-          trendPositive={true}
-          delay={1}
-        />
-
-        <KpiCard
-          label="Total Attendance"
-          target={2579}
-          icon={Clock}
-          sparkData={sparklines.attendance}
-          sparkColor="#10b981"
-          trend="77% rate"
-          trendPositive={true}
-          delay={2}
-        />
-
-        <KpiCard
-          label="Attendance Rate"
-          target={77}
-          suffix="%"
-          icon={TrendingUp}
-          sparkData={sparklines.rate}
-          sparkColor="#06b6d4"
-          trend="+2% vs last week"
-          trendPositive={true}
-          delay={3}
-        />
-      </Box>
-
-      {/* Employee Type Strength vs Attendance Chart */}
-      <Box sx={{ marginTop: "32px" }}>
-        <EmployeeTypeChart employeeTypeData={employeeTypeData} />
-      </Box>
-
-      {/* CDPLC Category Attendance Chart */}
-      <Box sx={{ marginTop: "32px" }}>
-        <CDPLCBreakdown cdplcData={cdplcData} radialData={radialData} />
-      </Box>
-
-      {/* Trainees Overview Charts */}
-      <Box sx={{ marginTop: "32px" }}>
-        <TraineesOverview
-          traineeOverall={traineeOverall}
-          traineeByDivision={traineeByDivision}
-        />
-      </Box>
-
-      {/* Division Attendance Rate Chart */}
-      <Box sx={{ marginTop: "32px" }}>
-        <DivisionBreakdown divisionData={divisionData} />
-      </Box>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 700,
+              marginBottom: "8px",
+              fontSize: "28px",
+            }}
+          >
+            Financial Dashboard
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: "16px",
+              opacity: 0.9,
+              fontWeight: 400,
+            }}
+          >
+            Financial metrics, budgets, and fiscal performance overview.
+          </Typography>
+          <Box sx={{ marginTop: "24px" }}>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                opacity: 0.8,
+                fontStyle: "italic",
+              }}
+            >
+              Financial dashboard content coming soon...
+            </Typography>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 };
