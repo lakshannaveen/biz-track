@@ -433,6 +433,11 @@ const Dashboard = () => {
             <CDPLCBreakdown cdplcData={cdplcData} radialData={radialData} />
           </Box>
 
+          {/* Division Attendance Rate Chart */}
+          <Box sx={{ marginTop: "32px" }}>
+            <DivisionBreakdown divisionData={divisionData} />
+          </Box>
+
           {/* Trainees Overview Charts */}
           <Box sx={{ marginTop: "32px" }}>
             <TraineesOverview
@@ -441,10 +446,6 @@ const Dashboard = () => {
             />
           </Box>
 
-          {/* Division Attendance Rate Chart */}
-          <Box sx={{ marginTop: "32px" }}>
-            <DivisionBreakdown divisionData={divisionData} />
-          </Box>
         </>
       )}
 
