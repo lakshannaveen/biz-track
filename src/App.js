@@ -650,8 +650,8 @@ function App() {
                     }}
                   >
                     <Routes>
-                      <Route element={<Dashboard />} path="/dashboard" />
-                      <Route element={<Home />} path="/*" />
+                      <Route element={<Home />} path="/home" />
+                      <Route element={<Dashboard />} path="/*" />
                       <Route element={<BudgetShop />} path="/budgetshop" />
                       <Route element={<Leave />} path="/leave" />
                       <Route element={<Extra_Hours />} path="/ex_hours" />

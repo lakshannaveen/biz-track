@@ -2,7 +2,7 @@ import * as React from "react";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import HouseIcon from "@mui/icons-material/House";
-import PersonIcon from "@mui/icons-material/Person";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import SmsIcon from "@mui/icons-material/Sms";
 import { Link } from "react-router-dom";
@@ -15,27 +15,26 @@ export default function Footer() {
   const dispatch = useDispatch();
   const [unreadCount, setUnreadCount] = React.useState(0);
 
- const fetchUnseenCount = async () => {
+  const fetchUnseenCount = async () => {
     try {
       const userResponse = await axios.get(
-        `${axios.defaults.baseURL}/login/GetUserByServiceNo`
+        `${axios.defaults.baseURL}/login/GetUserByServiceNo`,
       );
       const userData = userResponse.data.ResultSet[0];
       const mobileNo = userData.MobileNo;
 
       const countResponse = await axios.get(
-        `${axios.defaults.baseURL}Notification/GetUnSeenCount?P_PHONENO=${mobileNo}`
+        `${axios.defaults.baseURL}Notification/GetUnSeenCount?P_PHONENO=${mobileNo}`,
       );
       setUnreadCount(parseInt(countResponse.data.ResultSet.Count) || 0);
     } catch (error) {
       console.error("Error fetching unseen count:", error);
-      
     }
   };
 
   React.useEffect(() => {
     fetchUnseenCount();
-    
+
     const interval = setInterval(() => {
       fetchUnseenCount();
     }, 10000);
@@ -78,28 +77,28 @@ export default function Footer() {
         >
           <BottomNavigationAction
             component={Link}
-            to="/"
-           // label="Home"
+            to="/home"
+            // label="Home"
             value="Home"
             icon={<HouseIcon fontSize="large" />}
           />
           <BottomNavigationAction
             component={Link}
-            to="/userProfile"
-            //label="Profile"
-            value="Profile"
-            icon={<PersonIcon fontSize="large" />}
+            to="/dashboard"
+            //label="Dashboard"
+            value="Dashboard"
+            icon={<DashboardIcon fontSize="large" />}
           />
           <BottomNavigationAction
             //label="QR"
-           // to="/NewQR_Scan"
+            // to="/NewQR_Scan"
             value="QR"
             icon={<QrCodeScannerIcon fontSize="large" />}
           />
           <BottomNavigationAction
             component={Link}
             to="/notifications"
-           // label="Notification"
+            // label="Notification"
             value="Notification"
             icon={
               <Badge
