@@ -70,7 +70,9 @@ const Dashboard = () => {
     }
 
     // Fetch data on component mount
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    //const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    // Hard-coded date 
+    const today = "2026-02-22";
     try {
       dispatch(GetCdlBasedDivison(today, today));
       dispatch(GetTraineeBasedTypes(today));
