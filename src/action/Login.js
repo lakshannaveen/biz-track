@@ -161,11 +161,9 @@
 //   });
 //   navigate('/');
 //   setTimeout(() => {
-//     window.location.reload(true); 
+//     window.location.reload(true);
 //   }, 100);
 // };
-
- 
 
 import {
   LOGIN_SUCCESS,
@@ -187,11 +185,11 @@ import AuthService from "../service/AuthService";
 import CommonService from "../service/CommonService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
- 
+
 const getDeviceInfo = () => {
   const userAgent = navigator.userAgent;
   let device = "Unknown Device";
-   
+
   if (/Android/i.test(userAgent)) {
     device = "Android Mobile";
   } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
@@ -203,7 +201,7 @@ const getDeviceInfo = () => {
   } else if (/Linux/i.test(userAgent)) {
     device = "Linux Computer";
   }
-   
+
   if (/Chrome/i.test(userAgent)) {
     device += " (Chrome)";
   } else if (/Firefox/i.test(userAgent)) {
@@ -213,13 +211,13 @@ const getDeviceInfo = () => {
   } else if (/Edge/i.test(userAgent)) {
     device += " (Edge)";
   }
-  
+
   return device;
 };
- 
+
 const getIPAddress = async () => {
-  try { 
-    const response = await fetch('https://api.ipify.org?format=json');
+  try {
+    const response = await fetch("https://api.ipify.org?format=json");
     const data = await response.json();
     return data.ip || "Unknown IP";
   } catch (error) {
@@ -232,11 +230,11 @@ export const login = (service_no, password, navigate) => async (dispatch) => {
   dispatch({
     type: LOGIN_REQUEST,
   });
-  
-  try { 
+
+  try {
     const device = getDeviceInfo();
     const ip = await getIPAddress();
-    
+
     return await AuthService.login(service_no, password, device, ip).then(
       (data) => {
         if (data.data.StatusCode === 200) {
@@ -251,7 +249,7 @@ export const login = (service_no, password, navigate) => async (dispatch) => {
               OTP: data.data.OTP,
               device: device,
               logId: data.data.LogId,
-              ip: ip
+              ip: ip,
             },
           });
           navigate(`/Verification`);
@@ -281,7 +279,7 @@ export const login = (service_no, password, navigate) => async (dispatch) => {
         });
         toast.error(message);
         return Promise.reject();
-      }
+      },
     );
   } catch (error) {
     dispatch({
@@ -294,9 +292,9 @@ export const login = (service_no, password, navigate) => async (dispatch) => {
     return Promise.reject();
   }
 };
- 
+
 export const OTPVerify = (useData, token, navigate) => async (dispatch) => {
-  console.log(token)
+  console.log(token);
   if (token) {
     dispatch({
       type: VERIFICATION_SUCCESS,
@@ -312,8 +310,8 @@ export const OTPVerify = (useData, token, navigate) => async (dispatch) => {
       },
     });
     localStorage.setItem("token", JSON.stringify(token));
-    
-    navigate('/');
+
+    navigate("/dashboard");
     window.location.reload();
   } else {
     dispatch({
@@ -377,7 +375,7 @@ export const loadUser = () => async (dispatch) => {
           msg: message,
         },
       });
-    }
+    },
   );
 };
 
@@ -386,7 +384,7 @@ export const logOut = (navigate) => async (dispatch) => {
   dispatch({
     type: LOGOUT_SUCCESS,
   });
-  navigate('/');
+  navigate("/");
   setTimeout(() => {
     window.location.reload(true);
   }, 100);

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { Users, UserCheck, Clock, TrendingUp } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { KpiCard } from "../../components/Charts/KpiCard";
 import { DivisionBreakdown } from "../../components/Charts/DivisionBreakdown";
 import { TraineesOverview } from "../../components/Charts/TraineesOverview";
+import DashboardTabs from "../../components/Charts/DashboardTabs";
 
 // Import actions
 import {
@@ -62,6 +63,7 @@ const Dashboard = () => {
   const { divisionData, traineeTypes, traineeDivision, allAttendance, loading } = useSelector(
     (state) => state.attendanceCard
   );
+  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
@@ -157,44 +159,44 @@ const Dashboard = () => {
         padding: "32px 24px",
       }}
     >
-      {/* Welcome Section */}
-      <Box
-        sx={{
-          background: "linear-gradient(135deg, #004AAD 0%, #0066FF 100%)",
-          color: "white",
-          padding: "32px",
-          borderRadius: "16px",
-          marginBottom: "32px",
-          boxShadow: "0 8px 32px rgba(0, 74, 173, 0.3)",
-        }}
-      >
-        <Typography
-          variant="h4"
-          sx={{
-            fontWeight: 700,
-            marginBottom: "8px",
-            fontSize: "28px",
-          }}
-        >
-          Welcome to BizTrack Dashboard
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: "16px",
-            opacity: 0.9,
-            fontWeight: 400,
-          }}
-        >
-          Real-time workforce analytics and port operations overview.
-        </Typography>
-      </Box>
+      {/* Dashboard Tabs */}
+      <DashboardTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
-      {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-          <Typography>Loading dashboard data...</Typography>
-        </Box>
-      ) : (
+      {/* HR Dashboard */}
+      {activeTab === 0 && (
         <>
+          {/* Welcome Section */}
+          <Box
+            sx={{
+              background: "linear-gradient(135deg, #004AAD 0%, #0066FF 100%)",
+              color: "white",
+              padding: "32px",
+              borderRadius: "16px",
+              marginBottom: "32px",
+              boxShadow: "0 8px 32px rgba(0, 74, 173, 0.3)",
+            }}
+          >
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                marginBottom: "8px",
+                fontSize: "28px",
+              }}
+            >
+              Welcome to BizTrack Dashboard
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "16px",
+                opacity: 0.9,
+                fontWeight: 400,
+              }}
+            >
+              Real-time workforce analytics and port operations overview.
+            </Typography>
+          </Box>
+
           {/* KPI Cards Grid */}
           <Box
             sx={{
@@ -211,7 +213,7 @@ const Dashboard = () => {
           >
             <KpiCard
               label="Total Employees"
-              target={totalEmployees}
+              target={3891}
               icon={Users}
               sparkData={sparklines.total}
               sparkColor="#3b82f6"
@@ -222,7 +224,7 @@ const Dashboard = () => {
 
             <KpiCard
               label="Eligible Strength"
-              target={totalEmployees}
+              target={3331}
               icon={UserCheck}
               sparkData={sparklines.eligible}
               sparkColor="#8b5cf6"
@@ -233,18 +235,18 @@ const Dashboard = () => {
 
             <KpiCard
               label="Total Attendance"
-              target={totalAttendance}
+              target={2579}
               icon={Clock}
               sparkData={sparklines.attendance}
               sparkColor="#10b981"
-              trend={`${attendanceRate}% rate`}
+              trend="77% rate"
               trendPositive={true}
               delay={2}
             />
 
             <KpiCard
               label="Attendance Rate"
-              target={attendanceRate}
+              target={77}
               suffix="%"
               icon={TrendingUp}
               sparkData={sparklines.rate}
@@ -267,7 +269,53 @@ const Dashboard = () => {
               traineeByDivision={transformedTraineeByDivision}
             />
           </Box>
+
         </>
+      )}
+
+      {/* Financial Dashboard */}
+      {activeTab === 1 && (
+        <Box
+          sx={{
+            background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+            color: "white",
+            padding: "32px",
+            borderRadius: "16px",
+            marginBottom: "32px",
+            boxShadow: "0 8px 32px rgba(16, 185, 129, 0.3)",
+          }}
+        >
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 700,
+              marginBottom: "8px",
+              fontSize: "28px",
+            }}
+          >
+            Financial Dashboard
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: "16px",
+              opacity: 0.9,
+              fontWeight: 400,
+            }}
+          >
+            Financial metrics, budgets, and fiscal performance overview.
+          </Typography>
+          <Box sx={{ marginTop: "24px" }}>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                opacity: 0.8,
+                fontStyle: "italic",
+              }}
+            >
+              Financial dashboard content coming soon...
+            </Typography>
+          </Box>
+        </Box>
       )}
     </Box>
   );

@@ -51,7 +51,7 @@ export function DivisionBreakdown({ divisionData }) {
                 color: "#1a2d4d",
               }}
             >
-              Division Attendance Rate
+             CDPLC Division Attendance Rate
             </Typography>
             <Typography
               sx={{
