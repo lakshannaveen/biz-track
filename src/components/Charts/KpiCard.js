@@ -157,29 +157,31 @@ export function KpiCard({
           </Box>
 
           {/* Right Section - Trend Indicator */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-              justifyContent: "flex-start",
-            }}
-          >
+          {trend && (
             <Box
               sx={{
-                fontSize: "12px",
-                fontWeight: 700,
-                padding: "4px 8px",
-                borderRadius: "4px",
-                backgroundColor: trendPositive
-                  ? "rgba(16, 185, 129, 0.1)"
-                  : "rgba(244, 63, 94, 0.1)",
-                color: trendPositive ? "#10b981" : "#f43f5e",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
+                justifyContent: "flex-start",
               }}
             >
-              {trend}
+              <Box
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  padding: "4px 8px",
+                  borderRadius: "4px",
+                  backgroundColor: trendPositive
+                    ? "rgba(16, 185, 129, 0.1)"
+                    : "rgba(244, 63, 94, 0.1)",
+                  color: trendPositive ? "#10b981" : "#f43f5e",
+                }}
+              >
+                {trend}
+              </Box>
             </Box>
-          </Box>
+          )}
         </Box>
       </Box>
     </Box>
