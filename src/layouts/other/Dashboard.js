@@ -11,6 +11,7 @@ import { CDPLCBreakdown } from "../../components/Charts/CDPLCBreakdown";
 import { DivisionBreakdown } from "../../components/Charts/DivisionBreakdown";
 import { TraineesOverview } from "../../components/Charts/TraineesOverview";
 import DashboardTabs from "../../components/Charts/DashboardTabs";
+import WeeklyAttendanceTrend from "../../components/Charts/WeeklyAttendanceTrend";
 
 // Simulated sparkline data
 const sparklines = {
@@ -441,8 +442,14 @@ const Dashboard = () => {
             />
           </Box>
 
-          {/* Employee Type Strength vs Attendance Chart */}
-          <Box sx={{ marginTop: "32px" }}>
+          {/* Weekly trend and Employee Type charts side-by-side */}
+          <Box sx={{ marginTop: "32px", display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: "16px" }}>
+            <WeeklyAttendanceTrend
+              eligibleData={sparklines.eligible}
+              attendanceData={sparklines.attendance}
+              rateData={sparklines.rate}
+            />
+
             <EmployeeTypeChart employeeTypeData={employeeTypeData} />
           </Box>
 

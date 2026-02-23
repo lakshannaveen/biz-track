@@ -107,6 +107,7 @@ export function EmployeeTypeChart({ employeeTypeData }) {
           "0%": { opacity: 0, transform: "translateY(24px)" },
           "100%": { opacity: 1, transform: "translateY(0)" },
         },
+        height: "100%",
       }}
     >
       <Box
@@ -117,6 +118,7 @@ export function EmployeeTypeChart({ employeeTypeData }) {
           padding: "20px",
           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
           border: "1px solid #e2e8f0",
+          height: "100%",
         }}
       >
         {/* Header */}
@@ -146,13 +148,13 @@ export function EmployeeTypeChart({ employeeTypeData }) {
         </Box>
 
         {/* Chart */}
-        <Box sx={{ height: "200px", width: "100%", marginBottom: "16px" }}>
+        <Box sx={{ height: { xs: "260px", md: "320px" }, width: "100%", marginBottom: "16px" }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={chartData}
               layout="vertical"
               margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
-              barGap={4}
+              barGap={6}
             >
               <XAxis
                 type="number"
@@ -184,12 +186,7 @@ export function EmployeeTypeChart({ employeeTypeData }) {
                 strokeDasharray="3 3"
                 strokeWidth={1.5}
               />
-              <Bar
-                dataKey="percentage"
-                fill="#ef4444"
-                barSize={20}
-                radius={[0, 2, 2, 0]}
-              >
+              <Bar dataKey="percentage" fill="#ef4444" barSize={28} radius={[8, 8, 8, 8]}>
                 {chartData.map((item, index) => (
                   <Cell
                     key={`cell-${index}`}
