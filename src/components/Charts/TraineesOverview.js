@@ -315,11 +315,11 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
                   }}
                   labelStyle={{ color: "#1a2d4d" }}
                 />
-                <Legend verticalAlign="top" />
-                <Bar dataKey="clerical_strength" fill="url(#divisonClerical)" name="Clerical (Strength)" radius={[8, 8, 0, 0]} />
+                <Legend verticalAlign="bottom" align="center" />
                 <Bar dataKey="clerical_attendance" fill="url(#divisonClericalAtt)" name="Clerical (Attended)" radius={[8, 8, 0, 0]} />
-                <Bar dataKey="industrial_strength" fill="url(#divisionIndustrial)" name="Industrial (Strength)" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="clerical_strength" fill="url(#divisonClerical)" name="Clerical (Strength)" radius={[8, 8, 0, 0]} />
                 <Bar dataKey="industrial_attendance" fill="url(#divisionIndustrialAtt)" name="Industrial (Attended)" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="industrial_strength" fill="url(#divisionIndustrial)" name="Industrial (Strength)" radius={[8, 8, 0, 0]} />
               </BarChart>
             ) : (
               <BarChart data={traineeByDivision} margin={{ top: 20, right: 30, left: 0, bottom: 60 }}>
