@@ -4,7 +4,6 @@ import { Box, Typography } from "@mui/material";
 export const getColor = (rate) => {
   if (rate >= 90) return "#10b981";
   if (rate >= 75) return "#3b82f6";
-  if (rate >= 50) return "#fbbf24";
   return "#f43f5e";
 };
 
