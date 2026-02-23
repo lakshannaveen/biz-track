@@ -3,17 +3,28 @@ import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import HouseIcon from "@mui/icons-material/House";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import PersonIcon from "@mui/icons-material/Person";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import SmsIcon from "@mui/icons-material/Sms";
 import { Link } from "react-router-dom";
 import { Box, Badge } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 export default function Footer() {
   const [value, setValue] = React.useState("recents");
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { data } = useSelector((state) => state.userbyServiceNo);
   const [unreadCount, setUnreadCount] = React.useState(0);
+
+  // Allowed user IDs for dashboard access
+  const ALLOWED_USER_IDS = ["0004086", "0003595"];
+
+  // Get service number from user data
+  const serviceNo = user?.ServiceNo || (data && data[0]?.ServiceNo);
+  const canAccessDashboard =
+    serviceNo && ALLOWED_USER_IDS.includes(String(serviceNo).trim());
 
   const fetchUnseenCount = async () => {
     try {
@@ -82,13 +93,23 @@ export default function Footer() {
             value="Home"
             icon={<HouseIcon fontSize="large" />}
           />
-          <BottomNavigationAction
-            component={Link}
-            to="/dashboard"
-            //label="Dashboard"
-            value="Dashboard"
-            icon={<DashboardIcon fontSize="large" />}
-          />
+          {canAccessDashboard ? (
+            <BottomNavigationAction
+              component={Link}
+              to="/dashboard"
+              //label="Dashboard"
+              value="Dashboard"
+              icon={<DashboardIcon fontSize="large" />}
+            />
+          ) : (
+            <BottomNavigationAction
+              component={Link}
+              to="/userProfile"
+              //label="Profile"
+              value="Profile"
+              icon={<PersonIcon fontSize="large" />}
+            />
+          )}
           <BottomNavigationAction
             //label="QR"
             // to="/NewQR_Scan"

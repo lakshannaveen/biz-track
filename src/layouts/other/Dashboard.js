@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { Users, UserCheck, Clock, TrendingUp } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 // Import chart components
 import { KpiCard } from "../../components/Charts/KpiCard";
@@ -64,8 +65,19 @@ const Dashboard = () => {
     (state) => state.attendanceCard
   );
   const [activeTab, setActiveTab] = useState(0);
+  const navigate = useNavigate();
+  const { number } = useSelector((state) => state.auth);
+
+  // Allowed user IDs for dashboard access
+  const ALLOWED_USER_IDS = ["0004086", "0003595"];
 
   useEffect(() => {
+    // Check if user has access to the dashboard
+    if (number && !ALLOWED_USER_IDS.includes(String(number).trim())) {
+      // Redirect to home screen if user is not authorized
+      navigate("/home");
+    }
+
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (metaThemeColor) {
       metaThemeColor.setAttribute("content", "#004AAD");
@@ -148,6 +160,11 @@ const Dashboard = () => {
     sum + (parseInt(item.ATTENDANCE_EXECUTIVE) || 0) + (parseInt(item.ATTENDANCE_SUPERVISORY) || 0), 0) || 0;
   
   const attendanceRate = totalEmployees > 0 ? Math.round((totalAttendance / totalEmployees) * 100) : 0;
+
+  // Don't render the dashboard if user doesn't have access
+  if (number && !ALLOWED_USER_IDS.includes(String(number).trim())) {
+    return null;
+  }
 
   return (
     <Box
@@ -269,7 +286,6 @@ const Dashboard = () => {
               traineeByDivision={transformedTraineeByDivision}
             />
           </Box>
-
         </>
       )}
 
