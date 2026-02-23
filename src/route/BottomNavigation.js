@@ -117,14 +117,22 @@ export default function Footer() {
             },
             // make the selected/active item clearly visible on the gradient background
             "& .MuiBottomNavigationAction-root.Mui-selected": {
-              color: "#ffffff",
+              background: "#ffffff",
+              color: "#004AAD",
               fontWeight: 700,
+              borderRadius: "8px",
+              padding: "6px 10px",
+              margin: "6px",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.12)",
+              transition: "transform 150ms ease, box-shadow 150ms ease",
               "& .MuiBottomNavigationAction-label": {
                 fontSize: "11px",
                 fontWeight: 700,
+                color: "#004AAD",
               },
               "& svg": {
                 transform: "scale(1.12)",
+                color: "#004AAD",
               },
             },
           }}
