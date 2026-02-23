@@ -337,25 +337,25 @@ const Dashboard = () => {
             sx={{
               background: "linear-gradient(135deg, #004AAD 0%, #0066FF 100%)",
               color: "white",
-              padding: "32px",
-              borderRadius: "16px",
-              marginBottom: "32px",
-              boxShadow: "0 8px 32px rgba(0, 74, 173, 0.3)",
+              padding: "20px 24px",
+              borderRadius: "12px",
+              marginBottom: "24px",
+              boxShadow: "0 4px 12px rgba(0, 74, 173, 0.2)",
             }}
           >
             <Typography
-              variant="h4"
+              variant="h5"
               sx={{
                 fontWeight: 700,
-                marginBottom: "8px",
-                fontSize: "28px",
+                marginBottom: "4px",
+                fontSize: "20px",
               }}
             >
               Welcome to BizTrack Dashboard
             </Typography>
             <Typography
               sx={{
-                fontSize: "16px",
+                fontSize: "13px",
                 opacity: 0.9,
                 fontWeight: 400,
               }}
@@ -425,7 +425,14 @@ const Dashboard = () => {
           </Box>
 
           {/* Weekly trend and Employee Type charts side-by-side */}
-          <Box sx={{ marginTop: "32px", display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: "16px" }}>
+          <Box
+            sx={{
+              marginTop: "32px",
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+              gap: "16px",
+            }}
+          >
             <WeeklyAttendanceTrend
               eligibleData={sparklines.eligible}
               attendanceData={sparklines.attendance}
@@ -461,35 +468,35 @@ const Dashboard = () => {
           sx={{
             background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
             color: "white",
-            padding: "32px",
-            borderRadius: "16px",
-            marginBottom: "32px",
-            boxShadow: "0 8px 32px rgba(16, 185, 129, 0.3)",
+            padding: "20px 24px",
+            borderRadius: "12px",
+            marginBottom: "24px",
+            boxShadow: "0 4px 12px rgba(16, 185, 129, 0.2)",
           }}
         >
           <Typography
-            variant="h4"
+            variant="h5"
             sx={{
               fontWeight: 700,
-              marginBottom: "8px",
-              fontSize: "28px",
+              marginBottom: "4px",
+              fontSize: "20px",
             }}
           >
             Financial Dashboard
           </Typography>
           <Typography
             sx={{
-              fontSize: "16px",
+              fontSize: "13px",
               opacity: 0.9,
               fontWeight: 400,
             }}
           >
             Financial metrics, budgets, and fiscal performance overview.
           </Typography>
-          <Box sx={{ marginTop: "24px" }}>
+          <Box sx={{ marginTop: "12px" }}>
             <Typography
               sx={{
-                fontSize: "14px",
+                fontSize: "12px",
                 opacity: 0.8,
                 fontStyle: "italic",
               }}
