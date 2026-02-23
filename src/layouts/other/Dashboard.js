@@ -369,7 +369,7 @@ const Dashboard = () => {
             sx={{
               display: "grid",
               gridTemplateColumns: {
-                xs: "1fr",
+                xs: "repeat(2, 1fr)",
                 sm: "repeat(2, 1fr)",
                 md: "repeat(2, 1fr)",
                 lg: "repeat(4, 1fr)",
@@ -384,8 +384,6 @@ const Dashboard = () => {
               icon={Users}
               sparkData={sparklines.total}
               sparkColor="#3b82f6"
-              trend="+12%"
-              trendPositive={true}
               delay={0}
             />
 
@@ -395,8 +393,6 @@ const Dashboard = () => {
               icon={UserCheck}
               sparkData={sparklines.attendance}
               sparkColor="#8b5cf6"
-              trend="+2.3%"
-              trendPositive={true}
               delay={1}
             />
 
@@ -406,8 +402,6 @@ const Dashboard = () => {
               icon={Users}
               sparkData={sparklines.eligible}
               sparkColor="#f43f5e"
-              trend="-1.2%"
-              trendPositive={false}
               delay={2}
             />
 
@@ -418,8 +412,6 @@ const Dashboard = () => {
               icon={TrendingUp}
               sparkData={sparklines.rate}
               sparkColor="#06b6d4"
-              trend="+1.5%"
-              trendPositive={true}
               delay={3}
             />
           </Box>
