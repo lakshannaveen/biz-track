@@ -1,42 +1,19 @@
 import React from "react";
-import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import {
   ResponsiveContainer,
   BarChart,
   Bar,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   Tooltip,
   CartesianGrid,
   Legend,
-  LabelList,
 } from "recharts";
 
 export function TraineesOverview({ traineeOverall, traineeByDivision }) {
-  const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
-  const isExtraSmall = useMediaQuery(theme.breakpoints.down("xs"));
-
-  const truncate = (label, len = 24) =>
-    label && label.length > len ? `${label.slice(0, len)}...` : label;
-
-  const divisionChartHeight = isSmall ? 550 : 384;
-  const attendanceChartHeight = isSmall ? 500 : 320;
-  
-  // Adjust left margin based on screen size - reduced significantly for mobile
-  const getLeftMargin = () => {
-    if (isExtraSmall) return 30;
-    if (isSmall) return 40;
-    return 80;
-  };
-
-  // Adjust Y-axis width based on screen size - reduced significantly for mobile
-  const getYAxisWidth = () => {
-    if (isExtraSmall) return 40;
-    if (isSmall) return 50;
-    return 160;
-  };
-
   const totalTrainees = {
     clerical: 2,
     clerical_att: 0,
@@ -58,7 +35,6 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
           "0%": { opacity: 0, transform: "translateY(24px)" },
           "100%": { opacity: 1, transform: "translateY(0)" },
         },
-        px: { xs: 0, sm: 0 },
       }}
     >
       {/* Trainees Overview Bar Chart */}
@@ -67,7 +43,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "12px",
-          padding: { xs: "16px", sm: "24px" },
+          padding: "24px",
           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
           border: "1px solid #e2e8f0",
           marginBottom: "32px",
@@ -77,7 +53,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
         <Box sx={{ marginBottom: "24px" }}>
           <Typography
             sx={{
-              fontSize: { xs: "16px", sm: "18px" },
+              fontSize: "18px",
               fontWeight: 600,
               color: "#1a2d4d",
             }}
@@ -86,7 +62,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
           </Typography>
           <Typography
             sx={{
-              fontSize: { xs: "11px", sm: "12px" },
+              fontSize: "12px",
               color: "#64748b",
               marginTop: "4px",
             }}
@@ -96,11 +72,11 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
         </Box>
 
         {/* Chart */}
-        <Box sx={{ height: { xs: "300px", sm: "320px" }, width: "100%", marginBottom: "24px" }}>
+        <Box sx={{ height: "320px", width: "100%", marginBottom: "24px" }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={traineeOverall}
-              margin={{ top: 20, right: { xs: 5, sm: 30 }, left: { xs: 0, sm: 0 }, bottom: 20 }}
+              margin={{ top: 20, right: 30, left: 0, bottom: 20 }}
             >
               <defs>
                 <linearGradient id="colorStrength" x1="0" y1="0" x2="0" y2="1">
@@ -129,23 +105,16 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
                 tickLine={false}
                 tick={{
                   fill: "#94a3b8",
-                  fontSize: { xs: 9, sm: 12 },
-                  angle: isSmall ? -30 : 0,
-                  textAnchor: isSmall ? "end" : "middle",
-                  dy: isSmall ? 5 : 0,
-                  dx: isSmall ? -2 : 0,
+                  fontSize: 12,
                 }}
-                height={isSmall ? 50 : 30}
-                interval={0}
               />
               <YAxis
                 axisLine={false}
                 tickLine={false}
                 tick={{
                   fill: "#94a3b8",
-                  fontSize: { xs: 9, sm: 11 },
+                  fontSize: 11,
                 }}
-                width={isSmall ? 25 : 40}
               />
               <Tooltip
                 contentStyle={{
@@ -153,30 +122,19 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
                   border: "1px solid #e2e8f0",
                   borderRadius: "8px",
                   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                  fontSize: isSmall ? "12px" : "14px",
                 }}
                 labelStyle={{ color: "#1a2d4d" }}
               />
-              <Legend 
-                wrapperStyle={{ 
-                  fontSize: isSmall ? "10px" : "12px",
-                  paddingTop: isSmall ? "10px" : "0",
-                }}
-                iconSize={isSmall ? 10 : 14}
-                verticalAlign={isSmall ? "bottom" : "top"}
-                height={isSmall ? 40 : 30}
-              />
+              <Legend />
               <Bar
                 dataKey="strength"
                 fill="url(#colorStrength)"
                 radius={[8, 8, 0, 0]}
-                barSize={isSmall ? 30 : 30}
               />
               <Bar
                 dataKey="attendance"
                 fill="url(#colorAttendance)"
                 radius={[8, 8, 0, 0]}
-                barSize={isSmall ? 30 : 30}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -187,8 +145,8 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
           sx={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: { xs: "8px", sm: "16px" },
-            padding: { xs: "12px", sm: "16px" },
+            gap: "16px",
+            padding: "16px",
             backgroundColor: "#f8fafc",
             borderRadius: "8px",
             marginBottom: "16px",
@@ -197,7 +155,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
           <Box sx={{ textAlign: "center" }}>
             <Typography
               sx={{
-                fontSize: { xs: "10px", sm: "12px" },
+                fontSize: "12px",
                 color: "#94a3b8",
                 marginBottom: "4px",
               }}
@@ -206,7 +164,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
             </Typography>
             <Typography
               sx={{
-                fontSize: { xs: "18px", sm: "24px" },
+                fontSize: "24px",
                 fontWeight: 700,
                 color: "#1a2d4d",
               }}
@@ -217,7 +175,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
           <Box sx={{ textAlign: "center" }}>
             <Typography
               sx={{
-                fontSize: { xs: "10px", sm: "12px" },
+                fontSize: "12px",
                 color: "#94a3b8",
                 marginBottom: "4px",
               }}
@@ -226,7 +184,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
             </Typography>
             <Typography
               sx={{
-                fontSize: { xs: "18px", sm: "24px" },
+                fontSize: "24px",
                 fontWeight: 700,
                 color: "#10b981",
               }}
@@ -237,7 +195,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
           <Box sx={{ textAlign: "center" }}>
             <Typography
               sx={{
-                fontSize: { xs: "10px", sm: "12px" },
+                fontSize: "12px",
                 color: "#94a3b8",
                 marginBottom: "4px",
               }}
@@ -246,7 +204,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
             </Typography>
             <Typography
               sx={{
-                fontSize: { xs: "18px", sm: "24px" },
+                fontSize: "24px",
                 fontWeight: 700,
                 color: "#3b82f6",
               }}
@@ -258,7 +216,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
 
         <Typography
           sx={{
-            fontSize: { xs: "10px", sm: "11px" },
+            fontSize: "11px",
             color: "#94a3b8",
             fontStyle: "italic",
           }}
@@ -274,7 +232,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "12px",
-          padding: { xs: "16px", sm: "24px" },
+          padding: "24px",
           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
           border: "1px solid #e2e8f0",
           marginBottom: "32px",
@@ -284,7 +242,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
         <Box sx={{ marginBottom: "24px" }}>
           <Typography
             sx={{
-              fontSize: { xs: "16px", sm: "18px" },
+              fontSize: "18px",
               fontWeight: 600,
               color: "#1a2d4d",
             }}
@@ -293,7 +251,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
           </Typography>
           <Typography
             sx={{
-              fontSize: { xs: "11px", sm: "12px" },
+              fontSize: "12px",
               color: "#64748b",
               marginTop: "4px",
             }}
@@ -303,17 +261,11 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
         </Box>
 
         {/* Chart */}
-        <Box sx={{ height: divisionChartHeight, width: "100%", marginBottom: "16px" }}>
+        <Box sx={{ height: "384px", width: "100%", marginBottom: "16px" }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
-              layout="vertical"
               data={traineeByDivision}
-              margin={{ 
-                top: 20, 
-                right: isSmall ? 10 : 30, 
-                left: getLeftMargin(), 
-                bottom: isSmall ? 60 : 20 
-              }}
+              margin={{ top: 20, right: 30, left: 0, bottom: 60 }}
             >
               <defs>
                 <linearGradient
@@ -360,36 +312,26 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
               <CartesianGrid
                 strokeDasharray="3 3"
                 stroke="rgba(0,0,0,0.08)"
-                horizontal={false}
+                vertical={false}
               />
               <XAxis
-                type="number"
+                dataKey="division"
                 axisLine={false}
                 tickLine={false}
                 tick={{
                   fill: "#94a3b8",
-                  fontSize: isSmall ? 9 : 11,
+                  fontSize: 11,
                 }}
+                angle={-45}
+                textAnchor="end"
+                height={100}
               />
               <YAxis
-                type="category"
-                dataKey="division"
                 axisLine={false}
                 tickLine={false}
-                width={getYAxisWidth()}
-                tick={({ x, y, payload }) => {
-                  const label = truncate(payload.value, isSmall ? 6 : 24);
-                  return (
-                    <text 
-                      x={x - 2} 
-                      y={y + 4} 
-                      fill="#94a3b8" 
-                      fontSize={isSmall ? 9 : 11}
-                      textAnchor="end"
-                    >
-                      {label}
-                    </text>
-                  );
+                tick={{
+                  fill: "#94a3b8",
+                  fontSize: 11,
                 }}
               />
               <Tooltip
@@ -398,49 +340,33 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
                   border: "1px solid #e2e8f0",
                   borderRadius: "8px",
                   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                  fontSize: isSmall ? "12px" : "14px",
                 }}
                 labelStyle={{ color: "#1a2d4d" }}
               />
-              <Legend 
-                wrapperStyle={{ 
-                  fontSize: isSmall ? "8px" : "12px",
-                  paddingTop: "10px",
-                  lineHeight: "1.2",
-                }}
-                iconSize={isSmall ? 7 : 12}
-                layout={isSmall ? "horizontal" : "vertical"}
-                verticalAlign={isSmall ? "bottom" : "top"}
-                align="center"
-                height={isSmall ? 60 : 30}
-              />
+              <Legend />
               <Bar
                 dataKey="clerical_strength"
                 fill="url(#divisonClerical)"
-                name="Clerical (Str)"
+                name="Clerical (Strength)"
                 radius={[8, 8, 0, 0]}
-                barSize={isSmall ? 14 : 12}
               />
               <Bar
                 dataKey="clerical_attendance"
                 fill="url(#divisonClericalAtt)"
-                name="Clerical (Att)"
+                name="Clerical (Attended)"
                 radius={[8, 8, 0, 0]}
-                barSize={isSmall ? 14 : 12}
               />
               <Bar
                 dataKey="industrial_strength"
                 fill="url(#divisionIndustrial)"
-                name="Industrial (Str)"
+                name="Industrial (Strength)"
                 radius={[8, 8, 0, 0]}
-                barSize={isSmall ? 14 : 12}
               />
               <Bar
                 dataKey="industrial_attendance"
                 fill="url(#divisionIndustrialAtt)"
-                name="Industrial (Att)"
+                name="Industrial (Attended)"
                 radius={[8, 8, 0, 0]}
-                barSize={isSmall ? 14 : 12}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -448,7 +374,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
 
         <Typography
           sx={{
-            fontSize: { xs: "10px", sm: "11px" },
+            fontSize: "11px",
             color: "#94a3b8",
             fontStyle: "italic",
           }}
@@ -463,7 +389,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "12px",
-          padding: { xs: "16px", sm: "24px" },
+          padding: "24px",
           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
           border: "1px solid #e2e8f0",
         }}
@@ -472,7 +398,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
         <Box sx={{ marginBottom: "24px" }}>
           <Typography
             sx={{
-              fontSize: { xs: "16px", sm: "18px" },
+              fontSize: "18px",
               fontWeight: 600,
               color: "#1a2d4d",
             }}
@@ -481,7 +407,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
           </Typography>
           <Typography
             sx={{
-              fontSize: { xs: "11px", sm: "12px" },
+              fontSize: "12px",
               color: "#64748b",
               marginTop: "4px",
             }}
@@ -491,17 +417,11 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
         </Box>
 
         {/* Chart */}
-        <Box sx={{ height: attendanceChartHeight, width: "100%" }}>
+        <Box sx={{ height: "320px", width: "100%" }}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              layout="vertical"
+            <LineChart
               data={traineeByDivision}
-              margin={{ 
-                top: 20, 
-                right: isSmall ? 25 : 30, 
-                left: getLeftMargin(), 
-                bottom: isSmall ? 60 : 20 
-              }}
+              margin={{ top: 20, right: 30, left: 0, bottom: 60 }}
             >
               <defs>
                 <linearGradient id="linePercent" x1="0" y1="0" x2="1" y2="0">
@@ -513,39 +433,29 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
               <CartesianGrid
                 strokeDasharray="3 3"
                 stroke="rgba(0,0,0,0.08)"
-                horizontal={false}
+                vertical={false}
               />
               <XAxis
-                type="number"
+                dataKey="division"
                 axisLine={false}
                 tickLine={false}
                 tick={{
                   fill: "#94a3b8",
-                  fontSize: isSmall ? 9 : 11,
+                  fontSize: 11,
+                }}
+                angle={-45}
+                textAnchor="end"
+                height={100}
+              />
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tick={{
+                  fill: "#94a3b8",
+                  fontSize: 11,
                 }}
                 domain={[0, 100]}
                 tickFormatter={(v) => `${v}%`}
-              />
-              <YAxis
-                type="category"
-                dataKey="division"
-                axisLine={false}
-                tickLine={false}
-                width={getYAxisWidth()}
-                tick={({ x, y, payload }) => {
-                  const label = truncate(payload.value, isSmall ? 6 : 24);
-                  return (
-                    <text 
-                      x={x - 2} 
-                      y={y + 4} 
-                      fill="#94a3b8" 
-                      fontSize={isSmall ? 9 : 11}
-                      textAnchor="end"
-                    >
-                      {label}
-                    </text>
-                  );
-                }}
               />
               <Tooltip
                 contentStyle={{
@@ -553,44 +463,28 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
                   border: "1px solid #e2e8f0",
                   borderRadius: "8px",
                   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                  fontSize: isSmall ? "12px" : "14px",
                 }}
                 formatter={(value) => [`${value}%`, "Attendance Rate"]}
                 labelStyle={{ color: "#1a2d4d" }}
               />
-              <Legend 
-                wrapperStyle={{ 
-                  fontSize: isSmall ? "11px" : "12px",
-                  paddingTop: "10px",
-                }}
-                iconSize={isSmall ? 10 : 12}
-                verticalAlign={isSmall ? "bottom" : "top"}
-                height={isSmall ? 30 : 20}
-              />
-              <Bar
+              <Line
+                type="monotoneX"
                 dataKey="total_percent"
-                fill="url(#linePercent)"
-                name="Attendance Rate"
-                radius={[8, 8, 0, 0]}
-                barSize={isSmall ? 20 : 16}
-              >
-                {isSmall ? (
-                  <LabelList
-                    dataKey="total_percent"
-                    formatter={(v) => `${v}%`}
-                    position="right"
-                    style={{ fill: "#1a2d4d", fontSize: 9, fontWeight: 500 }}
-                  />
-                ) : (
-                  <LabelList
-                    dataKey="total_percent"
-                    formatter={(v) => `${v}%`}
-                    position="right"
-                    style={{ fill: "#1a2d4d", fontSize: 11 }}
-                  />
-                )}
-              </Bar>
-            </BarChart>
+                stroke="url(#linePercent)"
+                strokeWidth={3}
+                dot={{
+                  fill: "#06b6d4",
+                  r: 5,
+                  strokeWidth: 2,
+                  stroke: "#ffffff",
+                }}
+                activeDot={{
+                  r: 7,
+                  strokeWidth: 2,
+                  stroke: "#ffffff",
+                }}
+              />
+            </LineChart>
           </ResponsiveContainer>
         </Box>
       </Box>
