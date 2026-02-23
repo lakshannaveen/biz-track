@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import { Users, UserCheck, TrendingUp } from "lucide-react";
+import { Users, UserCheck, Clock, TrendingUp } from "lucide-react";
 
 // Import chart components
 import { KpiCard } from "../../components/Charts/KpiCard";
@@ -323,9 +323,7 @@ const Dashboard = () => {
         flexDirection: "column",
         minHeight: "calc(100vh - 120px)",
         backgroundColor: "#ffffff",
-        padding: { xs: "12px", sm: "20px", md: "32px" },
-        boxSizing: "border-box",
-        overflowX: "hidden",
+        padding: "32px 24px",
       }}
     >
       {/* Dashboard Tabs */}
@@ -371,14 +369,13 @@ const Dashboard = () => {
             sx={{
               display: "grid",
               gridTemplateColumns: {
-                xs: "repeat(2, 1fr)",
+                xs: "1fr",
                 sm: "repeat(2, 1fr)",
                 md: "repeat(2, 1fr)",
                 lg: "repeat(4, 1fr)",
               },
-              gap: { xs: "12px", sm: "12px", md: "16px" },
-              marginBottom: "24px",
-              width: "100%",
+              gap: "16px",
+              marginBottom: "32px",
             }}
           >
             <KpiCard
@@ -428,7 +425,14 @@ const Dashboard = () => {
           </Box>
 
           {/* Weekly trend and Employee Type charts side-by-side */}
-          <Box sx={{ marginTop: "24px", display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: { xs: "12px", md: "16px" } }}>
+          <Box
+            sx={{
+              marginTop: "32px",
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+              gap: "16px",
+            }}
+          >
             <WeeklyAttendanceTrend
               eligibleData={sparklines.eligible}
               attendanceData={sparklines.attendance}

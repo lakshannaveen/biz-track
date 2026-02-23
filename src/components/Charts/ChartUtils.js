@@ -9,6 +9,13 @@ export const getColor = (rate) => {
 
 // Custom Dot for Line Chart (Division Breakdown)
 export const CustomDot = ({ cx, cy, payload, divisionData }) => {
+  const getDivisionData = () => {
+    if (divisionData) {
+      return divisionData.find((x) => x.division === payload.division);
+    }
+    return null;
+  };
+
   const color = getColor(payload.rate);
   return (
     <circle

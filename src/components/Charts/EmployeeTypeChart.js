@@ -52,7 +52,7 @@ const AttendanceCustomTooltip = ({ active, payload }) => {
               fontSize: "11px",
             }}
           >
-            {payload[0].payload.percentage.toFixed(2)}
+            {payload[0].payload.percentage.toFixed(2)}%
           </Typography>
         </Box>
         <Box
@@ -115,10 +115,9 @@ export function EmployeeTypeChart({ employeeTypeData }) {
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "12px",
-          padding: { xs: "12px", sm: "16px", md: "20px" },
-          boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
-          border: "1px solid #e5e7eb",
-          boxSizing: "border-box",
+          padding: "20px",
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+          border: "1px solid #e2e8f0",
           height: "100%",
         }}
       >
@@ -221,7 +220,7 @@ export function EmployeeTypeChart({ employeeTypeData }) {
                 }}
               />
               <Typography sx={{ fontSize: "10px", color: "#64748b" }}>
-                ≥ 90
+                ≥ 90%
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
@@ -234,7 +233,7 @@ export function EmployeeTypeChart({ employeeTypeData }) {
                 }}
               />
               <Typography sx={{ fontSize: "10px", color: "#64748b" }}>
-                80–89
+                80–89%
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
@@ -247,7 +246,7 @@ export function EmployeeTypeChart({ employeeTypeData }) {
                 }}
               />
               <Typography sx={{ fontSize: "10px", color: "#64748b" }}>
-                &lt; 80
+                &lt; 80%
               </Typography>
             </Box>
           </Box>

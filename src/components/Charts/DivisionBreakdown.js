@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import { Box, Typography, Button } from "@mui/material";
-import { CustomDot, CustomTooltip } from "./ChartUtils";
-import { Building2 } from "lucide-react";
 import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  ReferenceLine,
-} from "recharts";
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Button,
+} from "@mui/material";
+import { Building2 } from "lucide-react";
 
 // Helper function to get color based on attendance percentage
 const getAttendanceColor = (percentage) => {
@@ -45,7 +44,23 @@ export function DivisionBreakdown({ divisionData }) {
 
   const stats = calculateStats();
 
-  // (table view removed) filtered table data is not used
+  // Get filtered data for the table
+  const getTableData = () => {
+    return divisionData
+      .map((division) => {
+        const categoryData = division.categories[selectedCategory];
+        if (!categoryData) return null;
+        return {
+          division: division.division,
+          strength: categoryData.st,
+          attendance: categoryData.at,
+          rate: categoryData.percent,
+        };
+      })
+      .filter((item) => item !== null);
+  };
+
+  const tableData = getTableData();
 
   const categories = [
     { key: "executive", label: "Executive", icon: "👔" },
@@ -70,10 +85,9 @@ export function DivisionBreakdown({ divisionData }) {
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "12px",
-          padding: { xs: "12px", sm: "16px", md: "20px" },
-          boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
-          border: "1px solid #e2e8eb",
-          boxSizing: "border-box",
+          padding: "24px",
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+          border: "1px solid #e2e8f0",
         }}
       >
         {/* Header */}
@@ -177,158 +191,60 @@ export function DivisionBreakdown({ divisionData }) {
               {stats.totalStrength}
             </Typography>
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "16px",
-              fontSize: "12px",
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <Box
-                sx={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  backgroundColor: "#10b981",
-                }}
-              />
-              <Typography
-                sx={{ fontSize: "12px", color: "#1a2d4d", fontWeight: 500 }}
-              >
-                ≥90
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <Box
-                sx={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  backgroundColor: "#3b82f6",
-                }}
-              />
-              <Typography
-                sx={{ fontSize: "12px", color: "#64748b", fontWeight: 500 }}
-              >
-                ≥75
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <Box
-                sx={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  backgroundColor: "#f43f5e",
-                }}
-              />
-              <Typography
-                sx={{ fontSize: "12px", color: "#64748b", fontWeight: 500 }}
-              >
-                &lt;75
-              </Typography>
-            </Box>
+          <Box>
+            <Typography
+              sx={{
+                fontSize: "11px",
+                fontWeight: 700,
+                color: "#9ca3af",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                marginBottom: "4px",
+              }}
+            >
+              Attendance
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "#1a2d4d",
+              }}
+            >
+              {stats.totalAttendance}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography
+              sx={{
+                fontSize: "11px",
+                fontWeight: 700,
+                color: "#9ca3af",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                marginBottom: "4px",
+              }}
+            >
+              Rate
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "24px",
+                fontWeight: 700,
+                color: getAttendanceColor(stats.rate),
+              }}
+            >
+              {stats.rate}%
+            </Typography>
           </Box>
         </Box>
 
-        {/* Chart */}
-        <Box sx={{ height: "288px", width: "100%", marginBottom: "16px" }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={divisionData}
-              margin={{ top: 10, right: 20, left: -10, bottom: 0 }}
-            >
-              <defs>
-                <linearGradient id="lineGlow" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#3b82f6" />
-                  <stop offset="50%" stopColor="#06b6d4" />
-                  <stop offset="100%" stopColor="#8b5cf6" />
-                </linearGradient>
-              </defs>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="rgba(0,0,0,0.08)"
-                vertical={false}
-              />
-              <XAxis
-                dataKey="division"
-                axisLine={false}
-                tickLine={false}
-                tick={{
-                  fill: "#94a3b8",
-                  fontSize: 12,
-                }}
-                dy={8}
-              />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tick={{
-                  fill: "#94a3b8",
-                  fontSize: 11,
-                }}
-                domain={[40, 110]}
-                tickFormatter={(v) => v}
-                width={42}
-              />
-              <Tooltip
-                content={(props) => (
-                  <CustomTooltip {...props} divisionData={divisionData} />
-                )}
-              />
-              <ReferenceLine
-                y={77}
-                stroke="rgba(6,182,212,0.3)"
-                strokeDasharray="6 3"
-                label={{
-                  value: "Avg 77",
-                  fill: "#06b6d4",
-                  fontSize: 10,
-                  position: "insideTopRight",
-                }}
-              />
-              <Line
-                type="monotoneX"
-                dataKey="rate"
-                stroke="url(#lineGlow)"
-                strokeWidth={3}
-                dot={(props) => (
-                  <CustomDot {...props} divisionData={divisionData} />
-                )}
-                activeDot={{
-                  r: 8,
-                  stroke: "#ffffff",
-                  strokeWidth: 2,
-                }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </Box>
-
-        {/* Division Badges */}
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-          {divisionData?.map((d) => {
-            const color = getAttendanceColor(d.rate);
-            const bgColor =
-              d.rate >= 90 ? "#f0fdf4" : d.rate >= 75 ? "#f0f9ff" : "#fdf2f8";
-            const borderColor =
-              d.rate >= 90 ? "#d1fae5" : d.rate >= 75 ? "#bfdbfe" : "#fbcfe8";
-            return (
-              <Box
-                key={d.division}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "6px 12px",
-                  borderRadius: "16px",
-                  backgroundColor: bgColor,
-                  border: `1px solid ${borderColor}`,
-                }}
-              >
-                <Typography
+        {/* Table */}
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow sx={{ backgroundColor: "#f9fafb" }}>
+                <TableCell
                   sx={{
                     fontWeight: 700,
                     fontSize: "11px",
@@ -339,22 +255,119 @@ export function DivisionBreakdown({ divisionData }) {
                     padding: "12px 0",
                   }}
                 >
-                  {d.division}
-                </Typography>
-                <Typography
+                  Division
+                </TableCell>
+                <TableCell
+                  align="center"
                   sx={{
                     fontWeight: 700,
-                    fontSize: "12px",
-                    color: color,
-                    paddingLeft: "8px",
+                    fontSize: "11px",
+                    color: "#6b7280",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.5px",
+                    borderBottom: "1px solid #e5e7eb",
+                    padding: "12px 0",
                   }}
                 >
-                  {d.rate}
-                </Typography>
-              </Box>
-            );
-          })}
-        </Box>
+                  Strength
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: "11px",
+                    color: "#6b7280",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.5px",
+                    borderBottom: "1px solid #e5e7eb",
+                    padding: "12px 0",
+                  }}
+                >
+                  Attendance
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: "11px",
+                    color: "#6b7280",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.5px",
+                    borderBottom: "1px solid #e5e7eb",
+                    padding: "12px 0",
+                  }}
+                >
+                  Rate
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {tableData.map((row, index) => (
+                <TableRow
+                  key={index}
+                  sx={{
+                    "&:hover": { backgroundColor: "#f9fafb" },
+                    backgroundColor:
+                      row.division === "DPR"
+                        ? "rgba(239, 68, 68, 0.05)"
+                        : "transparent",
+                  }}
+                >
+                  <TableCell
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: "13px",
+                      color: row.division === "DPR" ? "#ef4444" : "#1a2d4d",
+                      borderBottom: "1px solid #e5e7eb",
+                      padding: "16px 0",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
+                    {row.division}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "13px",
+                      color: "#4b5563",
+                      borderBottom: "1px solid #e5e7eb",
+                      padding: "16px 0",
+                    }}
+                  >
+                    {row.strength}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "13px",
+                      color: "#4b5563",
+                      borderBottom: "1px solid #e5e7eb",
+                      padding: "16px 0",
+                    }}
+                  >
+                    {row.attendance}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: "13px",
+                      color: getAttendanceColor(row.rate),
+                      borderBottom: "1px solid #e5e7eb",
+                      padding: "16px 0",
+                    }}
+                  >
+                    {row.rate}%
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
     </Box>
   );
