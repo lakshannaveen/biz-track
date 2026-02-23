@@ -17,7 +17,7 @@ const GetUserByServiceNo = async () => {
   const hardcodedServiceNo = "0004086";
   localStorage.setItem("ServiceNo", hardcodedServiceNo);
   
-  return axios.post(`login/GetUserByServiceNo`)
+  return axios.post(`/login/GetUserByServiceNo`)
     .then((response) => {
 
       if (

@@ -129,18 +129,21 @@ const SMSModal = ({ open, onClose }) => {
     const fetchData = async () => {
       try {
         // Fetch user data first
-        const userResponse = await axios.get("login/GetUserByServiceNo");
-        const userData = userResponse.data.ResultSet[0];
+        const userResponse = await axios.get("/login/GetUserByServiceNo");
+        const userData = userResponse?.data?.ResultSet?.[0];
+        if (!userData) return;
+        // set local state for UI if needed
         setUserInfo({
           mobileNo: userData.MobileNo,
           email: userData.Email,
         });
-        // Fetch notification data using the user info
-        const { mobileNo, email } = userInfo;
+        // Fetch notification data using the received user data (use variables, not stale state)
+        const mobileNo = userData.MobileNo || "";
+        const email = userData.Email || "";
         const notificationResponse = await axios.get(
-          `Notification/GetNotification?P_PHONENO=${mobileNo}&P_MAIL=${email}`
+          `/Notification/GetNotification?P_PHONENO=${mobileNo}&P_MAIL=${email}`
         );
-        setData(notificationResponse.data.ResultSet);
+        setData(notificationResponse.data.ResultSet || []);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

@@ -17,14 +17,12 @@ export default function Footer() {
 
   const fetchUnseenCount = async () => {
     try {
-      const userResponse = await axios.get(
-        `${axios.defaults.baseURL}/login/GetUserByServiceNo`,
-      );
+      const userResponse = await axios.get(`/login/GetUserByServiceNo`);
       const userData = userResponse.data.ResultSet[0];
       const mobileNo = userData.MobileNo;
 
       const countResponse = await axios.get(
-        `${axios.defaults.baseURL}Notification/GetUnSeenCount?P_PHONENO=${mobileNo}`,
+        `/Notification/GetUnSeenCount?P_PHONENO=${mobileNo}`,
       );
       setUnreadCount(parseInt(countResponse.data.ResultSet.Count) || 0);
     } catch (error) {
