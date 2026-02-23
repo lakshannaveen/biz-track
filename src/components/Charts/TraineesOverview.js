@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import {
   ResponsiveContainer,
   BarChart,
@@ -14,6 +14,8 @@ import {
 } from "recharts";
 
 export function TraineesOverview({ traineeOverall, traineeByDivision }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const totalTrainees = {
     clerical: 2,
     clerical_att: 0,
@@ -261,114 +263,103 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
         </Box>
 
         {/* Chart */}
-        <Box sx={{ height: "384px", width: "100%", marginBottom: "16px" }}>
+        <Box sx={{ height: isMobile ? "520px" : "384px", width: "100%", marginBottom: "16px" }}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={traineeByDivision}
-              margin={{ top: 20, right: 30, left: 0, bottom: 60 }}
-            >
-              <defs>
-                <linearGradient
-                  id="divisonClerical"
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.8} />
-                  <stop offset="100%" stopColor="#d97706" stopOpacity={0.8} />
-                </linearGradient>
-                <linearGradient
-                  id="divisonClericalAtt"
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop offset="0%" stopColor="#fbbf24" stopOpacity={0.8} />
-                  <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.8} />
-                </linearGradient>
-                <linearGradient
-                  id="divisionIndustrial"
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.8} />
-                  <stop offset="100%" stopColor="#6d28d9" stopOpacity={0.8} />
-                </linearGradient>
-                <linearGradient
-                  id="divisionIndustrialAtt"
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop offset="0%" stopColor="#a78bfa" stopOpacity={0.8} />
-                  <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.8} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="rgba(0,0,0,0.08)"
-                vertical={false}
-              />
-              <XAxis
-                dataKey="division"
-                axisLine={false}
-                tickLine={false}
-                tick={{
-                  fill: "#94a3b8",
-                  fontSize: 11,
-                }}
-                angle={-45}
-                textAnchor="end"
-                height={100}
-              />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tick={{
-                  fill: "#94a3b8",
-                  fontSize: 11,
-                }}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #e2e8f0",
-                  borderRadius: "8px",
-                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                }}
-                labelStyle={{ color: "#1a2d4d" }}
-              />
-              <Legend />
-              <Bar
-                dataKey="clerical_strength"
-                fill="url(#divisonClerical)"
-                name="Clerical (Strength)"
-                radius={[8, 8, 0, 0]}
-              />
-              <Bar
-                dataKey="clerical_attendance"
-                fill="url(#divisonClericalAtt)"
-                name="Clerical (Attended)"
-                radius={[8, 8, 0, 0]}
-              />
-              <Bar
-                dataKey="industrial_strength"
-                fill="url(#divisionIndustrial)"
-                name="Industrial (Strength)"
-                radius={[8, 8, 0, 0]}
-              />
-              <Bar
-                dataKey="industrial_attendance"
-                fill="url(#divisionIndustrialAtt)"
-                name="Industrial (Attended)"
-                radius={[8, 8, 0, 0]}
-              />
-            </BarChart>
+            {isMobile ? (
+              <BarChart
+                data={traineeByDivision}
+                layout="vertical"
+                margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+                barCategoryGap="20%"
+                barGap={6}
+              >
+                <defs>
+                  <linearGradient id="divisonClerical" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="#d97706" stopOpacity={0.8} />
+                  </linearGradient>
+                  <linearGradient id="divisonClericalAtt" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#fbbf24" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.8} />
+                  </linearGradient>
+                  <linearGradient id="divisionIndustrial" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="#6d28d9" stopOpacity={0.8} />
+                  </linearGradient>
+                  <linearGradient id="divisionIndustrialAtt" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#a78bfa" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.8} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.08)" vertical={false} />
+                <XAxis
+                  type="number"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "#94a3b8", fontSize: 11 }}
+                />
+                <YAxis
+                  dataKey="division"
+                  type="category"
+                  axisLine={false}
+                  tickLine={false}
+                  width={120}
+                  tick={{ fill: "#94a3b8", fontSize: 12 }}
+                />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#ffffff",
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                  }}
+                  labelStyle={{ color: "#1a2d4d" }}
+                />
+                <Legend verticalAlign="top" />
+                <Bar dataKey="clerical_strength" fill="url(#divisonClerical)" name="Clerical (Strength)" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="clerical_attendance" fill="url(#divisonClericalAtt)" name="Clerical (Attended)" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="industrial_strength" fill="url(#divisionIndustrial)" name="Industrial (Strength)" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="industrial_attendance" fill="url(#divisionIndustrialAtt)" name="Industrial (Attended)" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            ) : (
+              <BarChart data={traineeByDivision} margin={{ top: 20, right: 30, left: 0, bottom: 60 }}>
+                <defs>
+                  <linearGradient id="divisonClerical" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="#d97706" stopOpacity={0.8} />
+                  </linearGradient>
+                  <linearGradient id="divisonClericalAtt" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#fbbf24" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.8} />
+                  </linearGradient>
+                  <linearGradient id="divisionIndustrial" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="#6d28d9" stopOpacity={0.8} />
+                  </linearGradient>
+                  <linearGradient id="divisionIndustrialAtt" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#a78bfa" stopOpacity={0.8} />
+                    <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.8} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.08)" vertical={false} />
+                <XAxis dataKey="division" axisLine={false} tickLine={false} tick={{ fill: "#94a3b8", fontSize: 11 }} angle={-45} textAnchor="end" height={100} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: "#94a3b8", fontSize: 11 }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#ffffff",
+                    border: "1px solid #e2e8f0",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                  }}
+                  labelStyle={{ color: "#1a2d4d" }}
+                />
+                <Legend />
+                <Bar dataKey="clerical_strength" fill="url(#divisonClerical)" name="Clerical (Strength)" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="clerical_attendance" fill="url(#divisonClericalAtt)" name="Clerical (Attended)" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="industrial_strength" fill="url(#divisionIndustrial)" name="Industrial (Strength)" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="industrial_attendance" fill="url(#divisionIndustrialAtt)" name="Industrial (Attended)" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            )}
           </ResponsiveContainer>
         </Box>
 
