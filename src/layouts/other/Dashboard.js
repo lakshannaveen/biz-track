@@ -396,7 +396,7 @@ const Dashboard = () => {
             }}
           >
             <KpiCard
-              label="Total Employees"
+              label="Total Strength"
               target={3891}
               icon={Users}
               sparkData={sparklines.total}
@@ -407,24 +407,24 @@ const Dashboard = () => {
             />
 
             <KpiCard
-              label="Eligible Strength"
-              target={3331}
+              label="Present Today"
+              target={2579}
               icon={UserCheck}
-              sparkData={sparklines.eligible}
+              sparkData={sparklines.attendance}
               sparkColor="#8b5cf6"
-              trend="85% of total"
+              trend="+2.3%"
               trendPositive={true}
               delay={1}
             />
 
             <KpiCard
-              label="Total Attendance"
-              target={2579}
-              icon={Clock}
-              sparkData={sparklines.attendance}
-              sparkColor="#10b981"
-              trend="77% rate"
-              trendPositive={true}
+              label="Absent"
+              target={752}
+              icon={Users}
+              sparkData={sparklines.eligible}
+              sparkColor="#f43f5e"
+              trend="-1.2%"
+              trendPositive={false}
               delay={2}
             />
 
@@ -435,7 +435,7 @@ const Dashboard = () => {
               icon={TrendingUp}
               sparkData={sparklines.rate}
               sparkColor="#06b6d4"
-              trend="+2% vs last week"
+              trend="+1.5%"
               trendPositive={true}
               delay={3}
             />
