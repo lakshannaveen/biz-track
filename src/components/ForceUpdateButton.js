@@ -39,15 +39,17 @@ function ForceUpdateButton() {
   };
 
   return (
-    <button 
+    <button
       onClick={handleForceUpdate}
       className="force-update-btn"
       disabled={isUpdating}
       title="Force Update App"
+      aria-label="Force update app"
     >
-      <RefreshCw 
-        size={20} 
-        className={isUpdating ? 'spinning' : ''} 
+      <RefreshCw
+        size={24}
+        className={isUpdating ? 'spinning' : ''}
+        style={{ verticalAlign: 'middle' }}
       />
       {isUpdating && <span className="ml-2">Updating...</span>}
     </button>

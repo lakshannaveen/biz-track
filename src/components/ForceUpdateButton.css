@@ -1,20 +1,21 @@
 .force-update-btn {
   background: transparent;
-  border: 2px solid #007bff;
-  border-radius: 6px;          /* 8px → 6px */
-  padding: 6px 8px;            /* 8px 16px → podi */
+  border: none;
+  border-radius: 6px;
+  padding: 6px 8px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: all 0.3s ease;
+  transition: all 0.18s ease;
   color: #007bff;
   font-weight: 500;
-  min-height: 0px;   
-   width: 38px;
+  min-height: 0px;
+  width: 38px;
   height: 50px;
-  padding: 0;         /* optional */
+  padding: 0;
+  outline: none;
 }
 
 
@@ -27,6 +28,11 @@
 
 .force-update-btn:active {
   transform: translateY(0);
+}
+
+.force-update-btn:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .force-update-btn:disabled {
