@@ -25,9 +25,10 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "12px",
-          padding: "24px",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-          border: "1px solid #e2e8f0",
+          padding: { xs: "12px", sm: "16px", md: "20px" },
+          boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+          border: "1px solid #e2e8eb",
+          boxSizing: "border-box",
         }}
       >
         {/* Header */}
@@ -67,7 +68,7 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
                 color: "#1a2d4d",
               }}
             >
-              76%
+              76
             </Typography>
             <Typography
               sx={{
@@ -169,7 +170,7 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
                   color: cat.fill,
                 }}
               >
-                {cat.actualPct}%
+                {cat.actualPct}
               </Typography>
               <Typography
                 sx={{

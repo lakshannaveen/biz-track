@@ -45,9 +45,10 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "12px",
-          padding: "24px",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-          border: "1px solid #e2e8f0",
+          padding: { xs: "12px", sm: "16px", md: "20px" },
+          boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+          border: "1px solid #e2e8eb",
+          boxSizing: "border-box",
           marginBottom: "32px",
         }}
       >
@@ -211,7 +212,7 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
                 color: "#3b82f6",
               }}
             >
-              {totalTrainees.total_percent}%
+              {totalTrainees.total_percent}
             </Typography>
           </Box>
         </Box>
@@ -234,9 +235,10 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "12px",
-          padding: "24px",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-          border: "1px solid #e2e8f0",
+          padding: { xs: "12px", sm: "16px", md: "20px" },
+          boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+          border: "1px solid #e2e8eb",
+          boxSizing: "border-box",
           marginBottom: "32px",
         }}
       >

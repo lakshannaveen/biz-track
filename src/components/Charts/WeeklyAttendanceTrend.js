@@ -74,9 +74,10 @@ export function WeeklyAttendanceTrend({ eligibleData = [], attendanceData = [], 
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "12px",
-          padding: "20px",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-          border: "1px solid #e2e8f0",
+          padding: { xs: "12px", sm: "16px", md: "20px" },
+          boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+          border: "1px solid #e2e8eb",
+          boxSizing: "border-box",
           height: "100%",
         }}
       >
@@ -115,7 +116,7 @@ export function WeeklyAttendanceTrend({ eligibleData = [], attendanceData = [], 
                 tick={{ fill: "#64748b" }}
                 domain={[60, 100]}
                 width={60}
-                tickFormatter={(v) => `${v}%`}
+                tickFormatter={(v) => v}
               />
               <Tooltip content={<CustomTooltip />} />
               <Legend verticalAlign="bottom" align="center" wrapperStyle={{ bottom: -8 }} />
@@ -125,7 +126,7 @@ export function WeeklyAttendanceTrend({ eligibleData = [], attendanceData = [], 
               {/* Eligible as pale background bar */}
               <Bar yAxisId="left" dataKey="eligible" name="Eligible" barSize={36} fill="#eef6ff" radius={[8, 8, 8, 8]} />
               <Bar yAxisId="left" dataKey="attendance" name="Attendance" barSize={22} fill="#3b82f6" radius={[8, 8, 8, 8]} />
-              <Line yAxisId="right" type="monotone" dataKey="rate" name="Rate %" stroke="#f59e0b" strokeWidth={2} dot={{ r: 4 }} />
+              <Line yAxisId="right" type="monotone" dataKey="rate" name="Rate" stroke="#f59e0b" strokeWidth={2} dot={{ r: 4 }} />
             </ComposedChart>
           </ResponsiveContainer>
         </Box>
