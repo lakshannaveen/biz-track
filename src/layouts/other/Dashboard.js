@@ -360,7 +360,6 @@ const Dashboard = () => {
                 fontWeight: 400,
               }}
             >
-              Real-time workforce analytics and port operations overview.
             </Typography>
           </Box>
 
