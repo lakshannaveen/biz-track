@@ -88,6 +88,7 @@ export function KpiCard({
           },
           display: "flex",
           flexDirection: "column",
+          minHeight: "120px",
         }}
       >
         {/* Content Container */}
