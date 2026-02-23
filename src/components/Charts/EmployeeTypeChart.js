@@ -82,13 +82,6 @@ const AttendanceCustomTooltip = ({ active, payload }) => {
   return null;
 };
 
-// Helper function to get color based on attendance percentage
-const getAttendanceColor = (percentage) => {
-  if (percentage >= 90) return "#10b981"; // Green
-  if (percentage >= 80) return "#3b82f6"; // Blue (changed from orange to blue to match image)
-  return "#94a3b8"; // Gray (changed from red to gray to match image)
-};
-
 export function EmployeeTypeChart({ employeeTypeData }) {
   // Transform data to include percentage
   const chartData = employeeTypeData.map((item) => ({
@@ -148,7 +141,13 @@ export function EmployeeTypeChart({ employeeTypeData }) {
         </Box>
 
         {/* Chart */}
-        <Box sx={{ height: { xs: "260px", md: "320px" }, width: "100%", marginBottom: "16px" }}>
+        <Box
+          sx={{
+            height: { xs: "260px", md: "320px" },
+            width: "100%",
+            marginBottom: "16px",
+          }}
+        >
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={chartData}
@@ -186,14 +185,12 @@ export function EmployeeTypeChart({ employeeTypeData }) {
                 strokeDasharray="3 3"
                 strokeWidth={1.5}
               />
-              <Bar dataKey="percentage" fill="#ef4444" barSize={28} radius={[8, 8, 8, 8]}>
-                {chartData.map((item, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={getAttendanceColor(item.percentage)}
-                  />
-                ))}
-              </Bar>
+              <Bar
+                dataKey="percentage"
+                fill="#ef4444"
+                barSize={28}
+                radius={[8, 8, 8, 8]}
+              />
             </BarChart>
           </ResponsiveContainer>
         </Box>
@@ -202,66 +199,23 @@ export function EmployeeTypeChart({ employeeTypeData }) {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             alignItems: "center",
-            flexWrap: "wrap",
+            gap: "4px",
             paddingTop: "12px",
             borderTop: "1px solid #e5e7eb",
           }}
         >
-          <Box sx={{ display: "flex", gap: "16px", alignItems: "center" }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
-              <Box
-                sx={{
-                  width: "10px",
-                  height: "10px",
-                  borderRadius: "50%",
-                  backgroundColor: "#10b981",
-                }}
-              />
-              <Typography sx={{ fontSize: "10px", color: "#64748b" }}>
-                ≥ 90%
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
-              <Box
-                sx={{
-                  width: "10px",
-                  height: "10px",
-                  borderRadius: "50%",
-                  backgroundColor: "#3b82f6",
-                }}
-              />
-              <Typography sx={{ fontSize: "10px", color: "#64748b" }}>
-                80–89%
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
-              <Box
-                sx={{
-                  width: "10px",
-                  height: "10px",
-                  borderRadius: "50%",
-                  backgroundColor: "#94a3b8",
-                }}
-              />
-              <Typography sx={{ fontSize: "10px", color: "#64748b" }}>
-                &lt; 80%
-              </Typography>
-            </Box>
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            <Box
-              sx={{
-                width: "20px",
-                height: "0px",
-                borderBottom: "2px dashed #ef4444",
-              }}
-            />
-            <Typography sx={{ fontSize: "10px", color: "#64748b" }}>
-              Target
-            </Typography>
-          </Box>
+          <Box
+            sx={{
+              width: "20px",
+              height: "0px",
+              borderBottom: "2px dashed #ef4444",
+            }}
+          />
+          <Typography sx={{ fontSize: "10px", color: "#64748b" }}>
+            Target
+          </Typography>
         </Box>
       </Box>
     </Box>

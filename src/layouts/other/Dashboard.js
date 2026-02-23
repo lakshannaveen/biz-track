@@ -437,12 +437,12 @@ const Dashboard = () => {
           </Box>
 
           {/* Trainees Overview Charts */}
-          <Box sx={{ marginTop: "32px" }}>
+          {/* <Box sx={{ marginTop: "32px" }}>
             <TraineesOverview
               traineeOverall={traineeOverall}
               traineeByDivision={traineeByDivision}
             />
-          </Box>
+          </Box> */}
         </>
       )}
 
