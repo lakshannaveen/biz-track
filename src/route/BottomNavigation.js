@@ -6,22 +6,37 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonIcon from "@mui/icons-material/Person";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import SmsIcon from "@mui/icons-material/Sms";
-import { Link } from "react-router-dom";
-import { Box, Badge } from "@mui/material";
+import { Link, useLocation } from "react-router-dom";
+import { Box, Badge, Paper } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 export default function Footer() {
-  const [value, setValue] = React.useState("recents");
   const dispatch = useDispatch();
+  const [value, setValue] = React.useState(null);
+
+  const location = useLocation();
+
+  const getActiveValue = (path) => {
+    if (!path) return null;
+    if (path === "/" || path.startsWith("/home")) return "Home";
+    if (path.startsWith("/dashboard")) return "Dashboard";
+    if (path.startsWith("/userProfile") || path.startsWith("/userProfile")) return "Profile";
+    if (path.startsWith("/notifications")) return "Notification";
+    // common QR/Scan routes
+    if (path.startsWith("/qr") || path.startsWith("/scan") || path.startsWith("/qrcode")) return "QR";
+    return null;
+  };
+
+  React.useEffect(() => {
+    setValue(getActiveValue(location.pathname));
+  }, [location.pathname]);
+
   const { user } = useSelector((state) => state.auth);
   const { data } = useSelector((state) => state.userbyServiceNo);
   const [unreadCount, setUnreadCount] = React.useState(0);
 
-  // Allowed user IDs for dashboard access
   const ALLOWED_USER_IDS = ["0004086", "0003595"];
-
-  // Get service number from user data
   const serviceNo = user?.ServiceNo || (data && data[0]?.ServiceNo);
   const canAccessDashboard =
     serviceNo && ALLOWED_USER_IDS.includes(String(serviceNo).trim());
@@ -29,14 +44,15 @@ export default function Footer() {
   const fetchUnseenCount = async () => {
     try {
       const userResponse = await axios.get(
-        `${axios.defaults.baseURL}/login/GetUserByServiceNo`,
+        `${axios.defaults.baseURL}/login/GetUserByServiceNo`
       );
       const userData = userResponse.data.ResultSet[0];
       const mobileNo = userData.MobileNo;
 
       const countResponse = await axios.get(
-        `${axios.defaults.baseURL}Notification/GetUnSeenCount?P_PHONENO=${mobileNo}`,
+        `${axios.defaults.baseURL}Notification/GetUnSeenCount?P_PHONENO=${mobileNo}`
       );
+
       setUnreadCount(parseInt(countResponse.data.ResultSet.Count) || 0);
     } catch (error) {
       console.error("Error fetching unseen count:", error);
@@ -45,81 +61,114 @@ export default function Footer() {
 
   React.useEffect(() => {
     fetchUnseenCount();
-
-    const interval = setInterval(() => {
-      fetchUnseenCount();
-    }, 10000);
-
+    const interval = setInterval(fetchUnseenCount, 10000);
     return () => clearInterval(interval);
   }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+
     if (newValue === "QR") {
       dispatch({
         type: "IS_OPEN",
         payload: { isOpen: true, isOpenDetailScreen: false },
       });
-    } else if (newValue === "Notification") {
-      fetchUnseenCount();
     } else {
       dispatch({ type: "IS_CLOSE" });
     }
   };
 
   return (
-    <div>
-      <Box sx={{ width: "100%", padding: "5px" }}>
+    <Box
+      sx={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+      }}
+    >
+      <Paper
+        elevation={10}
+        sx={{
+          width: '100%',
+          // remove curved top corners on mobile, keep rounded on larger screens
+          borderTopLeftRadius: { xs: 0, sm: '20px' },
+          borderTopRightRadius: { xs: 0, sm: '20px' },
+          // ensure bottom corners are square on mobile
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
+          background: "linear-gradient(135deg, #5B52B3 0%, #004AAD 100%)",
+        }}
+      >
         <BottomNavigation
-          sx={{
-            width: "100%",
-            borderRadius: 3,
-            backgroundImage: "linear-gradient(to bottom, #5B52B3, #004AAD)",
-            "& .MuiBottomNavigationAction-root.Mui-selected": {
-              color: "white",
-            },
-            "& .MuiBottomNavigationAction-root": {
-              color: "white",
-            },
-          }}
           value={value}
           onChange={handleChange}
-          showLabels={false}
+          showLabels
+          sx={{
+            background: "transparent",
+            width: '100%',
+            "& .MuiBottomNavigationAction-root": {
+              color: "white",
+              fontSize: "12px",
+            },
+            "& .MuiBottomNavigationAction-label": {
+              fontSize: "11px",
+            },
+            // make the selected/active item clearly visible on the gradient background
+            "& .MuiBottomNavigationAction-root.Mui-selected": {
+              color: "#ffffff",
+              fontWeight: 700,
+              "& .MuiBottomNavigationAction-label": {
+                fontSize: "11px",
+                fontWeight: 700,
+              },
+              "& svg": {
+                transform: "scale(1.12)",
+              },
+            },
+          }}
         >
+          {/* Home */}
           <BottomNavigationAction
             component={Link}
             to="/home"
-            // label="Home"
+            label="Home"
             value="Home"
-            icon={<HouseIcon fontSize="large" />}
+            icon={<HouseIcon />}
           />
+
+          {/* Dashboard or Profile */}
           {canAccessDashboard ? (
             <BottomNavigationAction
               component={Link}
               to="/dashboard"
-              //label="Dashboard"
+              label="Dashboard"
               value="Dashboard"
-              icon={<DashboardIcon fontSize="large" />}
+              icon={<DashboardIcon />}
             />
           ) : (
             <BottomNavigationAction
               component={Link}
               to="/userProfile"
-              //label="Profile"
+              label="Profile"
               value="Profile"
-              icon={<PersonIcon fontSize="large" />}
+              icon={<PersonIcon />}
             />
           )}
+
+          {/* QR */}
           <BottomNavigationAction
-            //label="QR"
-            // to="/NewQR_Scan"
+            label="Scan"
             value="QR"
-            icon={<QrCodeScannerIcon fontSize="large" />}
+            icon={<QrCodeScannerIcon />}
           />
+
+          {/* Notifications */}
           <BottomNavigationAction
             component={Link}
             to="/notifications"
-            // label="Notification"
+            label="Messages"
             value="Notification"
             icon={
               <Badge
@@ -128,12 +177,12 @@ export default function Footer() {
                 invisible={unreadCount === 0}
                 max={999}
               >
-                <SmsIcon fontSize="large" />
+                <SmsIcon />
               </Badge>
             }
           />
         </BottomNavigation>
-      </Box>
-    </div>
+      </Paper>
+    </Box>
   );
 }
