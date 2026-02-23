@@ -549,6 +549,7 @@ import NotificationMessage from "./layouts/notifications/NotificationMessage";
 import MaintenancePage from "../src/components/Cards/maintenance";
 import Caregiver from "../src/components/Cards/CareGiver";
 import Manager from "../src/layouts/reservations/Managers";
+import ProtectedDashboardRoute from "./route/ProtectedDashboardRoute";
 
 // import useMediaQuery from "@material-ui/core/useMediaQuery";
 // const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -651,7 +652,7 @@ function App() {
                   >
                     <Routes>
                       <Route element={<Home />} path="/home" />
-                      <Route element={<Dashboard />} path="/*" />
+                      <Route element={<ProtectedDashboardRoute><Dashboard /></ProtectedDashboardRoute>} path="/*" />
                       <Route element={<BudgetShop />} path="/budgetshop" />
                       <Route element={<Leave />} path="/leave" />
                       <Route element={<Extra_Hours />} path="/ex_hours" />
