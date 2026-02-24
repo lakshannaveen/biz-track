@@ -2,16 +2,16 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import {
   ResponsiveContainer,
-  AreaChart,
-  Area,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
-  CartesianGrid,
+  ReferenceLine,
+  Cell,
 } from "recharts";
 
-const EmployeeTypeCustomTooltip = ({ active, payload }) => {
+const AttendanceCustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
       <Box
@@ -33,39 +33,49 @@ const EmployeeTypeCustomTooltip = ({ active, payload }) => {
         >
           {payload[0].payload.type}
         </Typography>
-        {payload.map((entry, i) => (
-          <Box
-            key={i}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            fontSize: "11px",
+            marginBottom: "4px",
+          }}
+        >
+          <Typography sx={{ color: "#64748b", fontSize: "11px" }}>
+            Attendance:
+          </Typography>
+          <Typography
             sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
+              color: "#1a2d4d",
+              fontWeight: 600,
               fontSize: "11px",
-              marginBottom: i < payload.length - 1 ? "4px" : 0,
             }}
           >
-            <Box
-              sx={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                backgroundColor: entry.color,
-              }}
-            />
-            <Typography sx={{ color: "#64748b", fontSize: "11px" }}>
-              {entry.name}:
-            </Typography>
-            <Typography
-              sx={{
-                color: "#1a2d4d",
-                fontWeight: 600,
-                fontSize: "11px",
-              }}
-            >
-              {entry.value.toLocaleString()}
-            </Typography>
-          </Box>
-        ))}
+            {payload[0].payload.percentage.toFixed(2)}%
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            fontSize: "11px",
+          }}
+        >
+          <Typography sx={{ color: "#64748b", fontSize: "11px" }}>
+            Present:
+          </Typography>
+          <Typography
+            sx={{
+              color: "#1a2d4d",
+              fontWeight: 600,
+              fontSize: "11px",
+            }}
+          >
+            {payload[0].payload.attendance} / {payload[0].payload.strength}
+          </Typography>
+        </Box>
       </Box>
     );
   }
@@ -73,6 +83,14 @@ const EmployeeTypeCustomTooltip = ({ active, payload }) => {
 };
 
 export function EmployeeTypeChart({ employeeTypeData }) {
+  // Transform data to include percentage
+  const chartData = employeeTypeData.map((item) => ({
+    type: item.type,
+    percentage: (item.attendance / item.strength) * 100,
+    attendance: item.attendance,
+    strength: item.strength,
+  }));
+
   return (
     <Box
       sx={{
@@ -82,6 +100,7 @@ export function EmployeeTypeChart({ employeeTypeData }) {
           "0%": { opacity: 0, transform: "translateY(24px)" },
           "100%": { opacity: 1, transform: "translateY(0)" },
         },
+        height: "100%",
       }}
     >
       <Box
@@ -89,234 +108,114 @@ export function EmployeeTypeChart({ employeeTypeData }) {
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "12px",
-          padding: "24px",
+          padding: "20px",
           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
           border: "1px solid #e2e8f0",
+          height: "100%",
         }}
       >
-        {/* Header with Badge */}
+        {/* Header */}
         <Box
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            marginBottom: "24px",
+            marginBottom: "16px",
           }}
         >
-          <Box>
-            <Typography
-              sx={{
-                fontSize: "18px",
-                fontWeight: 600,
-                color: "#1a2d4d",
-                marginBottom: "4px",
-              }}
-            >
-              Employee Strength vs Attendance
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "12px",
-                color: "#64748b",
-              }}
-            >
-              Workforce distribution by employee type
-            </Typography>
-          </Box>
-          <Box
+          <Typography
             sx={{
-              backgroundColor: "#e0f2fe",
-              color: "#0369a1",
-              padding: "4px 12px",
-              borderRadius: "20px",
-              fontSize: "12px",
+              fontSize: "16px",
               fontWeight: 600,
+              color: "#1a2d4d",
+              marginBottom: "2px",
             }}
           >
-            Today
-          </Box>
+            Attendance by Employee Type
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: "11px",
+              color: "#64748b",
+            }}
+          >
+            Color indicates attendance health
+          </Typography>
         </Box>
 
         {/* Chart */}
-        <Box sx={{ height: "288px", width: "100%", marginBottom: "24px" }}>
+        <Box
+          sx={{
+            height: { xs: "260px", md: "320px" },
+            width: "100%",
+            marginBottom: "16px",
+          }}
+        >
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart
-              data={employeeTypeData}
-              margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+            <BarChart
+              data={chartData}
+              layout="vertical"
+              margin={{ top: 5, right:0, left:-10, bottom: 5 }}
+              barGap={6}
             >
-              <defs>
-                <linearGradient id="gradStrength" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.35} />
-                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.02} />
-                </linearGradient>
-                <linearGradient id="gradEligible" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.02} />
-                </linearGradient>
-                <linearGradient id="gradAttendance" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.35} />
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0.02} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="rgba(0,0,0,0.08)"
-                vertical={false}
-              />
               <XAxis
-                dataKey="type"
+                type="number"
+                domain={[0, 100]}
                 axisLine={false}
                 tickLine={false}
                 tick={{
                   fill: "#94a3b8",
-                  fontSize: 12,
+                  fontSize: 10,
                 }}
+                ticks={[0, 25, 50, 75, 100]}
               />
               <YAxis
+                type="category"
+                dataKey="type"
                 axisLine={false}
                 tickLine={false}
                 tick={{
-                  fill: "#64748b",
-                  fontSize: 11,
+                  fill: "#1a2d4d",
+                  fontSize: 12,
+                  fontWeight: 500,
                 }}
+                width={60}
               />
-              <Tooltip content={<EmployeeTypeCustomTooltip />} />
-              <Legend
-                wrapperStyle={{
-                  paddingTop: "16px",
-                  fontSize: "12px",
-                }}
-                formatter={(value) => (
-                  <span style={{ color: "#94a3b8" }}>{value}</span>
-                )}
+              <Tooltip content={<AttendanceCustomTooltip />} />
+              <ReferenceLine
+                x={100}
+                stroke="#ef4444"
+                strokeDasharray="3 3"
+                strokeWidth={1.5}
               />
-              <Area
-                type="monotone"
-                dataKey="strength"
-                name="Actual Strength"
-                stroke="#3b82f6"
-                strokeWidth={2.5}
-                fill="url(#gradStrength)"
-                dot={{
-                  fill: "#3b82f6",
-                  r: 4,
-                  strokeWidth: 0,
-                }}
-                activeDot={{
-                  r: 6,
-                  fill: "#3b82f6",
-                  stroke: "#ffffff",
-                  strokeWidth: 2,
-                }}
+              <Bar
+                dataKey="percentage"
+                fill="#ef4444"
+                barSize={28}
+                radius={[8, 8, 8, 8]}
               />
-              <Area
-                type="monotone"
-                dataKey="eligible"
-                name="Eligible Strength"
-                stroke="#8b5cf6"
-                strokeWidth={2}
-                fill="url(#gradEligible)"
-                dot={{
-                  fill: "#8b5cf6",
-                  r: 4,
-                  strokeWidth: 0,
-                }}
-                activeDot={{
-                  r: 6,
-                  fill: "#8b5cf6",
-                  stroke: "#ffffff",
-                  strokeWidth: 2,
-                }}
-              />
-              <Area
-                type="monotone"
-                dataKey="attendance"
-                name="Attendance"
-                stroke="#10b981"
-                strokeWidth={2.5}
-                fill="url(#gradAttendance)"
-                dot={{
-                  fill: "#10b981",
-                  r: 4,
-                  strokeWidth: 0,
-                }}
-                activeDot={{
-                  r: 6,
-                  fill: "#10b981",
-                  stroke: "#ffffff",
-                  strokeWidth: 2,
-                }}
-              />
-            </AreaChart>
+            </BarChart>
           </ResponsiveContainer>
         </Box>
 
-        {/* Summary Stats */}
+        {/* Legend */}
         <Box
           sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "12px",
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: "4px",
+            paddingTop: "12px",
+            borderTop: "1px solid #e5e7eb",
           }}
         >
-          {[
-            {
-              label: "Total Strength",
-              value: "3,891",
-              color: "#3b82f6",
-            },
-            {
-              label: "Eligible",
-              value: "3,331",
-              color: "#8b5cf6",
-            },
-            {
-              label: "Attendance",
-              value: "2,579",
-              color: "#10b981",
-            },
-          ].map((stat) => (
-            <Box
-              key={stat.label}
-              sx={{
-                backgroundColor: "#f8fafc",
-                borderRadius: "8px",
-                padding: "12px",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-              }}
-            >
-              <Box
-                sx={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  backgroundColor: stat.color,
-                  flexShrink: 0,
-                }}
-              />
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    fontWeight: 700,
-                    color: stat.color,
-                  }}
-                >
-                  {stat.value}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "10px",
-                    color: "#94a3b8",
-                  }}
-                >
-                  {stat.label}
-                </Typography>
-              </Box>
-            </Box>
-          ))}
+          <Box
+            sx={{
+              width: "20px",
+              height: "0px",
+              borderBottom: "2px dashed #ef4444",
+            }}
+          />
+          <Typography sx={{ fontSize: "10px", color: "#64748b" }}>
+            Target
+          </Typography>
         </Box>
       </Box>
     </Box>

@@ -9,13 +9,17 @@ import { KpiCard } from "../../components/Charts/KpiCard";
 import { DivisionBreakdown } from "../../components/Charts/DivisionBreakdown";
 import { TraineesOverview } from "../../components/Charts/TraineesOverview";
 import DashboardTabs from "../../components/Charts/DashboardTabs";
+import WeeklyAttendanceTrend from "../../components/Charts/WeeklyAttendanceTrend";
+import { EmployeeTypeChart } from "../../components/Charts/EmployeeTypeChart";
+import { CDPLCBreakdown } from "../../components/Charts/CDPLCBreakdown";
+import QuickAccessSection from "../../components/Cards/QuickAccessSection";
 
 // Import actions
 import {
   GetCdlBasedDivison,
   GetTraineeBasedTypes,
   GetTraineeDivisionAttendance,
-  GetAllAttendance
+  GetAllAttendance,
 } from "../../action/Attendance";
 
 // Simulated sparkline data
@@ -61,23 +65,16 @@ const sparklines = {
 // Main Dashboard Component
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { divisionData, traineeTypes, traineeDivision, allAttendance, loading } = useSelector(
-    (state) => state.attendanceCard
-  );
+  const {
+    divisionData,
+    traineeTypes,
+    traineeDivision,
+    allAttendance,
+    loading,
+  } = useSelector((state) => state.attendanceCard);
   const [activeTab, setActiveTab] = useState(0);
-  const navigate = useNavigate();
-  const { number } = useSelector((state) => state.auth);
-
-  // Allowed user IDs for dashboard access
-  const ALLOWED_USER_IDS = ["0004086", "0003595"];
 
   useEffect(() => {
-    // Check if user has access to the dashboard
-    if (number && !ALLOWED_USER_IDS.includes(String(number).trim())) {
-      // Redirect to home screen if user is not authorized
-      navigate("/home");
-    }
-
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (metaThemeColor) {
       metaThemeColor.setAttribute("content", "#004AAD");
@@ -85,7 +82,7 @@ const Dashboard = () => {
 
     // Fetch data on component mount
     //const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-    // Hard-coded date 
+    // Hard-coded date
     const today = "2026-02-22";
     try {
       dispatch(GetCdlBasedDivison(today, today));
@@ -93,78 +90,121 @@ const Dashboard = () => {
       dispatch(GetTraineeDivisionAttendance(today, today));
       dispatch(GetAllAttendance(today, today));
     } catch (error) {
-      console.error('Error dispatching actions:', error);
+      console.error("Error dispatching actions:", error);
     }
   }, [dispatch]);
 
   // Transform division data for charts
-  const transformedDivisionData = divisionData?.map(item => ({
-    division: item.V_DIVNAME || item.HLD_DIV_CODE || 'Unknown',
-    rate: parseFloat(item.PERCENTAGE_EXECUTIVE) || 0,
-    categories: {
-      executive: {
-        st: parseInt(item.STRENGTH_EXECUTIVE) || 0,
-        at: parseInt(item.ATTENDANCE_EXECUTIVE) || 0,
-        percent: parseFloat(item.PERCENTAGE_EXECUTIVE) || 0
+  const transformedDivisionData =
+    divisionData?.map((item) => ({
+      division: item.V_DIVNAME || item.HLD_DIV_CODE || "Unknown",
+      rate: parseFloat(item.PERCENTAGE_EXECUTIVE) || 0,
+      categories: {
+        executive: {
+          st: parseInt(item.STRENGTH_EXECUTIVE) || 0,
+          at: parseInt(item.ATTENDANCE_EXECUTIVE) || 0,
+          percent: parseFloat(item.PERCENTAGE_EXECUTIVE) || 0,
+        },
+        supervisory: {
+          st: parseInt(item.STRENGTH_SUPERVISORY) || 0,
+          at: parseInt(item.ATTENDANCE_SUPERVISORY) || 0,
+          percent: parseFloat(item.PERCENTAGE_SUPERVISORY) || 0,
+        },
+        clerical: item.STRENGTH_CLERICAL
+          ? {
+              st: parseInt(item.STRENGTH_CLERICAL) || 0,
+              at: 0, // Assuming no attendance data for clerical in this API
+              percent: 0,
+            }
+          : null,
       },
-      supervisory: {
-        st: parseInt(item.STRENGTH_SUPERVISORY) || 0,
-        at: parseInt(item.ATTENDANCE_SUPERVISORY) || 0,
-        percent: parseFloat(item.PERCENTAGE_SUPERVISORY) || 0
-      },
-      clerical: item.STRENGTH_CLERICAL ? {
-        st: parseInt(item.STRENGTH_CLERICAL) || 0,
-        at: 0, // Assuming no attendance data for clerical in this API
-        percent: 0
-      } : null
-    }
-  })) || [];
+    })) || [];
 
-  console.log('Division Data:', divisionData);
-  console.log('Transformed Division Data:', transformedDivisionData);
-  console.log('Trainee Types:', traineeTypes);
-  console.log('Trainee Division:', traineeDivision);
-  console.log('All Attendance:', allAttendance);
+  console.log("Division Data:", divisionData);
+  console.log("Transformed Division Data:", transformedDivisionData);
+  console.log("Trainee Types:", traineeTypes);
+  console.log("Trainee Division:", traineeDivision);
+  console.log("All Attendance:", allAttendance);
 
   // Transform trainee types data
-  const transformedTraineeOverall = traineeTypes?.map(item => ({
-    category: item.TYPE || 'Unknown',
-    strength: parseInt(item.STRENGTH) || 0,
-    attendance: parseInt(item.ATTENDANCE) || 0,
-    percent: parseFloat(item.PERCENTAGE) || 0
-  })) || [];
+  const transformedTraineeOverall =
+    traineeTypes?.map((item) => ({
+      category: item.TYPE || "Unknown",
+      strength: parseInt(item.STRENGTH) || 0,
+      attendance: parseInt(item.ATTENDANCE) || 0,
+      percent: parseFloat(item.PERCENTAGE) || 0,
+    })) || [];
 
   // Transform trainee division data
-  const transformedTraineeByDivision = traineeDivision?.map(item => ({
-    division: item.V_DIVNAME || item.HLD_DIV_CODE || 'Unknown',
-    clerical_strength: parseInt(item.STRENGTH_CLERICAL) || 0,
-    clerical_attendance: parseInt(item.ATTENDANCE_CLERICAL) || 0,
-    industrial_strength: parseInt(item.STRENGTH_INDUSTRIAL) || 0,
-    industrial_attendance: parseInt(item.ATTENDANCE_INDUSTRIAL) || 0,
-    total_strength: (parseInt(item.STRENGTH_CLERICAL) || 0) + (parseInt(item.STRENGTH_INDUSTRIAL) || 0),
-    total_attendance: (parseInt(item.ATTENDANCE_CLERICAL) || 0) + (parseInt(item.ATTENDANCE_INDUSTRIAL) || 0),
-    total_percent: 0 // Will calculate below
-  })).map(item => ({
-    ...item,
-    total_percent: item.total_strength > 0 ? Math.round((item.total_attendance / item.total_strength) * 100) : 0
-  })) || [];
+  const transformedTraineeByDivision =
+    traineeDivision
+      ?.map((item) => ({
+        division: item.V_DIVNAME || item.HLD_DIV_CODE || "Unknown",
+        clerical_strength: parseInt(item.STRENGTH_CLERICAL) || 0,
+        clerical_attendance: parseInt(item.ATTENDANCE_CLERICAL) || 0,
+        industrial_strength: parseInt(item.STRENGTH_INDUSTRIAL) || 0,
+        industrial_attendance: parseInt(item.ATTENDANCE_INDUSTRIAL) || 0,
+        total_strength:
+          (parseInt(item.STRENGTH_CLERICAL) || 0) +
+          (parseInt(item.STRENGTH_INDUSTRIAL) || 0),
+        total_attendance:
+          (parseInt(item.ATTENDANCE_CLERICAL) || 0) +
+          (parseInt(item.ATTENDANCE_INDUSTRIAL) || 0),
+        total_percent: 0, // Will calculate below
+      }))
+      .map((item) => ({
+        ...item,
+        total_percent:
+          item.total_strength > 0
+            ? Math.round((item.total_attendance / item.total_strength) * 100)
+            : 0,
+      })) || [];
 
   // For now, using empty array for traineeByDivision since the API response wasn't provided
   const traineeByDivision = [];
 
-  // Calculate KPI values from data
-  const totalEmployees = divisionData?.reduce((sum, item) => 
-    sum + (parseInt(item.STRENGTH_EXECUTIVE) || 0) + (parseInt(item.STRENGTH_SUPERVISORY) || 0), 0) || 0;
-  
-  const totalAttendance = divisionData?.reduce((sum, item) => 
-    sum + (parseInt(item.ATTENDANCE_EXECUTIVE) || 0) + (parseInt(item.ATTENDANCE_SUPERVISORY) || 0), 0) || 0;
-  
-  const attendanceRate = totalEmployees > 0 ? Math.round((totalAttendance / totalEmployees) * 100) : 0;
+  // Sample data for employee type chart
+  const employeeTypeData = traineeTypes || [
+    { category: "Executive", count: 150 },
+    { category: "Supervisory", count: 250 },
+    { category: "Clerical", count: 100 },
+  ];
 
-  // Don't render the dashboard if user doesn't have access
-  if (number && !ALLOWED_USER_IDS.includes(String(number).trim())) {
-    return null;
-  }
+  // Sample data for CDPLC breakdown
+  const cdplcData = [
+    { name: "CDPLC A", value: 300 },
+    { name: "CDPLC B", value: 250 },
+    { name: "CDPLC C", value: 200 },
+  ];
+
+  const radialData = [
+    { label: "Present", value: 65 },
+    { label: "Absent", value: 35 },
+  ];
+
+  // Calculate KPI values from data
+  const totalEmployees =
+    divisionData?.reduce(
+      (sum, item) =>
+        sum +
+        (parseInt(item.STRENGTH_EXECUTIVE) || 0) +
+        (parseInt(item.STRENGTH_SUPERVISORY) || 0),
+      0,
+    ) || 0;
+
+  const totalAttendance =
+    divisionData?.reduce(
+      (sum, item) =>
+        sum +
+        (parseInt(item.ATTENDANCE_EXECUTIVE) || 0) +
+        (parseInt(item.ATTENDANCE_SUPERVISORY) || 0),
+      0,
+    ) || 0;
+
+  const attendanceRate =
+    totalEmployees > 0
+      ? Math.round((totalAttendance / totalEmployees) * 100)
+      : 0;
 
   return (
     <Box
@@ -183,7 +223,7 @@ const Dashboard = () => {
       {activeTab === 0 && (
         <>
           {/* Welcome Section */}
-          <Box
+          {/* <Box
             sx={{
               background: "linear-gradient(135deg, #004AAD 0%, #0066FF 100%)",
               color: "white",
@@ -210,54 +250,47 @@ const Dashboard = () => {
                 fontWeight: 400,
               }}
             >
-              Real-time workforce analytics and port operations overview.
             </Typography>
-          </Box>
+          </Box> */}
 
           {/* KPI Cards Grid */}
           <Box
             sx={{
               display: "grid",
               gridTemplateColumns: {
-                xs: "1fr",
+                xs: "repeat(2, 1fr)",
                 sm: "repeat(2, 1fr)",
                 md: "repeat(2, 1fr)",
                 lg: "repeat(4, 1fr)",
               },
               gap: "16px",
-              marginBottom: "32px",
+              marginBottom: "22px",
             }}
           >
             <KpiCard
-              label="Total Employees"
+              label="Total Strength"
               target={3891}
               icon={Users}
               sparkData={sparklines.total}
               sparkColor="#3b82f6"
-              trend="+12%"
-              trendPositive={true}
               delay={0}
             />
 
             <KpiCard
-              label="Eligible Strength"
-              target={3331}
+              label="Present Today"
+              target={2579}
               icon={UserCheck}
-              sparkData={sparklines.eligible}
+              sparkData={sparklines.attendance}
               sparkColor="#8b5cf6"
-              trend="85% of total"
-              trendPositive={true}
               delay={1}
             />
 
             <KpiCard
-              label="Total Attendance"
-              target={2579}
-              icon={Clock}
-              sparkData={sparklines.attendance}
-              sparkColor="#10b981"
-              trend="77% rate"
-              trendPositive={true}
+              label="Absent"
+              target={752}
+              icon={Users}
+              sparkData={sparklines.eligible}
+              sparkColor="#f43f5e"
               delay={2}
             />
 
@@ -268,24 +301,68 @@ const Dashboard = () => {
               icon={TrendingUp}
               sparkData={sparklines.rate}
               sparkColor="#06b6d4"
-              trend="+2% vs last week"
-              trendPositive={true}
               delay={3}
             />
           </Box>
 
-          {/* Division Attendance Rate Chart */}
-          <Box sx={{ marginTop: "32px" }}>
-            <DivisionBreakdown divisionData={transformedDivisionData} />
+          {/* Weekly trend and Employee Type charts side-by-side */}
+          <Box
+            sx={{
+              marginTop: "32px",
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+              gap: "16px",
+            }}
+          >
+            <WeeklyAttendanceTrend
+              eligibleData={sparklines.eligible}
+              attendanceData={sparklines.attendance}
+              rateData={sparklines.rate}
+            />
+
+            <EmployeeTypeChart employeeTypeData={employeeTypeData} />
           </Box>
 
-          {/* Trainees Overview Charts */}
+          {/* CDPLC Category Attendance Chart */}
           <Box sx={{ marginTop: "32px" }}>
+            <CDPLCBreakdown cdplcData={cdplcData} radialData={radialData} />
+          </Box>
+
+          {/* Division Attendance Rate Chart */}
+          {transformedDivisionData &&
+            transformedDivisionData.length > 0 &&
+            !loading && (
+              <Box sx={{ marginTop: "32px" }}>
+                <DivisionBreakdown divisionData={transformedDivisionData} />
+              </Box>
+            )}
+
+          {loading && (
+            <Box
+              sx={{
+                marginTop: "32px",
+                padding: "40px",
+                textAlign: "center",
+                backgroundColor: "#f5f5f5",
+                borderRadius: "8px",
+              }}
+            >
+              <Typography variant="h6" color="textSecondary">
+                Loading dashboard data...
+              </Typography>
+            </Box>
+          )}
+
+          {/* Trainees Overview Charts */}
+          {/* <Box sx={{ marginTop: "32px" }}>
             <TraineesOverview
               traineeOverall={transformedTraineeOverall}
               traineeByDivision={transformedTraineeByDivision}
             />
-          </Box>
+          </Box> */}
+
+          {/* Quick Access Section */}
+          <QuickAccessSection />
         </>
       )}
 
