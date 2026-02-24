@@ -152,7 +152,7 @@ export function EmployeeTypeChart({ employeeTypeData }) {
             <BarChart
               data={chartData}
               layout="vertical"
-              margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
+              margin={{ top: 5, right:0, left:-10, bottom: 5 }}
               barGap={6}
             >
               <XAxis
@@ -176,7 +176,7 @@ export function EmployeeTypeChart({ employeeTypeData }) {
                   fontSize: 12,
                   fontWeight: 500,
                 }}
-                width={80}
+                width={60}
               />
               <Tooltip content={<AttendanceCustomTooltip />} />
               <ReferenceLine
