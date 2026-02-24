@@ -22,16 +22,25 @@ const getAttendanceColor = (percentage) => {
 export function DivisionBreakdown({ divisionData }) {
   const [selectedCategory, setSelectedCategory] = useState("executive");
 
+  // Validate data exists and is an array
+  if (
+    !divisionData ||
+    !Array.isArray(divisionData) ||
+    divisionData.length === 0
+  ) {
+    return null; // Don't render if no valid data
+  }
+
   // Calculate summary stats based on selected category
   const calculateStats = () => {
     let totalStrength = 0;
     let totalAttendance = 0;
 
     divisionData.forEach((division) => {
-      const categoryData = division.categories[selectedCategory];
+      const categoryData = division?.categories?.[selectedCategory];
       if (categoryData) {
-        totalStrength += categoryData.st;
-        totalAttendance += categoryData.at;
+        totalStrength += Math.max(0, parseInt(categoryData.st) || 0);
+        totalAttendance += Math.max(0, parseInt(categoryData.at) || 0);
       }
     });
 
@@ -48,13 +57,13 @@ export function DivisionBreakdown({ divisionData }) {
   const getTableData = () => {
     return divisionData
       .map((division) => {
-        const categoryData = division.categories[selectedCategory];
+        const categoryData = division?.categories?.[selectedCategory];
         if (!categoryData) return null;
         return {
-          division: division.division,
-          strength: categoryData.st,
-          attendance: categoryData.at,
-          rate: categoryData.percent,
+          division: division?.division || "Unknown",
+          strength: Math.max(0, parseInt(categoryData.st) || 0),
+          attendance: Math.max(0, parseInt(categoryData.at) || 0),
+          rate: Math.max(0, Math.min(100, parseInt(categoryData.percent) || 0)),
         };
       })
       .filter((item) => item !== null);

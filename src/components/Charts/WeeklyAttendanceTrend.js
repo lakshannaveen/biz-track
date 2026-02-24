@@ -65,6 +65,11 @@ export function WeeklyAttendanceTrend({
   rateData = [],
   targetEligible = 1700,
 }) {
+  // Validate that we have data
+  if (!eligibleData?.length || !attendanceData?.length || !rateData?.length) {
+    return null; // Don't render if no data available
+  }
+
   // Build chart data using last 5 points (or available)
   const len = Math.min(
     5,
@@ -75,12 +80,21 @@ export function WeeklyAttendanceTrend({
   const chartData = [];
   for (let i = 0; i < len; i++) {
     const idx = start + i;
-    chartData.push({
+    const point = {
       name: days[i] || `D${i + 1}`,
-      eligible: eligibleData[idx]?.v ?? 0,
-      attendance: attendanceData[idx]?.v ?? 0,
-      rate: rateData[idx]?.v ?? 0,
-    });
+      eligible: Math.max(0, Math.floor(eligibleData[idx]?.v ?? 0)),
+      attendance: Math.max(0, Math.floor(attendanceData[idx]?.v ?? 0)),
+      rate: Math.max(0, Math.min(100, Math.floor(rateData[idx]?.v ?? 0))),
+    };
+    chartData.push(point);
+  }
+
+  // Don't render if chartData is empty or invalid
+  if (
+    chartData.length === 0 ||
+    chartData.every((d) => !d.eligible && !d.attendance)
+  ) {
+    return null;
   }
 
   return (
