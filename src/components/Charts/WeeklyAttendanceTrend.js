@@ -90,7 +90,7 @@ export function WeeklyAttendanceTrend({
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "12px",
-          padding: "20px",
+          padding: "20px ",
           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
           border: "1px solid #e2e8f0",
           height: "100%",
@@ -116,7 +116,7 @@ export function WeeklyAttendanceTrend({
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={chartData}
-              margin={{ top: 20, right: 20, left: 0, bottom: 60 }}
+              margin={{ top: 20, right: -12, left: -12, bottom: 40 }}
               barCategoryGap={20}
             >
               <CartesianGrid
@@ -165,7 +165,7 @@ export function WeeklyAttendanceTrend({
                 dataKey="eligible"
                 name="Eligible"
                 barSize={36}
-                fill="#eef6ff"
+                fill="#06b6d4"
                 radius={[8, 8, 8, 8]}
               />
               <Bar
