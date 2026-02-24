@@ -10,6 +10,7 @@ import { DivisionBreakdown } from "../../components/Charts/DivisionBreakdown";
 import { TraineesOverview } from "../../components/Charts/TraineesOverview";
 import DashboardTabs from "../../components/Charts/DashboardTabs";
 import WeeklyAttendanceTrend from "../../components/Charts/WeeklyAttendanceTrend";
+import QuickAccessSection from "../../components/Cards/QuickAccessSection";
 
 // Simulated sparkline data
 const sparklines = {
@@ -416,7 +417,14 @@ const Dashboard = () => {
           </Box>
 
           {/* Weekly trend and Employee Type charts side-by-side */}
-          <Box sx={{ marginTop: "32px", display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: "16px" }}>
+          <Box
+            sx={{
+              marginTop: "32px",
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+              gap: "16px",
+            }}
+          >
             <WeeklyAttendanceTrend
               eligibleData={sparklines.eligible}
               attendanceData={sparklines.attendance}
@@ -443,6 +451,9 @@ const Dashboard = () => {
               traineeByDivision={traineeByDivision}
             />
           </Box> */}
+
+          {/* Quick Access Section */}
+          <QuickAccessSection />
         </>
       )}
 
