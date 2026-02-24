@@ -21,10 +21,16 @@ export default function Footer() {
     if (!path) return null;
     if (path === "/" || path.startsWith("/home")) return "Home";
     if (path.startsWith("/dashboard")) return "Dashboard";
-    if (path.startsWith("/userProfile") || path.startsWith("/userProfile")) return "Profile";
+    if (path.startsWith("/userProfile") || path.startsWith("/userProfile"))
+      return "Profile";
     if (path.startsWith("/notifications")) return "Notification";
     // common QR/Scan routes
-    if (path.startsWith("/qr") || path.startsWith("/scan") || path.startsWith("/qrcode")) return "QR";
+    if (
+      path.startsWith("/qr") ||
+      path.startsWith("/scan") ||
+      path.startsWith("/qrcode")
+    )
+      return "QR";
     return null;
   };
 
@@ -44,13 +50,13 @@ export default function Footer() {
   const fetchUnseenCount = async () => {
     try {
       const userResponse = await axios.get(
-        `${axios.defaults.baseURL}/login/GetUserByServiceNo`
+        `${axios.defaults.baseURL}/login/GetUserByServiceNo`,
       );
       const userData = userResponse.data.ResultSet[0];
       const mobileNo = userData.MobileNo;
 
       const countResponse = await axios.get(
-        `${axios.defaults.baseURL}Notification/GetUnSeenCount?P_PHONENO=${mobileNo}`
+        `${axios.defaults.baseURL}Notification/GetUnSeenCount?P_PHONENO=${mobileNo}`,
       );
 
       setUnreadCount(parseInt(countResponse.data.ResultSet.Count) || 0);
@@ -91,10 +97,10 @@ export default function Footer() {
       <Paper
         elevation={10}
         sx={{
-          width: '100%',
+          width: "100%",
           // remove curved top corners on mobile, keep rounded on larger screens
-          borderTopLeftRadius: { xs: 0, sm: '20px' },
-          borderTopRightRadius: { xs: 0, sm: '20px' },
+          borderTopLeftRadius: { xs: 0, sm: "20px" },
+          borderTopRightRadius: { xs: 0, sm: "20px" },
           // ensure bottom corners are square on mobile
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
@@ -107,13 +113,19 @@ export default function Footer() {
           showLabels
           sx={{
             background: "transparent",
-            width: '100%',
+            width: "100%",
+            height: "75px",
             "& .MuiBottomNavigationAction-root": {
               color: "white",
-              fontSize: "12px",
+              fontSize: "13px",
+              paddingTop: "12px",
+              paddingBottom: "12px",
             },
             "& .MuiBottomNavigationAction-label": {
-              fontSize: "11px",
+              fontSize: "12px",
+            },
+            "& svg": {
+              fontSize: "28px",
             },
             // make the selected/active item clearly visible on the gradient background
             "& .MuiBottomNavigationAction-root.Mui-selected": {
@@ -121,17 +133,17 @@ export default function Footer() {
               color: "#004AAD",
               fontWeight: 700,
               borderRadius: "8px",
-              padding: "6px 10px",
-              margin: "6px",
+              padding: "8px 12px",
+              margin: "8px",
               boxShadow: "0 2px 6px rgba(0,0,0,0.12)",
               transition: "transform 150ms ease, box-shadow 150ms ease",
               "& .MuiBottomNavigationAction-label": {
-                fontSize: "11px",
+                fontSize: "12px",
                 fontWeight: 700,
                 color: "#004AAD",
               },
               "& svg": {
-                transform: "scale(1.12)",
+                transform: "scale(1.15)",
                 color: "#004AAD",
               },
             },

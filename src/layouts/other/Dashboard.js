@@ -333,7 +333,7 @@ const Dashboard = () => {
       {activeTab === 0 && (
         <>
           {/* Welcome Section */}
-          <Box
+          {/* <Box
             sx={{
               background: "linear-gradient(135deg, #004AAD 0%, #0066FF 100%)",
               color: "white",
@@ -361,7 +361,7 @@ const Dashboard = () => {
               }}
             >
             </Typography>
-          </Box>
+          </Box> */}
 
           {/* KPI Cards Grid */}
           <Box
@@ -374,7 +374,7 @@ const Dashboard = () => {
                 lg: "repeat(4, 1fr)",
               },
               gap: "16px",
-              marginBottom: "32px",
+              marginBottom: "22px",
             }}
           >
             <KpiCard
