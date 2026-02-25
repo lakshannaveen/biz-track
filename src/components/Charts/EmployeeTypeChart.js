@@ -86,7 +86,9 @@ const AttendanceCustomTooltip = ({ active, payload }) => {
 
 export function EmployeeTypeChart({ employeeTypeData = [] }) {
   const dispatch = useDispatch();
-  const traineeTypes = useSelector((state) => state.attendanceCard?.traineeTypes || []);
+  const traineeTypes = useSelector(
+    (state) => state.attendanceCard?.traineeTypes || [],
+  );
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -103,15 +105,33 @@ export function EmployeeTypeChart({ employeeTypeData = [] }) {
     }
   }, [dispatch, employeeTypeData]);
 
-  const sourceData = (employeeTypeData && employeeTypeData.length > 0)
-    ? employeeTypeData
-    : traineeTypes;
+  const sourceData =
+    employeeTypeData && employeeTypeData.length > 0
+      ? employeeTypeData
+      : traineeTypes;
 
   // Normalize various possible API shapes into a consistent structure
   const normalized = sourceData.map((item) => {
-    const type = item.type || item.TYPE || item.category || item.CATEGORY || item.TYPE_NAME || "Unknown";
-    const strength = parseInt(item.strength ?? item.STRENGTH ?? item.count ?? item.COUNT ?? item.COUNTY ?? 0) || 0;
-    const attendance = parseInt(item.attendance ?? item.ATTENDANCE ?? item.ATTEND ?? item.PRESENT ?? 0) || 0;
+    const type =
+      item.type ||
+      item.TYPE ||
+      item.category ||
+      item.CATEGORY ||
+      item.TYPE_NAME ||
+      "Unknown";
+    const strength =
+      parseInt(
+        item.strength ??
+          item.STRENGTH ??
+          item.count ??
+          item.COUNT ??
+          item.COUNTY ??
+          0,
+      ) || 0;
+    const attendance =
+      parseInt(
+        item.attendance ?? item.ATTENDANCE ?? item.ATTEND ?? item.PRESENT ?? 0,
+      ) || 0;
     const percentage = strength > 0 ? (attendance / strength) * 100 : 0;
     return { type, strength, attendance, percentage };
   });
@@ -179,7 +199,7 @@ export function EmployeeTypeChart({ employeeTypeData = [] }) {
             <BarChart
               data={chartData}
               layout="vertical"
-              margin={{ top: 5, right:0, left:-10, bottom: 5 }}
+              margin={{ top: 5, right: 0, left: -20, bottom: 5 }}
               barGap={6}
             >
               <XAxis
@@ -219,17 +239,16 @@ export function EmployeeTypeChart({ employeeTypeData = [] }) {
                 strokeDasharray="3 3"
                 strokeWidth={1.5}
               />
-              <Bar
-                dataKey="percentage"
-                barSize={28}
-                radius={[8, 8, 8, 8]}
-              >
+              <Bar dataKey="percentage" barSize={28} radius={[8, 8, 8, 8]}>
                 {chartData.map((entry, index) => {
                   const pct = entry.percentage || 0;
                   let color = "#ef4444"; // red
-                  if (pct >= 90) color = "#10b981"; // green
-                  else if (pct >= 80) color = "#84cc16"; // lime
-                  else if (pct >= 70) color = "#f59e0b"; // amber
+                  if (pct >= 90)
+                    color = "#10b981"; // green
+                  else if (pct >= 80)
+                    color = "#84cc16"; // lime
+                  else if (pct >= 70)
+                    color = "#f59e0b"; // amber
                   else color = "#ef4444"; // red
                   return <Cell key={`cell-${index}`} fill={color} />;
                 })}
