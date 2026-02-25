@@ -19,8 +19,8 @@ const GetCdlBasedDivison = async (mcvDate, hadDate) => {
   return axios
     .get(`Attendancedashboard/GetCdlBasedDivison`, {
       params: {
-        p_mcv_date: "2021-02-19",
-        p_had_date: "2021-02-19",
+        p_mcv_date: mcvDate,
+        p_had_date: hadDate,
       },
     })
     .then((response) => {
