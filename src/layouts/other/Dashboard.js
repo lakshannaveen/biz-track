@@ -20,6 +20,7 @@ import {
   GetTraineeBasedTypes,
   GetTraineeDivisionAttendance,
   GetAllAttendance,
+  GetCDLWeekAttendance,
 } from "../../action/Attendance";
 
 // Simulated sparkline data
@@ -71,6 +72,7 @@ const Dashboard = () => {
     traineeDivision,
     allAttendance,
     loading,
+    weeklyAttendance,
   } = useSelector((state) => state.attendanceCard);
   const [activeTab, setActiveTab] = useState(0);
 
@@ -84,11 +86,14 @@ const Dashboard = () => {
     //const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
     // Use a 2021 date because backend data exists for 2021 (not 2026)
     const today = "2021-02-19";
+    // Week end date for weekly attendance API (sample)
+    const weekDate = "2021-03-01";
     try {
       dispatch(GetCdlBasedDivison(today, today));
       dispatch(GetTraineeBasedTypes(today));
       dispatch(GetTraineeDivisionAttendance(today, today));
       dispatch(GetAllAttendance(today, today));
+      dispatch(GetCDLWeekAttendance(weekDate));
     } catch (error) {
       console.error("Error dispatching actions:", error);
     }
@@ -314,11 +319,40 @@ const Dashboard = () => {
               gap: "16px",
             }}
           >
-            <WeeklyAttendanceTrend
-              eligibleData={sparklines.eligible}
-              attendanceData={sparklines.attendance}
-              rateData={sparklines.rate}
-            />
+            {/* Weekly attendance: prefer API data, fallback to sample sparklines */}
+            {(() => {
+              const apiWeek = weeklyAttendance || [];
+              const attendanceFromApi = apiWeek.map((item) => ({ v: parseInt(item.VCount) || 0 }));
+              const eligibleForChart = sparklines.eligible.slice(-5).map((it) => ({ v: it.v }));
+
+              if (attendanceFromApi && attendanceFromApi.length) {
+                const len = Math.min(5, Math.max(attendanceFromApi.length, eligibleForChart.length));
+                const attendanceSlice = attendanceFromApi.slice(-len);
+                const eligibleSlice = eligibleForChart.slice(-len);
+                const rateForChart = attendanceSlice.map((a, i) => {
+                  const el = eligibleSlice[i]?.v || 0;
+                  const rate = el ? Math.round((a.v / el) * 100) : 0;
+                  return { v: rate };
+                });
+
+                return (
+                  <WeeklyAttendanceTrend
+                    eligibleData={eligibleSlice}
+                    attendanceData={attendanceSlice}
+                    rateData={rateForChart}
+                  />
+                );
+              }
+
+              // fallback
+              return (
+                <WeeklyAttendanceTrend
+                  eligibleData={sparklines.eligible}
+                  attendanceData={sparklines.attendance}
+                  rateData={sparklines.rate}
+                />
+              );
+            })()}
 
             <EmployeeTypeChart employeeTypeData={employeeTypeData} />
           </Box>

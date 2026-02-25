@@ -65,10 +65,23 @@ const GetAllAttendance = async (mcvDate, hadDate) => {
     });
 };
 
+const GetCDLWeekAttendance = async (hadDate) => {
+  return axios
+    .get(`Attendancedashboard/GetCDLWeekAttendance`, {
+      params: {
+        p_had_date: hadDate,
+      },
+    })
+    .then((response) => {
+      return response;
+    });
+};
+
 export default {
   GetAttendanceCard,
   GetCdlBasedDivison,
   GetTraineeBasedTypes,
   GetTraineeDivisionAttendance,
   GetAllAttendance,
+  GetCDLWeekAttendance,
 };

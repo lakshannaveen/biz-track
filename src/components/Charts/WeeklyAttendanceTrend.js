@@ -119,7 +119,7 @@ export function WeeklyAttendanceTrend({
               marginBottom: "2px",
             }}
           >
-            Weekly Attendance Trend
+            CDL Weekly Attendance Trend
           </Typography>
           <Typography sx={{ fontSize: 11, color: "#64748b" }}>
             Eligible vs attendance with rate overlay

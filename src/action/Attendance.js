@@ -6,6 +6,43 @@ import {
 
 import AttendanceService from "../service/AttendanceService";
 
+export const GetCDLWeekAttendance = (hadDate) => async (dispatch) => {
+  dispatch({
+    type: ATTENDANCE_REQUEST,
+  });
+
+  try {
+    const data = await AttendanceService.GetCDLWeekAttendance(hadDate);
+    if (data.data.StatusCode === 200) {
+      dispatch({
+        type: ATTENDANCE_SUCCESS,
+        payload: {
+          weeklyAttendance: data.data.ResultSet,
+        },
+      });
+    } else {
+      dispatch({
+        type: ATTENDANCE_FAIL,
+        payload: {
+          msg: "Failed to fetch weekly attendance data",
+        },
+      });
+    }
+  } catch (error) {
+    const message =
+      (error.response &&
+        error.response.data &&
+        error.response.data.message) ||
+      error.message ||
+      error.toString();
+    dispatch({
+      type: ATTENDANCE_FAIL,
+      payload: {
+        msg: message,
+      },
+    });
+  }
+};
 export const GetAttendanceCard = (month) => async (dispatch) => {
   dispatch({
     type: ATTENDANCE_REQUEST,
