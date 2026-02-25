@@ -15,6 +15,22 @@ import {
 export function TraineesOverview({ traineeOverall, traineeByDivision }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmall = isMobile;
+  const attendanceChartHeight = isMobile ? 300 : 350;
+
+  const getLeftMargin = () => {
+    return isMobile ? 60 : 100;
+  };
+
+  const getYAxisWidth = () => {
+    return isMobile ? 50 : 80;
+  };
+
+  const truncate = (str, length) => {
+    if (typeof str !== "string") return str;
+    return str.length > length ? str.substring(0, length) + "..." : str;
+  };
+
   const totalTrainees = {
     clerical: 2,
     clerical_att: 0,
@@ -74,11 +90,22 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
         </Box>
 
         {/* Chart */}
-        <Box sx={{ height: { xs: "300px", sm: "320px" }, width: "100%", marginBottom: "24px" }}>
+        <Box
+          sx={{
+            height: { xs: "300px", sm: "320px" },
+            width: "100%",
+            marginBottom: "24px",
+          }}
+        >
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={traineeOverall}
-              margin={{ top: 20, right: { xs: 5, sm: 30 }, left: { xs: 0, sm: 0 }, bottom: 20 }}
+              margin={{
+                top: 20,
+                right: { xs: 5, sm: 30 },
+                left: { xs: 0, sm: 0 },
+                bottom: 20,
+              }}
             >
               <defs>
                 <linearGradient id="colorStrength" x1="0" y1="0" x2="0" y2="1">
@@ -135,8 +162,8 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
                 }}
                 labelStyle={{ color: "#1a2d4d" }}
               />
-              <Legend 
-                wrapperStyle={{ 
+              <Legend
+                wrapperStyle={{
                   fontSize: isSmall ? "10px" : "12px",
                   paddingTop: isSmall ? "10px" : "0",
                 }}
@@ -281,7 +308,13 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
         </Box>
 
         {/* Chart */}
-        <Box sx={{ height: isMobile ? "520px" : "384px", width: "100%", marginBottom: "16px" }}>
+        <Box
+          sx={{
+            height: isMobile ? "520px" : "384px",
+            width: "100%",
+            marginBottom: "16px",
+          }}
+        >
           <ResponsiveContainer width="100%" height="100%">
             {isMobile ? (
               <BarChart
@@ -292,24 +325,52 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
                 barGap={6}
               >
                 <defs>
-                  <linearGradient id="divisonClerical" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="divisonClerical"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.8} />
                     <stop offset="100%" stopColor="#d97706" stopOpacity={0.8} />
                   </linearGradient>
-                  <linearGradient id="divisonClericalAtt" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="divisonClericalAtt"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="0%" stopColor="#fbbf24" stopOpacity={0.8} />
                     <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.8} />
                   </linearGradient>
-                  <linearGradient id="divisionIndustrial" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="divisionIndustrial"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.8} />
                     <stop offset="100%" stopColor="#6d28d9" stopOpacity={0.8} />
                   </linearGradient>
-                  <linearGradient id="divisionIndustrialAtt" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="divisionIndustrialAtt"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="0%" stopColor="#a78bfa" stopOpacity={0.8} />
                     <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.8} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.08)" vertical={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="rgba(0,0,0,0.08)"
+                  vertical={false}
+                />
                 <XAxis
                   type="number"
                   axisLine={false}
@@ -334,34 +395,97 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
                   labelStyle={{ color: "#1a2d4d" }}
                 />
                 <Legend verticalAlign="bottom" align="center" />
-                <Bar dataKey="clerical_attendance" fill="url(#divisonClericalAtt)" name="Clerical (Attended)" radius={[8, 8, 0, 0]} />
-                <Bar dataKey="clerical_strength" fill="url(#divisonClerical)" name="Clerical (Strength)" radius={[8, 8, 0, 0]} />
-                <Bar dataKey="industrial_attendance" fill="url(#divisionIndustrialAtt)" name="Industrial (Attended)" radius={[8, 8, 0, 0]} />
-                <Bar dataKey="industrial_strength" fill="url(#divisionIndustrial)" name="Industrial (Strength)" radius={[8, 8, 0, 0]} />
+                <Bar
+                  dataKey="clerical_attendance"
+                  fill="url(#divisonClericalAtt)"
+                  name="Clerical (Attended)"
+                  radius={[8, 8, 0, 0]}
+                />
+                <Bar
+                  dataKey="clerical_strength"
+                  fill="url(#divisonClerical)"
+                  name="Clerical (Strength)"
+                  radius={[8, 8, 0, 0]}
+                />
+                <Bar
+                  dataKey="industrial_attendance"
+                  fill="url(#divisionIndustrialAtt)"
+                  name="Industrial (Attended)"
+                  radius={[8, 8, 0, 0]}
+                />
+                <Bar
+                  dataKey="industrial_strength"
+                  fill="url(#divisionIndustrial)"
+                  name="Industrial (Strength)"
+                  radius={[8, 8, 0, 0]}
+                />
               </BarChart>
             ) : (
-              <BarChart data={traineeByDivision} margin={{ top: 20, right: 30, left: 0, bottom: 60 }}>
+              <BarChart
+                data={traineeByDivision}
+                margin={{ top: 20, right: 30, left: 0, bottom: 60 }}
+              >
                 <defs>
-                  <linearGradient id="divisonClerical" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="divisonClerical"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="0%" stopColor="#f59e0b" stopOpacity={0.8} />
                     <stop offset="100%" stopColor="#d97706" stopOpacity={0.8} />
                   </linearGradient>
-                  <linearGradient id="divisonClericalAtt" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="divisonClericalAtt"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="0%" stopColor="#fbbf24" stopOpacity={0.8} />
                     <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.8} />
                   </linearGradient>
-                  <linearGradient id="divisionIndustrial" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="divisionIndustrial"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.8} />
                     <stop offset="100%" stopColor="#6d28d9" stopOpacity={0.8} />
                   </linearGradient>
-                  <linearGradient id="divisionIndustrialAtt" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="divisionIndustrialAtt"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="0%" stopColor="#a78bfa" stopOpacity={0.8} />
                     <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.8} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.08)" vertical={false} />
-                <XAxis dataKey="division" axisLine={false} tickLine={false} tick={{ fill: "#94a3b8", fontSize: 11 }} angle={-45} textAnchor="end" height={100} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: "#94a3b8", fontSize: 11 }} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="rgba(0,0,0,0.08)"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="division"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "#94a3b8", fontSize: 11 }}
+                  angle={-45}
+                  textAnchor="end"
+                  height={100}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "#94a3b8", fontSize: 11 }}
+                />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#ffffff",
@@ -372,10 +496,30 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
                   labelStyle={{ color: "#1a2d4d" }}
                 />
                 <Legend />
-                <Bar dataKey="clerical_strength" fill="url(#divisonClerical)" name="Clerical (Strength)" radius={[8, 8, 0, 0]} />
-                <Bar dataKey="clerical_attendance" fill="url(#divisonClericalAtt)" name="Clerical (Attended)" radius={[8, 8, 0, 0]} />
-                <Bar dataKey="industrial_strength" fill="url(#divisionIndustrial)" name="Industrial (Strength)" radius={[8, 8, 0, 0]} />
-                <Bar dataKey="industrial_attendance" fill="url(#divisionIndustrialAtt)" name="Industrial (Attended)" radius={[8, 8, 0, 0]} />
+                <Bar
+                  dataKey="clerical_strength"
+                  fill="url(#divisonClerical)"
+                  name="Clerical (Strength)"
+                  radius={[8, 8, 0, 0]}
+                />
+                <Bar
+                  dataKey="clerical_attendance"
+                  fill="url(#divisonClericalAtt)"
+                  name="Clerical (Attended)"
+                  radius={[8, 8, 0, 0]}
+                />
+                <Bar
+                  dataKey="industrial_strength"
+                  fill="url(#divisionIndustrial)"
+                  name="Industrial (Strength)"
+                  radius={[8, 8, 0, 0]}
+                />
+                <Bar
+                  dataKey="industrial_attendance"
+                  fill="url(#divisionIndustrialAtt)"
+                  name="Industrial (Attended)"
+                  radius={[8, 8, 0, 0]}
+                />
               </BarChart>
             )}
           </ResponsiveContainer>
@@ -431,11 +575,11 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
             <BarChart
               layout="vertical"
               data={traineeByDivision}
-              margin={{ 
-                top: 20, 
-                right: isSmall ? 25 : 30, 
-                left: getLeftMargin(), 
-                bottom: isSmall ? 60 : 20 
+              margin={{
+                top: 20,
+                right: isSmall ? 25 : 30,
+                left: getLeftMargin(),
+                bottom: isSmall ? 60 : 20,
               }}
             >
               <defs>
@@ -470,10 +614,10 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
                 tick={({ x, y, payload }) => {
                   const label = truncate(payload.value, isSmall ? 6 : 24);
                   return (
-                    <text 
-                      x={x - 2} 
-                      y={y + 4} 
-                      fill="#94a3b8" 
+                    <text
+                      x={x - 2}
+                      y={y + 4}
+                      fill="#94a3b8"
                       fontSize={isSmall ? 9 : 11}
                       textAnchor="end"
                     >
@@ -493,8 +637,8 @@ export function TraineesOverview({ traineeOverall, traineeByDivision }) {
                 formatter={(value) => [`${value}%`, "Attendance Rate"]}
                 labelStyle={{ color: "#1a2d4d" }}
               />
-              <Legend 
-                wrapperStyle={{ 
+              <Legend
+                wrapperStyle={{
                   fontSize: isSmall ? "11px" : "12px",
                   paddingTop: "10px",
                 }}
