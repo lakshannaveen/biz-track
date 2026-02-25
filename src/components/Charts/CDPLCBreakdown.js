@@ -11,13 +11,41 @@ import { CDPLCCustomTooltip, CDPLCLegend } from "./ChartUtils";
 export function CDPLCBreakdown({ cdplcData, radialData }) {
   // Hard-coded fallback data for this chart
   const fallbackCdplc = [
-    { name: "CDPLC A", attendance: 380, strength: 500, actualPct: 76, fill: "#0ea5a4" },
-    { name: "CDPLC B", attendance: 190, strength: 250, actualPct: 76, fill: "#6366f1" },
-    { name: "CDPLC C", attendance: 152, strength: 200, actualPct: 76, fill: "#f59e0b" },
-    { name: "CDPLC D", attendance: 95, strength: 125, actualPct: 76, fill: "#10b981" },
+    {
+      name: "CLERICAL",
+      attendance: 51,
+      strength: 54,
+      actualPct: 94,
+      fill: "#06b6d4",
+    },
+    {
+      name: "EXECUTIVE",
+      attendance: 187,
+      strength: 212,
+      actualPct: 88,
+      fill: "#3b82f6",
+    },
+    {
+      name: "SUPERVISORY",
+      attendance: 201,
+      strength: 245,
+      actualPct: 82,
+      fill: "#8b5cf6",
+    },
+    {
+      name: "INDUSTRIAL",
+      attendance: 800,
+      strength: 1109,
+      actualPct: 72,
+      fill: "#10b981",
+    },
   ];
 
-  const fallbackRadial = fallbackCdplc.map((c) => ({ name: c.name, value: c.actualPct, fill: c.fill }));
+  const fallbackRadial = fallbackCdplc.map((c) => ({
+    name: c.name,
+    value: c.actualPct,
+    fill: c.fill,
+  }));
 
   // Use hard-coded fallback data unconditionally for this chart
   const usedCdplc = fallbackCdplc;
@@ -25,7 +53,10 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
 
   // debug: ensure data is present during development
   // eslint-disable-next-line no-console
-  console.log("CDPLCBreakdown: using hardcoded data", { usedCdplc, usedRadial });
+  console.log("CDPLCBreakdown: using hardcoded data", {
+    usedCdplc,
+    usedRadial,
+  });
 
   return (
     <Box
@@ -118,7 +149,11 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
                 }}
                 label={false}
               />
-              <Tooltip content={(props) => <CDPLCCustomTooltip {...props} cdplcData={usedCdplc} />} />
+              <Tooltip
+                content={(props) => (
+                  <CDPLCCustomTooltip {...props} cdplcData={usedCdplc} />
+                )}
+              />
             </RadialBarChart>
           </ResponsiveContainer>
         </Box>
