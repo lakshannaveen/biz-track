@@ -9,6 +9,24 @@ import {
 import { CDPLCCustomTooltip, CDPLCLegend } from "./ChartUtils";
 
 export function CDPLCBreakdown({ cdplcData, radialData }) {
+  // Hard-coded fallback data for this chart
+  const fallbackCdplc = [
+    { name: "CDPLC A", attendance: 380, strength: 500, actualPct: 76, fill: "#0ea5a4" },
+    { name: "CDPLC B", attendance: 190, strength: 250, actualPct: 76, fill: "#6366f1" },
+    { name: "CDPLC C", attendance: 152, strength: 200, actualPct: 76, fill: "#f59e0b" },
+    { name: "CDPLC D", attendance: 95, strength: 125, actualPct: 76, fill: "#10b981" },
+  ];
+
+  const fallbackRadial = fallbackCdplc.map((c) => ({ name: c.name, value: c.actualPct, fill: c.fill }));
+
+  // Use hard-coded fallback data unconditionally for this chart
+  const usedCdplc = fallbackCdplc;
+  const usedRadial = fallbackRadial;
+
+  // debug: ensure data is present during development
+  // eslint-disable-next-line no-console
+  console.log("CDPLCBreakdown: using hardcoded data", { usedCdplc, usedRadial });
+
   return (
     <Box
       sx={{
@@ -88,7 +106,7 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
               cy="50%"
               innerRadius="20%"
               outerRadius="90%"
-              data={radialData}
+              data={usedRadial}
               startAngle={90}
               endAngle={-270}
             >
@@ -100,17 +118,13 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
                 }}
                 label={false}
               />
-              <Tooltip
-                content={(props) => (
-                  <CDPLCCustomTooltip {...props} cdplcData={cdplcData} />
-                )}
-              />
+              <Tooltip content={(props) => <CDPLCCustomTooltip {...props} cdplcData={usedCdplc} />} />
             </RadialBarChart>
           </ResponsiveContainer>
         </Box>
 
         {/* Legend */}
-        <CDPLCLegend cdplcData={cdplcData} />
+        <CDPLCLegend cdplcData={usedCdplc} />
 
         {/* Category Cards */}
         <Box
@@ -124,7 +138,7 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
             gap: "12px",
           }}
         >
-          {cdplcData?.map((cat) => (
+          {usedCdplc?.map((cat) => (
             <Box
               key={cat.name}
               sx={{
