@@ -269,7 +269,7 @@ const Dashboard = () => {
           >
             <KpiCard
               label="Total Strength"
-              target={3891}
+              target={totalEmployees || 0}
               icon={Users}
               sparkData={sparklines.total}
               sparkColor="#3b82f6"
@@ -278,7 +278,7 @@ const Dashboard = () => {
 
             <KpiCard
               label="Present Today"
-              target={2579}
+              target={totalAttendance || 0}
               icon={UserCheck}
               sparkData={sparklines.attendance}
               sparkColor="#8b5cf6"
@@ -287,7 +287,7 @@ const Dashboard = () => {
 
             <KpiCard
               label="Absent"
-              target={752}
+              target={Math.max((totalEmployees || 0) - (totalAttendance || 0), 0)}
               icon={Users}
               sparkData={sparklines.eligible}
               sparkColor="#f43f5e"
@@ -296,7 +296,7 @@ const Dashboard = () => {
 
             <KpiCard
               label="Attendance Rate"
-              target={77}
+              target={attendanceRate}
               suffix="%"
               icon={TrendingUp}
               sparkData={sparklines.rate}
