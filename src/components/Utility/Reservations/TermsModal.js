@@ -972,7 +972,7 @@ const TermsModal = ({ open, handleClose }) => {
 
             <Typography variant="body2" sx={{ mt: 2 }}>
               For unresolved issues, please contact the Holiday Bungalow In-Charge
-              Executive <b>Mr. Kumara</b> on <b>077 967 5550</b>.
+              Executive <b>Mr. Thushara</b> on <b>077 253 3988</b>.
             </Typography>
           </Section>
 

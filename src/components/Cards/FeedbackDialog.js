@@ -197,7 +197,7 @@ const FeedbackDialog = ({
                     lineHeight: 1.6,
                     fontSize: isMobile ? '0.875rem' : '1rem'
                   }}>
-                    {feedback.Feed_EmpComm || t('noGuestFeedback')}
+                   {feedback.Feed_Report || t('noGuestFeedback')}
                   </Typography>
                 </Box>
               </Box>
@@ -211,7 +211,7 @@ const FeedbackDialog = ({
                     color: theme.palette.secondary.main,
                     fontSize: isMobile ? '0.875rem' : '1rem'
                   }}>
-                    {t('caregiverResponse')}
+                   {feedback.Feed_CareTReport || t('caregiverResponse')}
                   </Typography>
                 </Box>
                 <Box sx={{
