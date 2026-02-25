@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { GetTraineeBasedTypes } from "../../action/Attendance";
 import {
@@ -87,6 +87,9 @@ const AttendanceCustomTooltip = ({ active, payload }) => {
 export function EmployeeTypeChart({ employeeTypeData = [] }) {
   const dispatch = useDispatch();
   const traineeTypes = useSelector((state) => state.attendanceCard?.traineeTypes || []);
+
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
   // If no prop data provided, fetch from API via redux action
   useEffect(() => {
@@ -195,12 +198,19 @@ export function EmployeeTypeChart({ employeeTypeData = [] }) {
                 dataKey="type"
                 axisLine={false}
                 tickLine={false}
-                tick={{
-                  fill: "#1a2d4d",
-                  fontSize: 12,
-                  fontWeight: 500,
-                }}
-                width={60}
+                width={isSmall ? 90 : 160}
+                tick={({ x, y, payload }) => (
+                  <text
+                    x={x - 10}
+                    y={y + 4}
+                    fill="#1a2d4d"
+                    fontSize={isSmall ? 11 : 13}
+                    fontWeight={500}
+                    textAnchor="end"
+                  >
+                    {String(payload.value)}
+                  </text>
+                )}
               />
               <Tooltip content={<AttendanceCustomTooltip />} />
               <ReferenceLine
