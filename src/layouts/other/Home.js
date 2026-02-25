@@ -34,6 +34,8 @@ const Home = () => {
           marginLeft: 1,
           marginRight: 1,
           overflow: "auto",
+          // Add bottom padding on desktop so fixed BottomNavigation doesn't overlap content
+          paddingBottom: { md: "100px" },
         }}
       >
         <Box
