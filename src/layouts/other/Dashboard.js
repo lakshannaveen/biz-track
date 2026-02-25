@@ -82,8 +82,8 @@ const Dashboard = () => {
 
     // Fetch data on component mount
     //const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-    // Hard-coded date
-    const today = "2026-02-22";
+    // Use a 2021 date because backend data exists for 2021 (not 2026)
+    const today = "2021-02-19";
     try {
       dispatch(GetCdlBasedDivison(today, today));
       dispatch(GetTraineeBasedTypes(today));

@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { GetTraineeBasedTypes } from "../../action/Attendance";
 import {
   ResponsiveContainer,
   BarChart,
@@ -82,14 +84,36 @@ const AttendanceCustomTooltip = ({ active, payload }) => {
   return null;
 };
 
-export function EmployeeTypeChart({ employeeTypeData }) {
-  // Transform data to include percentage
-  const chartData = employeeTypeData.map((item) => ({
-    type: item.type,
-    percentage: (item.attendance / item.strength) * 100,
-    attendance: item.attendance,
-    strength: item.strength,
-  }));
+export function EmployeeTypeChart({ employeeTypeData = [] }) {
+  const dispatch = useDispatch();
+  const traineeTypes = useSelector((state) => state.attendanceCard?.traineeTypes || []);
+
+  // If no prop data provided, fetch from API via redux action
+  useEffect(() => {
+    if (!employeeTypeData || employeeTypeData.length === 0) {
+      const today = new Date().toISOString().split("T")[0];
+      try {
+        dispatch(GetTraineeBasedTypes(today));
+      } catch (err) {
+        // ignore
+      }
+    }
+  }, [dispatch, employeeTypeData]);
+
+  const sourceData = (employeeTypeData && employeeTypeData.length > 0)
+    ? employeeTypeData
+    : traineeTypes;
+
+  // Normalize various possible API shapes into a consistent structure
+  const normalized = sourceData.map((item) => {
+    const type = item.type || item.TYPE || item.category || item.CATEGORY || item.TYPE_NAME || "Unknown";
+    const strength = parseInt(item.strength ?? item.STRENGTH ?? item.count ?? item.COUNT ?? item.COUNTY ?? 0) || 0;
+    const attendance = parseInt(item.attendance ?? item.ATTENDANCE ?? item.ATTEND ?? item.PRESENT ?? 0) || 0;
+    const percentage = strength > 0 ? (attendance / strength) * 100 : 0;
+    return { type, strength, attendance, percentage };
+  });
+
+  const chartData = normalized;
 
   return (
     <Box
@@ -187,10 +211,19 @@ export function EmployeeTypeChart({ employeeTypeData }) {
               />
               <Bar
                 dataKey="percentage"
-                fill="#ef4444"
                 barSize={28}
                 radius={[8, 8, 8, 8]}
-              />
+              >
+                {chartData.map((entry, index) => {
+                  const pct = entry.percentage || 0;
+                  let color = "#ef4444"; // red
+                  if (pct >= 90) color = "#10b981"; // green
+                  else if (pct >= 80) color = "#84cc16"; // lime
+                  else if (pct >= 70) color = "#f59e0b"; // amber
+                  else color = "#ef4444"; // red
+                  return <Cell key={`cell-${index}`} fill={color} />;
+                })}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </Box>
