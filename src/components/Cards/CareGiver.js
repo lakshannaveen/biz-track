@@ -2526,10 +2526,8 @@ const CaregiverPage = () => {
       return { isValid: true, error: "" };
     }
 
-    const adultsCount =
-      reservation.Res_AdultCount || reservation.Res_AdultCount || 0;
-    const childrenCount =
-      reservation.Res_ChildCount || reservation.Res_ChildCount || 0;
+    const adultsCount = Number(reservation.Res_AdultCount) || 0;
+const childrenCount = Number(reservation.Res_ChildCount) || 0;
     const totalGuests = adultsCount + childrenCount;
 
     // Check individual limits
