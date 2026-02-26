@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import {
   ResponsiveContainer,
@@ -12,22 +12,6 @@ import {
   Legend,
   ReferenceLine,
 } from "recharts";
-
-const dayOrderMap = {
-  Monday: 0,
-  Tuesday: 1,
-  Wednesday: 2,
-  Thursday: 3,
-  Friday: 4,
-};
-
-const dayAbbrMap = {
-  Monday: "Mon",
-  Tuesday: "Tue",
-  Wednesday: "Wed",
-  Thursday: "Thu",
-  Friday: "Fri",
-};
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
@@ -77,48 +61,62 @@ export function WeeklyAttendanceTrend({
   eligibleData = [],
   attendanceData = [],
   rateData = [],
-  dayNames = [],
   targetEligible = 1700,
 }) {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 600);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   // Validate that we have data
   if (!eligibleData?.length || !attendanceData?.length || !rateData?.length) {
     return null; // Don't render if no data available
   }
 
-  // Build chart data
-  let chartData = [];
+  // Build chart data using all available points
+  const len = Math.max(
+    eligibleData.length,
+    attendanceData.length,
+    rateData.length,
+  );
 
-  // If dayNames provided, use them directly; otherwise use index-based fallback
-  if (dayNames && dayNames.length > 0) {
-    for (let i = 0; i < dayNames.length; i++) {
-      const point = {
-        name: dayAbbrMap[dayNames[i]] || dayNames[i],
-        eligible: Math.max(0, Math.floor(eligibleData[i]?.v ?? 0)),
-        attendance: Math.max(0, Math.floor(attendanceData[i]?.v ?? 0)),
-        rate: Math.max(0, Math.min(100, Math.floor(rateData[i]?.v ?? 0))),
-      };
-      chartData.push(point);
-    }
-  } else {
-    // Fallback: use last 5 points with index-based day names
-    const len = Math.min(
-      5,
-      Math.max(eligibleData.length, attendanceData.length, rateData.length),
-    );
-    const start = Math.max(0, eligibleData.length - len);
-    const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+  console.log("WeeklyAttendanceTrend - Data received:", {
+    eligibleLength: eligibleData.length,
+    attendanceLength: attendanceData.length,
+    rateLength: rateData.length,
+    eligibleData,
+    attendanceData,
+    rateData,
+  });
 
-    for (let i = 0; i < len; i++) {
-      const idx = start + i;
-      const point = {
-        name: days[i] || `D${i + 1}`,
-        eligible: Math.max(0, Math.floor(eligibleData[idx]?.v ?? 0)),
-        attendance: Math.max(0, Math.floor(attendanceData[idx]?.v ?? 0)),
-        rate: Math.max(0, Math.min(100, Math.floor(rateData[idx]?.v ?? 0))),
-      };
-      chartData.push(point);
-    }
+  const chartData = [];
+  for (let i = 0; i < len; i++) {
+    const eligibleItem = eligibleData[i];
+    const attendanceItem = attendanceData[i];
+    const rateItem = rateData[i];
+
+    // Use dayName from the first available source
+    const dayName =
+      eligibleItem?.dayName ||
+      attendanceItem?.dayName ||
+      rateItem?.dayName ||
+      `Day ${i + 1}`;
+
+    const point = {
+      name: dayName.substring(0, 3),
+      eligible: Math.max(0, Math.floor(eligibleItem?.v ?? 0)),
+      attendance: Math.max(0, Math.floor(attendanceItem?.v ?? 0)),
+      rate: Math.max(0, Math.min(100, Math.floor(rateItem?.v ?? 0))),
+    };
+    chartData.push(point);
   }
+
+  console.log("Chart data built:", chartData);
 
   // Don't render if chartData is empty or invalid
   if (
@@ -128,6 +126,21 @@ export function WeeklyAttendanceTrend({
     return null;
   }
 
+  // Calculate responsive values
+  const chartMargin = {
+    top: 30,
+    right: isMobile ? -10 : -13,
+    left: isMobile ? -20 : -22,
+    bottom: isMobile ? 10 : 30,
+  };
+
+  const chartHeight = isMobile ? 450 : 650;
+  const barGap = chartData.length > 5 ? 30 : 50;
+  const barSizeEligible = chartData.length > 5 ? 18 : 28;
+  const barSizeAttendance = chartData.length > 5 ? 12 : 18;
+  const yAxisWidth = isMobile ? (chartData.length > 5 ? 50 : 60) : 60;
+  const yAxisRightWidth = isMobile ? (chartData.length > 5 ? 45 : 60) : 60;
+
   return (
     <Box sx={{ animation: `fadeInUp 0.5s ease-out 0.2s forwards`, opacity: 0 }}>
       <Box
@@ -135,7 +148,7 @@ export function WeeklyAttendanceTrend({
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "12px",
-          padding: "20px ",
+          padding: { xs: "16px", sm: "20px" },
           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
           border: "1px solid #e2e8f0",
           height: "100%",
@@ -144,7 +157,7 @@ export function WeeklyAttendanceTrend({
         <Box sx={{ marginBottom: 2 }}>
           <Typography
             sx={{
-              fontSize: 16,
+              fontSize: { xs: 14, sm: 16 },
               fontWeight: 600,
               color: "#1a2d4d",
               marginBottom: "2px",
@@ -152,17 +165,17 @@ export function WeeklyAttendanceTrend({
           >
             CDL Weekly Attendance Trend
           </Typography>
-          <Typography sx={{ fontSize: 11, color: "#64748b" }}>
+          <Typography sx={{ fontSize: { xs: 10, sm: 11 }, color: "#64748b" }}>
             Eligible vs attendance with rate overlay
           </Typography>
         </Box>
 
-        <Box sx={{ height: { xs: 450, md: 550 }, width: "100%" }}>
+        <Box sx={{ height: chartHeight, width: "100%" }}>
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={chartData}
-              margin={{ top: 20, right: -12, left: -12, bottom: 40 }}
-              barCategoryGap={20}
+              margin={chartMargin}
+              barCategoryGap={barGap}
             >
               <CartesianGrid
                 strokeDasharray="3 3"
@@ -173,15 +186,21 @@ export function WeeklyAttendanceTrend({
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#64748b" }}
+                tick={{
+                  fill: "#64748b",
+                  fontSize: chartData.length > 5 ? 10 : 12,
+                }}
+                angle={chartData.length > 5 ? -45 : 0}
+                textAnchor={chartData.length > 5 ? "end" : "middle"}
+                height={chartData.length > 5 ? 60 : 30}
               />
               <YAxis
                 yAxisId="left"
                 orientation="left"
                 tickLine={false}
                 axisLine={false}
-                tick={{ fill: "#64748b" }}
-                width={60}
+                tick={{ fill: "#64748b", fontSize: 10 }}
+                width={yAxisWidth}
                 tickFormatter={fmtK}
               />
               <YAxis
@@ -189,9 +208,10 @@ export function WeeklyAttendanceTrend({
                 orientation="right"
                 tickLine={false}
                 axisLine={false}
-                tick={{ fill: "#64748b" }}
-                domain={[60, 100]}
-                width={60}
+                tick={{ fill: "#64748b", fontSize: 10 }}
+                domain={[0, 100]}
+                ticks={[0, 25, 50, 75, 100]}
+                width={yAxisRightWidth}
                 tickFormatter={(v) => `${v}%`}
               />
               <Tooltip content={<CustomTooltip />} />
@@ -209,7 +229,7 @@ export function WeeklyAttendanceTrend({
                 yAxisId="left"
                 dataKey="eligible"
                 name="Eligible"
-                barSize={36}
+                barSize={barSizeEligible}
                 fill="#06b6d4"
                 radius={[8, 8, 8, 8]}
               />
@@ -217,7 +237,7 @@ export function WeeklyAttendanceTrend({
                 yAxisId="left"
                 dataKey="attendance"
                 name="Attendance"
-                barSize={22}
+                barSize={barSizeAttendance}
                 fill="#3b82f6"
                 radius={[8, 8, 8, 8]}
               />
@@ -237,10 +257,11 @@ export function WeeklyAttendanceTrend({
         <Box
           sx={{
             display: "flex",
-            gap: 2,
+            gap: { xs: 1, sm: 2 },
             alignItems: "center",
             paddingTop: 2,
             borderTop: "1px solid #e5e7eb",
+            flexWrap: "wrap",
           }}
         >
           <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
@@ -252,7 +273,7 @@ export function WeeklyAttendanceTrend({
                 backgroundColor: "#06b6d4",
               }}
             />
-            <Typography sx={{ fontSize: 10, color: "#64748b" }}>
+            <Typography sx={{ fontSize: { xs: 9, sm: 10 }, color: "#64748b" }}>
               Eligible
             </Typography>
           </Box>
@@ -265,7 +286,7 @@ export function WeeklyAttendanceTrend({
                 backgroundColor: "#3b82f6",
               }}
             />
-            <Typography sx={{ fontSize: 10, color: "#64748b" }}>
+            <Typography sx={{ fontSize: { xs: 9, sm: 10 }, color: "#64748b" }}>
               Attendance
             </Typography>
           </Box>
@@ -278,7 +299,7 @@ export function WeeklyAttendanceTrend({
                 backgroundColor: "#f59e0b",
               }}
             />
-            <Typography sx={{ fontSize: 10, color: "#64748b" }}>
+            <Typography sx={{ fontSize: { xs: 9, sm: 10 }, color: "#64748b" }}>
               Rate %
             </Typography>
           </Box>
@@ -293,7 +314,7 @@ export function WeeklyAttendanceTrend({
             <Box
               sx={{ width: 20, height: 0, borderBottom: "2px dashed #ef4444" }}
             />
-            <Typography sx={{ fontSize: 10, color: "#64748b" }}>
+            <Typography sx={{ fontSize: { xs: 9, sm: 10 }, color: "#64748b" }}>
               Target
             </Typography>
           </Box>

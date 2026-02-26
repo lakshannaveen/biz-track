@@ -332,43 +332,23 @@ const Dashboard = () => {
 
               // Transform API response: GetCDLWeekAttendance returns {Attendance, Eligible, DayName, AttDate}
               if (apiWeek && apiWeek.length > 0) {
-                // Filter for Monday-Friday only
-                const weekdayData = apiWeek.filter((item) => {
-                  const day = item.DayName;
-                  return [
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                  ].includes(day);
-                });
-
-                // Sort by weekday order (Mon-Fri)
-                const dayOrder = {
-                  Monday: 0,
-                  Tuesday: 1,
-                  Wednesday: 2,
-                  Thursday: 3,
-                  Friday: 4,
-                };
-                weekdayData.sort(
-                  (a, b) => dayOrder[a.DayName] - dayOrder[b.DayName],
-                );
-
-                const attendanceFromApi = weekdayData.map((item) => ({
+                const attendanceFromApi = apiWeek.map((item) => ({
                   v: parseInt(item.Attendance) || 0,
+                  dayName: item.DayName || "",
                 }));
-                const eligibleFromApi = weekdayData.map((item) => ({
+                const eligibleFromApi = apiWeek.map((item) => ({
                   v: parseInt(item.Eligible) || 0,
+                  dayName: item.DayName || "",
                 }));
-                const dayNamesFromApi = weekdayData.map((item) => item.DayName);
 
                 // Calculate rate based on API data: (Attendance / Eligible) * 100
                 const rateForChart = attendanceFromApi.map((a, i) => {
                   const el = eligibleFromApi[i]?.v || 0;
                   const rate = el ? Math.round((a.v / el) * 100) : 0;
-                  return { v: Math.max(0, Math.min(100, rate)) };
+                  return {
+                    v: Math.max(0, Math.min(100, rate)),
+                    dayName: a.dayName,
+                  };
                 });
 
                 return (
@@ -376,7 +356,6 @@ const Dashboard = () => {
                     eligibleData={eligibleFromApi}
                     attendanceData={attendanceFromApi}
                     rateData={rateForChart}
-                    dayNames={dayNamesFromApi}
                   />
                 );
               }
