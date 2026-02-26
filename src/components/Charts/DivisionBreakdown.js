@@ -250,19 +250,38 @@ export function DivisionBreakdown({ divisionData }) {
         </Box>
 
         {/* Table */}
-        <TableContainer>
+        <TableContainer
+          sx={{
+            maxHeight: "400px",
+            overflowY: "auto",
+            "&::-webkit-scrollbar": {
+              width: "4px",
+              height: "4px",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#f1f5f9",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#cbd5e1",
+              borderRadius: "4px",
+              "&:hover": {
+                backgroundColor: "#94a3b8",
+              },
+            },
+          }}
+        >
           <Table>
             <TableHead>
               <TableRow sx={{ backgroundColor: "#f9fafb" }}>
                 <TableCell
                   sx={{
                     fontWeight: 700,
-                    fontSize: "11px",
+                    fontSize: "10px",
                     color: "#6b7280",
                     textTransform: "uppercase",
                     letterSpacing: "0.5px",
                     borderBottom: "1px solid #e5e7eb",
-                    padding: "12px 0",
+                    padding: "12px 16px",
                   }}
                 >
                   Division
@@ -271,12 +290,12 @@ export function DivisionBreakdown({ divisionData }) {
                   align="center"
                   sx={{
                     fontWeight: 700,
-                    fontSize: "11px",
+                    fontSize: "10px",
                     color: "#6b7280",
                     textTransform: "uppercase",
                     letterSpacing: "0.5px",
                     borderBottom: "1px solid #e5e7eb",
-                    padding: "12px 0",
+                    padding: "12px 16px",
                   }}
                 >
                   Strength
@@ -285,12 +304,12 @@ export function DivisionBreakdown({ divisionData }) {
                   align="center"
                   sx={{
                     fontWeight: 700,
-                    fontSize: "11px",
+                    fontSize: "10px",
                     color: "#6b7280",
                     textTransform: "uppercase",
                     letterSpacing: "0.5px",
                     borderBottom: "1px solid #e5e7eb",
-                    padding: "12px 0",
+                    padding: "12px 16px",
                   }}
                 >
                   Attendance
@@ -299,12 +318,12 @@ export function DivisionBreakdown({ divisionData }) {
                   align="center"
                   sx={{
                     fontWeight: 700,
-                    fontSize: "11px",
+                    fontSize: "10px",
                     color: "#6b7280",
                     textTransform: "uppercase",
                     letterSpacing: "0.5px",
                     borderBottom: "1px solid #e5e7eb",
-                    padding: "12px 0",
+                    padding: "12px 16px",
                   }}
                 >
                   Rate
@@ -326,10 +345,10 @@ export function DivisionBreakdown({ divisionData }) {
                   <TableCell
                     sx={{
                       fontWeight: 600,
-                      fontSize: "13px",
+                      fontSize: "11px",
                       color: row.division === "DPR" ? "#ef4444" : "#1a2d4d",
                       borderBottom: "1px solid #e5e7eb",
-                      padding: "16px 0",
+                      padding: "16px",
                       display: "flex",
                       alignItems: "center",
                       gap: "8px",
@@ -341,10 +360,10 @@ export function DivisionBreakdown({ divisionData }) {
                     align="center"
                     sx={{
                       fontWeight: 500,
-                      fontSize: "13px",
+                      fontSize: "11px",
                       color: "#4b5563",
                       borderBottom: "1px solid #e5e7eb",
-                      padding: "16px 0",
+                      padding: "16px",
                     }}
                   >
                     {row.strength}
@@ -353,10 +372,10 @@ export function DivisionBreakdown({ divisionData }) {
                     align="center"
                     sx={{
                       fontWeight: 500,
-                      fontSize: "13px",
+                      fontSize: "11px",
                       color: "#4b5563",
                       borderBottom: "1px solid #e5e7eb",
-                      padding: "16px 0",
+                      padding: "16px",
                     }}
                   >
                     {row.attendance}
@@ -365,10 +384,10 @@ export function DivisionBreakdown({ divisionData }) {
                     align="center"
                     sx={{
                       fontWeight: 700,
-                      fontSize: "13px",
+                      fontSize: "11px",
                       color: getAttendanceColor(row.rate),
                       borderBottom: "1px solid #e5e7eb",
-                      padding: "16px 0",
+                      padding: "16px",
                     }}
                   >
                     {row.rate}%
