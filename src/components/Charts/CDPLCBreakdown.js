@@ -1,62 +1,193 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import {
   ResponsiveContainer,
   RadialBarChart,
   RadialBar,
   Tooltip,
+  PolarAngleAxis,
 } from "recharts";
+import { useDispatch, useSelector } from "react-redux";
+import { GetCDLCategoryAtt } from "../../action/Attendance";
 import { CDPLCCustomTooltip, CDPLCLegend } from "./ChartUtils";
 
-export function CDPLCBreakdown({ cdplcData, radialData }) {
-  // Hard-coded fallback data for this chart
-  const fallbackCdplc = [
-    {
-      name: "CLERICAL",
-      attendance: 51,
-      strength: 54,
-      actualPct: 94,
-      fill: "#06b6d4",
-    },
-    {
-      name: "EXECUTIVE",
-      attendance: 187,
-      strength: 212,
-      actualPct: 88,
-      fill: "#3b82f6",
-    },
-    {
-      name: "SUPERVISORY",
-      attendance: 201,
-      strength: 245,
-      actualPct: 82,
-      fill: "#8b5cf6",
-    },
-    {
-      name: "INDUSTRIAL",
-      attendance: 800,
-      strength: 1109,
-      actualPct: 72,
-      fill: "#10b981",
-    },
-  ];
+const colorMap = {
+  CLERICAL: "#06b6d4",
+  EXECUTIVE: "#3b82f6",
+  SUPERVISORY: "#8b5cf6",
+  INDUSTRIAL: "#10b981",
+};
 
-  const fallbackRadial = fallbackCdplc.map((c) => ({
+export function CDPLCBreakdown({
+  cdplcData: propCdplcData,
+  radialData: propRadialData,
+  hadDate,
+}) {
+  const dispatch = useDispatch();
+  const {
+    cdplcData: reduxCdplcData,
+    loading,
+    msg,
+  } = useSelector((state) => state.attendanceCard);
+
+  // Use Redux data, fallback to props
+  const apiData =
+    reduxCdplcData && reduxCdplcData.length > 0
+      ? reduxCdplcData
+      : propCdplcData;
+
+  useEffect(() => {
+    // Fetch data with provided date or today's date by default
+    const dateToFetch = hadDate || new Date().toISOString().split("T")[0];
+    console.log("CDPLCBreakdown: Fetching data for date:", dateToFetch);
+    dispatch(GetCDLCategoryAtt(dateToFetch));
+  }, [dispatch, hadDate]);
+
+  // Transform API data to component format
+  const transformedCdplc = apiData
+    ? apiData
+        .filter((item) => item.Type && item.Type.toUpperCase() !== "TOTAL")
+        .map((item) => {
+          const typeName = item.Type.toUpperCase();
+          return {
+            name: typeName,
+            attendance: item.Attendance,
+            strength: item.EligibleStrength,
+            actualPct: item.ActualPercentage,
+            eligiblePct: item.EligiblePercentage,
+            fill: colorMap[typeName] || "#64748b",
+          };
+        })
+    : [];
+
+  // Get overall percentage from TOTAL entry
+  const totalItem = apiData?.find(
+    (item) => item.Type && item.Type.toUpperCase() === "TOTAL",
+  );
+  const overallPercentage = totalItem ? totalItem.ActualPercentage : "N/A";
+
+  const radialData = transformedCdplc.map((c) => ({
     name: c.name,
     value: c.actualPct,
     fill: c.fill,
   }));
 
-  // Use hard-coded fallback data unconditionally for this chart
-  const usedCdplc = fallbackCdplc;
-  const usedRadial = fallbackRadial;
-
   // debug: ensure data is present during development
   // eslint-disable-next-line no-console
-  console.log("CDPLCBreakdown: using hardcoded data", {
-    usedCdplc,
-    usedRadial,
+  console.log("CDPLCBreakdown: loaded data", {
+    apiData,
+    transformedCdplc,
+    radialData,
+    overallPercentage,
+    loading,
+    msg,
+    reduxCdplcData,
   });
+
+  // Show loading state
+  if (loading && !apiData) {
+    return (
+      <Box
+        sx={{
+          animation: `fadeInUp 0.5s ease-out 0.2s forwards`,
+          opacity: 0,
+          "@keyframes fadeInUp": {
+            "0%": { opacity: 0, transform: "translateY(24px)" },
+            "100%": { opacity: 1, transform: "translateY(0)" },
+          },
+        }}
+      >
+        <Box
+          sx={{
+            overflow: "hidden",
+            backgroundColor: "#ffffff",
+            borderRadius: "12px",
+            padding: "24px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+            border: "1px solid #e2e8f0",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "400px",
+          }}
+        >
+          <Typography sx={{ color: "#64748b" }}>
+            Loading chart data...
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
+
+  // Show error state
+  if (msg && !apiData) {
+    return (
+      <Box
+        sx={{
+          animation: `fadeInUp 0.5s ease-out 0.2s forwards`,
+          opacity: 0,
+          "@keyframes fadeInUp": {
+            "0%": { opacity: 0, transform: "translateY(24px)" },
+            "100%": { opacity: 1, transform: "translateY(0)" },
+          },
+        }}
+      >
+        <Box
+          sx={{
+            overflow: "hidden",
+            backgroundColor: "#ffffff",
+            borderRadius: "12px",
+            padding: "24px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+            border: "1px solid #e2e8f0",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "400px",
+          }}
+        >
+          <Typography sx={{ color: "#ef4444" }}>
+            Error loading chart data: {msg}
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
+
+  // Show empty state
+  if (!apiData || (transformedCdplc && transformedCdplc.length === 0)) {
+    return (
+      <Box
+        sx={{
+          animation: `fadeInUp 0.5s ease-out 0.2s forwards`,
+          opacity: 0,
+          "@keyframes fadeInUp": {
+            "0%": { opacity: 0, transform: "translateY(24px)" },
+            "100%": { opacity: 1, transform: "translateY(0)" },
+          },
+        }}
+      >
+        <Box
+          sx={{
+            overflow: "hidden",
+            backgroundColor: "#ffffff",
+            borderRadius: "12px",
+            padding: "24px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
+            border: "1px solid #e2e8f0",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "400px",
+          }}
+        >
+          <Typography sx={{ color: "#64748b" }}>
+            No data available for the selected date
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -105,7 +236,7 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
                 marginTop: "4px",
               }}
             >
-              Actual attendance % by category
+              Actual attendance %
             </Typography>
           </Box>
           <Box sx={{ textAlign: "right" }}>
@@ -116,7 +247,7 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
                 color: "#1a2d4d",
               }}
             >
-              76%
+              {overallPercentage}%
             </Typography>
             <Typography
               sx={{
@@ -137,10 +268,11 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
               cy="50%"
               innerRadius="20%"
               outerRadius="90%"
-              data={usedRadial}
+              data={radialData}
               startAngle={90}
               endAngle={-270}
             >
+              <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
               <RadialBar
                 dataKey="value"
                 cornerRadius={6}
@@ -151,7 +283,7 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
               />
               <Tooltip
                 content={(props) => (
-                  <CDPLCCustomTooltip {...props} cdplcData={usedCdplc} />
+                  <CDPLCCustomTooltip {...props} cdplcData={transformedCdplc} />
                 )}
               />
             </RadialBarChart>
@@ -159,7 +291,20 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
         </Box>
 
         {/* Legend */}
-        <CDPLCLegend cdplcData={usedCdplc} />
+        <CDPLCLegend cdplcData={transformedCdplc} />
+
+        {/* Total Heading */}
+        <Typography
+          sx={{
+            fontSize: "16px",
+            fontWeight: 600,
+            color: "#1a2d4d",
+            marginTop: "24px",
+            marginBottom: "12px",
+          }}
+        >
+          Total
+        </Typography>
 
         {/* Category Cards */}
         <Box
@@ -173,63 +318,135 @@ export function CDPLCBreakdown({ cdplcData, radialData }) {
             gap: "12px",
           }}
         >
-          {usedCdplc?.map((cat) => (
-            <Box
-              key={cat.name}
+          {/* Card 1: Actual Strength */}
+          <Box
+            sx={{
+              backgroundColor: "#f8fafc",
+              borderRadius: "8px",
+              padding: "12px",
+              border: "1px solid #e2e8f0",
+            }}
+          >
+            <Typography
               sx={{
-                backgroundColor: "#f8fafc",
-                borderRadius: "8px",
-                padding: "12px",
-                border: "1px solid #e2e8f0",
+                fontSize: "10px",
+                color: "#64748b",
+                fontWeight: 600,
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                marginBottom: "8px",
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  marginBottom: "8px",
-                }}
-              >
-                <Box
-                  sx={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    backgroundColor: cat.fill,
-                  }}
-                />
-                <Typography
-                  sx={{
-                    fontSize: "10px",
-                    color: "#64748b",
-                    fontWeight: 600,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px",
-                  }}
-                >
-                  {cat.name}
-                </Typography>
-              </Box>
-              <Typography
-                sx={{
-                  fontSize: "20px",
-                  fontWeight: 700,
-                  color: cat.fill,
-                }}
-              >
-                {cat.actualPct}%
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: "10px",
-                  color: "#94a3b8",
-                }}
-              >
-                {cat.attendance}/{cat.strength}
-              </Typography>
-            </Box>
-          ))}
+              Actual Strength
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "#3b82f6",
+              }}
+            >
+              {totalItem?.ActualStrength || "N/A"}
+            </Typography>
+          </Box>
+
+          {/* Card 2: Attendance */}
+          <Box
+            sx={{
+              backgroundColor: "#f8fafc",
+              borderRadius: "8px",
+              padding: "12px",
+              border: "1px solid #e2e8f0",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "10px",
+                color: "#64748b",
+                fontWeight: 600,
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                marginBottom: "8px",
+              }}
+            >
+              Attendance
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "#10b981",
+              }}
+            >
+              {totalItem?.Attendance || "N/A"}
+            </Typography>
+          </Box>
+
+          {/* Card 3: Eligible Strength */}
+          <Box
+            sx={{
+              backgroundColor: "#f8fafc",
+              borderRadius: "8px",
+              padding: "12px",
+              border: "1px solid #e2e8f0",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "10px",
+                color: "#64748b",
+                fontWeight: 600,
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                marginBottom: "8px",
+              }}
+            >
+              Eligible Strength
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "#8b5cf6",
+              }}
+            >
+              {totalItem?.EligibleStrength || "N/A"}
+            </Typography>
+          </Box>
+
+          {/* Card 4: Eligible Percentage */}
+          <Box
+            sx={{
+              backgroundColor: "#f8fafc",
+              borderRadius: "8px",
+              padding: "12px",
+              border: "1px solid #e2e8f0",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "10px",
+                color: "#64748b",
+                fontWeight: 600,
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                marginBottom: "8px",
+              }}
+            >
+              Eligible Percentage
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "#f59e0b",
+              }}
+            >
+              {totalItem?.EligiblePercentage
+                ? `${Math.round(totalItem.EligiblePercentage * 100) / 100}%`
+                : "N/A"}
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>

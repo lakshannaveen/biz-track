@@ -375,7 +375,7 @@ const Dashboard = () => {
 
           {/* CDPLC Category Attendance Chart */}
           <Box sx={{ marginTop: "32px" }}>
-            <CDPLCBreakdown cdplcData={cdplcData} radialData={radialData} />
+            <CDPLCBreakdown hadDate="2021-02-19" />
           </Box>
 
           {/* Division Attendance Rate Chart */}

@@ -12,6 +12,7 @@ const initialState = {
   traineeTypes: [],
   traineeDivision: [],
   allAttendance: [],
+  cdplcData: [],
   error: null,
   msg: null,
   loading: false,
@@ -19,7 +20,7 @@ const initialState = {
 
 export const GetAttendanceCard = (state = initialState, action) => {
   switch (action.type) {
-    case ATTENDANCE_REQUEST:  
+    case ATTENDANCE_REQUEST:
       return {
         ...state,
         loading: true,
@@ -31,10 +32,13 @@ export const GetAttendanceCard = (state = initialState, action) => {
         loading: false,
         responseBody: action.payload.responseBody || state.responseBody,
         divisionData: action.payload.divisionData || state.divisionData,
-        weeklyAttendance: action.payload.weeklyAttendance || state.weeklyAttendance,
+        weeklyAttendance:
+          action.payload.weeklyAttendance || state.weeklyAttendance,
         traineeTypes: action.payload.traineeTypes || state.traineeTypes,
-        traineeDivision: action.payload.traineeDivision || state.traineeDivision,
+        traineeDivision:
+          action.payload.traineeDivision || state.traineeDivision,
         allAttendance: action.payload.allAttendance || state.allAttendance,
+        cdplcData: action.payload.cdplcData || state.cdplcData,
         msg: null,
       };
     case ATTENDANCE_FAIL:

@@ -30,9 +30,43 @@ export const GetCDLWeekAttendance = (hadDate) => async (dispatch) => {
     }
   } catch (error) {
     const message =
-      (error.response &&
-        error.response.data &&
-        error.response.data.message) ||
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    dispatch({
+      type: ATTENDANCE_FAIL,
+      payload: {
+        msg: message,
+      },
+    });
+  }
+};
+
+export const GetCDLCategoryAtt = (hadDate) => async (dispatch) => {
+  dispatch({
+    type: ATTENDANCE_REQUEST,
+  });
+
+  try {
+    const data = await AttendanceService.GetCDLCategoryAtt(hadDate);
+    if (data.data.StatusCode === 200) {
+      dispatch({
+        type: ATTENDANCE_SUCCESS,
+        payload: {
+          cdplcData: data.data.ResultSet,
+        },
+      });
+    } else {
+      dispatch({
+        type: ATTENDANCE_FAIL,
+        payload: {
+          msg: "Failed to fetch CDPLC category attendance data",
+        },
+      });
+    }
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString();
     dispatch({
@@ -47,7 +81,6 @@ export const GetAttendanceCard = (month) => async (dispatch) => {
   dispatch({
     type: ATTENDANCE_REQUEST,
   });
-
 
   try {
     const data = await AttendanceService.GetAttendanceCard(month);
@@ -68,9 +101,7 @@ export const GetAttendanceCard = (month) => async (dispatch) => {
     }
   } catch (error) {
     const message =
-      (error.response &&
-        error.response.data &&
-        error.response.data.message) ||
+      (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString();
     dispatch({
@@ -106,9 +137,7 @@ export const GetCdlBasedDivison = (mcvDate, hadDate) => async (dispatch) => {
     }
   } catch (error) {
     const message =
-      (error.response &&
-        error.response.data &&
-        error.response.data.message) ||
+      (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString();
     dispatch({
@@ -144,9 +173,7 @@ export const GetTraineeBasedTypes = (hadDate) => async (dispatch) => {
     }
   } catch (error) {
     const message =
-      (error.response &&
-        error.response.data &&
-        error.response.data.message) ||
+      (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString();
     dispatch({
@@ -158,43 +185,47 @@ export const GetTraineeBasedTypes = (hadDate) => async (dispatch) => {
   }
 };
 
-export const GetTraineeDivisionAttendance = (mcvDate, hadDate) => async (dispatch) => {
-  dispatch({
-    type: ATTENDANCE_REQUEST,
-  });
+export const GetTraineeDivisionAttendance =
+  (mcvDate, hadDate) => async (dispatch) => {
+    dispatch({
+      type: ATTENDANCE_REQUEST,
+    });
 
-  try {
-    const data = await AttendanceService.GetTraineeDivisionAttendance(mcvDate, hadDate);
-    if (data.data.StatusCode === 200) {
-      dispatch({
-        type: ATTENDANCE_SUCCESS,
-        payload: {
-          traineeDivision: data.data.ResultSet,
-        },
-      });
-    } else {
+    try {
+      const data = await AttendanceService.GetTraineeDivisionAttendance(
+        mcvDate,
+        hadDate,
+      );
+      if (data.data.StatusCode === 200) {
+        dispatch({
+          type: ATTENDANCE_SUCCESS,
+          payload: {
+            traineeDivision: data.data.ResultSet,
+          },
+        });
+      } else {
+        dispatch({
+          type: ATTENDANCE_FAIL,
+          payload: {
+            msg: "Failed to fetch trainee division data",
+          },
+        });
+      }
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
       dispatch({
         type: ATTENDANCE_FAIL,
         payload: {
-          msg: "Failed to fetch trainee division data",
+          msg: message,
         },
       });
     }
-  } catch (error) {
-    const message =
-      (error.response &&
-        error.response.data &&
-        error.response.data.message) ||
-      error.message ||
-      error.toString();
-    dispatch({
-      type: ATTENDANCE_FAIL,
-      payload: {
-        msg: message,
-      },
-    });
-  }
-};
+  };
 
 export const GetAllAttendance = (mcvDate, hadDate) => async (dispatch) => {
   dispatch({
@@ -220,9 +251,7 @@ export const GetAllAttendance = (mcvDate, hadDate) => async (dispatch) => {
     }
   } catch (error) {
     const message =
-      (error.response &&
-        error.response.data &&
-        error.response.data.message) ||
+      (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString();
     dispatch({
