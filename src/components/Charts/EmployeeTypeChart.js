@@ -15,6 +15,14 @@ import {
 
 const AttendanceCustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    const percentage = Number(data?.percentage || 0);
+
+    // Show tooltip only for low-attendance (red) bars
+    if (percentage >= 70) {
+      return null;
+    }
+
     return (
       <Box
         sx={{
@@ -33,7 +41,7 @@ const AttendanceCustomTooltip = ({ active, payload }) => {
             fontSize: "12px",
           }}
         >
-          {payload[0].payload.type}
+          {data.type}
         </Typography>
         <Box
           sx={{
@@ -42,6 +50,49 @@ const AttendanceCustomTooltip = ({ active, payload }) => {
             gap: "8px",
             fontSize: "11px",
             marginBottom: "4px",
+          }}
+        >
+          <Typography sx={{ color: "#64748b", fontSize: "11px" }}>
+            Percentage:
+          </Typography>
+          <Typography
+            sx={{
+              color: "#1a2d4d",
+              fontWeight: 600,
+              fontSize: "11px",
+            }}
+          >
+            {percentage.toFixed(2)}%
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            fontSize: "11px",
+            marginBottom: "4px",
+          }}
+        >
+          <Typography sx={{ color: "#64748b", fontSize: "11px" }}>
+            Strength:
+          </Typography>
+          <Typography
+            sx={{
+              color: "#1a2d4d",
+              fontWeight: 600,
+              fontSize: "11px",
+            }}
+          >
+            {data.strength}
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            fontSize: "11px",
           }}
         >
           <Typography sx={{ color: "#64748b", fontSize: "11px" }}>
@@ -54,28 +105,7 @@ const AttendanceCustomTooltip = ({ active, payload }) => {
               fontSize: "11px",
             }}
           >
-            {payload[0].payload.percentage.toFixed(2)}%
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            fontSize: "11px",
-          }}
-        >
-          <Typography sx={{ color: "#64748b", fontSize: "11px" }}>
-            Present:
-          </Typography>
-          <Typography
-            sx={{
-              color: "#1a2d4d",
-              fontWeight: 600,
-              fontSize: "11px",
-            }}
-          >
-            {payload[0].payload.attendance} / {payload[0].payload.strength}
+            {data.attendance}
           </Typography>
         </Box>
       </Box>
@@ -232,7 +262,7 @@ export function EmployeeTypeChart({ employeeTypeData = [] }) {
                   </text>
                 )}
               />
-              <Tooltip content={<AttendanceCustomTooltip />} />
+              <Tooltip trigger="click" content={<AttendanceCustomTooltip />} />
               <ReferenceLine
                 x={100}
                 stroke="#ef4444"

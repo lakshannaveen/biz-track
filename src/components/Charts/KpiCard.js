@@ -78,7 +78,7 @@ export function KpiCard({
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "12px",
-          padding: "20px",
+          padding: "16px 20px 12px",
           color: "#1a2d4d",
           border: "1px solid #e5e7eb",
           boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
@@ -88,7 +88,7 @@ export function KpiCard({
           },
           display: "flex",
           flexDirection: "column",
-          minHeight: "120px",
+          minHeight: "102px",
         }}
       >
         {/* Content Container */}

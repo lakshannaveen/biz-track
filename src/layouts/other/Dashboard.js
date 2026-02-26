@@ -272,8 +272,8 @@ const Dashboard = () => {
                 md: "repeat(2, 1fr)",
                 lg: "repeat(4, 1fr)",
               },
-              gap: "16px",
-              marginBottom: "22px",
+              gap: "12px",
+              marginBottom: "12px",
             }}
           >
             <KpiCard
