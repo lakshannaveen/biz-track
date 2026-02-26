@@ -13,7 +13,21 @@ import {
   ReferenceLine,
 } from "recharts";
 
-const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+const dayOrderMap = {
+  Monday: 0,
+  Tuesday: 1,
+  Wednesday: 2,
+  Thursday: 3,
+  Friday: 4,
+};
+
+const dayAbbrMap = {
+  Monday: "Mon",
+  Tuesday: "Tue",
+  Wednesday: "Wed",
+  Thursday: "Thu",
+  Friday: "Fri",
+};
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
@@ -63,6 +77,7 @@ export function WeeklyAttendanceTrend({
   eligibleData = [],
   attendanceData = [],
   rateData = [],
+  dayNames = [],
   targetEligible = 1700,
 }) {
   // Validate that we have data
@@ -70,23 +85,39 @@ export function WeeklyAttendanceTrend({
     return null; // Don't render if no data available
   }
 
-  // Build chart data using last 5 points (or available)
-  const len = Math.min(
-    5,
-    Math.max(eligibleData.length, attendanceData.length, rateData.length),
-  );
-  const start = Math.max(0, eligibleData.length - len);
+  // Build chart data
+  let chartData = [];
 
-  const chartData = [];
-  for (let i = 0; i < len; i++) {
-    const idx = start + i;
-    const point = {
-      name: days[i] || `D${i + 1}`,
-      eligible: Math.max(0, Math.floor(eligibleData[idx]?.v ?? 0)),
-      attendance: Math.max(0, Math.floor(attendanceData[idx]?.v ?? 0)),
-      rate: Math.max(0, Math.min(100, Math.floor(rateData[idx]?.v ?? 0))),
-    };
-    chartData.push(point);
+  // If dayNames provided, use them directly; otherwise use index-based fallback
+  if (dayNames && dayNames.length > 0) {
+    for (let i = 0; i < dayNames.length; i++) {
+      const point = {
+        name: dayAbbrMap[dayNames[i]] || dayNames[i],
+        eligible: Math.max(0, Math.floor(eligibleData[i]?.v ?? 0)),
+        attendance: Math.max(0, Math.floor(attendanceData[i]?.v ?? 0)),
+        rate: Math.max(0, Math.min(100, Math.floor(rateData[i]?.v ?? 0))),
+      };
+      chartData.push(point);
+    }
+  } else {
+    // Fallback: use last 5 points with index-based day names
+    const len = Math.min(
+      5,
+      Math.max(eligibleData.length, attendanceData.length, rateData.length),
+    );
+    const start = Math.max(0, eligibleData.length - len);
+    const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+
+    for (let i = 0; i < len; i++) {
+      const idx = start + i;
+      const point = {
+        name: days[i] || `D${i + 1}`,
+        eligible: Math.max(0, Math.floor(eligibleData[idx]?.v ?? 0)),
+        attendance: Math.max(0, Math.floor(attendanceData[idx]?.v ?? 0)),
+        rate: Math.max(0, Math.min(100, Math.floor(rateData[idx]?.v ?? 0))),
+      };
+      chartData.push(point);
+    }
   }
 
   // Don't render if chartData is empty or invalid

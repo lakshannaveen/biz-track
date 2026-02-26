@@ -130,6 +130,10 @@ const Dashboard = () => {
   console.log("Trainee Types:", traineeTypes);
   console.log("Trainee Division:", traineeDivision);
   console.log("All Attendance:", allAttendance);
+  console.log(
+    "Weekly Attendance (from GetCDLWeekAttendance):",
+    weeklyAttendance,
+  );
 
   // Transform trainee types data
   const transformedTraineeOverall =
@@ -292,7 +296,10 @@ const Dashboard = () => {
 
             <KpiCard
               label="Absent"
-              target={Math.max((totalEmployees || 0) - (totalAttendance || 0), 0)}
+              target={Math.max(
+                (totalEmployees || 0) - (totalAttendance || 0),
+                0,
+              )}
               icon={Users}
               sparkData={sparklines.eligible}
               sparkColor="#f43f5e"
@@ -322,29 +329,59 @@ const Dashboard = () => {
             {/* Weekly attendance: prefer API data, fallback to sample sparklines */}
             {(() => {
               const apiWeek = weeklyAttendance || [];
-              const attendanceFromApi = apiWeek.map((item) => ({ v: parseInt(item.VCount) || 0 }));
-              const eligibleForChart = sparklines.eligible.slice(-5).map((it) => ({ v: it.v }));
 
-              if (attendanceFromApi && attendanceFromApi.length) {
-                const len = Math.min(5, Math.max(attendanceFromApi.length, eligibleForChart.length));
-                const attendanceSlice = attendanceFromApi.slice(-len);
-                const eligibleSlice = eligibleForChart.slice(-len);
-                const rateForChart = attendanceSlice.map((a, i) => {
-                  const el = eligibleSlice[i]?.v || 0;
+              // Transform API response: GetCDLWeekAttendance returns {Attendance, Eligible, DayName, AttDate}
+              if (apiWeek && apiWeek.length > 0) {
+                // Filter for Monday-Friday only
+                const weekdayData = apiWeek.filter((item) => {
+                  const day = item.DayName;
+                  return [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                  ].includes(day);
+                });
+
+                // Sort by weekday order (Mon-Fri)
+                const dayOrder = {
+                  Monday: 0,
+                  Tuesday: 1,
+                  Wednesday: 2,
+                  Thursday: 3,
+                  Friday: 4,
+                };
+                weekdayData.sort(
+                  (a, b) => dayOrder[a.DayName] - dayOrder[b.DayName],
+                );
+
+                const attendanceFromApi = weekdayData.map((item) => ({
+                  v: parseInt(item.Attendance) || 0,
+                }));
+                const eligibleFromApi = weekdayData.map((item) => ({
+                  v: parseInt(item.Eligible) || 0,
+                }));
+                const dayNamesFromApi = weekdayData.map((item) => item.DayName);
+
+                // Calculate rate based on API data: (Attendance / Eligible) * 100
+                const rateForChart = attendanceFromApi.map((a, i) => {
+                  const el = eligibleFromApi[i]?.v || 0;
                   const rate = el ? Math.round((a.v / el) * 100) : 0;
-                  return { v: rate };
+                  return { v: Math.max(0, Math.min(100, rate)) };
                 });
 
                 return (
                   <WeeklyAttendanceTrend
-                    eligibleData={eligibleSlice}
-                    attendanceData={attendanceSlice}
+                    eligibleData={eligibleFromApi}
+                    attendanceData={attendanceFromApi}
                     rateData={rateForChart}
+                    dayNames={dayNamesFromApi}
                   />
                 );
               }
 
-              // fallback
+              // fallback to sample data if no API data
               return (
                 <WeeklyAttendanceTrend
                   eligibleData={sparklines.eligible}
