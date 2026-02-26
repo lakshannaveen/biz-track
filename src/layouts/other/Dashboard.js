@@ -191,7 +191,7 @@ const Dashboard = () => {
     { label: "Absent", value: 35 },
   ];
 
-  // Calculate KPI values from data
+  // Calculate fallback KPI values from division data
   const totalEmployees =
     divisionData?.reduce(
       (sum, item) =>
@@ -214,6 +214,27 @@ const Dashboard = () => {
     totalEmployees > 0
       ? Math.round((totalAttendance / totalEmployees) * 100)
       : 0;
+
+  // Primary KPI source: GetAllAttendance API (Employee Type: TOTAL)
+  const totalAttendanceItem = (allAttendance || []).find((item) => {
+    const typeValue =
+      item?.Type || item?.TYPE || item?.EmployeeType || item?.employeeType;
+    return typeof typeValue === "string" && typeValue.toUpperCase() === "TOTAL";
+  });
+
+  const kpiActualStrength =
+    parseInt(totalAttendanceItem?.ActualStrength) || totalEmployees || 0;
+  const kpiAttendance =
+    parseInt(totalAttendanceItem?.Attendance) || totalAttendance || 0;
+  const kpiEligiblePercentageRaw = parseFloat(totalAttendanceItem?.EligiblePercentage);
+  const kpiActualPercentageRaw = parseFloat(totalAttendanceItem?.ActualPercentage);
+
+  const kpiEligiblePercentage = Number.isFinite(kpiEligiblePercentageRaw)
+    ? Math.round(kpiEligiblePercentageRaw * 100) / 100
+    : attendanceRate;
+  const kpiActualPercentage = Number.isFinite(kpiActualPercentageRaw)
+    ? Math.round(kpiActualPercentageRaw * 100) / 100
+    : attendanceRate;
 
   return (
     <Box
@@ -277,8 +298,8 @@ const Dashboard = () => {
             }}
           >
             <KpiCard
-              label="Total Strength"
-              target={totalEmployees || 0}
+              label="Actual Strength"
+              target={kpiActualStrength}
               icon={Users}
               sparkData={sparklines.total}
               sparkColor="#3b82f6"
@@ -286,8 +307,8 @@ const Dashboard = () => {
             />
 
             <KpiCard
-              label="Present Today"
-              target={totalAttendance || 0}
+              label="Attendance"
+              target={kpiAttendance}
               icon={UserCheck}
               sparkData={sparklines.attendance}
               sparkColor="#8b5cf6"
@@ -295,20 +316,18 @@ const Dashboard = () => {
             />
 
             <KpiCard
-              label="Absent"
-              target={Math.max(
-                (totalEmployees || 0) - (totalAttendance || 0),
-                0,
-              )}
-              icon={Users}
-              sparkData={sparklines.eligible}
+              label="Eligible Percentage"
+              target={kpiEligiblePercentage}
+              suffix="%"
+              icon={Clock}
+              sparkData={sparklines.rate}
               sparkColor="#f43f5e"
               delay={2}
             />
 
             <KpiCard
-              label="Attendance Rate"
-              target={attendanceRate}
+              label="Actual Percentage "
+              target={kpiActualPercentage}
               suffix="%"
               icon={TrendingUp}
               sparkData={sparklines.rate}
