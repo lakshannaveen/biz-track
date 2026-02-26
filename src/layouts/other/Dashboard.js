@@ -307,7 +307,7 @@ const Dashboard = () => {
             />
 
             <KpiCard
-              label="Attendance"
+              label="Total Attendance"
               target={kpiAttendance}
               icon={UserCheck}
               sparkData={sparklines.attendance}

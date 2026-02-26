@@ -2820,30 +2820,11 @@ export default function HeaderComponent() {
           display: "flex",
           alignItems: "center",
           gap: 8,
-          marginBottom: 16,
+          marginBottom: 5,
           paddingTop: 4,
         }}
       >
-        <div
-          style={{
-            width: 3,
-            height: 18,
-            borderRadius: 2,
-            background: "linear-gradient(180deg, #6366F1, #818CF8)",
-          }}
-        />
-        <span
-          style={{
-            fontSize: 13,
-            fontWeight: 700,
-            color: "#9CA3AF",
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            fontFamily: "'DM Sans', sans-serif",
-          }}
-        >
-          Services
-        </span>
+         
       </div>
       {/* News Ticker */}
       <NewsTicker ads={ads} />
