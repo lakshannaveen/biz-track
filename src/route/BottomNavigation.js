@@ -19,8 +19,8 @@ export default function Footer() {
 
   const getActiveValue = (path) => {
     if (!path) return null;
-    if (path === "/" || path.startsWith("/home")) return "Home";
-    if (path.startsWith("/dashboard")) return "Dashboard";
+    if (path === "/" || path.startsWith("/dashboard")) return "Dashboard";
+    if (path.startsWith("/home")) return "Home";
     if (path.startsWith("/userProfile") || path.startsWith("/userProfile"))
       return "Profile";
     if (path.startsWith("/notifications")) return "Notification";
