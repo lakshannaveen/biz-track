@@ -12,6 +12,7 @@ import DashboardTabs from "../../components/Charts/DashboardTabs";
 import WeeklyAttendanceTrend from "../../components/Charts/WeeklyAttendanceTrend";
 import { EmployeeTypeChart } from "../../components/Charts/EmployeeTypeChart";
 import { CDPLCBreakdown } from "../../components/Charts/CDPLCBreakdown";
+import StrengthAttendanceChart from "../../components/Charts/StrengthAttendanceChart";
 import QuickAccessSection from "../../components/Cards/QuickAccessSection";
  
 import {
@@ -247,6 +248,7 @@ const Dashboard = () => {
       {/* HR Dashboard */}
       {activeTab === 0 && (
         <>
+          {/* (Chart moved below KPI cards) */}
           {/* Welcome Section */}
           {/* <Box
             sx={{
@@ -331,6 +333,9 @@ const Dashboard = () => {
               delay={3}
             />
           </Box>
+
+          {/* Strength vs Attendance chart (placed after KPI cards) */}
+          <StrengthAttendanceChart series={transformedTraineeOverall} />
 
           {/* Weekly trend and Employee Type charts side-by-side */}
           <Box
