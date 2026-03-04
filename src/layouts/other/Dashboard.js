@@ -4,7 +4,7 @@ import { Users, UserCheck, Clock, TrendingUp } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
- 
+// Import chart components
 import { KpiCard } from "../../components/Charts/KpiCard";
 import { DivisionBreakdown } from "../../components/Charts/DivisionBreakdown";
 import { TraineesOverview } from "../../components/Charts/TraineesOverview";
@@ -12,9 +12,9 @@ import DashboardTabs from "../../components/Charts/DashboardTabs";
 import WeeklyAttendanceTrend from "../../components/Charts/WeeklyAttendanceTrend";
 import { EmployeeTypeChart } from "../../components/Charts/EmployeeTypeChart";
 import { CDPLCBreakdown } from "../../components/Charts/CDPLCBreakdown";
-import StrengthAttendanceChart from "../../components/Charts/StrengthAttendanceChart";
 import QuickAccessSection from "../../components/Cards/QuickAccessSection";
- 
+
+// Import actions
 import {
   GetCdlBasedDivison,
   GetTraineeBasedTypes,
@@ -22,8 +22,9 @@ import {
   GetAllAttendance,
   GetCDLWeekAttendance,
 } from "../../action/Attendance";
+import { EmployeeStrengthAttendanceChart } from "../../components/Charts/EmployeeStrengthAttendanceChart";
 
- 
+// Simulated sparkline data
 const sparklines = {
   total: [
     { v: 3720 },
@@ -63,7 +64,7 @@ const sparklines = {
   ],
 };
 
- 
+// Main Dashboard Component
 const Dashboard = () => {
   const dispatch = useDispatch();
   const {
@@ -81,9 +82,13 @@ const Dashboard = () => {
     if (metaThemeColor) {
       metaThemeColor.setAttribute("content", "#004AAD");
     }
- 
-    const today = "2021-01-19"; 
-    const weekDate = "2021-01-19";
+
+    // Fetch data on component mount
+    //const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    // Use a 2021 date because backend data exists for 2021 (not 2026)
+    const today = "2021-02-19";
+    // Week end date for weekly attendance API (sample)
+    const weekDate = "2021-03-01";
     try {
       dispatch(GetCdlBasedDivison(today, today));
       dispatch(GetTraineeBasedTypes(today));
@@ -95,7 +100,7 @@ const Dashboard = () => {
     }
   }, [dispatch]);
 
- 
+  // Transform division data for charts
   const transformedDivisionData =
     divisionData?.map((item) => ({
       division: item.V_DIVNAME || item.HLD_DIV_CODE || "Unknown",
@@ -114,7 +119,7 @@ const Dashboard = () => {
         clerical: item.STRENGTH_CLERICAL
           ? {
               st: parseInt(item.STRENGTH_CLERICAL) || 0,
-              at: 0,  
+              at: 0, // Assuming no attendance data for clerical in this API
               percent: 0,
             }
           : null,
@@ -131,16 +136,16 @@ const Dashboard = () => {
     weeklyAttendance,
   );
 
- 
+  // Transform trainee types data
   const transformedTraineeOverall =
     traineeTypes?.map((item) => ({
       category: item.TYPE || "Unknown",
       strength: parseInt(item.STRENGTH) || 0,
-      attendance: parseInt(item.ATTENDANCE) || 0, 
+      attendance: parseInt(item.ATTENDANCE) || 0,
       percent: parseFloat(item.PERCENTAGE) || 0,
     })) || [];
 
-  
+  // Transform trainee division data
   const transformedTraineeByDivision =
     traineeDivision
       ?.map((item) => ({
@@ -155,7 +160,7 @@ const Dashboard = () => {
         total_attendance:
           (parseInt(item.ATTENDANCE_CLERICAL) || 0) +
           (parseInt(item.ATTENDANCE_INDUSTRIAL) || 0),
-        total_percent: 0,  
+        total_percent: 0, // Will calculate below
       }))
       .map((item) => ({
         ...item,
@@ -165,17 +170,17 @@ const Dashboard = () => {
             : 0,
       })) || [];
 
-   
+  // For now, using empty array for traineeByDivision since the API response wasn't provided
   const traineeByDivision = [];
 
-  
+  // Sample data for employee type chart
   const employeeTypeData = traineeTypes || [
     { category: "Executive", count: 150 },
     { category: "Supervisory", count: 250 },
     { category: "Clerical", count: 100 },
   ];
 
- 
+  // Sample data for CDPLC breakdown
   const cdplcData = [
     { name: "CDPLC A", value: 300 },
     { name: "CDPLC B", value: 250 },
@@ -187,7 +192,7 @@ const Dashboard = () => {
     { label: "Absent", value: 35 },
   ];
 
- 
+  // Calculate fallback KPI values from division data
   const totalEmployees =
     divisionData?.reduce(
       (sum, item) =>
@@ -211,7 +216,7 @@ const Dashboard = () => {
       ? Math.round((totalAttendance / totalEmployees) * 100)
       : 0;
 
-   
+  // Primary KPI source: GetAllAttendance API (Employee Type: TOTAL)
   const totalAttendanceItem = (allAttendance || []).find((item) => {
     const typeValue =
       item?.Type || item?.TYPE || item?.EmployeeType || item?.employeeType;
@@ -222,8 +227,12 @@ const Dashboard = () => {
     parseInt(totalAttendanceItem?.ActualStrength) || totalEmployees || 0;
   const kpiAttendance =
     parseInt(totalAttendanceItem?.Attendance) || totalAttendance || 0;
-  const kpiEligiblePercentageRaw = parseFloat(totalAttendanceItem?.EligiblePercentage);
-  const kpiActualPercentageRaw = parseFloat(totalAttendanceItem?.ActualPercentage);
+  const kpiEligiblePercentageRaw = parseFloat(
+    totalAttendanceItem?.EligiblePercentage,
+  );
+  const kpiActualPercentageRaw = parseFloat(
+    totalAttendanceItem?.ActualPercentage,
+  );
 
   const kpiEligiblePercentage = Number.isFinite(kpiEligiblePercentageRaw)
     ? Math.round(kpiEligiblePercentageRaw * 100) / 100
@@ -248,7 +257,6 @@ const Dashboard = () => {
       {/* HR Dashboard */}
       {activeTab === 0 && (
         <>
-          {/* (Chart moved below KPI cards) */}
           {/* Welcome Section */}
           {/* <Box
             sx={{
@@ -294,7 +302,14 @@ const Dashboard = () => {
               marginBottom: "12px",
             }}
           >
-            
+            <KpiCard
+              label="Actual Strength"
+              target={kpiActualStrength}
+              icon={Users}
+              sparkData={sparklines.total}
+              sparkColor="#3b82f6"
+              delay={0}
+            />
 
             <KpiCard
               label="Total Attendance"
@@ -303,14 +318,6 @@ const Dashboard = () => {
               sparkData={sparklines.attendance}
               sparkColor="#8b5cf6"
               delay={1}
-            />
-            <KpiCard
-              label=" Actual Strength"
-              target={kpiActualStrength}
-              icon={Users}
-              sparkData={sparklines.total}
-              sparkColor="#3b82f6"
-              delay={0}
             />
 
             <KpiCard
@@ -334,8 +341,10 @@ const Dashboard = () => {
             />
           </Box>
 
-          {/* Strength vs Attendance chart (placed after KPI cards) */}
-          <StrengthAttendanceChart series={transformedTraineeOverall} />
+          {/* Employee Strength vs Attendance Chart */}
+          <Box sx={{ marginTop: "20px" }}>
+            <EmployeeStrengthAttendanceChart allAttendance={allAttendance} />
+          </Box>
 
           {/* Weekly trend and Employee Type charts side-by-side */}
           <Box
@@ -395,7 +404,7 @@ const Dashboard = () => {
 
           {/* CDPLC Category Attendance Chart */}
           <Box sx={{ marginTop: "32px" }}>
-            <CDPLCBreakdown hadDate="2021-01-19" />
+            <CDPLCBreakdown hadDate="2021-02-19" />
           </Box>
 
           {/* Division Attendance Rate Chart */}
