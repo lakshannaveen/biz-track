@@ -86,22 +86,22 @@ export default function Footer() {
 
   return (
     <Box
-      sx={{
-        position: "fixed",
+      sx={{ 
         bottom: 0,
         left: 0,
         right: 0,
         zIndex: 1000,
+        width: "100%", 
       }}
     >
       <Paper
         elevation={10}
         sx={{
           width: "100%",
-          // remove curved top corners on mobile, keep rounded on larger screens
-          borderTopLeftRadius: { xs: 0, sm: "20px" },
-          borderTopRightRadius: { xs: 0, sm: "20px" },
-          // ensure bottom corners are square on mobile
+          // 🌟 Me line eka change karala - top corners round karala
+          borderTopLeftRadius: "20px",
+          borderTopRightRadius: "20px",
+          // bottom corners square (optional - mobile view ekata)
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
           background: "linear-gradient(135deg, #5B52B3 0%, #004AAD 100%)",
