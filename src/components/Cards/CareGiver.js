@@ -2527,7 +2527,7 @@ const CaregiverPage = () => {
     }
 
     const adultsCount = Number(reservation.Res_AdultCount) || 0;
-const childrenCount = Number(reservation.Res_ChildCount) || 0;
+    const childrenCount = Number(reservation.Res_ChildCount) || 0;
     const totalGuests = adultsCount + childrenCount;
 
     // Check individual limits
@@ -3086,6 +3086,7 @@ const childrenCount = Number(reservation.Res_ChildCount) || 0;
                 gap: isMobile ? 2 : 0,
               }}
             >
+              {/* Left Side - Title and Avatar */}
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Avatar
                   sx={{
@@ -3095,236 +3096,227 @@ const childrenCount = Number(reservation.Res_ChildCount) || 0;
                     height: isMobile ? 40 : 48,
                   }}
                 >
-                  <CleaningServicesIcon
-                    fontSize={isMobile ? "medium" : "large"}
-                  />
+                  <CleaningServicesIcon fontSize={isMobile ? "medium" : "large"} />
                 </Avatar>
-                {/* <Box>
-                  <Typography
-                    variant={isMobile ? "h6" : "h5"}
-                    component="h1"
-                    fontWeight="bold"
-                  >
-                    Bungalow Caretaker Portal
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Manage bungalow check-in and checkout operations
-                  </Typography>
-                </Box> */}
 
                 <Box>
                   <Typography
                     variant={isMobile ? "h6" : "h5"}
                     component="h1"
                     fontWeight="bold"
+                    sx={{ display: "flex", alignItems: "center", gap: 1 }}
                   >
                     {t("pageTitle")}
+
+                    {/* Back Button - Inside Title (Mobile) */}
+                    {isMobile && (
+                      <IconButton
+                        onClick={() => navigate(-1)}
+                        size="small"
+                        sx={{
+                          ml: 1,
+                          bgcolor: "primary.main",
+                          color: "white",
+                          "&:hover": {
+                            bgcolor: "primary.dark",
+                          },
+                        }}
+                      >
+                        <ArrowBackIcon fontSize="small" />
+                      </IconButton>
+                    )}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {t("pageSubtitle")}
                   </Typography>
                 </Box>
               </Box>
+            </Box>
 
+            {/* Second Row - Search and Main Actions */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: isMobile ? "column" : "row",
+                gap: 2,
+                mb: 2,
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              {/* Search Bar - Left Side */}
+              <TextField
+                size="small"
+                placeholder={t("search")}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <SearchIcon sx={{ color: "action.active", mr: 1, fontSize: 20 }} />
+                  ),
+                }}
+                sx={{
+                  minWidth: isMobile ? "100%" : 300,
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 3,
+                  },
+                }}
+              />
+
+              {/* Action Buttons - Right Side */}
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
                   gap: 1,
-                  width: "100%",
+                  flexWrap: "wrap",
+                  width: isMobile ? "100%" : "auto",
+                  justifyContent: isMobile ? "space-between" : "flex-end",
                 }}
               >
-                <Box
+
+
+                {/* Language Selector Chip */}
+                <Chip
+                  icon={
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                      {/* Country Flag based on language */}
+
+                      <PublicIcon sx={{ fontSize: 16, color: "white" }} />
+                    </Box>
+                  }
+                  label={
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: 600,
+                          letterSpacing: "0.5px",
+                          fontSize: language === "ta" ? "0.75rem" : "0.875rem",
+                        }}
+                      >
+                        {language === "en" ? "EN" :
+                          language === "si" ? "සිං" :
+                            language === "ta" ? "த" :
+                              "हि"}
+                      </Typography>
+                    </Box>
+                  }
+                  onClick={() => {
+                    const nextLang =
+                      language === "en"
+                        ? "si"
+                        : language === "si"
+                          ? "ta"
+                          : language === "ta"
+                            ? "hi"
+                            : "en";
+                    setLanguage(nextLang);
+                  }}
                   sx={{
+                    height: "44px",
+                    minWidth: "90px",
+                    background: (theme) => {
+                      const colors = {
+                        en: "linear-gradient(135deg, #2196f3 0%, #1976d2 100%)",  
+                        si: "linear-gradient(135deg, #4caf50 0%, #388e3c 100%)",  
+                        ta: "linear-gradient(135deg, #ff9800 0%, #f57c00 100%)",  
+                        hi: "linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%)",  
+                      };
+                      return colors[language] || colors.en;
+                    },
+                    color: "white",
+                    cursor: "pointer",
+                    borderRadius: "30px",
+                    border: "2px solid rgba(255, 255, 255, 0.8)",
+                    boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                     display: "flex",
-                    gap: 1,
-                    flexWrap: "nowrap",
-                    overflowX: "auto",
+                    alignItems: "center",
+                    padding: "0 8px",
+
+                    "& .MuiChip-icon": {
+                      marginLeft: "4px",
+                      marginRight: "4px",
+                      color: "white",
+                    },
+
+                    "& .MuiChip-label": {
+                      paddingLeft: "4px",
+                      paddingRight: "8px",
+                    },
+
+                     
+                    "&:hover": {
+                      transform: "translateY(-2px) scale(1.02)",
+                      boxShadow: "0 8px 25px rgba(0,0,0,0.3)",
+                      border: "2px solid white",
+                      background: (theme) => {
+                        const colors = {
+                          en: "linear-gradient(135deg, #1976d2 0%, #0d47a1 100%)",
+                          si: "linear-gradient(135deg, #388e3c 0%, #1b5e20 100%)",
+                          ta: "linear-gradient(135deg, #f57c00 0%, #e65100 100%)",
+                          hi: "linear-gradient(135deg, #7b1fa2 0%, #4a0072 100%)",
+                        };
+                        return colors[language] || colors.en;
+                      },
+                    },
+
+                     
+                    "&:active": {
+                      transform: "translateY(0) scale(0.98)",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                    },
+
+                     
+                    "& .MuiTouchRipple-root": {
+                      color: "rgba(255, 255, 255, 0.3)",
+                    },
+
+                     
+                    "&:focus-visible": {
+                      outline: "none",
+                      boxShadow: "0 0 0 3px rgba(255,255,255,0.5), 0 4px 15px rgba(0,0,0,0.2)",
+                    },
                   }}
-                >
-                  {/* <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={handleRefresh}
-                  startIcon={<RefreshIcon />}
-                  disabled={loading}
-                  sx={{
-                    textTransform: "none",
-                    height: "40px"
-                  }}
-                  size={isMobile ? "small" : "medium"}
-                >
-                  Refresh
-                </Button>
+                />
+
+                {/* View Toggle */}
                 <Button
                   variant="outlined"
                   color="primary"
                   onClick={toggleViewMode}
-                  startIcon={viewMode === 'list' ? <VisibilityIcon /> : <InventoryIcon />}
+                  startIcon={viewMode === "list" ? <VisibilityIcon /> : <InventoryIcon />}
+                  size={isMobile ? "small" : "medium"}
                   sx={{
                     textTransform: "none",
-                    height: "40px"
+                    borderRadius: "20px",
+                    minWidth: isMobile ? "auto" : "100px",
+                    flex: isMobile ? 1 : "0 1 auto",
                   }}
-                  size={isMobile ? "small" : "medium"}
                 >
-                  {viewMode === 'list' ? 'Card View' : 'List View'}
+                  {viewMode === "list" ? t("cardView") : t("listView")}
                 </Button>
+
+                {/* History/Current Toggle */}
                 <Button
-                  variant="contained"
+                  variant={showHistory ? "contained" : "outlined"}
                   color="primary"
-                  onClick={() => navigate(-1)}
-                  startIcon={<ArrowBackIcon />}
+                  onClick={() => setShowHistory(!showHistory)}
+                  startIcon={<Assignment />}
+                  size={isMobile ? "small" : "medium"}
                   sx={{
                     textTransform: "none",
-                    height: "40px"
+                    borderRadius: "20px",
+                    minWidth: isMobile ? "auto" : "100px",
+                    flex: isMobile ? 1 : "0 1 auto",
                   }}
-                  size={isMobile ? "small" : "medium"}
                 >
-                  Back
-                </Button> */}
-
-                  {/* <Button
-  variant="outlined"
-  color="primary"
-  onClick={handleRefresh}
-  startIcon={<RefreshIcon />}
-  disabled={loading}
-  sx={{ textTransform: "none", height: "40px" }}
-  size={isMobile ? "small" : "medium"}
->
-  {t('refresh')}
-</Button> */}
-
-                  {/* <Button
-  variant="outlined"
-  color="primary"
-  onClick={handleRefresh}
-  startIcon={<RefreshIcon />}
-  disabled={loading}
-  sx={{ textTransform: "none", height: "40px" }}
-  size={isMobile ? "small" : "medium"}
->
-  {t('refresh')}
-</Button> */}
-                  <Chip
-                    icon={<PublicIcon sx={{ color: "white", fontSize: 15 }} />}
-                    label={
-                      language === "en"
-                        ? "EN"
-                        : language === "si"
-                          ? "SI"
-                          : language === "ta"
-                            ? "TA"
-                            : "HI"
-                    }
-                    onClick={() => {
-                      const nextLang =
-                        language === "en"
-                          ? "si"
-                          : language === "si"
-                            ? "ta"
-                            : language === "ta"
-                              ? "hi"
-                              : "en";
-                      setLanguage(nextLang);
-                    }}
-                    sx={{
-                      color: "white",
-                      bgcolor: "rgba(38, 187, 100, 0.99)",
-                      cursor: "pointer",
-                      height: "44px",
-                      display: "flex",
-                      alignItems: "center",
-                      fontSize: language === "ta" ? "0.75rem" : "0.875rem",
-                      "&:hover": {
-                        bgcolor: "rgba(33, 199, 42, 0.99)",
-                      },
-                    }}
-                  />
-
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={toggleViewMode}
-                    startIcon={
-                      viewMode === "list" ? (
-                        <VisibilityIcon />
-                      ) : (
-                        <InventoryIcon />
-                      )
-                    }
-                    sx={{
-                      textTransform: "none",
-                      height: "44px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: language === "ta" ? "0.75rem" : "0.875rem",
-                    }}
-                  >
-                    {viewMode === "list" ? t("cardView") : t("listView")}
-                  </Button>
-
-                  <Button
-                    variant={showHistory ? "contained" : "outlined"}
-                    color="primary"
-                    onClick={() => setShowHistory(!showHistory)}
-                    startIcon={<Assignment />}
-                    sx={{
-                      textTransform: "none",
-                      height: "44px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: language === "ta" ? "0.75rem" : "0.875rem",
-                    }}
-                  >
-                    {showHistory ? t("current") : t("history")}
-                  </Button>
-
-                  {language !== "ta" && (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => navigate(-1)}
-                      startIcon={<ArrowBackIcon />}
-                      sx={{
-                        textTransform: "none",
-                        height: "44px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "0.875rem",
-                      }}
-                    >
-                      {t("back")}
-                    </Button>
-                  )}
-                </Box>
-
-                {language === "ta" && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate(-1)}
-                    startIcon={<ArrowBackIcon />}
-                    sx={{
-                      textTransform: "none",
-                      height: "44px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "0.70rem",
-                      width: "fit-content",
-                    }}
-                  >
-                    {t("back")}
-                  </Button>
-                )}
+                  {showHistory ? t("current") : t("history")}
+                </Button>
               </Box>
             </Box>
 
-            <Divider sx={{ mb: 3 }} />
+            {/* <Divider sx={{ mb: 3 }} /> */}
 
             {/* Tabs */}
             <Box
@@ -3460,8 +3452,8 @@ const childrenCount = Number(reservation.Res_ChildCount) || 0;
                 sx={{
                   boxShadow: "none",
                   maxHeight: isMobile
-                    ? "calc(100vh - 400px)"
-                    : "calc(100vh - 350px)",
+                    ? "calc(100vh - 260px)"
+                    : "calc(100vh - 220px)",
                   overflow: "auto",
                   borderRadius: 2,
                   border: `1px solid ${theme.palette.divider}`,
@@ -3947,7 +3939,7 @@ const childrenCount = Number(reservation.Res_ChildCount) || 0;
                             sx={{ textTransform: "none", borderRadius: 2 }}
                           >
                             {reservation.Res_CheckStatus === "Check In" ||
-                            reservation.Res_CheckStatus === "I"
+                              reservation.Res_CheckStatus === "I"
                               ? t("checkOut")
                               : t("checkIn")}
                           </Button>
@@ -4313,52 +4305,52 @@ const childrenCount = Number(reservation.Res_ChildCount) || 0;
                         {(!selectedReservation.Res_CheckStatus ||
                           selectedReservation.Res_CheckStatus.trim() === "" ||
                           selectedReservation.Res_CheckStatus.trim() ===
-                            "Pending" ||
+                          "Pending" ||
                           selectedReservation.Res_CheckStatus.trim() ===
-                            "Confirm" ||
+                          "Confirm" ||
                           selectedReservation.Res_CheckStatus.trim() ===
-                            "B") && (
-                          <Button
-                            variant={
-                              caregiverStatus === "I" ? "contained" : "outlined"
-                            }
-                            color="success"
-                            onClick={() => setCaregiverStatus("I")}
-                            fullWidth
-                            size={isMobile ? "medium" : "large"}
-                            startIcon={<CheckCircleIcon />}
-                            sx={{
-                              borderRadius: 1,
-                              py: isMobile ? 1 : 1.5,
-                              textTransform: "none",
-                            }}
-                          >
-                            {t("checkInGuest")}
-                          </Button>
-                        )}
+                          "B") && (
+                            <Button
+                              variant={
+                                caregiverStatus === "I" ? "contained" : "outlined"
+                              }
+                              color="success"
+                              onClick={() => setCaregiverStatus("I")}
+                              fullWidth
+                              size={isMobile ? "medium" : "large"}
+                              startIcon={<CheckCircleIcon />}
+                              sx={{
+                                borderRadius: 1,
+                                py: isMobile ? 1 : 1.5,
+                                textTransform: "none",
+                              }}
+                            >
+                              {t("checkInGuest")}
+                            </Button>
+                          )}
 
                         {(selectedReservation.Res_CheckStatus.trim() ===
                           "Check In" ||
                           selectedReservation.Res_CheckStatus.trim() ===
-                            "I") && (
-                          <Button
-                            variant={
-                              caregiverStatus === "O" ? "contained" : "outlined"
-                            }
-                            color="primary"
-                            onClick={() => setCaregiverStatus("O")}
-                            fullWidth
-                            size={isMobile ? "medium" : "large"}
-                            startIcon={<DoneIcon />}
-                            sx={{
-                              borderRadius: 1,
-                              py: isMobile ? 1 : 1.5,
-                              textTransform: "none",
-                            }}
-                          >
-                            {t("checkOutGuest")}
-                          </Button>
-                        )}
+                          "I") && (
+                            <Button
+                              variant={
+                                caregiverStatus === "O" ? "contained" : "outlined"
+                              }
+                              color="primary"
+                              onClick={() => setCaregiverStatus("O")}
+                              fullWidth
+                              size={isMobile ? "medium" : "large"}
+                              startIcon={<DoneIcon />}
+                              sx={{
+                                borderRadius: 1,
+                                py: isMobile ? 1 : 1.5,
+                                textTransform: "none",
+                              }}
+                            >
+                              {t("checkOutGuest")}
+                            </Button>
+                          )}
                       </Box>
                     )}
 

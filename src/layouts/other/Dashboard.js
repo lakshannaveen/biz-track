@@ -22,6 +22,7 @@ import {
   GetAllAttendance,
   GetCDLWeekAttendance,
 } from "../../action/Attendance";
+import { EmployeeStrengthAttendanceChart } from "../../components/Charts/EmployeeStrengthAttendanceChart";
 
 // Simulated sparkline data
 const sparklines = {
@@ -226,8 +227,12 @@ const Dashboard = () => {
     parseInt(totalAttendanceItem?.ActualStrength) || totalEmployees || 0;
   const kpiAttendance =
     parseInt(totalAttendanceItem?.Attendance) || totalAttendance || 0;
-  const kpiEligiblePercentageRaw = parseFloat(totalAttendanceItem?.EligiblePercentage);
-  const kpiActualPercentageRaw = parseFloat(totalAttendanceItem?.ActualPercentage);
+  const kpiEligiblePercentageRaw = parseFloat(
+    totalAttendanceItem?.EligiblePercentage,
+  );
+  const kpiActualPercentageRaw = parseFloat(
+    totalAttendanceItem?.ActualPercentage,
+  );
 
   const kpiEligiblePercentage = Number.isFinite(kpiEligiblePercentageRaw)
     ? Math.round(kpiEligiblePercentageRaw * 100) / 100
@@ -334,6 +339,11 @@ const Dashboard = () => {
               sparkColor="#06b6d4"
               delay={3}
             />
+          </Box>
+
+          {/* Employee Strength vs Attendance Chart */}
+          <Box sx={{ marginTop: "20px" }}>
+            <EmployeeStrengthAttendanceChart allAttendance={allAttendance} />
           </Box>
 
           {/* Weekly trend and Employee Type charts side-by-side */}

@@ -303,7 +303,7 @@ export function CDPLCBreakdown({
             marginBottom: "12px",
           }}
         >
-          Total
+          TOTAL
         </Typography>
 
         {/* Category Cards */}
