@@ -76,6 +76,23 @@ const Dashboard = () => {
     weeklyAttendance,
   } = useSelector((state) => state.attendanceCard);
   const [activeTab, setActiveTab] = useState(0);
+  const [cachedAllAttendance, setCachedAllAttendance] = useState(null);
+  const [cachedTraineeTypes, setCachedTraineeTypes] = useState(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  // Load cached data on mount
+  useEffect(() => {
+    const cachedAll = localStorage.getItem('dashboard_allAttendance');
+    const cachedTrainee = localStorage.getItem('dashboard_traineeTypes');
+    
+    if (cachedAll) {
+      setCachedAllAttendance(JSON.parse(cachedAll));
+    }
+    if (cachedTrainee) {
+      setCachedTraineeTypes(JSON.parse(cachedTrainee));
+    }
+    setDataLoaded(true);
+  }, []);
 
   useEffect(() => {
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
@@ -83,22 +100,39 @@ const Dashboard = () => {
       metaThemeColor.setAttribute("content", "#004AAD");
     }
 
-    // Fetch data on component mount
-    //const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-    // Use a 2021 date because backend data exists for 2021 (not 2026)
-    const today = "2021-02-19";
-    // Week end date for weekly attendance API (sample)
-    const weekDate = "2021-03-01";
-    try {
-      dispatch(GetCdlBasedDivison(today, today));
-      dispatch(GetTraineeBasedTypes(today));
-      dispatch(GetTraineeDivisionAttendance(today, today));
-      dispatch(GetAllAttendance(today, today));
-      dispatch(GetCDLWeekAttendance(weekDate));
-    } catch (error) {
-      console.error("Error dispatching actions:", error);
+    // Only fetch if no cached data
+    if (!cachedAllAttendance || !cachedTraineeTypes) {
+      //const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+      // Use a 2021 date because backend data exists for 2021 (not 2026)
+      const today = "2021-02-19";
+      // Week end date for weekly attendance API (sample)
+      const weekDate = "2021-03-01";
+      try {
+        dispatch(GetCdlBasedDivison(today, today));
+        dispatch(GetTraineeBasedTypes(today));
+        dispatch(GetTraineeDivisionAttendance(today, today));
+        dispatch(GetAllAttendance(today, today));
+        dispatch(GetCDLWeekAttendance(weekDate));
+      } catch (error) {
+        console.error("Error dispatching actions:", error);
+      }
     }
-  }, [dispatch]);
+  }, [dispatch, cachedAllAttendance, cachedTraineeTypes]);
+
+  // Save data to localStorage when fetched
+  useEffect(() => {
+    if (allAttendance && allAttendance.length > 0 && !cachedAllAttendance) {
+      localStorage.setItem('dashboard_allAttendance', JSON.stringify(allAttendance));
+      setCachedAllAttendance(allAttendance);
+    }
+  }, [allAttendance, cachedAllAttendance]);
+
+  useEffect(() => {
+    if (traineeTypes && traineeTypes.length > 0 && !cachedTraineeTypes) {
+      localStorage.setItem('dashboard_traineeTypes', JSON.stringify(traineeTypes));
+      setCachedTraineeTypes(traineeTypes);
+    }
+  }, [traineeTypes, cachedTraineeTypes]);
 
   // Transform division data for charts
   const transformedDivisionData =
@@ -174,11 +208,7 @@ const Dashboard = () => {
   const traineeByDivision = [];
 
   // Sample data for employee type chart
-  const employeeTypeData = traineeTypes || [
-    { category: "Executive", count: 150 },
-    { category: "Supervisory", count: 250 },
-    { category: "Clerical", count: 100 },
-  ];
+  const employeeTypeData = cachedTraineeTypes || traineeTypes || [];
 
   // Sample data for CDPLC breakdown
   const cdplcData = [
@@ -343,7 +373,7 @@ const Dashboard = () => {
 
           {/* Employee Strength vs Attendance Chart */}
           <Box sx={{ marginTop: "20px" }}>
-            <EmployeeStrengthAttendanceChart allAttendance={allAttendance} />
+            <EmployeeStrengthAttendanceChart allAttendance={cachedAllAttendance || allAttendance} />
           </Box>
 
           {/* Weekly trend and Employee Type charts side-by-side */}
