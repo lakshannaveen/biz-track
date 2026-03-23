@@ -489,7 +489,7 @@ export default function DailyCollectionSheet() {
               textAlign: "center",
               marginTop: 8,
             }}>
-              ✅ Chaser: {selectedChaser} - Ready for collection
+              Chaser: {selectedChaser} - Ready for collection
             </div>
           )}
           
