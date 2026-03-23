@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const STORAGE_KEY = "cdplc_collection_items_v3";
@@ -121,6 +121,88 @@ function InjectStyles() {
     document.head.appendChild(style);
   }, []);
   return null;
+}
+
+// ─── Searchable Select Component ────────────────────────────────────────────
+function SearchableSelect({ options = [], value, onChange, placeholder = "-- Select --", id }) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const containerRef = useRef();
+
+  useEffect(() => {
+    function onDoc(e) {
+      if (!containerRef.current) return;
+      if (!containerRef.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
+
+  const filtered = options.filter((o) => o.toLowerCase().includes(query.toLowerCase()));
+
+  return (
+    <div ref={containerRef} style={{ position: "relative" }}>
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => { setOpen((s) => !s); setQuery(""); }}
+        onKeyDown={(e) => { if (e.key === "Enter") { setOpen((s) => !s); setQuery(""); } }}
+        style={{
+          ...inputSx,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          cursor: "pointer",
+        }}
+        id={id}
+      >
+        <div style={{ color: value ? "#0f172a" : "#94a3b8", flex: 1 }}>
+          {value || placeholder}
+        </div>
+        <div style={{ marginLeft: 8, color: "#64748b" }}>{open ? "▴" : "▾"}</div>
+      </div>
+
+      {open && (
+        <div style={{ position: "absolute", left: 0, right: 0, zIndex: 60 }}>
+          <div style={{ padding: 8, background: "#fff", borderRadius: 10, boxShadow: "0 8px 30px rgba(2,6,23,0.12)", border: "1px solid rgba(2,6,23,0.06)" }}>
+            <input
+              autoFocus
+              placeholder="Search..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "8px 10px",
+                marginBottom: 8,
+                borderRadius: 8,
+                border: "1px solid #e6eefc",
+                outline: "none",
+                fontSize: 13,
+              }}
+            />
+            <div style={{ maxHeight: 220, overflow: "auto" }}>
+              {filtered.length === 0 ? (
+                <div style={{ padding: 8, color: "#94a3b8" }}>No results</div>
+              ) : (
+                filtered.map((opt) => (
+                  <div
+                    key={opt}
+                    onClick={() => { onChange(opt); setOpen(false); }}
+                    style={{ padding: "8px 10px", borderRadius: 8, cursor: "pointer", fontSize: 13, color: "#0f172a" }}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { onChange(opt); setOpen(false); } }}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    {opt}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 // ─── Form Field Wrapper ───────────────────────────────────────────────────────
@@ -373,50 +455,26 @@ export default function DailyCollectionSheet() {
               <label style={{ fontSize: 11, color: "rgba(255,255,255,0.7)", display: "block", marginBottom: 4 }}>
                 👤 Select Admin
               </label>
-              <select
+              <SearchableSelect
+                options={ADMIN_OPTIONS}
                 value={selectedAdmin}
-                onChange={(e) => setSelectedAdmin(e.target.value)}
-                style={{
-                  background: "rgba(255,255,255,0.15)",
-                  border: "1px solid rgba(255,255,255,0.3)",
-                  borderRadius: 8,
-                  padding: "8px 12px",
-                  color: "#fff",
-                  fontSize: 13,
-                  width: "100%",
-                  outline: "none",
-                }}
-              >
-                <option value="" style={{ color: "#000" }}>-- Select Admin --</option>
-                {ADMIN_OPTIONS.map(admin => (
-                  <option key={admin} value={admin} style={{ color: "#000" }}>{admin}</option>
-                ))}
-              </select>
+                onChange={(v) => setSelectedAdmin(v)}
+                placeholder="-- Select Admin --"
+                id="select-admin-header"
+              />
             </div>
             
             <div>
               <label style={{ fontSize: 11, color: "rgba(255,255,255,0.7)", display: "block", marginBottom: 4 }}>
                 👤 Select Chaser
               </label>
-              <select
+              <SearchableSelect
+                options={CHASER_OPTIONS}
                 value={selectedChaser}
-                onChange={(e) => setSelectedChaser(e.target.value)}
-                style={{
-                  background: "rgba(255,255,255,0.15)",
-                  border: "1px solid rgba(255,255,255,0.3)",
-                  borderRadius: 8,
-                  padding: "8px 12px",
-                  color: "#fff",
-                  fontSize: 13,
-                  width: "100%",
-                  outline: "none",
-                }}
-              >
-                <option value="" style={{ color: "#000" }}>-- Select Chaser --</option>
-                {CHASER_OPTIONS.map(chaser => (
-                  <option key={chaser} value={chaser} style={{ color: "#000" }}>{chaser}</option>
-                ))}
-              </select>
+                onChange={(v) => setSelectedChaser(v)}
+                placeholder="-- Select Chaser --"
+                id="select-chaser-header"
+              />
             </div>
           </div>
           
@@ -524,17 +582,13 @@ export default function DailyCollectionSheet() {
               {/* Admin selection in form */}
               <div style={{ marginBottom: 20 }}>
                 <Field label="Handling Admin (Required)">
-                  <select
-                    style={inputSx}
+                  <SearchableSelect
+                    options={ADMIN_OPTIONS}
                     value={selectedAdmin}
-                    onChange={(e) => setSelectedAdmin(e.target.value)}
-                    required
-                  >
-                    <option value="">-- Select Admin --</option>
-                    {ADMIN_OPTIONS.map(admin => (
-                      <option key={admin} value={admin}>{admin}</option>
-                    ))}
-                  </select>
+                    onChange={(v) => setSelectedAdmin(v)}
+                    placeholder="-- Select Admin --"
+                    id="select-admin-form"
+                  />
                 </Field>
               </div>
 
@@ -546,22 +600,21 @@ export default function DailyCollectionSheet() {
                 {formFields.map(([key, label, type]) => (
                   <Field key={key} label={label}>
                     {type === "moc" ? (
-                      <select
-                        style={inputSx}
+                      <SearchableSelect
+                        options={MOC_OPTIONS}
                         value={form[key]}
-                        onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                      >
-                        <option value="">-- Select --</option>
-                        {MOC_OPTIONS.map((o) => <option key={o}>{o}</option>)}
-                      </select>
+                        onChange={(v) => setForm({ ...form, [key]: v })}
+                        placeholder="-- Select --"
+                        id={`moc-${key}`}
+                      />
                     ) : type === "status" ? (
-                      <select
-                        style={inputSx}
+                      <SearchableSelect
+                        options={STATUS_OPTIONS}
                         value={form[key]}
-                        onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                      >
-                        {STATUS_OPTIONS.map((o) => <option key={o}>{o}</option>)}
-                      </select>
+                        onChange={(v) => setForm({ ...form, [key]: v })}
+                        placeholder="Select status"
+                        id={`status-${key}`}
+                      />
                     ) : (
                       <input
                         className="cdp-input"
