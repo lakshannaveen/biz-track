@@ -641,7 +641,7 @@ export default function DailyCollectionSheet() {
                     transition: "transform 0.15s, box-shadow 0.15s",
                   }}
                 >
-                  {editId ? "💾 Update Item" : "✅ Save Item"}
+                  {editId ? "💾 Update Item" : "💾 Save Item"}
                 </button>
                 <button
                   onClick={() => { setView("list"); setForm(defaultForm); setEditId(null); setSelectedAdmin(""); }}
