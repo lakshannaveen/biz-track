@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -10,34 +10,52 @@ import {
   TableRow,
   Button,
 } from "@mui/material";
-import { Building2 } from "lucide-react";
- 
+import { Users, Briefcase } from "lucide-react";
+
 const getAttendanceColor = (percentage) => {
-  if (percentage >= 90) return "#10b981";  
-  if (percentage >= 80) return "#f59e0b";  
-  return "#ef4444";  
+  const numPercentage = parseFloat(percentage) || 0;
+  if (numPercentage >= 90) return "#10b981"; // Green for good
+  if (numPercentage >= 80) return "#f59e0b"; // Orange for average
+  return "#ef4444"; // Red for poor
 };
 
-export function DivisionBreakdown({ divisionData }) {
-  const [selectedCategory, setSelectedCategory] = useState("executive");
- 
+export function TraineesDivisionBreakdown({ traineeDivisionData }) {
+  const [selectedCategory, setSelectedCategory] = useState("industrial");
+
+  // Filter out divisions with no data for the selected category
+  const filteredData = useMemo(() => {
+    if (!traineeDivisionData || !Array.isArray(traineeDivisionData)) {
+      return [];
+    }
+
+    return traineeDivisionData.filter((division) => {
+      if (selectedCategory === "clerical") {
+        return parseInt(division.STRENGTH_CLERICAL) > 0;
+      } else {
+        return parseInt(division.STRENGTH_INDUSTRIAL) > 0;
+      }
+    });
+  }, [traineeDivisionData, selectedCategory]);
+
   if (
-    !divisionData ||
-    !Array.isArray(divisionData) ||
-    divisionData.length === 0
+    !traineeDivisionData ||
+    !Array.isArray(traineeDivisionData) ||
+    traineeDivisionData.length === 0
   ) {
-    return null;  
+    return null;
   }
- 
+
   const calculateStats = () => {
     let totalStrength = 0;
     let totalAttendance = 0;
 
-    divisionData.forEach((division) => {
-      const categoryData = division?.categories?.[selectedCategory];
-      if (categoryData) {
-        totalStrength += Math.max(0, parseInt(categoryData.st) || 0);
-        totalAttendance += Math.max(0, parseInt(categoryData.at) || 0);
+    traineeDivisionData.forEach((division) => {
+      if (selectedCategory === "clerical") {
+        totalStrength += Math.max(0, parseInt(division.STRENGTH_CLERICAL) || 0);
+        totalAttendance += Math.max(0, parseInt(division.ATTENDANCE_CLERICAL) || 0);
+      } else if (selectedCategory === "industrial") {
+        totalStrength += Math.max(0, parseInt(division.STRENGTH_INDUSTRIAL) || 0);
+        totalAttendance += Math.max(0, parseInt(division.ATTENDANCE_INDUSTRIAL) || 0);
       }
     });
 
@@ -49,29 +67,40 @@ export function DivisionBreakdown({ divisionData }) {
   };
 
   const stats = calculateStats();
- 
+
   const getTableData = () => {
-    return divisionData
+    return traineeDivisionData
       .map((division) => {
-        const categoryData = division?.categories?.[selectedCategory];
-        if (!categoryData) return null;
+        let strength = 0;
+        let attendance = 0;
+        let percentage = 0;
+
+        if (selectedCategory === "clerical") {
+          strength = Math.max(0, parseInt(division.STRENGTH_CLERICAL) || 0);
+          attendance = Math.max(0, parseInt(division.ATTENDANCE_CLERICAL) || 0);
+          percentage = parseFloat(division.PERCENTAGE_CLERICAL) || 0;
+        } else if (selectedCategory === "industrial") {
+          strength = Math.max(0, parseInt(division.STRENGTH_INDUSTRIAL) || 0);
+          attendance = Math.max(0, parseInt(division.ATTENDANCE_INDUSTRIAL) || 0);
+          percentage = parseFloat(division.PERCENTAGE_INDUSTRIAL) || 0;
+        }
+
         return {
-          division: division?.division || "Unknown",
-          strength: Math.max(0, parseInt(categoryData.st) || 0),
-          attendance: Math.max(0, parseInt(categoryData.at) || 0),
-          rate: Math.max(0, Math.min(100, parseInt(categoryData.percent) || 0)),
+          division: division?.V_DIVNAME || "Unknown",
+          divisionCode: division?.HLD_DIV_CODE || "",
+          strength,
+          attendance,
+          rate: percentage.toFixed(2),
         };
       })
-      .filter((item) => item !== null);
+      .filter((item) => item.strength > 0); // Only show divisions with strength
   };
 
   const tableData = getTableData();
 
   const categories = [
-    { key: "executive", label: "Executive", icon: "👔" },
-    { key: "supervisory", label: "Supervisory", icon: "👥" },
-    { key: "clerical", label: "Clerical", icon: "📋" },
-    { key: "industrial", label: "Industrial", icon: "🔧" },
+    { key: "industrial", label: "Industrial Trainees", icon: "🔧" },
+    { key: "clerical", label: "Clerical Trainees", icon: "📋" },
   ];
 
   return (
@@ -106,7 +135,7 @@ export function DivisionBreakdown({ divisionData }) {
               marginBottom: "4px",
             }}
           >
-            <Building2 size={20} color="#1a2d4d" />
+            <Briefcase size={20} color="#1a2d4d" />
             <Typography
               sx={{
                 fontSize: "18px",
@@ -114,7 +143,7 @@ export function DivisionBreakdown({ divisionData }) {
                 color: "#1a2d4d",
               }}
             >
-              CDL Based ON Division  
+              Trainees Based on Division 
             </Typography>
           </Box>
           <Typography
@@ -123,7 +152,7 @@ export function DivisionBreakdown({ divisionData }) {
               color: "#64748b",
             }}
           >
-            Select a sector to view division-level attendance
+            View trainee attendance by division and category
           </Typography>
         </Box>
 
@@ -159,7 +188,7 @@ export function DivisionBreakdown({ divisionData }) {
                 },
               }}
             >
-              {category.label}
+               {category.label}
             </Button>
           ))}
         </Box>
@@ -185,7 +214,7 @@ export function DivisionBreakdown({ divisionData }) {
                 marginBottom: "4px",
               }}
             >
-              Strength
+              Total Strength
             </Typography>
             <Typography
               sx={{
@@ -208,7 +237,7 @@ export function DivisionBreakdown({ divisionData }) {
                 marginBottom: "4px",
               }}
             >
-              Attendance
+              Total Attendance
             </Typography>
             <Typography
               sx={{
@@ -231,7 +260,7 @@ export function DivisionBreakdown({ divisionData }) {
                 marginBottom: "4px",
               }}
             >
-              Rate
+              Attendance Rate
             </Typography>
             <Typography
               sx={{
@@ -250,7 +279,6 @@ export function DivisionBreakdown({ divisionData }) {
           sx={{
             maxHeight: "400px",
             overflowY: "auto",
-            overflowX: "auto", 
             "&::-webkit-scrollbar": {
               width: "4px",
               height: "4px",
@@ -267,10 +295,12 @@ export function DivisionBreakdown({ divisionData }) {
             },
           }}
         >
-          <Table >
+          <Table stickyHeader>
             <TableHead>
-              <TableRow sx={{ backgroundColor: "#f9fafb" }}>
+              <TableRow>
+                
                 <TableCell
+                  align="center"
                   sx={{
                     fontWeight: 700,
                     fontSize: "10px",
@@ -279,9 +309,10 @@ export function DivisionBreakdown({ divisionData }) {
                     letterSpacing: "0.5px",
                     borderBottom: "1px solid #e5e7eb",
                     padding: "12px 10px",
+                    backgroundColor: "#f9fafb",
                   }}
                 >
-                  Division
+                  Division 
                 </TableCell>
                 <TableCell
                   align="center"
@@ -292,7 +323,8 @@ export function DivisionBreakdown({ divisionData }) {
                     textTransform: "uppercase",
                     letterSpacing: "0.5px",
                     borderBottom: "1px solid #e5e7eb",
-                    padding: "12px 16px",
+                    padding: "12px 10px",
+                    backgroundColor: "#f9fafb",
                   }}
                 >
                   Strength
@@ -307,6 +339,7 @@ export function DivisionBreakdown({ divisionData }) {
                     letterSpacing: "0.5px",
                     borderBottom: "1px solid #e5e7eb",
                     padding: "12px 16px",
+                    backgroundColor: "#f9fafb",
                   }}
                 >
                   Attendance
@@ -320,10 +353,11 @@ export function DivisionBreakdown({ divisionData }) {
                     textTransform: "uppercase",
                     letterSpacing: "0.5px",
                     borderBottom: "1px solid #e5e7eb",
-                    padding: "12px 16px",
+                    padding: "12px 10px",
+                    backgroundColor: "#f9fafb",
                   }}
                 >
-                  Rate
+                  Rate (%)
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -333,32 +367,27 @@ export function DivisionBreakdown({ divisionData }) {
                   key={index}
                   sx={{
                     "&:hover": { backgroundColor: "#f9fafb" },
-                    backgroundColor:
-                      row.division === "DPR"
-                        ? "rgba(239, 68, 68, 0.05)"
-                        : "transparent",
+                    transition: "background-color 0.2s ease",
                   }}
                 >
-                  <TableCell
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: "11px",
-                      color: row.division === "DPR" ? "#ef4444" : "#1a2d4d",
-                      borderBottom: "1px solid #e5e7eb",
-                      padding: "16px",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                    }}
-                  >
-                    {row.division}
-                  </TableCell>
                   <TableCell
                     align="center"
                     sx={{
                       fontWeight: 500,
                       fontSize: "11px",
-                      color: "#4b5563",
+                      color: "#64748b",
+                      borderBottom: "1px solid #e5e7eb",
+                      padding: "16px",
+                    }}
+                  >
+                    {row.divisionCode}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: "12px",
+                      color: "#1a2d4d",
                       borderBottom: "1px solid #e5e7eb",
                       padding: "16px",
                     }}
@@ -368,9 +397,9 @@ export function DivisionBreakdown({ divisionData }) {
                   <TableCell
                     align="center"
                     sx={{
-                      fontWeight: 500,
-                      fontSize: "11px",
-                      color: "#4b5563",
+                      fontWeight: 600,
+                      fontSize: "12px",
+                      color: "#1a2d4d",
                       borderBottom: "1px solid #e5e7eb",
                       padding: "16px",
                     }}
@@ -381,7 +410,7 @@ export function DivisionBreakdown({ divisionData }) {
                     align="center"
                     sx={{
                       fontWeight: 700,
-                      fontSize: "11px",
+                      fontSize: "12px",
                       color: getAttendanceColor(row.rate),
                       borderBottom: "1px solid #e5e7eb",
                       padding: "16px",
@@ -391,9 +420,26 @@ export function DivisionBreakdown({ divisionData }) {
                   </TableCell>
                 </TableRow>
               ))}
+              {tableData.length === 0 && (
+                <TableRow>
+                  <TableCell
+                    colSpan={5}
+                    align="center"
+                    sx={{
+                      padding: "32px",
+                      color: "#64748b",
+                      fontSize: "14px",
+                    }}
+                  >
+                    No data available for the selected category
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
+
+         
       </Box>
     </Box>
   );

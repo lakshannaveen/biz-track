@@ -1,7 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-
 import message from "./reducers/message";
 import { authReducer } from "./reducers/userReducers";
 import {
@@ -39,6 +38,7 @@ import { GetJobCard , GetUnAssignedList } from "./reducers/JobAllocationReducer"
 import {resDetailsHistoryReducer , loadResDetailsReducer ,logReservationReducer,cancelReservationReducer} from "./reducers/ReservationReducer";
 import { employeeReducer } from "./reducers/EmployeeReducer";
 import caregiverReducer from './reducers/caregiverReducer';
+import kpiReducer from './reducers/CompanyOverviewReducer';
 
 const reducer = combineReducers({
   message: message,
@@ -71,7 +71,7 @@ const reducer = combineReducers({
   JobCard: GetJobCard,
   UnAssignedList: GetUnAssignedList,
   caregiver: caregiverReducer,
-
+  kpi: kpiReducer,
 });
 
 const middlware = [thunk];

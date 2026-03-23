@@ -1164,6 +1164,9 @@
 
 // export default Rfid_Attendence;
 
+
+
+
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -1203,7 +1206,7 @@ const Rfid_Attendence = () => {
   const [loading, setLoading] = useState(true);
   const [searchMode, setSearchMode] = useState(false);
   const [expandedSearch, setExpandedSearch] = useState(false);
-  const [triggerSearch, setTriggerSearch] = useState(false); // 🔹 new trigger state
+  const [triggerSearch, setTriggerSearch] = useState(false);  
 
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
@@ -1319,9 +1322,7 @@ const Rfid_Attendence = () => {
     };
 
     fetchData();
-  }, [selectedDate, selectedTab, selectedLocation, searchMode, startDate, endDate, triggerSearch]);
-  // 🔹 notice serviceNumber is removed; triggerSearch added
-
+  }, [selectedDate, selectedTab, selectedLocation, searchMode, startDate, endDate, triggerSearch]); 
   const renderSearchControls = () => (
     <Box sx={{ mb: 2, width: "100%" }}>
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>

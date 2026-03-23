@@ -532,7 +532,8 @@ import Approvals from "./layouts/approvals/Approvals";
 import Reservations from "./layouts/reservations/ReservationCard";
 import Reservations1 from "./layouts/reservations/Reservations";
 import Rfid_Attendence from "./layouts/rfid_attendence/Rfid_Attendence";
-import Personal from "./layouts/personal/personal";
+import Personal from "./layouts/personal/personal"; 
+import CollectForm from "./layouts/CollectingForm/Collectingform";
 
 // Import all approval component files
 import IwoApp from "./layouts/approvals/IwoApp";
@@ -550,6 +551,7 @@ import MaintenancePage from "../src/components/Cards/maintenance";
 import Caregiver from "../src/components/Cards/CareGiver";
 import Manager from "../src/layouts/reservations/Managers";
 import ProtectedDashboardRoute from "./route/ProtectedDashboardRoute";
+
 
 // import useMediaQuery from "@material-ui/core/useMediaQuery";
 // const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -664,6 +666,7 @@ function App() {
                       <Route element={<Medical />} path="/medical" />
                       <Route element={<Telephone />} path="/telephone" />
                       <Route element={<Jobs />} path="/jobs" />
+                      <Route element={<CollectForm />} path="/collectForm" />
                       <Route
                         element={<MaintenancePage />}
                         path="/MaintenancePage"

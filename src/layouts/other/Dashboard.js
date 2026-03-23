@@ -1,20 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import {
+  Box,
+  Typography,
+  CircularProgress,
+  Fade,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  useMediaQuery,
+  useTheme,
+  AppBar,
+  Toolbar,
+  Container
+} from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import { Users, UserCheck, Clock, TrendingUp } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
-// Import chart components
+import { useNavigate, useLocation } from "react-router-dom";
+import CompanyDashboard from './companyDashboad/index';
 import { KpiCard } from "../../components/Charts/KpiCard";
 import { DivisionBreakdown } from "../../components/Charts/DivisionBreakdown";
+import { TraineesDivisionBreakdown } from "../../components/Charts/TraineesDivisionBreakdown";
 import { TraineesOverview } from "../../components/Charts/TraineesOverview";
-import DashboardTabs from "../../components/Charts/DashboardTabs";
 import WeeklyAttendanceTrend from "../../components/Charts/WeeklyAttendanceTrend";
 import { EmployeeTypeChart } from "../../components/Charts/EmployeeTypeChart";
 import { CDPLCBreakdown } from "../../components/Charts/CDPLCBreakdown";
 import QuickAccessSection from "../../components/Cards/QuickAccessSection";
-
-// Import actions
 import {
   GetCdlBasedDivison,
   GetTraineeBasedTypes,
@@ -23,50 +43,534 @@ import {
   GetCDLWeekAttendance,
 } from "../../action/Attendance";
 import { EmployeeStrengthAttendanceChart } from "../../components/Charts/EmployeeStrengthAttendanceChart";
+import { Person } from "@material-ui/icons";
 
-// Simulated sparkline data
-const sparklines = {
-  total: [
-    { v: 3720 },
-    { v: 3750 },
-    { v: 3800 },
-    { v: 3780 },
-    { v: 3820 },
-    { v: 3860 },
-    { v: 3891 },
-  ],
-  eligible: [
-    { v: 3100 },
-    { v: 3150 },
-    { v: 3200 },
-    { v: 3180 },
-    { v: 3250 },
-    { v: 3300 },
-    { v: 3331 },
-  ],
-  attendance: [
-    { v: 2400 },
-    { v: 2450 },
-    { v: 2500 },
-    { v: 2480 },
-    { v: 2530 },
-    { v: 2560 },
-    { v: 2579 },
-  ],
-  rate: [
-    { v: 72 },
-    { v: 74 },
-    { v: 75 },
-    { v: 73 },
-    { v: 76 },
-    { v: 76 },
-    { v: 77 },
-  ],
+// ─── KPI Card Skeleton ────────────────────────────────────────────────────────
+const KpiCardSkeleton = () => (
+  <Box
+    sx={{
+      position: "relative",
+      background: "linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%)",
+      borderRadius: "20px",
+      padding: "24px",
+      overflow: "hidden",
+      border: "1px solid rgba(255,255,255,0.8)",
+      boxShadow: "0 4px 24px rgba(0,74,173,0.06)",
+      "@keyframes shimmer": {
+        "0%": { backgroundPosition: "-200% 0" },
+        "100%": { backgroundPosition: "200% 0" },
+      },
+      "&::after": {
+        content: '""',
+        position: "absolute",
+        inset: 0,
+        background:
+          "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%)",
+        backgroundSize: "200% 100%",
+        animation: "shimmer 1.8s infinite",
+        borderRadius: "20px",
+      },
+    }}
+  >
+    <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2.5 }}>
+      <Box
+        sx={{
+          width: "45%",
+          height: 13,
+          backgroundColor: "rgba(0,74,173,0.12)",
+          borderRadius: "6px",
+        }}
+      />
+      <Box
+        sx={{
+          width: 38,
+          height: 38,
+          backgroundColor: "rgba(0,74,173,0.1)",
+          borderRadius: "10px",
+        }}
+      />
+    </Box>
+    <Box
+      sx={{
+        width: "55%",
+        height: 34,
+        backgroundColor: "rgba(0,74,173,0.14)",
+        borderRadius: "8px",
+        mb: 1.5,
+      }}
+    />
+    <Box
+      sx={{
+        width: "35%",
+        height: 11,
+        backgroundColor: "rgba(0,74,173,0.08)",
+        borderRadius: "6px",
+      }}
+    />
+  </Box>
+);
+
+// ─── Chart Skeleton ───────────────────────────────────────────────────────────
+const ChartSkeleton = ({ height = 300 }) => (
+  <Box
+    sx={{
+      position: "relative",
+      background: "linear-gradient(135deg, #f7f9ff 0%, #eef2ff 100%)",
+      borderRadius: "20px",
+      padding: "24px",
+      height: height,
+      overflow: "hidden",
+      border: "1px solid rgba(0,74,173,0.06)",
+      boxShadow: "0 4px 24px rgba(0,74,173,0.05)",
+      "@keyframes shimmer2": {
+        "0%": { backgroundPosition: "-200% 0" },
+        "100%": { backgroundPosition: "200% 0" },
+      },
+      "&::after": {
+        content: '""',
+        position: "absolute",
+        inset: 0,
+        background:
+          "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.7) 50%, transparent 100%)",
+        backgroundSize: "200% 100%",
+        animation: "shimmer2 1.8s infinite",
+        borderRadius: "20px",
+      },
+    }}
+  >
+    <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
+      <Box
+        sx={{
+          width: "28%",
+          height: 20,
+          backgroundColor: "rgba(0,74,173,0.1)",
+          borderRadius: "6px",
+        }}
+      />
+      <Box
+        sx={{
+          width: "16%",
+          height: 20,
+          backgroundColor: "rgba(0,74,173,0.07)",
+          borderRadius: "6px",
+        }}
+      />
+    </Box>
+    <Box sx={{ display: "flex", alignItems: "flex-end", gap: 1.5, height: "70%" }}>
+      {[65, 80, 50, 90, 70, 85, 60].map((h, i) => (
+        <Box
+          key={i}
+          sx={{
+            flex: 1,
+            height: `${h}%`,
+            backgroundColor: "rgba(0,74,173,0.08)",
+            borderRadius: "6px 6px 0 0",
+          }}
+        />
+      ))}
+    </Box>
+  </Box>
+);
+ 
+// ─── Navigation Drawer Component ───────────────────────────────────────────────
+const NavigationDrawer = ({ open, onClose, activeTab, onTabChange }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+ 
+  const overviewItems = [
+    {
+      id: 4,
+      label: 'Company',
+      icon: <DashboardIcon />,
+      color: '#ef4444',
+      //description: 'Company overview and metrics',
+      isBold: true 
+    },
+    {
+      id: 5,
+      label: 'Own',
+      icon: <Person />,
+      color: '#f59e0b',
+      //description: 'Personal dashboard and KPIs',
+      isBold: true,
+      disabled: true
+    },
+  ];
+
+  // Main dashboard items
+  const mainItems = [
+    {
+      id: 0,
+      label: 'HR Dashboard',
+      icon: <PeopleAltIcon />,
+      color: '#004AAD',
+      description: 'Employee attendance and performance metrics'
+    },
+    {
+      id: 1,
+      label: 'Financial Dashboard',
+      icon: <AccountBalanceIcon />,
+      color: '#10b981',
+      description: 'Budget tracking and fiscal overview',
+      disabled: true
+    },
+    {
+      id: 2,
+      label: 'Sales Performance',
+      icon: <TrendingUp />,
+      color: '#f59e0b',
+      description: 'Sales metrics and targets',
+      disabled: true
+    },
+    {
+      id: 3,
+      label: 'Customer Support',
+      icon: <Users />,
+      color: '#8b5cf6',
+      description: 'Support ticket analytics',
+      disabled: true
+    },
+  ];
+
+  // Other KPIs section items
+  const otherKpisItems = [
+    {
+      id: 7,
+      label: 'Operational KPIs',
+      icon: <Clock />,
+      color: '#06b6d4',
+      description: 'Operational efficiency metrics',
+      disabled: true
+    },
+    {
+      id: 8,
+      label: 'Quality Metrics',
+      icon: <UserCheck />,
+      color: '#8b5cf6',
+      description: 'Quality assurance indicators',
+      disabled: true
+    },
+    {
+      id: 9,
+      label: 'Project Status',
+      icon: <TrendingUp />,
+      color: '#f43f5e',
+      description: 'Project completion rates',
+      disabled: true
+    },
+  ];
+
+  const handleTabClick = (tabId) => {
+    onTabChange(tabId);
+    onClose();
+  };
+
+  // Helper function to render menu items
+  const renderMenuItems = (items, showDivider = false) => (
+    <>
+      <List sx={{ p: 0 }}>
+        {items.map((item) => (
+          <ListItem key={item.id} disablePadding sx={{ mb: 1 }}>
+            <ListItemButton
+              onClick={() => handleTabClick(item.id)}
+              disabled={item.disabled}
+              selected={activeTab === item.id}
+              sx={{
+                borderRadius: '12px',
+                py: 1.5,
+                px: 2,
+                transition: 'all 0.2s ease',
+                ...(item.isBold && {
+                  borderLeft: '4px solid',
+                  borderLeftColor: item.color,
+                  backgroundColor: 'rgba(239,68,68,0.04)',
+                }),
+                '&.Mui-selected': {
+                  backgroundColor: `${item.color}12`,
+                  '&:hover': {
+                    backgroundColor: `${item.color}20`,
+                  },
+                  '& .MuiListItemIcon-root': {
+                    color: item.color,
+                  },
+                  '& .MuiListItemText-primary': {
+                    color: item.color,
+                    fontWeight: 600,
+                  },
+                },
+                '&:hover': {
+                  backgroundColor: 'rgba(0,74,173,0.04)',
+                  transform: 'translateX(4px)',
+                },
+                '&.Mui-disabled': {
+                  opacity: 0.5,
+                  cursor: 'not-allowed',
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 40,
+                  color: activeTab === item.id ? item.color : '#64748b',
+                  transition: 'color 0.2s ease',
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText
+                primary={item.label}
+                secondary={item.description}
+                primaryTypographyProps={{
+                  fontSize: '0.95rem',
+                  fontWeight: item.isBold ? 700 : (activeTab === item.id ? 600 : 500),
+                  ...(item.isBold && {
+                    color: item.color,
+                  }),
+                }}
+                secondaryTypographyProps={{
+                  fontSize: '0.75rem',
+                  sx: { color: 'text.secondary', mt: 0.5 }
+                }}
+              />
+              {item.disabled && (
+                <Typography
+                  variant="caption"
+                  sx={{
+                    bgcolor: 'rgba(0,0,0,0.04)',
+                    px: 1,
+                    py: 0.5,
+                    borderRadius: '4px',
+                    color: 'text.secondary',
+                    fontSize: '0.7rem'
+                  }}
+                >
+                  Coming Soon
+                </Typography>
+              )}
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      {showDivider && (
+        <Divider sx={{ my: 2, borderColor: 'rgba(0,74,173,0.08)' }} />
+      )}
+    </>
+  );
+
+  return (
+    <Drawer
+      anchor="left"
+      open={open}
+      onClose={onClose}
+      PaperProps={{
+        sx: {
+          width: isMobile ? '85%' : 320,
+          maxWidth: 320,
+          borderTopRightRadius: 20,
+          borderBottomRightRadius: 20,
+          background: 'linear-gradient(135deg, #ffffff 0%, #fafcff 100%)',
+          boxShadow: '8px 0 32px rgba(0,74,173,0.12)',
+        }
+      }}
+    >
+      <Box sx={{ p: 3 }}>
+        {/* Header */}
+        <Box sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          mb: 3
+        }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box
+              sx={{
+                width: 32,
+                height: 32,
+                borderRadius: '10px',
+                background: 'linear-gradient(135deg, #004AAD 0%, #3b82f6 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <DashboardIcon sx={{ color: 'white', fontSize: 18 }} />
+            </Box>
+            <Typography
+              sx={{
+                fontSize: '1.2rem',
+                fontWeight: 700,
+                background: 'linear-gradient(135deg, #004AAD 0%, #3b82f6 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Dashboards
+            </Typography>
+          </Box>
+          <IconButton onClick={onClose} size="small">
+            <CloseIcon />
+          </IconButton>
+        </Box>
+
+        <Divider sx={{ mb: 2, borderColor: 'rgba(0,74,173,0.08)' }} />
+
+        {/* Overview Section with Company & Own */}
+        <Typography
+          variant="subtitle2"
+          sx={{
+            px: 2,
+            mb: 1,
+            color: '#ef4444',
+            fontWeight: 700,
+            fontSize: '0.85rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px'
+          }}
+        >
+          OVERVIEW
+        </Typography>
+        {renderMenuItems(overviewItems, true)}
+
+        {/* Main Dashboards Section */}
+        <Typography
+          variant="subtitle2"
+          sx={{
+            px: 2,
+            mb: 1,
+            color: '#004AAD',
+            fontWeight: 600,
+            fontSize: '0.85rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px'
+          }}
+        >
+          KPI'S 
+        </Typography>
+        {renderMenuItems(mainItems, false)}
+
+        {/* Underline after Customer Support */}
+        <Divider sx={{ my: 2, borderColor: 'rgba(0,74,173,0.12)', borderBottomWidth: 2 }} />
+
+        {/* Other KPIs Section */}
+        <Typography
+          variant="subtitle2"
+          sx={{
+            px: 2,
+            mb: 1,
+            color: '#f43f5e',
+            fontWeight: 600,
+            fontSize: '0.85rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px'
+          }}
+        >
+          OTHER KPIs
+        </Typography>
+        {renderMenuItems(otherKpisItems, false)}
+
+        
+      </Box>
+    </Drawer>
+  );
 };
 
-// Main Dashboard Component
+// ─── KPI Cards Grid ───────────────────────────────────────────────────────────
+const KpiCardsGrid = ({
+  loadingStates,
+  kpiAttendance,
+  kpiActualStrength,
+  kpiEligibleStrength,
+  kpiAttendanceRate,
+}) => {
+  const cards = [
+    {
+      label: "Total Workforce",
+      target: kpiActualStrength,
+      icon: Users,
+      sparkColor: "#004AAD",
+      accent: "rgba(0,74,173,0.12)",
+      accentSolid: "#004AAD",
+      delay: 0,
+      suffix: undefined,
+    },
+    {
+      label: "Total Attendance",
+      target: kpiAttendance,
+      icon: UserCheck,
+      sparkColor: "#8b5cf6",
+      accent: "rgba(139,92,246,0.12)",
+      accentSolid: "#8b5cf6",
+      delay: 1,
+      suffix: undefined,
+    },
+
+    {
+      label: "Eligible Workforce",
+      target: kpiEligibleStrength,
+      icon: Clock,
+      sparkColor: "#f43f5e",
+      accent: "rgba(244,63,94,0.12)",
+      accentSolid: "#f43f5e",
+      delay: 2,
+      suffix: undefined,
+    },
+    {
+      label: "Attendance Rate",
+      target: kpiAttendanceRate,
+      icon: TrendingUp,
+      sparkColor: "#06b6d4",
+      accent: "rgba(6,182,212,0.12)",
+      accentSolid: "#06b6d4",
+      delay: 3,
+      suffix: "%",
+    },
+  ];
+
+  return (
+    <Box
+      sx={{
+        display: "grid",
+        gridTemplateColumns: {
+          xs: "1fr 1fr",
+          sm: "1fr 1fr",
+          md: "1fr 1fr",
+          lg: "repeat(4, 1fr)",
+        },
+        gap: { xs: "10px", sm: "14px", md: "16px" },
+        marginBottom: "20px",
+      }}
+    >
+      {cards.map((card, index) =>
+        loadingStates.allAttendance ? (
+          <KpiCardSkeleton key={index} />
+        ) : (
+          <KpiCard
+            key={index}
+            label={card.label}
+            target={card.target}
+            icon={card.icon}
+            sparkColor={card.sparkColor}
+            delay={card.delay}
+            suffix={card.suffix}
+          />
+        )
+      )}
+    </Box>
+  );
+};
+
+// ─── Main Dashboard ─────────────────────────────────────────────────────────── 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const [selectedYear, setSelectedYear] = useState(() => { 
+    return new Date().getFullYear().toString();
+  });
+
   const {
     divisionData,
     traineeTypes,
@@ -75,69 +579,91 @@ const Dashboard = () => {
     loading,
     weeklyAttendance,
   } = useSelector((state) => state.attendanceCard);
-  const [activeTab, setActiveTab] = useState(0);
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState(4);
   const [cachedAllAttendance, setCachedAllAttendance] = useState(null);
   const [cachedTraineeTypes, setCachedTraineeTypes] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  // Load cached data on mount
+  const [loadingStates, setLoadingStates] = useState({
+    divisionData: true,
+    traineeTypes: true,
+    traineeDivision: true,
+    allAttendance: true,
+    weeklyAttendance: true,
+  });
+
+  const today = new Date().toISOString().split("T")[0];
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+  };
+
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
   useEffect(() => {
-    const cachedAll = localStorage.getItem('dashboard_allAttendance');
-    const cachedTrainee = localStorage.getItem('dashboard_traineeTypes');
-    
-    if (cachedAll) {
-      setCachedAllAttendance(JSON.parse(cachedAll));
-    }
+    const cachedTrainee = localStorage.getItem("dashboard_traineeTypes");
     if (cachedTrainee) {
       setCachedTraineeTypes(JSON.parse(cachedTrainee));
+      setLoadingStates((prev) => ({ ...prev, traineeTypes: false }));
     }
     setDataLoaded(true);
   }, []);
 
   useEffect(() => {
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-    if (metaThemeColor) {
-      metaThemeColor.setAttribute("content", "#004AAD");
-    }
+    if (divisionData && divisionData.length > 0)
+      setLoadingStates((prev) => ({ ...prev, divisionData: false }));
+  }, [divisionData]);
 
-    // Only fetch if no cached data
-    if (!cachedAllAttendance || !cachedTraineeTypes) {
-      //const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-      // Use a 2021 date because backend data exists for 2021 (not 2026)
-      const today = "2021-02-19";
-      // Week end date for weekly attendance API (sample)
-      const weekDate = "2021-03-01";
+  useEffect(() => {
+    if (traineeTypes && traineeTypes.length > 0) {
+      setLoadingStates((prev) => ({ ...prev, traineeTypes: false }));
+      localStorage.setItem("dashboard_traineeTypes", JSON.stringify(traineeTypes));
+    }
+  }, [traineeTypes]);
+
+  useEffect(() => {
+    if (traineeDivision && traineeDivision.length > 0)
+      setLoadingStates((prev) => ({ ...prev, traineeDivision: false }));
+  }, [traineeDivision]);
+
+  useEffect(() => {
+    if (allAttendance && allAttendance.length > 0) {
+      setLoadingStates((prev) => ({ ...prev, allAttendance: false }));
+      localStorage.setItem("dashboard_allAttendance", JSON.stringify(allAttendance));
+    }
+  }, [allAttendance]);
+
+  useEffect(() => {
+    if (weeklyAttendance && weeklyAttendance.length > 0)
+      setLoadingStates((prev) => ({ ...prev, weeklyAttendance: false }));
+  }, [weeklyAttendance]);
+
+  useEffect(() => {
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) metaThemeColor.setAttribute("content", "#004AAD");
+
+    const fetchData = async () => {
       try {
+        if (!cachedAllAttendance) dispatch(GetAllAttendance(today, today));
+        if (!cachedTraineeTypes) dispatch(GetTraineeBasedTypes(today));
         dispatch(GetCdlBasedDivison(today, today));
-        dispatch(GetTraineeBasedTypes(today));
         dispatch(GetTraineeDivisionAttendance(today, today));
-        dispatch(GetAllAttendance(today, today));
-        dispatch(GetCDLWeekAttendance(weekDate));
+        dispatch(GetCDLWeekAttendance(today));
       } catch (error) {
         console.error("Error dispatching actions:", error);
       }
-    }
-  }, [dispatch, cachedAllAttendance, cachedTraineeTypes]);
+    };
 
-  // Save data to localStorage when fetched
-  useEffect(() => {
-    if (allAttendance && allAttendance.length > 0 && !cachedAllAttendance) {
-      localStorage.setItem('dashboard_allAttendance', JSON.stringify(allAttendance));
-      setCachedAllAttendance(allAttendance);
-    }
-  }, [allAttendance, cachedAllAttendance]);
+    fetchData();
+  }, [dispatch, cachedAllAttendance, cachedTraineeTypes, today]);
 
-  useEffect(() => {
-    if (traineeTypes && traineeTypes.length > 0 && !cachedTraineeTypes) {
-      localStorage.setItem('dashboard_traineeTypes', JSON.stringify(traineeTypes));
-      setCachedTraineeTypes(traineeTypes);
-    }
-  }, [traineeTypes, cachedTraineeTypes]);
-
-  // Transform division data for charts
+  // ── Transforms ──
   const transformedDivisionData =
     divisionData?.map((item) => ({
-      division: item.V_DIVNAME || item.HLD_DIV_CODE || "Unknown",
+      division: item.HLD_DIV_CODE || item.HLD_DIV_CODE || "Unknown",
       rate: parseFloat(item.PERCENTAGE_EXECUTIVE) || 0,
       categories: {
         executive: {
@@ -151,35 +677,11 @@ const Dashboard = () => {
           percent: parseFloat(item.PERCENTAGE_SUPERVISORY) || 0,
         },
         clerical: item.STRENGTH_CLERICAL
-          ? {
-              st: parseInt(item.STRENGTH_CLERICAL) || 0,
-              at: 0, // Assuming no attendance data for clerical in this API
-              percent: 0,
-            }
+          ? { st: parseInt(item.STRENGTH_CLERICAL) || 0, at: 0, percent: 0 }
           : null,
       },
     })) || [];
 
-  console.log("Division Data:", divisionData);
-  console.log("Transformed Division Data:", transformedDivisionData);
-  console.log("Trainee Types:", traineeTypes);
-  console.log("Trainee Division:", traineeDivision);
-  console.log("All Attendance:", allAttendance);
-  console.log(
-    "Weekly Attendance (from GetCDLWeekAttendance):",
-    weeklyAttendance,
-  );
-
-  // Transform trainee types data
-  const transformedTraineeOverall =
-    traineeTypes?.map((item) => ({
-      category: item.TYPE || "Unknown",
-      strength: parseInt(item.STRENGTH) || 0,
-      attendance: parseInt(item.ATTENDANCE) || 0,
-      percent: parseFloat(item.PERCENTAGE) || 0,
-    })) || [];
-
-  // Transform trainee division data
   const transformedTraineeByDivision =
     traineeDivision
       ?.map((item) => ({
@@ -194,7 +696,7 @@ const Dashboard = () => {
         total_attendance:
           (parseInt(item.ATTENDANCE_CLERICAL) || 0) +
           (parseInt(item.ATTENDANCE_INDUSTRIAL) || 0),
-        total_percent: 0, // Will calculate below
+        total_percent: 0,
       }))
       .map((item) => ({
         ...item,
@@ -204,32 +706,15 @@ const Dashboard = () => {
             : 0,
       })) || [];
 
-  // For now, using empty array for traineeByDivision since the API response wasn't provided
-  const traineeByDivision = [];
-
-  // Sample data for employee type chart
   const employeeTypeData = cachedTraineeTypes || traineeTypes || [];
 
-  // Sample data for CDPLC breakdown
-  const cdplcData = [
-    { name: "CDPLC A", value: 300 },
-    { name: "CDPLC B", value: 250 },
-    { name: "CDPLC C", value: 200 },
-  ];
-
-  const radialData = [
-    { label: "Present", value: 65 },
-    { label: "Absent", value: 35 },
-  ];
-
-  // Calculate fallback KPI values from division data
   const totalEmployees =
     divisionData?.reduce(
       (sum, item) =>
         sum +
         (parseInt(item.STRENGTH_EXECUTIVE) || 0) +
         (parseInt(item.STRENGTH_SUPERVISORY) || 0),
-      0,
+      0
     ) || 0;
 
   const totalAttendance =
@@ -238,15 +723,12 @@ const Dashboard = () => {
         sum +
         (parseInt(item.ATTENDANCE_EXECUTIVE) || 0) +
         (parseInt(item.ATTENDANCE_SUPERVISORY) || 0),
-      0,
+      0
     ) || 0;
 
   const attendanceRate =
-    totalEmployees > 0
-      ? Math.round((totalAttendance / totalEmployees) * 100)
-      : 0;
+    totalEmployees > 0 ? Math.round((totalAttendance / totalEmployees) * 100) : 0;
 
-  // Primary KPI source: GetAllAttendance API (Employee Type: TOTAL)
   const totalAttendanceItem = (allAttendance || []).find((item) => {
     const typeValue =
       item?.Type || item?.TYPE || item?.EmployeeType || item?.employeeType;
@@ -257,268 +739,292 @@ const Dashboard = () => {
     parseInt(totalAttendanceItem?.ActualStrength) || totalEmployees || 0;
   const kpiAttendance =
     parseInt(totalAttendanceItem?.Attendance) || totalAttendance || 0;
-  const kpiEligiblePercentageRaw = parseFloat(
-    totalAttendanceItem?.EligiblePercentage,
-  );
-  const kpiActualPercentageRaw = parseFloat(
-    totalAttendanceItem?.ActualPercentage,
-  );
-
-  const kpiEligiblePercentage = Number.isFinite(kpiEligiblePercentageRaw)
-    ? Math.round(kpiEligiblePercentageRaw * 100) / 100
-    : attendanceRate;
-  const kpiActualPercentage = Number.isFinite(kpiActualPercentageRaw)
-    ? Math.round(kpiActualPercentageRaw * 100) / 100
-    : attendanceRate;
+ 
+  const kpiEligibleStrength =
+    parseInt(totalAttendanceItem?.EligibleStrength) || 0;
+ 
+  const kpiAttendanceRate = kpiActualStrength > 0
+    ? Math.round((kpiAttendance / kpiActualStrength) * 100)
+    : 0;
+ 
+  const apiWeek = weeklyAttendance || [];
+  const attendanceFromApi = apiWeek.map((item) => ({
+    v: parseInt(item.Attendance) || 0,
+    dayName: item.DayName || "",
+  }));
+  const eligibleFromApi = apiWeek.map((item) => ({
+    v: parseInt(item.Eligible) || 0,
+    dayName: item.DayName || "",
+  }));
+  const rateForChart = attendanceFromApi.map((a, i) => {
+    const el = eligibleFromApi[i]?.v || 0;
+    return {
+      v: el ? Math.max(0, Math.min(100, Math.round((a.v / el) * 100))) : 0,
+      dayName: a.dayName,
+    };
+  });
 
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
-        minHeight: "calc(100vh - 120px)",
-        backgroundColor: "#ffffff",
-        padding: "32px 24px",
+        height: "calc(100vh - 120px)", 
+        backgroundColor: "#f8faff",
+        padding: { xs: "20px 14px", sm: "28px 20px", md: "36px 28px" },
+        backgroundImage:
+          "radial-gradient(rgba(0,74,173,0.06) 1px, transparent 1px)",
+        backgroundSize: "28px 28px",
+        overflow: "hidden", // Prevent outer container from scrolling
       }}
     >
-      {/* Dashboard Tabs */}
-      <DashboardTabs activeTab={activeTab} onTabChange={setActiveTab} />
-
-      {/* HR Dashboard */}
-      {activeTab === 0 && (
-        <>
-          {/* Welcome Section */}
-          {/* <Box
+      {/* Hamburger Menu Button and Header - Fixed at top */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          mb: 3,
+          flexShrink: 0,  
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <IconButton
+            onClick={toggleDrawer}
             sx={{
-              background: "linear-gradient(135deg, #004AAD 0%, #0066FF 100%)",
-              color: "white",
-              padding: "32px",
-              borderRadius: "16px",
-              marginBottom: "32px",
-              boxShadow: "0 8px 32px rgba(0, 74, 173, 0.3)",
-            }}
-          >
-            <Typography
-              variant="h4"
-              sx={{
-                fontWeight: 700,
-                marginBottom: "8px",
-                fontSize: "28px",
-              }}
-            >
-              Welcome to BizTrack Dashboard
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "16px",
-                opacity: 0.9,
-                fontWeight: 400,
-              }}
-            >
-            </Typography>
-          </Box> */}
-
-          {/* KPI Cards Grid */}
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                xs: "repeat(2, 1fr)",
-                sm: "repeat(2, 1fr)",
-                md: "repeat(2, 1fr)",
-                lg: "repeat(4, 1fr)",
+              backgroundColor: '#ffffff',
+              boxShadow: '0 2px 8px rgba(0,74,173,0.12)',
+              borderRadius: '12px',
+              padding: '10px',
+              '&:hover': {
+                backgroundColor: '#f5f5f5',
+                transform: 'scale(1.05)',
               },
-              gap: "12px",
-              marginBottom: "12px",
+              transition: 'all 0.2s ease',
             }}
           >
-            <KpiCard
-              label="Actual Strength"
-              target={kpiActualStrength}
-              icon={Users}
-              sparkData={sparklines.total}
-              sparkColor="#3b82f6"
-              delay={0}
-            />
+            <MenuIcon sx={{ color: '#004AAD' }} />
+          </IconButton>
 
-            <KpiCard
-              label="Total Attendance"
-              target={kpiAttendance}
-              icon={UserCheck}
-              sparkData={sparklines.attendance}
-              sparkColor="#8b5cf6"
-              delay={1}
-            />
-
-            <KpiCard
-              label="Eligible Percentage"
-              target={kpiEligiblePercentage}
-              suffix="%"
-              icon={Clock}
-              sparkData={sparklines.rate}
-              sparkColor="#f43f5e"
-              delay={2}
-            />
-
-            <KpiCard
-              label="Actual Percentage "
-              target={kpiActualPercentage}
-              suffix="%"
-              icon={TrendingUp}
-              sparkData={sparklines.rate}
-              sparkColor="#06b6d4"
-              delay={3}
-            />
-          </Box>
-
-          {/* Employee Strength vs Attendance Chart */}
-          <Box sx={{ marginTop: "20px" }}>
-            <EmployeeStrengthAttendanceChart allAttendance={cachedAllAttendance || allAttendance} />
-          </Box>
-
-          {/* Weekly trend and Employee Type charts side-by-side */}
-          <Box
-            sx={{
-              marginTop: "32px",
-              display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-              gap: "16px",
-            }}
-          >
-            {/* Weekly attendance: prefer API data, fallback to sample sparklines */}
-            {(() => {
-              const apiWeek = weeklyAttendance || [];
-
-              // Transform API response: GetCDLWeekAttendance returns {Attendance, Eligible, DayName, AttDate}
-              if (apiWeek && apiWeek.length > 0) {
-                const attendanceFromApi = apiWeek.map((item) => ({
-                  v: parseInt(item.Attendance) || 0,
-                  dayName: item.DayName || "",
-                }));
-                const eligibleFromApi = apiWeek.map((item) => ({
-                  v: parseInt(item.Eligible) || 0,
-                  dayName: item.DayName || "",
-                }));
-
-                // Calculate rate based on API data: (Attendance / Eligible) * 100
-                const rateForChart = attendanceFromApi.map((a, i) => {
-                  const el = eligibleFromApi[i]?.v || 0;
-                  const rate = el ? Math.round((a.v / el) * 100) : 0;
-                  return {
-                    v: Math.max(0, Math.min(100, rate)),
-                    dayName: a.dayName,
-                  };
-                });
-
-                return (
-                  <WeeklyAttendanceTrend
-                    eligibleData={eligibleFromApi}
-                    attendanceData={attendanceFromApi}
-                    rateData={rateForChart}
-                  />
-                );
-              }
-
-              // fallback to sample data if no API data
-              return (
-                <WeeklyAttendanceTrend
-                  eligibleData={sparklines.eligible}
-                  attendanceData={sparklines.attendance}
-                  rateData={sparklines.rate}
-                />
-              );
-            })()}
-
-            <EmployeeTypeChart employeeTypeData={employeeTypeData} />
-          </Box>
-
-          {/* CDPLC Category Attendance Chart */}
-          <Box sx={{ marginTop: "32px" }}>
-            <CDPLCBreakdown hadDate="2021-02-19" />
-          </Box>
-
-          {/* Division Attendance Rate Chart */}
-          {transformedDivisionData &&
-            transformedDivisionData.length > 0 &&
-            !loading && (
-              <Box sx={{ marginTop: "32px" }}>
-                <DivisionBreakdown divisionData={transformedDivisionData} />
-              </Box>
-            )}
-
-          {loading && (
-            <Box
-              sx={{
-                marginTop: "32px",
-                padding: "40px",
-                textAlign: "center",
-                backgroundColor: "#f5f5f5",
-                borderRadius: "8px",
-              }}
-            >
-              <Typography variant="h6" color="textSecondary">
-                Loading dashboard data...
-              </Typography>
-            </Box>
-          )}
-
-          {/* Trainees Overview Charts */}
-          {/* <Box sx={{ marginTop: "32px" }}>
-            <TraineesOverview
-              traineeOverall={transformedTraineeOverall}
-              traineeByDivision={transformedTraineeByDivision}
-            />
-          </Box> */}
-
-          {/* Quick Access Section */}
-          <QuickAccessSection />
-        </>
-      )}
-
-      {/* Financial Dashboard */}
-      {activeTab === 1 && (
-        <Box
-          sx={{
-            background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-            color: "white",
-            padding: "32px",
-            borderRadius: "16px",
-            marginBottom: "32px",
-            boxShadow: "0 8px 32px rgba(16, 185, 129, 0.3)",
-          }}
-        >
           <Typography
-            variant="h4"
+            variant="h5"
             sx={{
               fontWeight: 700,
-              marginBottom: "8px",
-              fontSize: "28px",
+              background: 'linear-gradient(135deg, #004AAD 0%, #3b82f6 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              fontSize: { xs: '1.2rem', sm: '1.5rem' },
             }}
           >
-            Financial Dashboard
+            {activeTab === 0 ? 'HR Dashboard' :
+              activeTab === 1 ? 'Financial Dashboard' :
+                activeTab === 4 ? 'Company Overview' :
+                  activeTab === 5 ? 'Own Overview' :
+                    'Dashboard'}
           </Typography>
-          <Typography
-            sx={{
-              fontSize: "16px",
-              opacity: 0.9,
-              fontWeight: 400,
-            }}
-          >
-            Financial metrics, budgets, and fiscal performance overview.
-          </Typography>
-          <Box sx={{ marginTop: "24px" }}>
-            <Typography
+        </Box>
+
+        {/* Optional: Add date display or other actions here */}
+        <Typography
+          variant="body2"
+          sx={{
+            color: '#64748b',
+            backgroundColor: '#ffffff',
+            padding: '6px 12px',
+            borderRadius: '20px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            display: { xs: 'none', sm: 'block' }
+          }}
+        >
+          {new Date().toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })}
+        </Typography>
+      </Box>
+
+      {/* Navigation Drawer */}
+      <NavigationDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+      />
+
+      {/* Scrollable Content Area */}
+      <Box
+        sx={{
+          flex: 1,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          pr: { xs: 0, sm: 1 },  
+          '&::-webkit-scrollbar': {
+            width: '0px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#f1f1f1',
+            borderRadius: '10px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: '#f8faff',
+            borderRadius: '10px',
+            '&:hover': {
+              background: '#a8a8a8',
+            },
+          },
+        }}
+      >
+        {/* ── HR Dashboard ── */}
+        {activeTab === 0 && (
+          <Fade in={true} timeout={600}>
+            <Box>
+              {/* Section label - Now scrollable */}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1.5,
+                  mb: 2,
+                  mt: 0.5,
+                }}
+              > 
+              </Box>
+
+              {/* ── KPI Cards ── */}
+              <KpiCardsGrid
+                loadingStates={loadingStates}
+                kpiAttendance={kpiAttendance}
+                kpiActualStrength={kpiActualStrength}
+                kpiEligibleStrength={kpiEligibleStrength}
+                kpiAttendanceRate={kpiAttendanceRate}
+              />
+
+              {/* ── Employee Strength vs Attendance ── */}
+              <Box sx={{ marginBottom: "24px" }}>
+                {loadingStates.allAttendance ? (
+                  <ChartSkeleton height={350} />
+                ) : (
+                  <EmployeeStrengthAttendanceChart
+                    allAttendance={cachedAllAttendance || allAttendance}
+                  />
+                )}
+              </Box>
+
+              {/* ── Weekly Attendance ── */}
+              <Box sx={{ marginBottom: "24px" }}>
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+                    gap: "16px",
+                  }}
+                >
+                  {/* Weekly Attendance Trend */}
+                  <Box>
+                    {loadingStates.weeklyAttendance ? (
+                      <ChartSkeleton height={300} />
+                    ) : apiWeek.length > 0 ? (
+                      <WeeklyAttendanceTrend
+                        eligibleData={eligibleFromApi}
+                        attendanceData={attendanceFromApi}
+                        rateData={rateForChart}
+                      />
+                    ) : (
+                      <WeeklyAttendanceTrend
+                        eligibleData={[]}
+                        attendanceData={[]}
+                        rateData={[]}
+                      />
+                    )}
+                  </Box>
+
+                  {/* Employee Type Chart */} 
+                </Box>
+              </Box>
+
+              {/* ── CDPLC Breakdown ── */}
+              <Box sx={{ marginBottom: "24px" }}>
+                {loadingStates.divisionData ? (
+                  <ChartSkeleton height={300} />
+                ) : (
+                  <CDPLCBreakdown hadDate={today} />
+                )}
+              </Box>
+
+              {/* ── Division Breakdown ── */}
+              <Box sx={{ marginBottom: "24px" }}>
+                {loadingStates.divisionData ? (
+                  <ChartSkeleton height={400} />
+                ) : (
+                  transformedDivisionData.length > 0 && (
+                    <DivisionBreakdown divisionData={transformedDivisionData} />
+                  )
+                )}
+              </Box>
+              
+              <Box sx={{ marginBottom: "24px" }}>
+                {loadingStates.traineeTypes ? (
+                  <ChartSkeleton height={300} />
+                ) : (
+                  <EmployeeTypeChart employeeTypeData={employeeTypeData} />
+                )}
+              </Box>
+              
+              <Box sx={{ marginBottom: "24px" }}>
+                {loadingStates.traineeDivision ? (
+                  <ChartSkeleton height={400} />
+                ) : (
+                  <TraineesDivisionBreakdown traineeDivisionData={traineeDivision} />
+                )}
+              </Box>
+
+              {/* Add bottom padding for better scrolling experience */}
+              <Box sx={{ height: '20px' }} />
+            </Box>
+          </Fade>
+        )}
+
+        {/* ── Financial Dashboard ── */}
+        {activeTab === 1 && (
+          <Fade in={true} timeout={500}>
+            <Box
               sx={{
-                fontSize: "14px",
-                opacity: 0.8,
-                fontStyle: "italic",
+                background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                color: "white",
+                padding: "40px 36px",
+                borderRadius: "20px",
+                marginBottom: "32px",
+                boxShadow: "0 8px 40px rgba(16,185,129,0.25)",
               }}
             >
-              Financial dashboard content coming soon...
-            </Typography>
-          </Box>
-        </Box>
-      )}
+              <Typography
+                variant="h4"
+                sx={{ fontWeight: 700, marginBottom: "8px", fontSize: "28px" }}
+              >
+                Financial Dashboard
+              </Typography>
+              <Typography sx={{ fontSize: "16px", opacity: 0.85, fontWeight: 400 }}>
+                Financial metrics, budgets, and fiscal performance overview.
+              </Typography>
+              <Box sx={{ marginTop: "24px" }}>
+                <Typography sx={{ fontSize: "14px", opacity: 0.75, fontStyle: "italic" }}>
+                  Financial dashboard content coming soon...
+                </Typography>
+              </Box>
+            </Box>
+          </Fade>
+        )}
+        {activeTab === 4 && (
+          <Fade in={true} timeout={600}>
+            <Box>
+              <CompanyDashboard selectedYear="2026" />
+            </Box>
+          </Fade>
+        )}
+
+      </Box>
     </Box>
   );
 };

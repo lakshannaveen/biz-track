@@ -9,7 +9,6 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  Legend,
   ReferenceLine,
 } from "recharts";
 
@@ -73,26 +72,15 @@ export function WeeklyAttendanceTrend({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Validate that we have data
   if (!eligibleData?.length || !attendanceData?.length || !rateData?.length) {
-    return null; // Don't render if no data available
+    return null;
   }
 
-  // Build chart data using all available points
   const len = Math.max(
     eligibleData.length,
     attendanceData.length,
     rateData.length,
   );
-
-  console.log("WeeklyAttendanceTrend - Data received:", {
-    eligibleLength: eligibleData.length,
-    attendanceLength: attendanceData.length,
-    rateLength: rateData.length,
-    eligibleData,
-    attendanceData,
-    rateData,
-  });
 
   const chartData = [];
   for (let i = 0; i < len; i++) {
@@ -100,7 +88,6 @@ export function WeeklyAttendanceTrend({
     const attendanceItem = attendanceData[i];
     const rateItem = rateData[i];
 
-    // Use dayName from the first available source
     const dayName =
       eligibleItem?.dayName ||
       attendanceItem?.dayName ||
@@ -116,9 +103,6 @@ export function WeeklyAttendanceTrend({
     chartData.push(point);
   }
 
-  console.log("Chart data built:", chartData);
-
-  // Don't render if chartData is empty or invalid
   if (
     chartData.length === 0 ||
     chartData.every((d) => !d.eligible && !d.attendance)
@@ -126,7 +110,6 @@ export function WeeklyAttendanceTrend({
     return null;
   }
 
-  // Calculate responsive values
   const chartMargin = {
     top: 30,
     right: isMobile ? -10 : -13,
@@ -135,9 +118,7 @@ export function WeeklyAttendanceTrend({
   };
 
   const chartHeight = isMobile ? 450 : 650;
-  const barGap = chartData.length > 5 ? 30 : 50;
-  const barSizeEligible = chartData.length > 5 ? 18 : 28;
-  const barSizeAttendance = chartData.length > 5 ? 12 : 18;
+  const barSize = chartData.length > 5 ? 28 : 40;
   const yAxisWidth = isMobile ? (chartData.length > 5 ? 50 : 60) : 60;
   const yAxisRightWidth = isMobile ? (chartData.length > 5 ? 45 : 60) : 60;
 
@@ -175,7 +156,8 @@ export function WeeklyAttendanceTrend({
             <ComposedChart
               data={chartData}
               margin={chartMargin}
-              barCategoryGap={barGap}
+              barCategoryGap="30%"
+              barGap={0}
             >
               <CartesianGrid
                 strokeDasharray="3 3"
@@ -224,31 +206,32 @@ export function WeeklyAttendanceTrend({
                 strokeWidth={1.5}
               />
 
-              {/* Eligible as pale background bar */}
+              {/* Eligible rendered first = behind; light blue, full opacity */}
               <Bar
                 yAxisId="left"
                 dataKey="eligible"
                 name="Eligible"
-                barSize={barSizeEligible}
-                fill="#06b6d4"
-                radius={[8, 8, 8, 8]}
+                barSize={barSize}
+                fill="#bfdbfe"  
+                radius={[6, 6, 6, 6]}
               />
+              {/* Attendance rendered second = in front; darker blue, narrower */}
               <Bar
                 yAxisId="left"
                 dataKey="attendance"
                 name="Attendance"
-                barSize={barSizeAttendance}
+                barSize={barSize * 0.65} 
                 fill="#3b82f6"
-                radius={[8, 8, 8, 8]}
+                radius={[6, 6, 6, 6]}
               />
               <Line
                 yAxisId="right"
                 type="monotone"
                 dataKey="rate"
                 name="Rate %"
-                stroke="#f59e0b"
-                strokeWidth={2}
-                dot={{ r: 4 }}
+                //stroke="#f59e0b"
+                //strokeWidth={2}
+                //dot={{ r: 4, fill: "#f59e0b" }}
               />
             </ComposedChart>
           </ResponsiveContainer>
@@ -270,7 +253,7 @@ export function WeeklyAttendanceTrend({
                 width: 10,
                 height: 10,
                 borderRadius: "50%",
-                backgroundColor: "#06b6d4",
+                backgroundColor: "#bfdbfe",
               }}
             />
             <Typography sx={{ fontSize: { xs: 9, sm: 10 }, color: "#64748b" }}>

@@ -227,7 +227,7 @@ export function CDPLCBreakdown({
                 color: "#1a2d4d",
               }}
             >
-              CDPLC Category Attendance
+              CDPLC Category 
             </Typography>
             <Typography
               sx={{
@@ -242,9 +242,9 @@ export function CDPLCBreakdown({
           <Box sx={{ textAlign: "right" }}>
             <Typography
               sx={{
-                fontSize: "28px",
+                fontSize: "20px",
                 fontWeight: 700,
-                color: "#1a2d4d",
+                color: "#2512ca",
               }}
             >
               {overallPercentage}%

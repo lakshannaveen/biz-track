@@ -17,12 +17,7 @@ const AttendanceCustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     const percentage = Number(data?.percentage || 0);
-
-    // Show tooltip only for low-attendance (red) bars
-    if (percentage >= 70) {
-      return null;
-    }
-
+  
     return (
       <Box
         sx={{
@@ -113,7 +108,6 @@ const AttendanceCustomTooltip = ({ active, payload }) => {
   }
   return null;
 };
-
 export function EmployeeTypeChart({ employeeTypeData = [] }) {
   const dispatch = useDispatch();
   const traineeTypes = useSelector(
@@ -122,8 +116,7 @@ export function EmployeeTypeChart({ employeeTypeData = [] }) {
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
-
-  // If no prop data provided, fetch from API via redux action
+ 
   useEffect(() => {
     if (!employeeTypeData || employeeTypeData.length === 0) {
       const today = new Date().toISOString().split("T")[0];
@@ -139,8 +132,7 @@ export function EmployeeTypeChart({ employeeTypeData = [] }) {
     employeeTypeData && employeeTypeData.length > 0
       ? employeeTypeData
       : traineeTypes;
-
-  // Normalize various possible API shapes into a consistent structure
+ 
   const normalized = sourceData.map((item) => {
     const type =
       item.type ||
@@ -205,7 +197,7 @@ export function EmployeeTypeChart({ employeeTypeData = [] }) {
               marginBottom: "2px",
             }}
           >
-            Attendance by Employee Type
+            Trainees by Type
           </Typography>
           <Typography
             sx={{
@@ -220,7 +212,7 @@ export function EmployeeTypeChart({ employeeTypeData = [] }) {
         {/* Chart */}
         <Box
           sx={{
-            height: { xs: "260px", md: "320px" },
+            height: { xs: "120px", md: "320px" },
             width: "100%",
             marginBottom: "16px",
           }}
