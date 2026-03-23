@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+// Icons: using lucide-react for consistent SVG icons
+import { Save, Edit } from "lucide-react";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const STORAGE_KEY = "cdplc_collection_items_v3";
@@ -641,7 +643,17 @@ export default function DailyCollectionSheet() {
                     transition: "transform 0.15s, box-shadow 0.15s",
                   }}
                 >
-                  {editId ? "💾 Update Item" : "💾 Save Item"}
+                  {editId ? (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                      <Edit size={14} />
+                      Update Item
+                    </span>
+                  ) : (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                      <Save size={14} />
+                      Save Item
+                    </span>
+                  )}
                 </button>
                 <button
                   onClick={() => { setView("list"); setForm(defaultForm); setEditId(null); setSelectedAdmin(""); }}
