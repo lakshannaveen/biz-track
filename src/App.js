@@ -534,6 +534,7 @@ import Reservations1 from "./layouts/reservations/Reservations";
 import Rfid_Attendence from "./layouts/rfid_attendence/Rfid_Attendence";
 import Personal from "./layouts/personal/personal"; 
 import CollectForm from "./layouts/CollectingForm/Collectingform";
+import AdminChaserSelection from "./layouts/CollectingForm/AdminChaserSelection";
 
 // Import all approval component files
 import IwoApp from "./layouts/approvals/IwoApp";
@@ -666,6 +667,7 @@ function App() {
                       <Route element={<Medical />} path="/medical" />
                       <Route element={<Telephone />} path="/telephone" />
                       <Route element={<Jobs />} path="/jobs" />
+                      <Route element={<AdminChaserSelection />} path="/admin-chaser-selection" />
                       <Route element={<CollectForm />} path="/collectForm" />
                       <Route
                         element={<MaintenancePage />}

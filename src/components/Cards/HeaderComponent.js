@@ -700,7 +700,7 @@ export default function HeaderComponent() {
                 >
                   <CardActionArea
                     onClick={() => {
-                      navigate("/collectForm");
+                      navigate("/admin-chaser-selection");
                     }}
                   >
                     <div
