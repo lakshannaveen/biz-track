@@ -1,5 +1,7 @@
 import React from "react";
 import { Box, Card, CardActionArea, Typography, Grid } from "@mui/material";
+import adminIcon from "../../assets/icons/user.png";
+import chaserIcon from "../../assets/icons/briefcase.png";
 import { useNavigate } from "react-router-dom";
 
 const AdminChaserSelection = () => {
@@ -69,21 +71,34 @@ const AdminChaserSelection = () => {
                   textAlign: "center",
                 }}
               >
+                <Box
+                  sx={{
+                    width: 72,
+                    height: 72,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mb: 1.5,
+                    background: "linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)",
+                    boxShadow: 1,
+                  }}
+                >
+                  <Box component="img" src={adminIcon} alt="admin" sx={{ width: 40, height: 40 }} />
+                </Box>
+
                 <Typography
                   variant="h6"
                   component="div"
                   sx={{
                     fontWeight: 600,
                     color: "#1976d2",
-                    marginBottom: 1,
+                    marginBottom: 0.5,
                   }}
                 >
                   Admin
                 </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                >
+                <Typography variant="body2" color="text.secondary">
                   Select admin role
                 </Typography>
               </Box>
@@ -126,21 +141,34 @@ const AdminChaserSelection = () => {
                   textAlign: "center",
                 }}
               >
+                <Box
+                  sx={{
+                    width: 72,
+                    height: 72,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mb: 1.5,
+                    background: "linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%)",
+                    boxShadow: 1,
+                  }}
+                >
+                  <Box component="img" src={chaserIcon} alt="chaser" sx={{ width: 40, height: 40 }} />
+                </Box>
+
                 <Typography
                   variant="h6"
                   component="div"
                   sx={{
                     fontWeight: 600,
                     color: "#1976d2",
-                    marginBottom: 1,
+                    marginBottom: 0.5,
                   }}
                 >
                   Chaser
                 </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                >
+                <Typography variant="body2" color="text.secondary">
                   Select chaser role
                 </Typography>
               </Box>
