@@ -113,9 +113,35 @@ const GLOBAL_CSS = `
 
   .cdp-input:focus { border-color: #004AAD; outline: none; }
   
+  .cdp-header-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .cdp-header-meta {
+    text-align: right;
+    min-width: 140px;
+  }
+  
   @media (max-width: 768px) {
     .cdp-mobile-card {
       margin-bottom: 12px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .cdp-header-top-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .cdp-header-meta {
+      text-align: left;
+      min-width: 0;
+      margin-top: 6px;
     }
   }
 `;
@@ -534,63 +560,179 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
 
       {/* ── Scrollable Body ───────────────────────────────────────────────── */}
       <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", padding: "20px 16px 32px" }}>
-        {/* ── Selection Panel (Admin & Chaser & Date) ─────────────────── */}
+        {/* ── Header / Summary Card ───────────────────────────────────── */}
         <div
           style={{
-            background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)",
-            borderRadius: 16,
-            padding: "16px 20px",
+            borderRadius: 18,
+            background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 55%, #0ea5e9 100%)",
+            padding: "16px 18px 18px",
             marginBottom: 20,
-            boxShadow: "0 4px 20px rgba(0,74,173,0.25)",
+            boxShadow: "0 10px 30px rgba(15,23,42,0.35)",
+            color: "#ffffff",
           }}
         >
-          <div style={{ color: "#fff", marginBottom: 12 }}>
-            <div style={{ fontSize: 11, opacity: 0.7, textTransform: "uppercase", letterSpacing: "0.5px" }}>
-              COLOMBO DOCKYARD PLC
-            </div>
-            <div style={{ fontSize: 15, fontWeight: 700, display: "flex", alignItems: "center", gap: 8 }}>
-              <ClipboardList size={18} />
-              Daily Collection Detail Sheet
-            </div>
-            <div style={{ fontSize: 11, opacity: 0.7, marginTop: 2 }}>
-              Supplies & Material Control — Local Purchase
-            </div>
-            <div style={{ fontSize: 11, opacity: 0.85, marginTop: 6 }}>
-              {isChaser ? "Role: Chaser (View only, can mark collected)" : "Role: Admin (Full access)"}
-            </div>
-            <div style={{ fontSize: 11, opacity: 0.85, marginTop: 2 }}>
-              {dateLong}
-            </div>
-          </div>
-
-          {/* Date Picker */}
-          <div style={{ marginBottom: 12 }}>
-            <label style={{ fontSize: 11, color: "rgba(255,255,255,0.7)", display: "block", marginBottom: 4 }}>
-              <Calendar size={12} style={{ display: "inline", marginRight: 4 }} />
-              Select Date
-            </label>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              style={{
-                background: "rgba(255,255,255,0.15)",
-                border: "1px solid rgba(255,255,255,0.3)",
-                borderRadius: 8,
-                padding: "8px 12px",
-                color: "#fff",
-                fontSize: 13,
-                width: "100%",
-                outline: "none",
-              }}
-            />
-          </div>
-
-          {/* Admin and Chaser selection row */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+          {/* Top row: title + role/date */}
+          <div className="cdp-header-top-row">
             <div>
-              <label style={{ fontSize: 11, color: "rgba(255,255,255,0.7)", display: "block", marginBottom: 4 }}>
-                <Users size={12} style={{ display: "inline", marginRight: 4 }} />
+              <div
+                style={{
+                  fontSize: 11,
+                  opacity: 0.8,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                COLOMBO DOCKYARD PLC
+              </div>
+              <div
+                style={{
+                  marginTop: 4,
+                  fontSize: 16,
+                  fontWeight: 700,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <ClipboardList size={18} />
+                Daily Collection Detail Sheet
+              </div>
+              <div style={{ fontSize: 11, opacity: 0.85, marginTop: 2 }}>
+                Supplies & Material Control — Local Purchase
+              </div>
+            </div>
+
+            <div className="cdp-header-meta">
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  padding: "3px 10px",
+                  borderRadius: 999,
+                  background: "rgba(15,23,42,0.25)",
+                  fontSize: 11,
+                  fontWeight: 600,
+                  marginBottom: 6,
+                }}
+              >
+                <User size={12} style={{ marginRight: 4 }} />
+                {isChaser ? "Chaser View" : "Admin View"}
+              </div>
+              <div style={{ fontSize: 11, opacity: 0.7 }}>Today</div>
+              <div style={{ fontSize: 12, fontWeight: 600 }}>{dateLong}</div>
+            </div>
+          </div>
+
+          {/* Middle row: quick stats */}
+          <div
+            style={{
+              marginTop: 14,
+              display: "grid",
+              gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+              gap: 8,
+            }}
+          >
+            <div
+              style={{
+                background: "rgba(15,23,42,0.18)",
+                borderRadius: 10,
+                padding: "8px 10px",
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                fontSize: 12,
+              }}
+            >
+              <ClipboardList size={16} />
+              <div>
+                <div style={{ fontSize: 10, opacity: 0.8 }}>Total Items</div>
+                <div style={{ fontWeight: 700 }}>{total}</div>
+              </div>
+            </div>
+            <div
+              style={{
+                background: "rgba(15,23,42,0.18)",
+                borderRadius: 10,
+                padding: "8px 10px",
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                fontSize: 12,
+              }}
+            >
+              <Clock size={16} />
+              <div>
+                <div style={{ fontSize: 10, opacity: 0.8 }}>Pending</div>
+                <div style={{ fontWeight: 700 }}>{pending}</div>
+              </div>
+            </div>
+            <div
+              style={{
+                background: "rgba(15,23,42,0.18)",
+                borderRadius: 10,
+                padding: "8px 10px",
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                fontSize: 12,
+              }}
+            >
+              <CheckCircle2 size={16} />
+              <div>
+                <div style={{ fontSize: 10, opacity: 0.8 }}>Collected</div>
+                <div style={{ fontWeight: 700 }}>{collected}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom row: date + filters */}
+          <div
+            style={{
+              marginTop: 16,
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
+              gap: 10,
+            }}
+          >
+            <div>
+              <label
+                style={{
+                  fontSize: 11,
+                  color: "rgba(255,255,255,0.8)",
+                  display: "block",
+                  marginBottom: 4,
+                }}
+              >
+                <Calendar size={12} style={{ marginRight: 4 }} />
+                Select Date
+              </label>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                style={{
+                  width: "100%",
+                  background: "rgba(255,255,255,0.12)",
+                  border: "1px solid rgba(255,255,255,0.35)",
+                  borderRadius: 10,
+                  padding: "8px 10px",
+                  color: "#fff",
+                  fontSize: 13,
+                  outline: "none",
+                }}
+              />
+            </div>
+
+            <div>
+              <label
+                style={{
+                  fontSize: 11,
+                  color: "rgba(255,255,255,0.8)",
+                  display: "block",
+                  marginBottom: 4,
+                }}
+              >
+                <Users size={12} style={{ marginRight: 4 }} />
                 Select Admin
               </label>
               <SearchableSelect
@@ -603,8 +745,15 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
             </div>
 
             <div>
-              <label style={{ fontSize: 11, color: "rgba(255,255,255,0.7)", display: "block", marginBottom: 4 }}>
-                <Truck size={12} style={{ display: "inline", marginRight: 4 }} />
+              <label
+                style={{
+                  fontSize: 11,
+                  color: "rgba(255,255,255,0.8)",
+                  display: "block",
+                  marginBottom: 4,
+                }}
+              >
+                <Truck size={12} style={{ marginRight: 4 }} />
                 Select Chaser
               </label>
               <SearchableSelect
@@ -616,53 +765,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
               />
             </div>
           </div>
-
-          {/* Chaser count display */}
-          {selectedChaser && (
-            <div
-              style={{
-                background: "rgba(255,255,255,0.1)",
-                borderRadius: 8,
-                padding: "6px 12px",
-                fontSize: 12,
-                color: "#fff",
-                textAlign: "center",
-                marginTop: 8,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 6,
-              }}
-            >
-              <User size={12} />
-              Chaser: {selectedChaser} - Ready for collection
-            </div>
-          )}
-
-          {/* Progress bar */}
-          {selectedAdmin && (
-            <div style={{ marginTop: 12 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.7)" }}>
-                  Collection Progress ({selectedAdmin})
-                </span>
-                <span style={{ fontSize: 12, color: "#fff", fontWeight: 600 }}>
-                  {collected}/{total} ({pct}%)
-                </span>
-              </div>
-              <div style={{ height: 6, background: "rgba(255,255,255,0.2)", borderRadius: 10, overflow: "hidden" }}>
-                <div
-                  style={{
-                    height: "100%",
-                    width: `${pct}%`,
-                    background: "#34d399",
-                    borderRadius: 10,
-                    transition: "width 0.5s ease",
-                  }}
-                />
-              </div>
-            </div>
-          )}
         </div>
 
         {/* ── Tab Navigation ────────────────────────────────────────────── */}
