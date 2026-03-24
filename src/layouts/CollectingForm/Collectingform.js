@@ -165,6 +165,7 @@ function SearchableSelect({ options = [], value, onChange, placeholder = "-- Sel
         }}
         style={{
           ...inputSx,
+          background: value ? "#fff" : "#1976d2", // blue background when showing placeholder
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -172,8 +173,8 @@ function SearchableSelect({ options = [], value, onChange, placeholder = "-- Sel
         }}
         id={id}
       >
-        <div style={{ color: value ? "#0f172a" : "#94a3b8", flex: 1 }}>{value || placeholder}</div>
-        <div style={{ marginLeft: 8, color: "#64748b" }}>{open ? "▴" : "▾"}</div>
+        <div style={{ color: value ? "#0f172a" : "#ffffff", flex: 1 }}>{value || placeholder}</div>
+        <div style={{ marginLeft: 8, color: value ? "#64748b" : "#e0f2fe" }}>{open ? "▴" : "▾"}</div>
       </div>
 
       {open && (
