@@ -157,8 +157,8 @@ function InjectStyles() {
   return null;
 }
 
-// ─── Searchable Select Component ─���──────────────────────────────────────────
-function SearchableSelect({ options = [], value, onChange, placeholder = "-- Select --", id }) {
+// ─── Searchable Select Component ───────────────────────────────────────────
+function SearchableSelect({ options = [], value, onChange, placeholder = "-- Select --", id, usePrimaryPlaceholderStyle = true }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const containerRef = useRef();
@@ -173,6 +173,9 @@ function SearchableSelect({ options = [], value, onChange, placeholder = "-- Sel
   }, []);
 
   const filtered = options.filter((o) => o.toLowerCase().includes(query.toLowerCase()));
+
+  const isPlaceholder = !value;
+  const usePrimary = usePrimaryPlaceholderStyle && isPlaceholder;
 
   return (
     <div ref={containerRef} style={{ position: "relative" }}>
@@ -191,7 +194,7 @@ function SearchableSelect({ options = [], value, onChange, placeholder = "-- Sel
         }}
         style={{
           ...inputSx,
-          background: value ? "#fff" : "#1976d2", // blue background when showing placeholder
+          background: usePrimary ? "#1976d2" : "#fff",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -199,8 +202,8 @@ function SearchableSelect({ options = [], value, onChange, placeholder = "-- Sel
         }}
         id={id}
       >
-        <div style={{ color: value ? "#0f172a" : "#ffffff", flex: 1 }}>{value || placeholder}</div>
-        <div style={{ marginLeft: 8, color: value ? "#64748b" : "#e0f2fe" }}>{open ? "▴" : "▾"}</div>
+        <div style={{ color: usePrimary ? "#ffffff" : "#0f172a", flex: 1 }}>{value || placeholder}</div>
+        <div style={{ marginLeft: 8, color: usePrimary ? "#e0f2fe" : "#64748b" }}>{open ? "▴" : "▾"}</div>
       </div>
 
       {open && (
@@ -741,6 +744,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                 onChange={(v) => setSelectedAdmin(v)}
                 placeholder="-- Select Admin --"
                 id="select-admin-header"
+                usePrimaryPlaceholderStyle={false}
               />
             </div>
 
@@ -762,6 +766,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                 onChange={(v) => setSelectedChaser(v)}
                 placeholder="-- Select Chaser --"
                 id="select-chaser-header"
+                usePrimaryPlaceholderStyle={false}
               />
             </div>
           </div>
@@ -868,6 +873,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                     onChange={(v) => setSelectedAdmin(v)}
                     placeholder="-- Select Admin --"
                     id="select-admin-form"
+                    usePrimaryPlaceholderStyle={false}
                   />
                 </Field>
               </div>
@@ -882,6 +888,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                         onChange={(v) => setForm({ ...form, [key]: v })}
                         placeholder="-- Select --"
                         id={`moc-${key}`}
+                        usePrimaryPlaceholderStyle={false}
                       />
                     ) : type === "status" ? (
                       <SearchableSelect
