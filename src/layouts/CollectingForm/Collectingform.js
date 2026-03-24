@@ -168,6 +168,8 @@ function SearchableSelect({
   // When true, keep the primary (blue) styling even after a value is selected.
   // Used for the top-card Admin/Chaser selectors only.
   keepPrimaryBackgroundAfterSelect = false,
+  // Allow caller to customize the primary background color (top card only)
+  primaryBackgroundColor = "#1976d2",
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -204,7 +206,7 @@ function SearchableSelect({
         }}
         style={{
           ...inputSx,
-          background: usePrimary ? "#1976d2" : "#fff",
+          background: usePrimary ? primaryBackgroundColor : "#fff",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -785,6 +787,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                   placeholder="-- Select Admin --"
                   id="select-admin-header"
                   keepPrimaryBackgroundAfterSelect
+                  primaryBackgroundColor="#004AAD"
                 />
               </div>
 
@@ -807,6 +810,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                   placeholder="-- Select Chaser --"
                   id="select-chaser-header"
                   keepPrimaryBackgroundAfterSelect
+                  primaryBackgroundColor="#004AAD"
                 />
               </div>
             </div>
