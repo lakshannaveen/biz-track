@@ -19,6 +19,9 @@ import {
   Square,
 } from "lucide-react";
 
+// Services
+import CommonService from "../../service/CommonService";
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 const STORAGE_KEY = "cdplc_collection_items_v3";
 const MOC_OPTIONS = ["PE", "EM", "PM", "ON", "NC", "CA", "SR", "BS", "OR", "CP"];
@@ -334,6 +337,12 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [filteredItems, setFilteredItems] = useState([]);
 
+  // API data states
+  const [poOptions, setPoOptions] = useState([]);
+  const [mocOptions, setMocOptions] = useState([]);
+  const [supplierOptions, setSupplierOptions] = useState([]);
+  const [loadingOptions, setLoadingOptions] = useState(false);
+
   const dateLong = new Date(selectedDate).toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
@@ -428,6 +437,38 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
 
     setFilteredItems(filtered);
   }, [items, selectedAdmin, selectedDate]);
+
+  // Fetch TODO list options
+  useEffect(() => {
+    const fetchToDoList = async () => {
+      setLoadingOptions(true);
+      try {
+        const response = await CommonService.GetToDoList();
+        if (response.data && response.data.ResultSet) {
+          const data = response.data.ResultSet;
+          
+          // Extract unique PO Nos
+          const uniquePoNos = [...new Set(data.map(item => item.PO_NO).filter(Boolean))];
+          setPoOptions(uniquePoNos);
+          
+          // Extract unique MOCs
+          const uniqueMocs = [...new Set(data.map(item => String(item.MOCNO)).filter(Boolean))];
+          setMocOptions(uniqueMocs);
+          
+          // Extract unique Supplier Names
+          const uniqueSuppliers = [...new Set(data.map(item => item.SUPPLIER_NAME).filter(Boolean))];
+          setSupplierOptions(uniqueSuppliers);
+        }
+      } catch (error) {
+        console.error("Error fetching TODO list:", error);
+        showToast("Failed to load options from API", "error");
+      } finally {
+        setLoadingOptions(false);
+      }
+    };
+
+    fetchToDoList();
+  }, []);
 
   // ── Toast ──
   function showToast(msg, type = "success") {
@@ -550,8 +591,8 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     ["moc", "MOC", "moc"],
     ["jobNo", "Job No", "text"],
     ["description", "Description *", "text"],
-    ["poNo", "PO No", "text"],
-    ["supplierName", "Supplier Name & Location", "text"],
+    ["poNo", "PO No", "po"],
+    ["supplierName", "Supplier Name & Location", "supplier"],
     ["pcNo", "P/C No", "text"],
     ["status", "Status", "status"],
     ["invoiceCollectedBy", "Invoice Collected Person & Service No", "text"],
@@ -953,11 +994,29 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                   <Field key={key} label={label}>
                     {type === "moc" ? (
                       <SearchableSelect
-                        options={MOC_OPTIONS}
+                        options={mocOptions.length > 0 ? mocOptions : MOC_OPTIONS}
                         value={form[key]}
                         onChange={(v) => setForm({ ...form, [key]: v })}
                         placeholder="-- Select --"
                         id={`moc-${key}`}
+                        usePrimaryPlaceholderStyle={false}
+                      />
+                    ) : type === "po" ? (
+                      <SearchableSelect
+                        options={poOptions}
+                        value={form[key]}
+                        onChange={(v) => setForm({ ...form, [key]: v })}
+                        placeholder={loadingOptions ? "Loading..." : "Select PO No"}
+                        id={`po-${key}`}
+                        usePrimaryPlaceholderStyle={false}
+                      />
+                    ) : type === "supplier" ? (
+                      <SearchableSelect
+                        options={supplierOptions}
+                        value={form[key]}
+                        onChange={(v) => setForm({ ...form, [key]: v })}
+                        placeholder={loadingOptions ? "Loading..." : "Select Supplier"}
+                        id={`supplier-${key}`}
                         usePrimaryPlaceholderStyle={false}
                       />
                     ) : type === "status" ? (
