@@ -524,6 +524,8 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
       setView("list");
       setEditId(null);
       setForm(defaultForm);
+      // In chaser mode we treat the current user as the active chaser
+      setSelectedChaser("Chaser");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isChaser]);
@@ -563,214 +565,256 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
 
       {/* ── Scrollable Body ───────────────────────────────────────────────── */}
       <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", padding: "20px 16px 32px" }}>
-        {/* ── Header / Summary Card ───────────────────────────────────── */}
-        <div
-          style={{
-            borderRadius: 18,
-            background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 55%, #0ea5e9 100%)",
-            padding: "16px 18px 18px",
-            marginBottom: 20,
-            boxShadow: "0 10px 30px rgba(15,23,42,0.35)",
-            color: "#ffffff",
-          }}
-        >
-          {/* Top row: title + role/date */}
-          <div className="cdp-header-top-row">
-            <div>
-              <div
-                style={{
-                  fontSize: 11,
-                  opacity: 0.8,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
-                }}
-              >
-                COLOMBO DOCKYARD PLC
+        {isAdmin ? (
+          /* ── Header / Summary Card (Admin only) ───────────────────── */
+          <div
+            style={{
+              borderRadius: 18,
+              background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 55%, #0ea5e9 100%)",
+              padding: "16px 18px 18px",
+              marginBottom: 20,
+              boxShadow: "0 10px 30px rgba(15,23,42,0.35)",
+              color: "#ffffff",
+            }}
+          >
+            {/* Top row: title + role/date */}
+            <div className="cdp-header-top-row">
+              <div>
+                <div
+                  style={{
+                    fontSize: 11,
+                    opacity: 0.8,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                  }}
+                >
+                  COLOMBO DOCKYARD PLC
+                </div>
+                <div
+                  style={{
+                    marginTop: 4,
+                    fontSize: 16,
+                    fontWeight: 700,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                >
+                  <ClipboardList size={18} />
+                  Daily Collection Detail Sheet
+                </div>
+                <div style={{ fontSize: 11, opacity: 0.85, marginTop: 2 }}>
+                  Supplies & Material Control — Local Purchase
+                </div>
               </div>
+
+              <div className="cdp-header-meta">
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    padding: "3px 10px",
+                    borderRadius: 999,
+                    background: "rgba(15,23,42,0.25)",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    marginBottom: 6,
+                  }}
+                >
+                  <User size={12} style={{ marginRight: 4 }} />
+                  Admin View
+                </div>
+                <div style={{ fontSize: 11, opacity: 0.7 }}>Today</div>
+                <div style={{ fontSize: 12, fontWeight: 600 }}>{dateLong}</div>
+              </div>
+            </div>
+
+            {/* Middle row: quick stats */}
+            <div
+              style={{
+                marginTop: 14,
+                display: "grid",
+                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                gap: 8,
+              }}
+            >
               <div
                 style={{
-                  marginTop: 4,
-                  fontSize: 16,
-                  fontWeight: 700,
+                  background: "rgba(15,23,42,0.18)",
+                  borderRadius: 10,
+                  padding: "8px 10px",
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
+                  fontSize: 12,
                 }}
               >
-                <ClipboardList size={18} />
-                Daily Collection Detail Sheet
+                <ClipboardList size={16} />
+                <div>
+                  <div style={{ fontSize: 10, opacity: 0.8 }}>Total Items</div>
+                  <div style={{ fontWeight: 700 }}>{total}</div>
+                </div>
               </div>
-              <div style={{ fontSize: 11, opacity: 0.85, marginTop: 2 }}>
-                Supplies & Material Control — Local Purchase
-              </div>
-            </div>
-
-            <div className="cdp-header-meta">
               <div
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  padding: "3px 10px",
-                  borderRadius: 999,
-                  background: "rgba(15,23,42,0.25)",
-                  fontSize: 11,
-                  fontWeight: 600,
-                  marginBottom: 6,
-                }}
-              >
-                <User size={12} style={{ marginRight: 4 }} />
-                {isChaser ? "Chaser View" : "Admin View"}
-              </div>
-              <div style={{ fontSize: 11, opacity: 0.7 }}>Today</div>
-              <div style={{ fontSize: 12, fontWeight: 600 }}>{dateLong}</div>
-            </div>
-          </div>
-
-          {/* Middle row: quick stats */}
-          <div
-            style={{
-              marginTop: 14,
-              display: "grid",
-              gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-              gap: 8,
-            }}
-          >
-            <div
-              style={{
-                background: "rgba(15,23,42,0.18)",
-                borderRadius: 10,
-                padding: "8px 10px",
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                fontSize: 12,
-              }}
-            >
-              <ClipboardList size={16} />
-              <div>
-                <div style={{ fontSize: 10, opacity: 0.8 }}>Total Items</div>
-                <div style={{ fontWeight: 700 }}>{total}</div>
-              </div>
-            </div>
-            <div
-              style={{
-                background: "rgba(15,23,42,0.18)",
-                borderRadius: 10,
-                padding: "8px 10px",
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                fontSize: 12,
-              }}
-            >
-              <Clock size={16} />
-              <div>
-                <div style={{ fontSize: 10, opacity: 0.8 }}>Pending</div>
-                <div style={{ fontWeight: 700 }}>{pending}</div>
-              </div>
-            </div>
-            <div
-              style={{
-                background: "rgba(15,23,42,0.18)",
-                borderRadius: 10,
-                padding: "8px 10px",
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                fontSize: 12,
-              }}
-            >
-              <CheckCircle2 size={16} />
-              <div>
-                <div style={{ fontSize: 10, opacity: 0.8 }}>Collected</div>
-                <div style={{ fontWeight: 700 }}>{collected}</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom row: date + filters */}
-          <div
-            style={{
-              marginTop: 16,
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
-              gap: 10,
-            }}
-          >
-            <div>
-              <label
-                style={{
-                  fontSize: 11,
-                  color: "rgba(255,255,255,0.8)",
-                  display: "block",
-                  marginBottom: 4,
-                }}
-              >
-                <Calendar size={12} style={{ marginRight: 4 }} />
-                Select Date
-              </label>
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                style={{
-                  width: "100%",
-                  background: "rgba(255,255,255,0.12)",
-                  border: "1px solid rgba(255,255,255,0.35)",
+                  background: "rgba(15,23,42,0.18)",
                   borderRadius: 10,
                   padding: "8px 10px",
-                  color: "#fff",
-                  fontSize: 13,
-                  outline: "none",
-                }}
-              />
-            </div>
-
-            <div>
-              <label
-                style={{
-                  fontSize: 11,
-                  color: "rgba(255,255,255,0.8)",
-                  display: "block",
-                  marginBottom: 4,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  fontSize: 12,
                 }}
               >
-                <Users size={12} style={{ marginRight: 4 }} />
-                Select Admin
-              </label>
-              <SearchableSelect
-                options={ADMIN_OPTIONS}
-                value={selectedAdmin}
-                onChange={(v) => setSelectedAdmin(v)}
-                placeholder="-- Select Admin --"
-                id="select-admin-header"
-                usePrimaryPlaceholderStyle={false}
-              />
-            </div>
-
-            <div>
-              <label
+                <Clock size={16} />
+                <div>
+                  <div style={{ fontSize: 10, opacity: 0.8 }}>Pending</div>
+                  <div style={{ fontWeight: 700 }}>{pending}</div>
+                </div>
+              </div>
+              <div
                 style={{
-                  fontSize: 11,
-                  color: "rgba(255,255,255,0.8)",
-                  display: "block",
-                  marginBottom: 4,
+                  background: "rgba(15,23,42,0.18)",
+                  borderRadius: 10,
+                  padding: "8px 10px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  fontSize: 12,
                 }}
               >
-                <Truck size={12} style={{ marginRight: 4 }} />
-                Select Chaser
-              </label>
-              <SearchableSelect
-                options={CHASER_OPTIONS}
-                value={selectedChaser}
-                onChange={(v) => setSelectedChaser(v)}
-                placeholder="-- Select Chaser --"
-                id="select-chaser-header"
-                usePrimaryPlaceholderStyle={false}
-              />
+                <CheckCircle2 size={16} />
+                <div>
+                  <div style={{ fontSize: 10, opacity: 0.8 }}>Collected</div>
+                  <div style={{ fontWeight: 700 }}>{collected}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom row: date + filters */}
+            <div
+              style={{
+                marginTop: 16,
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
+                gap: 10,
+              }}
+            >
+              <div>
+                <label
+                  style={{
+                    fontSize: 11,
+                    color: "rgba(255,255,255,0.8)",
+                    display: "block",
+                    marginBottom: 4,
+                  }}
+                >
+                  <Calendar size={12} style={{ marginRight: 4 }} />
+                  Select Date
+                </label>
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  style={{
+                    width: "100%",
+                    background: "rgba(255,255,255,0.12)",
+                    border: "1px solid rgba(255,255,255,0.35)",
+                    borderRadius: 10,
+                    padding: "8px 10px",
+                    color: "#fff",
+                    fontSize: 13,
+                    outline: "none",
+                  }}
+                />
+              </div>
+
+              <div>
+                <label
+                  style={{
+                    fontSize: 11,
+                    color: "rgba(255,255,255,0.8)",
+                    display: "block",
+                    marginBottom: 4,
+                  }}
+                >
+                  <Users size={12} style={{ marginRight: 4 }} />
+                  Select Admin
+                </label>
+                <SearchableSelect
+                  options={ADMIN_OPTIONS}
+                  value={selectedAdmin}
+                  onChange={(v) => setSelectedAdmin(v)}
+                  placeholder="-- Select Admin --"
+                  id="select-admin-header"
+                  usePrimaryPlaceholderStyle={false}
+                />
+              </div>
+
+              <div>
+                <label
+                  style={{
+                    fontSize: 11,
+                    color: "rgba(255,255,255,0.8)",
+                    display: "block",
+                    marginBottom: 4,
+                  }}
+                >
+                  <Truck size={12} style={{ marginRight: 4 }} />
+                  Select Chaser
+                </label>
+                <SearchableSelect
+                  options={CHASER_OPTIONS}
+                  value={selectedChaser}
+                  onChange={(v) => setSelectedChaser(v)}
+                  placeholder="-- Select Chaser --"
+                  id="select-chaser-header"
+                  usePrimaryPlaceholderStyle={false}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          /* ── Compact Date Bar (Chaser only) ───────────────────────── */
+          <div
+            style={{
+              background: "#ffffff",
+              borderRadius: 14,
+              padding: "10px 14px 12px",
+              marginBottom: 16,
+              boxShadow: "0 4px 16px rgba(15,23,42,0.12)",
+              border: "1px solid rgba(148,163,184,0.25)",
+            }}
+          >
+            <label
+              style={{
+                fontSize: 11,
+                color: "#64748b",
+                display: "block",
+                marginBottom: 4,
+                fontWeight: 600,
+              }}
+            >
+              <Calendar size={12} style={{ marginRight: 4 }} />
+              Select Date
+            </label>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              style={{
+                width: "100%",
+                background: "#f8fafc",
+                border: "1px solid #e2e8f0",
+                borderRadius: 10,
+                padding: "8px 10px",
+                color: "#0f172a",
+                fontSize: 13,
+                outline: "none",
+              }}
+            />
+          </div>
+        )}
 
         {/* ── Tab Navigation ────────────────────────────────────────────── */}
         <div
