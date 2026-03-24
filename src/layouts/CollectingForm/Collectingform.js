@@ -933,11 +933,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                         • Active chaser: {selectedChaser}
                       </span>
                     )}
-                    {isChaser && (
-                      <span style={{ fontSize: 12, color: "#64748b", marginLeft: 8 }}>
-                        • View only (no edit/delete)
-                      </span>
-                    )}
                   </div>
 
                   {isAdmin && (
@@ -1003,7 +998,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 780 }}>
                     <thead>
                       <tr style={{ background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)" }}>
-                        {["#", "✓", "End User", "MOC", "Job No", "Description", "PO No", "Supplier", "Status", "Actions"].map((h) => (
+                        {["#", "✓", "End User", "MOC", "Job No", "Description", "PO No", "Supplier", "Status", ...(isAdmin ? ["Actions"] : [])].map((h) => (
                           <th
                             key={h}
                             style={{
@@ -1121,10 +1116,8 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                                 {item.status}
                               </span>
                             </td>
-                            <td style={{ padding: "10px 12px", whiteSpace: "nowrap" }}>
-                              {isChaser ? (
-                                <span style={{ fontSize: 11, color: "#94a3b8" }}>View only</span>
-                              ) : (
+                            {isAdmin && (
+                              <td style={{ padding: "10px 12px", whiteSpace: "nowrap" }}>
                                 <>
                                   <button
                                     onClick={() => handleEdit(item)}
@@ -1160,8 +1153,8 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                                     <Trash2 size={14} color="#ef4444" />
                                   </button>
                                 </>
-                              )}
-                            </td>
+                              </td>
+                            )}
                           </tr>
                         );
                       })}
@@ -1234,7 +1227,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                                 </button>
                               </>
                             ) : (
-                              <span style={{ fontSize: 11, color: "#94a3b8" }}>View only</span>
+                              <></>
                             )}
                           </div>
                         </div>
