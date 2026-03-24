@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-// Icons: using lucide-react for consistent SVG icons
-import { Save, Edit } from "lucide-react";
+// Icons: using lucide-react for professional SVG icons
+import { Save, Edit, Trash2, Plus, CheckCircle2, XCircle, AlertCircle, User, Calendar, ClipboardList, Package, Truck, Users, FileText, Clock, CheckSquare, Square, Eye, MoreHorizontal } from "lucide-react";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const STORAGE_KEY = "cdplc_collection_items_v3";
@@ -460,9 +460,13 @@ export default function DailyCollectionSheet() {
             boxShadow: "0 8px 24px rgba(0,0,0,0.18)",
             fontSize: 14,
             fontWeight: 600,
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
           }}
         >
-          {toast.type === "error" ? "⚠️" : "✅"} {toast.msg}
+          {toast.type === "error" ? <XCircle size={18} /> : <CheckCircle2 size={18} />}
+          {toast.msg}
         </div>
       )}
 
@@ -481,7 +485,8 @@ export default function DailyCollectionSheet() {
             <div style={{ fontSize: 11, opacity: 0.7, textTransform: "uppercase", letterSpacing: "0.5px" }}>
               COLOMBO DOCKYARD PLC
             </div>
-            <div style={{ fontSize: 15, fontWeight: 700 }}>
+            <div style={{ fontSize: 15, fontWeight: 700, display: "flex", alignItems: "center", gap: 8 }}>
+              <ClipboardList size={18} />
               Daily Collection Detail Sheet
             </div>
             <div style={{ fontSize: 11, opacity: 0.7, marginTop: 2 }}>
@@ -492,7 +497,8 @@ export default function DailyCollectionSheet() {
           {/* Date Picker */}
           <div style={{ marginBottom: 12 }}>
             <label style={{ fontSize: 11, color: "rgba(255,255,255,0.7)", display: "block", marginBottom: 4 }}>
-              📅 Select Date
+              <Calendar size={12} style={{ display: "inline", marginRight: 4 }} />
+              Select Date
             </label>
             <input
               type="date"
@@ -515,7 +521,8 @@ export default function DailyCollectionSheet() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
             <div>
               <label style={{ fontSize: 11, color: "rgba(255,255,255,0.7)", display: "block", marginBottom: 4 }}>
-                👤 Select Admin
+                <Users size={12} style={{ display: "inline", marginRight: 4 }} />
+                Select Admin
               </label>
               <SearchableSelect
                 options={ADMIN_OPTIONS}
@@ -528,7 +535,8 @@ export default function DailyCollectionSheet() {
             
             <div>
               <label style={{ fontSize: 11, color: "rgba(255,255,255,0.7)", display: "block", marginBottom: 4 }}>
-                👤 Select Chaser
+                <Truck size={12} style={{ display: "inline", marginRight: 4 }} />
+                Select Chaser
               </label>
               <SearchableSelect
                 options={CHASER_OPTIONS}
@@ -550,7 +558,12 @@ export default function DailyCollectionSheet() {
               color: "#fff",
               textAlign: "center",
               marginTop: 8,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 6,
             }}>
+              <User size={12} />
               Chaser: {selectedChaser} - Ready for collection
             </div>
           )}
@@ -586,8 +599,8 @@ export default function DailyCollectionSheet() {
           border: "1px solid rgba(0,74,173,0.06)",
         }}>
           {[
-            ["list", "📋 Collection List"],
-            ["form", editId ? "✏️ Edit Item" : "➕ Add Item"],
+            ["list", <><ClipboardList size={14} /> Collection List</>],
+            ["form", editId ? <><Edit size={14} /> Edit Item</> : <><Plus size={14} /> Add Item</>],
           ].map(([v, label]) => (
             <button
               key={v}
@@ -602,6 +615,10 @@ export default function DailyCollectionSheet() {
                 color: view === v ? "#fff" : "#64748b",
                 boxShadow: view === v ? "0 2px 8px rgba(0,74,173,0.25)" : "none",
                 transition: "all 0.25s",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
               }}
             >
               {label}
@@ -631,7 +648,7 @@ export default function DailyCollectionSheet() {
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 18,
                 }}>
-                  {editId ? "✏️" : "➕"}
+                  {editId ? <Edit size={18} color="#004AAD" /> : <Plus size={18} color="#004AAD" />}
                 </div>
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 700, color: "#1e293b" }}>
@@ -701,18 +718,21 @@ export default function DailyCollectionSheet() {
                     fontSize: 14, fontWeight: 600, cursor: selectedAdmin ? "pointer" : "not-allowed",
                     boxShadow: selectedAdmin ? "0 4px 12px rgba(0,74,173,0.3)" : "none",
                     transition: "transform 0.15s, box-shadow 0.15s",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
                   }}
                 >
                   {editId ? (
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                    <>
                       <Edit size={14} />
                       Update Item
-                    </span>
+                    </>
                   ) : (
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                    <>
                       <Save size={14} />
                       Save Item
-                    </span>
+                    </>
                   )}
                 </button>
                 <button
@@ -722,8 +742,12 @@ export default function DailyCollectionSheet() {
                     border: "none", padding: "10px 20px",
                     borderRadius: 10, fontSize: 14, cursor: "pointer",
                     transition: "background 0.2s",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
                   }}
                 >
+                  <XCircle size={14} />
                   Cancel
                 </button>
               </div>
@@ -756,9 +780,13 @@ export default function DailyCollectionSheet() {
                     color: "#fff", border: "none",
                     padding: "10px 24px", borderRadius: 10,
                     fontSize: 14, fontWeight: 600, cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
                   }}
                 >
-                  ➕ Add First Item
+                  <Plus size={14} />
+                  Add First Item
                 </button>
               </div>
             ) : (
@@ -788,7 +816,8 @@ export default function DailyCollectionSheet() {
                       display: "flex", alignItems: "center", gap: 6,
                     }}
                   >
-                    ➕ Add Item
+                    <Plus size={14} />
+                    Add Item
                   </button>
                 </div>
 
@@ -799,12 +828,18 @@ export default function DailyCollectionSheet() {
                       background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
                       borderRadius: 12, padding: "12px 16px",
                       marginBottom: 12,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
                     }}>
-                      <div style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>
-                        ✅ Collected by {selectedChaser}
-                      </div>
-                      <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 11 }}>
-                        {itemsByChaser[selectedChaser]?.length || 0} items collected
+                      <CheckCircle2 size={18} color="#fff" />
+                      <div>
+                        <div style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>
+                          Collected by {selectedChaser}
+                        </div>
+                        <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 11 }}>
+                          {itemsByChaser[selectedChaser]?.length || 0} items collected
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -829,7 +864,7 @@ export default function DailyCollectionSheet() {
                             {h}
                           </th>
                         ))}
-                      </tr>
+                       </tr>
                     </thead>
                     <tbody>
                       {filteredItems.map((item, idx) => {
@@ -842,10 +877,8 @@ export default function DailyCollectionSheet() {
                             style={{ borderBottom: "1px solid rgba(0,74,173,0.06)", background: rowBg }}>
                             <td style={{ padding: "10px 12px", color: "#94a3b8", fontSize: 11 }}>{idx + 1}</td>
                             <td style={{ padding: "10px 12px", textAlign: "center" }}>
-                              <input
-                                type="checkbox"
-                                checked={item.collected}
-                                onChange={() => {
+                              <button
+                                onClick={() => {
                                   if (selectedChaser) {
                                     handleCollection(item.id, selectedChaser);
                                   } else {
@@ -853,13 +886,27 @@ export default function DailyCollectionSheet() {
                                   }
                                 }}
                                 disabled={!selectedChaser || item.collected}
-                                style={{ 
-                                  width: 16, height: 16, cursor: selectedChaser && !item.collected ? "pointer" : "not-allowed",
-                                  accentColor: "#004AAD" 
+                                style={{
+                                  background: "none",
+                                  border: "none",
+                                  cursor: selectedChaser && !item.collected ? "pointer" : "not-allowed",
+                                  padding: 0,
+                                  display: "inline-flex",
+                                  alignItems: "center",
                                 }}
-                              />
+                              >
+                                {item.collected ? 
+                                  <CheckCircle2 size={18} color="#10b981" /> : 
+                                  <Square size={18} color={selectedChaser ? "#94a3b8" : "#cbd5e1"} />
+                                }
+                              </button>
+                             </td>
+                            <td style={{ padding: "10px 12px", fontSize: 12, color: "#334155" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                <User size={12} color="#64748b" />
+                                {item.endUser}
+                              </div>
                             </td>
-                            <td style={{ padding: "10px 12px", fontSize: 12, color: "#334155" }}>{item.endUser}</td>
                             <td style={{ padding: "10px 12px" }}>
                               {item.moc && (
                                 <span style={{
@@ -870,8 +917,13 @@ export default function DailyCollectionSheet() {
                                   {item.moc}
                                 </span>
                               )}
+                             </td>
+                            <td style={{ padding: "10px 12px", fontSize: 12, color: "#334155" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                <FileText size={11} color="#64748b" />
+                                {item.jobNo}
+                              </div>
                             </td>
-                            <td style={{ padding: "10px 12px", fontSize: 12, color: "#334155" }}>{item.jobNo}</td>
                             <td style={{ padding: "10px 12px", fontWeight: 500, maxWidth: 180 }}>
                               {item.collected
                                 ? <s style={{ color: "#94a3b8", fontSize: 13 }}>{item.description}</s>
@@ -881,14 +933,27 @@ export default function DailyCollectionSheet() {
                                   ✓ Collected by {item.collectedByChaser}
                                 </div>
                               )}
+                             </td>
+                            <td style={{ padding: "10px 12px", fontSize: 12, whiteSpace: "nowrap", color: "#475569" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                <Package size={11} color="#64748b" />
+                                {item.poNo}
+                              </div>
                             </td>
-                            <td style={{ padding: "10px 12px", fontSize: 12, whiteSpace: "nowrap", color: "#475569" }}>{item.poNo}</td>
-                            <td style={{ padding: "10px 12px", fontSize: 12, color: "#475569", maxWidth: 130 }}>{item.supplierName}</td>
+                            <td style={{ padding: "10px 12px", fontSize: 12, color: "#475569", maxWidth: 130 }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                <Truck size={11} color="#64748b" />
+                                {item.supplierName}
+                              </div>
+                            </td>
                             <td style={{ padding: "10px 12px" }}>
                               <span
                                 className={getBadgeClasses(item.status)}
                                 style={{ padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600, whiteSpace: "nowrap" }}
                               >
+                                {item.status === "Collected" && <CheckCircle2 size={10} style={{ display: "inline", marginRight: 4 }} />}
+                                {item.status === "Pending" && <Clock size={10} style={{ display: "inline", marginRight: 4 }} />}
+                                {item.status === "Not Available" && <AlertCircle size={10} style={{ display: "inline", marginRight: 4 }} />}
                                 {item.status}
                               </span>
                             </td>
@@ -898,22 +963,28 @@ export default function DailyCollectionSheet() {
                                 title="Edit"
                                 style={{
                                   background: "rgba(0,74,173,0.07)", border: "none",
-                                  borderRadius: 7, padding: "4px 8px",
-                                  cursor: "pointer", fontSize: 14, marginRight: 4,
+                                  borderRadius: 7, padding: "6px 8px",
+                                  cursor: "pointer", marginRight: 8,
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: 4,
                                 }}
                               >
-                                ✏️
+                                <Edit size={14} color="#004AAD" />
                               </button>
                               <button
                                 onClick={() => handleDelete(item.id)}
                                 title="Delete"
                                 style={{
                                   background: "rgba(239,68,68,0.07)", border: "none",
-                                  borderRadius: 7, padding: "4px 8px",
-                                  cursor: "pointer", fontSize: 14,
+                                  borderRadius: 7, padding: "6px 8px",
+                                  cursor: "pointer",
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: 4,
                                 }}
                               >
-                                🗑️
+                                <Trash2 size={14} color="#ef4444" />
                               </button>
                             </td>
                           </tr>
@@ -944,10 +1015,8 @@ export default function DailyCollectionSheet() {
                         }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                             <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600 }}>#{idx + 1}</span>
-                            <input
-                              type="checkbox"
-                              checked={item.collected}
-                              onChange={() => {
+                            <button
+                              onClick={() => {
                                 if (selectedChaser) {
                                   handleCollection(item.id, selectedChaser);
                                 } else {
@@ -955,8 +1024,19 @@ export default function DailyCollectionSheet() {
                                 }
                               }}
                               disabled={!selectedChaser || item.collected}
-                              style={{ width: 16, height: 16, cursor: selectedChaser && !item.collected ? "pointer" : "not-allowed" }}
-                            />
+                              style={{
+                                background: "none",
+                                border: "none",
+                                cursor: selectedChaser && !item.collected ? "pointer" : "not-allowed",
+                                padding: 0,
+                                display: "inline-flex",
+                              }}
+                            >
+                              {item.collected ? 
+                                <CheckCircle2 size={18} color="#10b981" /> : 
+                                <Square size={18} color={selectedChaser ? "#94a3b8" : "#cbd5e1"} />
+                              }
+                            </button>
                             <span
                               className={getBadgeClasses(item.status)}
                               style={{ padding: "2px 9px", borderRadius: 20, fontSize: 11, fontWeight: 600 }}
@@ -964,11 +1044,15 @@ export default function DailyCollectionSheet() {
                               {item.status}
                             </span>
                           </div>
-                          <div style={{ display: "flex", gap: 4 }}>
+                          <div style={{ display: "flex", gap: 8 }}>
                             <button onClick={() => handleEdit(item)}
-                              style={{ background: "none", border: "none", cursor: "pointer", fontSize: 15, padding: "2px 5px" }}>✏️</button>
+                              style={{ background: "none", border: "none", cursor: "pointer", padding: "4px" }}>
+                              <Edit size={16} color="#004AAD" />
+                            </button>
                             <button onClick={() => handleDelete(item.id)}
-                              style={{ background: "none", border: "none", cursor: "pointer", fontSize: 15, padding: "2px 5px" }}>🗑️</button>
+                              style={{ background: "none", border: "none", cursor: "pointer", padding: "4px" }}>
+                              <Trash2 size={16} color="#ef4444" />
+                            </button>
                           </div>
                         </div>
 
@@ -978,19 +1062,31 @@ export default function DailyCollectionSheet() {
                             textDecoration: item.collected ? "line-through" : "none",
                             color: item.collected ? "#94a3b8" : "#1e293b",
                             marginBottom: 8,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
                           }}>
+                            <FileText size={12} color="#64748b" />
                             {item.description || <span style={{ color: "#cbd5e1", fontStyle: "italic" }}>No description</span>}
                           </p>
                           {isCollectedByCurrentChaser && (
                             <div style={{
                               fontSize: 11, color: "#10b981", background: "rgba(16,185,129,0.1)",
                               padding: "4px 8px", borderRadius: 6, marginBottom: 8,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 4,
                             }}>
-                              ✓ Collected by {item.collectedByChaser}
+                              <CheckCircle2 size={12} />
+                              Collected by {item.collectedByChaser}
                             </div>
                           )}
                           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 16px", fontSize: 12, color: "#64748b" }}>
-                            {item.endUser && <span><b>End User:</b> {item.endUser}</span>}
+                            {item.endUser && (
+                              <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                <User size={10} /> <b>End User:</b> {item.endUser}
+                              </span>
+                            )}
                             {item.moc && (
                               <span>
                                 <b>MOC:</b>{" "}
@@ -999,12 +1095,20 @@ export default function DailyCollectionSheet() {
                                 </span>
                               </span>
                             )}
-                            {item.jobNo && <span><b>Job No:</b> {item.jobNo}</span>}
-                            {item.poNo && <span><b>PO No:</b> {item.poNo}</span>}
+                            {item.jobNo && (
+                              <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                <FileText size={10} /> <b>Job No:</b> {item.jobNo}
+                              </span>
+                            )}
+                            {item.poNo && (
+                              <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                <Package size={10} /> <b>PO No:</b> {item.poNo}
+                              </span>
+                            )}
                             {item.pcNo && <span><b>P/C No:</b> {item.pcNo}</span>}
                             {item.supplierName && (
-                              <span style={{ gridColumn: "1 / -1" }}>
-                                <b>Supplier:</b> {item.supplierName}
+                              <span style={{ gridColumn: "1 / -1", display: "flex", alignItems: "center", gap: 4 }}>
+                                <Truck size={10} /> <b>Supplier:</b> {item.supplierName}
                               </span>
                             )}
                           </div>
