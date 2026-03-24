@@ -607,7 +607,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
           <div
             style={{
               borderRadius: 18,
-              background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 55%, #0ea5e9 100%)",
+              background: "linear-gradient(135deg, #5B52B3 0%, #004AAD 100%)",
               padding: "16px 18px 18px",
               marginBottom: 20,
               boxShadow: "0 10px 30px rgba(15,23,42,0.35)",
