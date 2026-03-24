@@ -158,7 +158,17 @@ function InjectStyles() {
 }
 
 // ─── Searchable Select Component ───────────────────────────────────────────
-function SearchableSelect({ options = [], value, onChange, placeholder = "-- Select --", id, usePrimaryPlaceholderStyle = true }) {
+function SearchableSelect({
+  options = [],
+  value,
+  onChange,
+  placeholder = "-- Select --",
+  id,
+  usePrimaryPlaceholderStyle = true,
+  // When true, keep the primary (blue) styling even after a value is selected.
+  // Used for the top-card Admin/Chaser selectors only.
+  keepPrimaryBackgroundAfterSelect = false,
+}) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const containerRef = useRef();
@@ -175,7 +185,7 @@ function SearchableSelect({ options = [], value, onChange, placeholder = "-- Sel
   const filtered = options.filter((o) => o.toLowerCase().includes(query.toLowerCase()));
 
   const isPlaceholder = !value;
-  const usePrimary = usePrimaryPlaceholderStyle && isPlaceholder;
+  const usePrimary = usePrimaryPlaceholderStyle && (isPlaceholder || keepPrimaryBackgroundAfterSelect);
 
   return (
     <div ref={containerRef} style={{ position: "relative" }}>
@@ -747,6 +757,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                   onChange={(v) => setSelectedAdmin(v)}
                   placeholder="-- Select Admin --"
                   id="select-admin-header"
+                  keepPrimaryBackgroundAfterSelect
                 />
               </div>
 
@@ -768,6 +779,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                   onChange={(v) => setSelectedChaser(v)}
                   placeholder="-- Select Chaser --"
                   id="select-chaser-header"
+                  keepPrimaryBackgroundAfterSelect
                 />
               </div>
             </div>
