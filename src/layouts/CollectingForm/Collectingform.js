@@ -747,7 +747,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                   onChange={(v) => setSelectedAdmin(v)}
                   placeholder="-- Select Admin --"
                   id="select-admin-header"
-                  usePrimaryPlaceholderStyle={false}
                 />
               </div>
 
@@ -769,7 +768,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                   onChange={(v) => setSelectedChaser(v)}
                   placeholder="-- Select Chaser --"
                   id="select-chaser-header"
-                  usePrimaryPlaceholderStyle={false}
                 />
               </div>
             </div>
