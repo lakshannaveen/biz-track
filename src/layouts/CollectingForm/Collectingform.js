@@ -342,6 +342,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
   const [mocOptions, setMocOptions] = useState([]);
   const [supplierOptions, setSupplierOptions] = useState([]);
   const [loadingOptions, setLoadingOptions] = useState(false);
+  const [apiData, setApiData] = useState([]);
 
   const dateLong = new Date(selectedDate).toLocaleDateString("en-US", {
     weekday: "long",
@@ -446,6 +447,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
         const response = await CommonService.GetToDoList();
         if (response.data && response.data.ResultSet) {
           const data = response.data.ResultSet;
+          setApiData(data);
           
           // Extract unique PO Nos
           const uniquePoNos = [...new Set(data.map(item => item.PO_NO).filter(Boolean))];
@@ -469,6 +471,20 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
 
     fetchToDoList();
   }, []);
+
+  // Auto-fill supplier and moc when poNo changes
+  useEffect(() => {
+    if (form.poNo && apiData.length > 0) {
+      const matchingItem = apiData.find(item => item.PO_NO === form.poNo);
+      if (matchingItem) {
+        setForm(prev => ({
+          ...prev,
+          supplierName: matchingItem.SUPPLIER_NAME || prev.supplierName,
+          moc: String(matchingItem.MOCNO) || prev.moc,
+        }));
+      }
+    }
+  }, [form.poNo, apiData]);
 
   // ── Toast ──
   function showToast(msg, type = "success") {
