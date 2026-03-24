@@ -253,12 +253,72 @@ export default function DailyCollectionSheet() {
     weekday: "long", year: "numeric", month: "long", day: "numeric",
   });
 
+  // ── Sample Data ──
+  function getSampleItems() {
+    return [
+      {
+        id: "sample-1",
+        handlingAdmin: "Waruni",
+        endUser: "Mr. John Smith",
+        moc: "PE",
+        jobNo: "JOB-2024-001",
+        description: "Steel plates for hull construction",
+        poNo: "PO-2024-0456",
+        supplierName: "ABC Steel Suppliers, Colombo",
+        pcNo: "PC-789",
+        status: "Pending",
+        invoiceCollectedBy: "Service No: 12345",
+        collected: false,
+        date: selectedDate,
+      },
+      {
+        id: "sample-2",
+        handlingAdmin: "Lakshmi",
+        endUser: "Mrs. Priya Fernando",
+        moc: "EM",
+        jobNo: "JOB-2024-002",
+        description: "Electrical cables and connectors",
+        poNo: "PO-2024-0457",
+        supplierName: "ElectroTech Ltd, Negombo",
+        pcNo: "PC-790",
+        status: "Collected",
+        invoiceCollectedBy: "Service No: 23456",
+        collected: true,
+        collectedByChaser: "Mr. Damiya",
+        collectedAt: new Date().toISOString(),
+        date: selectedDate,
+      },
+      {
+        id: "sample-3",
+        handlingAdmin: "Waruni",
+        endUser: "Mr. Rajesh Kumar",
+        moc: "PM",
+        jobNo: "JOB-2024-003",
+        description: "Paint and coating materials",
+        poNo: "PO-2024-0458",
+        supplierName: "Marine Paints Co, Colombo",
+        pcNo: "PC-791",
+        status: "Partial",
+        invoiceCollectedBy: "Service No: 34567",
+        collected: false,
+        date: selectedDate,
+      },
+    ];
+  }
+
   // ── Persistence ──
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) setItems(JSON.parse(saved));
-    } catch { /* ignore */ }
+      if (saved) {
+        const parsedItems = JSON.parse(saved);
+        setItems(parsedItems.length > 0 ? parsedItems : getSampleItems());
+      } else {
+        setItems(getSampleItems());
+      }
+    } catch { 
+      setItems(getSampleItems());
+    }
   }, []);
 
   useEffect(() => {
@@ -676,21 +736,7 @@ export default function DailyCollectionSheet() {
         {/* ════════════════════════════════════════════════════════════════ */}
         {view === "list" && (
           <div className="cdp-fade-in" style={{ opacity: 0 }}>
-            {!selectedAdmin ? (
-              <div style={{
-                background: "#fff", borderRadius: 20,
-                padding: "48px 24px", textAlign: "center",
-                boxShadow: "0 4px 24px rgba(0,74,173,0.06)",
-              }}>
-                <div style={{ fontSize: 56, marginBottom: 16 }}>👤</div>
-                <div style={{ fontSize: 16, color: "#64748b", marginBottom: 8 }}>
-                  Please select an admin first
-                </div>
-                <div style={{ fontSize: 13, color: "#94a3b8" }}>
-                  Choose an admin from the dropdown above to view their collection items
-                </div>
-              </div>
-            ) : filteredItems.length === 0 ? (
+            {filteredItems.length === 0 ? (
               <div style={{
                 background: "#fff", borderRadius: 20,
                 padding: "48px 24px", textAlign: "center",
@@ -698,10 +744,10 @@ export default function DailyCollectionSheet() {
               }}>
                 <div style={{ fontSize: 56, marginBottom: 16 }}>📭</div>
                 <div style={{ fontSize: 16, color: "#64748b", marginBottom: 8 }}>
-                  No items for {selectedAdmin}
+                  No collection items found
                 </div>
                 <div style={{ fontSize: 13, color: "#94a3b8", marginBottom: 20 }}>
-                  Add your first collection item to get started
+                  {selectedAdmin ? `No items for ${selectedAdmin}` : "Add your first collection item to get started"}
                 </div>
                 <button
                   onClick={handleNew}
@@ -720,7 +766,11 @@ export default function DailyCollectionSheet() {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12, flexWrap: "wrap", gap: 10 }}>
                   <div>
                     <span style={{ fontSize: 13, color: "#64748b" }}>
-                      Showing items for <strong style={{ color: "#004AAD" }}>{selectedAdmin}</strong>
+                      {selectedAdmin ? (
+                        <>Showing items for <strong style={{ color: "#004AAD" }}>{selectedAdmin}</strong></>
+                      ) : (
+                        <>Showing all collection items</>
+                      )}
                     </span>
                     {selectedChaser && (
                       <span style={{ fontSize: 12, color: "#10b981", marginLeft: 8 }}>
