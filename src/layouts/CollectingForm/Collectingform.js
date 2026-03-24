@@ -8,7 +8,6 @@ import {
   Plus,
   CheckCircle2,
   XCircle,
-  AlertCircle,
   User,
   Calendar,
   ClipboardList,
@@ -43,6 +42,7 @@ const defaultForm = {
   status: "Pending",
   invoiceCollectedBy: "",
   collectedByChaser: "", // Track which chaser collected this item
+  remark: "", // Chaser remark (admin view-only)
 };
 
 function generateId() {
@@ -355,6 +355,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
         status: "Pending",
         invoiceCollectedBy: "Service No: 12345",
         collected: false,
+        remark: "",
         date: selectedDate,
       },
       {
@@ -372,6 +373,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
         collected: true,
         collectedByChaser: "Mr. Damiya",
         collectedAt: new Date().toISOString(),
+        remark: "",
         date: selectedDate,
       },
       {
@@ -387,6 +389,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
         status: "Partial",
         invoiceCollectedBy: "Service No: 34567",
         collected: false,
+        remark: "",
         date: selectedDate,
       },
     ];
@@ -437,12 +440,20 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
       return;
     }
 
+    // Preserve existing remark when admin edits; new items start without remark
+    let existingRemark = "";
+    if (editId) {
+      const existingItem = items.find((it) => it.id === editId);
+      if (existingItem && existingItem.remark) existingRemark = existingItem.remark;
+    }
+
     const newItem = {
       ...form,
       id: editId || generateId(),
       collected: false,
       date: selectedDate, // Store the date
       handlingAdmin: selectedAdmin, // Use selected admin
+      remark: existingRemark,
     };
 
     if (editId) {
@@ -490,6 +501,23 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     showToast(`Item marked as collected by ${chaserName}!`);
   }
 
+  // Chaser-only: update remark text for a specific item
+  function handleRemarkChange(itemId, remarkText) {
+    if (!isChaser) return;
+    setItems((prev) =>
+      prev.map((it) =>
+        it.id === itemId
+          ? {
+              ...it,
+              // remove any legacy remarkText field and store under remark
+              remarkText: undefined,
+              remark: remarkText,
+            }
+          : it
+      )
+    );
+  }
+
   function handleNew() {
     if (isChaser) return;
     setForm(defaultForm);
@@ -502,7 +530,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
   const collected = filteredItems.filter((i) => i.collected).length;
   const pending = filteredItems.filter((i) => !i.collected).length;
   const total = filteredItems.length;
-  const pct = total ? Math.round((collected / total) * 100) : 0;
 
   // Group items by chaser who collected them
   const itemsByChaser = filteredItems.reduce((acc, item) => {
@@ -1146,187 +1173,8 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                   </div>
                 )}
 
-                {/* Desktop Table */}
-                <div
-                  className="hidden md:block"
-                  style={{
-                    background: "#fff",
-                    borderRadius: 20,
-                    overflow: "hidden",
-                    boxShadow: "0 4px 24px rgba(0,74,173,0.07)",
-                    border: "1px solid rgba(0,74,173,0.06)",
-                    overflowX: "auto",
-                  }}
-                >
-                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 780 }}>
-                    <thead>
-                      <tr style={{ background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)" }}>
-                        {["#", "✓", "End User", "MOC", "Job No", "Description", "PO No", "Supplier", "Status", ...(isAdmin ? ["Actions"] : [])].map((h) => (
-                          <th
-                            key={h}
-                            style={{
-                              padding: "12px 12px",
-                              textAlign: "left",
-                              color: "#fff",
-                              fontSize: 11,
-                              fontWeight: 600,
-                              letterSpacing: "0.4px",
-                              whiteSpace: "nowrap",
-                            }}
-                          >
-                            {h}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredItems.map((item, idx) => {
-                        const rowBg = item.collected ? "rgba(16,185,129,0.04)" : idx % 2 === 0 ? "#fff" : "rgba(0,74,173,0.015)";
-                        const isCollectedByCurrentChaser = item.collected && item.collectedByChaser === selectedChaser;
-                        return (
-                          <tr
-                            key={item.id}
-                            className="cdp-data-row"
-                            style={{ borderBottom: "1px solid rgba(0,74,173,0.06)", background: rowBg }}
-                          >
-                            <td style={{ padding: "10px 12px", color: "#94a3b8", fontSize: 11 }}>{idx + 1}</td>
-                            <td style={{ padding: "10px 12px", textAlign: "center" }}>
-                              <button
-                                onClick={() => {
-                                  if (selectedChaser) {
-                                    handleCollection(item.id, selectedChaser);
-                                  } else {
-                                    showToast("Please select a chaser first!", "error");
-                                  }
-                                }}
-                                disabled={!selectedChaser || item.collected}
-                                style={{
-                                  background: "none",
-                                  border: "none",
-                                  cursor: selectedChaser && !item.collected ? "pointer" : "not-allowed",
-                                  padding: 0,
-                                  display: "inline-flex",
-                                  alignItems: "center",
-                                }}
-                              >
-                                {item.collected ? (
-                                  <CheckCircle2 size={18} color="#10b981" />
-                                ) : (
-                                  <Square size={18} color={selectedChaser ? "#94a3b8" : "#cbd5e1"} />
-                                )}
-                              </button>
-                            </td>
-                            <td style={{ padding: "10px 12px", fontSize: 12, color: "#334155" }}>
-                              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                <User size={12} color="#64748b" />
-                                {item.endUser}
-                              </div>
-                            </td>
-                            <td style={{ padding: "10px 12px" }}>
-                              {item.moc && (
-                                <span
-                                  style={{
-                                    background: "rgba(0,74,173,0.08)",
-                                    color: "#004AAD",
-                                    fontSize: 11,
-                                    fontWeight: 700,
-                                    padding: "2px 8px",
-                                    borderRadius: 6,
-                                  }}
-                                >
-                                  {item.moc}
-                                </span>
-                              )}
-                            </td>
-                            <td style={{ padding: "10px 12px", fontSize: 12, color: "#334155" }}>
-                              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                                <FileText size={11} color="#64748b" />
-                                {item.jobNo}
-                              </div>
-                            </td>
-                            <td style={{ padding: "10px 12px", fontWeight: 500, maxWidth: 180 }}>
-                              {item.collected ? (
-                                <s style={{ color: "#94a3b8", fontSize: 13 }}>{item.description}</s>
-                              ) : (
-                                <span style={{ color: "#1e293b", fontSize: 13 }}>{item.description}</span>
-                              )}
-                              {isCollectedByCurrentChaser && (
-                                <div style={{ fontSize: 10, color: "#10b981", marginTop: 2 }}>
-                                  ✓ Collected by {item.collectedByChaser}
-                                </div>
-                              )}
-                            </td>
-                            <td style={{ padding: "10px 12px", fontSize: 12, whiteSpace: "nowrap", color: "#475569" }}>
-                              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                                <Package size={11} color="#64748b" />
-                                {item.poNo}
-                              </div>
-                            </td>
-                            <td style={{ padding: "10px 12px", fontSize: 12, color: "#475569", maxWidth: 130 }}>
-                              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                                <Truck size={11} color="#64748b" />
-                                {item.supplierName}
-                              </div>
-                            </td>
-                            <td style={{ padding: "10px 12px" }}>
-                              <span
-                                className={getBadgeClasses(item.status)}
-                                style={{ padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600, whiteSpace: "nowrap" }}
-                              >
-                                {item.status === "Collected" && <CheckCircle2 size={10} style={{ display: "inline", marginRight: 4 }} />}
-                                {item.status === "Pending" && <Clock size={10} style={{ display: "inline", marginRight: 4 }} />}
-                                {item.status === "Not Available" && <AlertCircle size={10} style={{ display: "inline", marginRight: 4 }} />}
-                                {item.status}
-                              </span>
-                            </td>
-                            {isAdmin && (
-                              <td style={{ padding: "10px 12px", whiteSpace: "nowrap" }}>
-                                <>
-                                  <button
-                                    onClick={() => handleEdit(item)}
-                                    title="Edit"
-                                    style={{
-                                      background: "rgba(0,74,173,0.07)",
-                                      border: "none",
-                                      borderRadius: 7,
-                                      padding: "6px 8px",
-                                      cursor: "pointer",
-                                      marginRight: 8,
-                                      display: "inline-flex",
-                                      alignItems: "center",
-                                      gap: 4,
-                                    }}
-                                  >
-                                    <Edit size={14} color="#004AAD" />
-                                  </button>
-                                  <button
-                                    onClick={() => handleDelete(item.id)}
-                                    title="Delete"
-                                    style={{
-                                      background: "rgba(239,68,68,0.07)",
-                                      border: "none",
-                                      borderRadius: 7,
-                                      padding: "6px 8px",
-                                      cursor: "pointer",
-                                      display: "inline-flex",
-                                      alignItems: "center",
-                                      gap: 4,
-                                    }}
-                                  >
-                                    <Trash2 size={14} color="#ef4444" />
-                                  </button>
-                                </>
-                              </td>
-                            )}
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Mobile Cards */}
-                <div className="md:hidden" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {/* Card list for both admin and chaser views */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   {filteredItems.map((item, idx) => {
                     const isCollectedByCurrentChaser = item.collected && item.collectedByChaser === selectedChaser;
                     return (
@@ -1428,6 +1276,63 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                             >
                               <CheckCircle2 size={12} />
                               Collected by {item.collectedByChaser}
+                            </div>
+                          )}
+
+                          {/* Remark: editable for chaser, read-only for admin */}
+                          {isChaser ? (
+                            <div style={{ marginBottom: 8 }}>
+                              <div style={{ fontSize: 11, color: "#64748b", marginBottom: 4, fontWeight: 600 }}>
+                                Chaser Remark
+                              </div>
+                              <textarea
+                                value={item.remark || ""}
+                                onChange={(e) => handleRemarkChange(item.id, e.target.value)}
+                                placeholder="Type remark and click Save"
+                                rows={2}
+                                style={{
+                                  width: "100%",
+                                  resize: "vertical",
+                                  fontSize: 12,
+                                  padding: "6px 8px",
+                                  borderRadius: 8,
+                                  border: "1px solid #e2e8f0",
+                                  outline: "none",
+                                }}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => showToast("Remark saved for this item")}
+                                style={{
+                                  marginTop: 4,
+                                  border: "none",
+                                  borderRadius: 6,
+                                  padding: "4px 10px",
+                                  fontSize: 11,
+                                  fontWeight: 600,
+                                  cursor: "pointer",
+                                  background: "linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)",
+                                  color: "#fff",
+                                }}
+                              >
+                                Save
+                              </button>
+                            </div>
+                          ) : (
+                            <div
+                              style={{
+                                marginBottom: 8,
+                                fontSize: 11,
+                                color: "#0f172a",
+                                background: "#eef2ff",
+                                padding: "4px 8px",
+                                borderRadius: 6,
+                              }}
+                            >
+                              <b>Remark:</b>{" "}
+                              {item.remark && item.remark.trim()
+                                ? item.remark
+                                : "No remark from chaser"}
                             </div>
                           )}
 
