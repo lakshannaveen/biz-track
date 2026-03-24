@@ -816,24 +816,23 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
           </div>
         )}
 
-        {/* ── Tab Navigation ────────────────────────────────────────────── */}
-        <div
-          style={{
-            display: "flex",
-            background: "rgba(255,255,255,0.95)",
-            borderRadius: 12,
-            padding: 4,
-            marginBottom: 16,
-            boxShadow: "0 2px 8px rgba(0,74,173,0.06)",
-            border: "1px solid rgba(0,74,173,0.06)",
-          }}
-        >
-          {[
-            ["list", <><ClipboardList size={14} /> Collection List</>],
-            ["form", editId ? <><Edit size={14} /> Edit Item</> : <><Plus size={14} /> Add Item</>],
-          ]
-            .filter(([v]) => (isChaser ? v === "list" : true))
-            .map(([v, label]) => (
+        {/* ── Tab Navigation (Admin only; chaser always sees list) ─────── */}
+        {isAdmin && (
+          <div
+            style={{
+              display: "flex",
+              background: "rgba(255,255,255,0.95)",
+              borderRadius: 12,
+              padding: 4,
+              marginBottom: 16,
+              boxShadow: "0 2px 8px rgba(0,74,173,0.06)",
+              border: "1px solid rgba(0,74,173,0.06)",
+            }}
+          >
+            {[
+              ["list", <><ClipboardList size={14} /> Collection List</>],
+              ["form", editId ? <><Edit size={14} /> Edit Item</> : <><Plus size={14} /> Add Item</>],
+            ].map(([v, label]) => (
               <button
                 key={v}
                 onClick={() => (v === "form" ? handleNew() : setView("list"))}
@@ -860,7 +859,8 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                 {label}
               </button>
             ))}
-        </div>
+          </div>
+        )}
 
         {/* ════════════════════════════════════════════════════════════════ */}
         {/* FORM VIEW                                                        */}
@@ -1061,34 +1061,34 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
               </div>
             ) : (
               <>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: 12,
-                    flexWrap: "wrap",
-                    gap: 10,
-                  }}
-                >
-                  <div>
-                    <span style={{ fontSize: 13, color: "#64748b" }}>
-                      {selectedAdmin ? (
-                        <>
-                          Showing items for <strong style={{ color: "#004AAD" }}>{selectedAdmin}</strong>
-                        </>
-                      ) : (
-                        <>Showing all collection items</>
-                      )}
-                    </span>
-                    {selectedChaser && (
-                      <span style={{ fontSize: 12, color: "#10b981", marginLeft: 8 }}>
-                        • Active chaser: {selectedChaser}
+                {isAdmin && (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: 12,
+                      flexWrap: "wrap",
+                      gap: 10,
+                    }}
+                  >
+                    <div>
+                      <span style={{ fontSize: 13, color: "#64748b" }}>
+                        {selectedAdmin ? (
+                          <>
+                            Showing items for <strong style={{ color: "#004AAD" }}>{selectedAdmin}</strong>
+                          </>
+                        ) : (
+                          <>Showing all collection items</>
+                        )}
                       </span>
-                    )}
-                  </div>
+                      {selectedChaser && (
+                        <span style={{ fontSize: 12, color: "#10b981", marginLeft: 8 }}>
+                          • Active chaser: {selectedChaser}
+                        </span>
+                      )}
+                    </div>
 
-                  {isAdmin && (
                     <button
                       onClick={handleNew}
                       style={{
@@ -1108,8 +1108,8 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                       <Plus size={14} />
                       Add Item
                     </button>
-                  )}
-                </div>
+                  </div>
+                )}
 
                 {/* Display items grouped by chaser who collected them */}
                 {selectedChaser && Object.keys(itemsByChaser).length > 0 && (
