@@ -648,21 +648,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
               </div>
 
               <div className="cdp-header-meta">
-                <div
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    padding: "3px 10px",
-                    borderRadius: 999,
-                    background: "rgba(15,23,42,0.25)",
-                    fontSize: 11,
-                    fontWeight: 600,
-                    marginBottom: 6,
-                  }}
-                >
-                  <User size={12} style={{ marginRight: 4 }} />
-                  Admin View
-                </div>
                 <div style={{ fontSize: 11, opacity: 0.7 }}>Today</div>
                 <div style={{ fontSize: 12, fontWeight: 600 }}>{dateLong}</div>
               </div>
