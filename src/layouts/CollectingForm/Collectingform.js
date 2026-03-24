@@ -1,40 +1,46 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 // Icons: using lucide-react for professional SVG icons
-import { Save, Edit, Trash2, Plus, CheckCircle2, XCircle, AlertCircle, User, Calendar, ClipboardList, Package, Truck, Users, FileText, Clock, CheckSquare, Square, Eye, MoreHorizontal } from "lucide-react";
+import {
+  Save,
+  Edit,
+  Trash2,
+  Plus,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  User,
+  Calendar,
+  ClipboardList,
+  Package,
+  Truck,
+  Users,
+  FileText,
+  Clock,
+  Square,
+} from "lucide-react";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const STORAGE_KEY = "cdplc_collection_items_v3";
-const MOC_OPTIONS  = ["PE", "EM", "PM", "ON", "NC", "CA", "SR", "BS", "OR", "CP"];
+const MOC_OPTIONS = ["PE", "EM", "PM", "ON", "NC", "CA", "SR", "BS", "OR", "CP"];
 const STATUS_OPTIONS = ["Pending", "Collected", "Not Available", "Partial"];
 
 // Admin list from the image
-const ADMIN_OPTIONS = [
-  "Waruni",
-  "Lakshmi",
-  "Roshni",
-  "Hiran",
-  "Osani",
-  "Rakmal"
-];
+const ADMIN_OPTIONS = ["Waruni", "Lakshmi", "Roshni", "Hiran", "Osani", "Rakmal"];
 
 // Chaser list from the image
-const CHASER_OPTIONS = [
-  "Mr. Damiya",
-  "Mrs. Kamala",
-  "Mr. Nimal",
-  "Mrs. Priyanka"
-];
+const CHASER_OPTIONS = ["Mr. Damiya", "Mrs. Kamala", "Mr. Nimal", "Mrs. Priyanka"];
 
 const defaultForm = {
-  handlingAdmin:    "",
-  endUser:          "",
-  moc:              "",
-  jobNo:            "",
-  description:      "",
-  poNo:             "",
-  supplierName:     "",
-  pcNo:             "",
-  status:           "Pending",
+  handlingAdmin: "",
+  endUser: "",
+  moc: "",
+  jobNo: "",
+  description: "",
+  poNo: "",
+  supplierName: "",
+  pcNo: "",
+  status: "Pending",
   invoiceCollectedBy: "",
   collectedByChaser: "", // Track which chaser collected this item
 };
@@ -46,10 +52,10 @@ function generateId() {
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function getBadgeClasses(status) {
   const map = {
-    Collected:      "bg-green-100 text-green-800",
-    Pending:        "bg-yellow-100 text-yellow-800",
-    "Not Available":"bg-red-100 text-red-800",
-    Partial:        "bg-blue-100 text-blue-800",
+    Collected: "bg-green-100 text-green-800",
+    Pending: "bg-yellow-100 text-yellow-800",
+    "Not Available": "bg-red-100 text-red-800",
+    Partial: "bg-blue-100 text-blue-800",
   };
   return map[status] ?? "bg-slate-100 text-slate-700";
 }
@@ -125,7 +131,7 @@ function InjectStyles() {
   return null;
 }
 
-// ─── Searchable Select Component ────────────────────────────────────────────
+// ─── Searchable Select Component ─���──────────────────────────────────────────
 function SearchableSelect({ options = [], value, onChange, placeholder = "-- Select --", id }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -147,8 +153,16 @@ function SearchableSelect({ options = [], value, onChange, placeholder = "-- Sel
       <div
         role="button"
         tabIndex={0}
-        onClick={() => { setOpen((s) => !s); setQuery(""); }}
-        onKeyDown={(e) => { if (e.key === "Enter") { setOpen((s) => !s); setQuery(""); } }}
+        onClick={() => {
+          setOpen((s) => !s);
+          setQuery("");
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            setOpen((s) => !s);
+            setQuery("");
+          }
+        }}
         style={{
           ...inputSx,
           display: "flex",
@@ -158,15 +172,21 @@ function SearchableSelect({ options = [], value, onChange, placeholder = "-- Sel
         }}
         id={id}
       >
-        <div style={{ color: value ? "#0f172a" : "#94a3b8", flex: 1 }}>
-          {value || placeholder}
-        </div>
+        <div style={{ color: value ? "#0f172a" : "#94a3b8", flex: 1 }}>{value || placeholder}</div>
         <div style={{ marginLeft: 8, color: "#64748b" }}>{open ? "▴" : "▾"}</div>
       </div>
 
       {open && (
         <div style={{ position: "absolute", left: 0, right: 0, zIndex: 60 }}>
-          <div style={{ padding: 8, background: "#fff", borderRadius: 10, boxShadow: "0 8px 30px rgba(2,6,23,0.12)", border: "1px solid rgba(2,6,23,0.06)" }}>
+          <div
+            style={{
+              padding: 8,
+              background: "#fff",
+              borderRadius: 10,
+              boxShadow: "0 8px 30px rgba(2,6,23,0.12)",
+              border: "1px solid rgba(2,6,23,0.06)",
+            }}
+          >
             <input
               autoFocus
               placeholder="Search..."
@@ -189,9 +209,17 @@ function SearchableSelect({ options = [], value, onChange, placeholder = "-- Sel
                 filtered.map((opt) => (
                   <div
                     key={opt}
-                    onClick={() => { onChange(opt); setOpen(false); }}
+                    onClick={() => {
+                      onChange(opt);
+                      setOpen(false);
+                    }}
                     style={{ padding: "8px 10px", borderRadius: 8, cursor: "pointer", fontSize: 13, color: "#0f172a" }}
-                    onKeyDown={(e) => { if (e.key === 'Enter') { onChange(opt); setOpen(false); } }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        onChange(opt);
+                        setOpen(false);
+                      }
+                    }}
                     role="button"
                     tabIndex={0}
                   >
@@ -211,10 +239,15 @@ function SearchableSelect({ options = [], value, onChange, placeholder = "-- Sel
 function Field({ label, children }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-      <label style={{
-        fontSize: 11, fontWeight: 600, color: "#64748b",
-        textTransform: "uppercase", letterSpacing: "0.5px",
-      }}>
+      <label
+        style={{
+          fontSize: 11,
+          fontWeight: 600,
+          color: "#64748b",
+          textTransform: "uppercase",
+          letterSpacing: "0.5px",
+        }}
+      >
         {label}
       </label>
       {children}
@@ -236,21 +269,34 @@ const inputSx = {
 };
 
 // ─── Main Component ───────────────────────────────────────────────────────────
-export default function DailyCollectionSheet() {
+export default function DailyCollectionSheet({ role: propRole = "admin" }) {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const typeParam = searchParams.get("type");
+
+  // Determine role: query param has highest priority, then prop
+  const role = typeParam === "chaser" ? "chaser" : "admin";
+
+  const isChaser = role === "chaser";
+  const isAdmin = role === "admin";
+
   const [view, setView] = useState("list");
   const [items, setItems] = useState([]);
   const [form, setForm] = useState(defaultForm);
   const [editId, setEditId] = useState(null);
   const [toast, setToast] = useState(null);
-  
+
   // New state for admin and chaser selection
   const [selectedAdmin, setSelectedAdmin] = useState("");
   const [selectedChaser, setSelectedChaser] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [filteredItems, setFilteredItems] = useState([]);
-  
+
   const dateLong = new Date(selectedDate).toLocaleDateString("en-US", {
-    weekday: "long", year: "numeric", month: "long", day: "numeric",
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
   // ── Sample Data ──
@@ -316,9 +362,10 @@ export default function DailyCollectionSheet() {
       } else {
         setItems(getSampleItems());
       }
-    } catch { 
+    } catch {
       setItems(getSampleItems());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -328,13 +375,12 @@ export default function DailyCollectionSheet() {
   // Filter items based on selected admin and date
   useEffect(() => {
     let filtered = items;
-    
-    // Filter by date (we'll add date field to items if needed)
-    // For now, we'll filter by handlingAdmin and optionally by date
+
+    // Filter by handlingAdmin
     if (selectedAdmin) {
-      filtered = filtered.filter(item => item.handlingAdmin === selectedAdmin);
+      filtered = filtered.filter((item) => item.handlingAdmin === selectedAdmin);
     }
-    
+
     setFilteredItems(filtered);
   }, [items, selectedAdmin, selectedDate]);
 
@@ -350,15 +396,15 @@ export default function DailyCollectionSheet() {
       showToast("Description is required!", "error");
       return;
     }
-    
-    const newItem = { 
-      ...form, 
-      id: editId || generateId(), 
+
+    const newItem = {
+      ...form,
+      id: editId || generateId(),
       collected: false,
       date: selectedDate, // Store the date
-      handlingAdmin: selectedAdmin // Use selected admin
+      handlingAdmin: selectedAdmin, // Use selected admin
     };
-    
+
     if (editId) {
       setItems((prev) => prev.map((it) => (it.id === editId ? newItem : it)));
       showToast("Item updated successfully!");
@@ -366,13 +412,14 @@ export default function DailyCollectionSheet() {
       setItems((prev) => [...prev, newItem]);
       showToast("Item added successfully!");
     }
-    
+
     setForm(defaultForm);
     setEditId(null);
     setView("list");
   }
 
   function handleEdit(item) {
+    if (isChaser) return;
     setForm({ ...item });
     setEditId(item.id);
     setSelectedAdmin(item.handlingAdmin);
@@ -380,27 +427,31 @@ export default function DailyCollectionSheet() {
   }
 
   function handleDelete(id) {
+    if (isChaser) return;
     setItems((prev) => prev.filter((it) => it.id !== id));
     showToast("Item removed.", "error");
   }
 
   // Handle collection with chaser tracking
   function handleCollection(itemId, chaserName) {
-    setItems((prev) => prev.map((it) => 
-      it.id === itemId 
-        ? { 
-            ...it, 
-            collected: true, 
-            collectedByChaser: chaserName,
-            collectedAt: new Date().toISOString(),
-            status: "Collected"
-          } 
-        : it
-    ));
+    setItems((prev) =>
+      prev.map((it) =>
+        it.id === itemId
+          ? {
+              ...it,
+              collected: true,
+              collectedByChaser: chaserName,
+              collectedAt: new Date().toISOString(),
+              status: "Collected",
+            }
+          : it
+      )
+    );
     showToast(`Item marked as collected by ${chaserName}!`);
   }
 
   function handleNew() {
+    if (isChaser) return;
     setForm(defaultForm);
     setEditId(null);
     setSelectedAdmin("");
@@ -437,12 +488,19 @@ export default function DailyCollectionSheet() {
     ["invoiceCollectedBy", "Invoice Collected Person & Service No", "text"],
   ];
 
+  // If chaser: force list view always (no form)
+  useEffect(() => {
+    if (isChaser) {
+      setView("list");
+      setEditId(null);
+      setForm(defaultForm);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isChaser]);
+
   // ─────────────────────────────────────────────────────────────────────────────
   return (
-    <div
-      className="cdp-dot-bg"
-      style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}
-    >
+    <div className="cdp-dot-bg" style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}>
       <InjectStyles />
 
       {/* ── Toast ─────────────────────────────────────────────────────────── */}
@@ -450,7 +508,10 @@ export default function DailyCollectionSheet() {
         <div
           className="cdp-toast-in"
           style={{
-            position: "fixed", top: 16, right: 16, zIndex: 100,
+            position: "fixed",
+            top: 16,
+            right: 16,
+            zIndex: 100,
             background: toast.type === "error"
               ? "linear-gradient(135deg, #ef4444, #dc2626)"
               : "linear-gradient(135deg, #10b981, #059669)",
@@ -471,16 +532,17 @@ export default function DailyCollectionSheet() {
       )}
 
       {/* ── Scrollable Body ───────────────────────────────────────────────── */}
-      <div
-        style={{ flex: 1, overflowY: "auto", overflowX: "hidden", padding: "20px 16px 32px" }}
-      >
-
+      <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", padding: "20px 16px 32px" }}>
         {/* ── Selection Panel (Admin & Chaser & Date) ─────────────────── */}
-        <div style={{
-          background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)",
-          borderRadius: 16, padding: "16px 20px", marginBottom: 20,
-          boxShadow: "0 4px 20px rgba(0,74,173,0.25)",
-        }}>
+        <div
+          style={{
+            background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)",
+            borderRadius: 16,
+            padding: "16px 20px",
+            marginBottom: 20,
+            boxShadow: "0 4px 20px rgba(0,74,173,0.25)",
+          }}
+        >
           <div style={{ color: "#fff", marginBottom: 12 }}>
             <div style={{ fontSize: 11, opacity: 0.7, textTransform: "uppercase", letterSpacing: "0.5px" }}>
               COLOMBO DOCKYARD PLC
@@ -492,8 +554,14 @@ export default function DailyCollectionSheet() {
             <div style={{ fontSize: 11, opacity: 0.7, marginTop: 2 }}>
               Supplies & Material Control — Local Purchase
             </div>
+            <div style={{ fontSize: 11, opacity: 0.85, marginTop: 6 }}>
+              {isChaser ? "Role: Chaser (View only, can mark collected)" : "Role: Admin (Full access)"}
+            </div>
+            <div style={{ fontSize: 11, opacity: 0.85, marginTop: 2 }}>
+              {dateLong}
+            </div>
           </div>
-          
+
           {/* Date Picker */}
           <div style={{ marginBottom: 12 }}>
             <label style={{ fontSize: 11, color: "rgba(255,255,255,0.7)", display: "block", marginBottom: 4 }}>
@@ -516,7 +584,7 @@ export default function DailyCollectionSheet() {
               }}
             />
           </div>
-          
+
           {/* Admin and Chaser selection row */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
             <div>
@@ -532,7 +600,7 @@ export default function DailyCollectionSheet() {
                 id="select-admin-header"
               />
             </div>
-            
+
             <div>
               <label style={{ fontSize: 11, color: "rgba(255,255,255,0.7)", display: "block", marginBottom: 4 }}>
                 <Truck size={12} style={{ display: "inline", marginRight: 4 }} />
@@ -547,27 +615,29 @@ export default function DailyCollectionSheet() {
               />
             </div>
           </div>
-          
+
           {/* Chaser count display */}
           {selectedChaser && (
-            <div style={{
-              background: "rgba(255,255,255,0.1)",
-              borderRadius: 8,
-              padding: "6px 12px",
-              fontSize: 12,
-              color: "#fff",
-              textAlign: "center",
-              marginTop: 8,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 6,
-            }}>
+            <div
+              style={{
+                background: "rgba(255,255,255,0.1)",
+                borderRadius: 8,
+                padding: "6px 12px",
+                fontSize: 12,
+                color: "#fff",
+                textAlign: "center",
+                marginTop: 8,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+              }}
+            >
               <User size={12} />
               Chaser: {selectedChaser} - Ready for collection
             </div>
           )}
-          
+
           {/* Progress bar */}
           {selectedAdmin && (
             <div style={{ marginTop: 12 }}>
@@ -580,74 +650,102 @@ export default function DailyCollectionSheet() {
                 </span>
               </div>
               <div style={{ height: 6, background: "rgba(255,255,255,0.2)", borderRadius: 10, overflow: "hidden" }}>
-                <div style={{
-                  height: "100%", width: `${pct}%`,
-                  background: "#34d399", borderRadius: 10,
-                  transition: "width 0.5s ease",
-                }} />
+                <div
+                  style={{
+                    height: "100%",
+                    width: `${pct}%`,
+                    background: "#34d399",
+                    borderRadius: 10,
+                    transition: "width 0.5s ease",
+                  }}
+                />
               </div>
             </div>
           )}
         </div>
 
         {/* ── Tab Navigation ────────────────────────────────────────────── */}
-        <div style={{
-          display: "flex",
-          background: "rgba(255,255,255,0.95)",
-          borderRadius: 12, padding: 4, marginBottom: 16,
-          boxShadow: "0 2px 8px rgba(0,74,173,0.06)",
-          border: "1px solid rgba(0,74,173,0.06)",
-        }}>
+        <div
+          style={{
+            display: "flex",
+            background: "rgba(255,255,255,0.95)",
+            borderRadius: 12,
+            padding: 4,
+            marginBottom: 16,
+            boxShadow: "0 2px 8px rgba(0,74,173,0.06)",
+            border: "1px solid rgba(0,74,173,0.06)",
+          }}
+        >
           {[
             ["list", <><ClipboardList size={14} /> Collection List</>],
             ["form", editId ? <><Edit size={14} /> Edit Item</> : <><Plus size={14} /> Add Item</>],
-          ].map(([v, label]) => (
-            <button
-              key={v}
-              onClick={() => v === "form" ? handleNew() : setView("list")}
-              style={{
-                flex: 1, border: "none", padding: "9px 12px", borderRadius: 9,
-                cursor: "pointer", fontSize: 13,
-                fontWeight: view === v ? 700 : 500,
-                background: view === v
-                  ? "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)"
-                  : "transparent",
-                color: view === v ? "#fff" : "#64748b",
-                boxShadow: view === v ? "0 2px 8px rgba(0,74,173,0.25)" : "none",
-                transition: "all 0.25s",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 6,
-              }}
-            >
-              {label}
-            </button>
-          ))}
+          ]
+            .filter(([v]) => (isChaser ? v === "list" : true))
+            .map(([v, label]) => (
+              <button
+                key={v}
+                onClick={() => (v === "form" ? handleNew() : setView("list"))}
+                style={{
+                  flex: 1,
+                  border: "none",
+                  padding: "9px 12px",
+                  borderRadius: 9,
+                  cursor: "pointer",
+                  fontSize: 13,
+                  fontWeight: view === v ? 700 : 500,
+                  background: view === v
+                    ? "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)"
+                    : "transparent",
+                  color: view === v ? "#fff" : "#64748b",
+                  boxShadow: view === v ? "0 2px 8px rgba(0,74,173,0.25)" : "none",
+                  transition: "all 0.25s",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6,
+                }}
+              >
+                {label}
+              </button>
+            ))}
         </div>
 
         {/* ════════════════════════════════════════════════════════════════ */}
         {/* FORM VIEW                                                        */}
         {/* ════════════════════════════════════════════════════════════════ */}
-        {view === "form" && (
+        {view === "form" && isAdmin && (
           <div className="cdp-pop-in" style={{ opacity: 0 }}>
-            <div style={{
-              background: "#fff", borderRadius: 20,
-              boxShadow: "0 4px 24px rgba(0,74,173,0.08)",
-              border: "1px solid rgba(0,74,173,0.06)",
-              padding: 24,
-            }}>
-              <div style={{
-                display: "flex", alignItems: "center", gap: 10,
-                borderBottom: "1px solid rgba(0,74,173,0.08)",
-                paddingBottom: 16, marginBottom: 20,
-              }}>
-                <div style={{
-                  width: 36, height: 36, borderRadius: 10,
-                  background: "rgba(0,74,173,0.08)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 18,
-                }}>
+            <div
+              style={{
+                background: "#fff",
+                borderRadius: 20,
+                boxShadow: "0 4px 24px rgba(0,74,173,0.08)",
+                border: "1px solid rgba(0,74,173,0.06)",
+                padding: 24,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  borderBottom: "1px solid rgba(0,74,173,0.08)",
+                  paddingBottom: 16,
+                  marginBottom: 20,
+                }}
+              >
+                <div
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 10,
+                    background: "rgba(0,74,173,0.08)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 18,
+                  }}
+                >
                   {editId ? <Edit size={18} color="#004AAD" /> : <Plus size={18} color="#004AAD" />}
                 </div>
                 <div>
@@ -671,11 +769,7 @@ export default function DailyCollectionSheet() {
                 </Field>
               </div>
 
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-                gap: 14,
-              }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
                 {formFields.map(([key, label, type]) => (
                   <Field key={key} label={label}>
                     {type === "moc" ? (
@@ -713,9 +807,13 @@ export default function DailyCollectionSheet() {
                   disabled={!selectedAdmin}
                   style={{
                     background: selectedAdmin ? "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)" : "#cbd5e1",
-                    color: "#fff", border: "none",
-                    padding: "10px 24px", borderRadius: 10,
-                    fontSize: 14, fontWeight: 600, cursor: selectedAdmin ? "pointer" : "not-allowed",
+                    color: "#fff",
+                    border: "none",
+                    padding: "10px 24px",
+                    borderRadius: 10,
+                    fontSize: 14,
+                    fontWeight: 600,
+                    cursor: selectedAdmin ? "pointer" : "not-allowed",
                     boxShadow: selectedAdmin ? "0 4px 12px rgba(0,74,173,0.3)" : "none",
                     transition: "transform 0.15s, box-shadow 0.15s",
                     display: "flex",
@@ -736,11 +834,20 @@ export default function DailyCollectionSheet() {
                   )}
                 </button>
                 <button
-                  onClick={() => { setView("list"); setForm(defaultForm); setEditId(null); setSelectedAdmin(""); }}
+                  onClick={() => {
+                    setView("list");
+                    setForm(defaultForm);
+                    setEditId(null);
+                    setSelectedAdmin("");
+                  }}
                   style={{
-                    background: "#f1f5f9", color: "#475569",
-                    border: "none", padding: "10px 20px",
-                    borderRadius: 10, fontSize: 14, cursor: "pointer",
+                    background: "#f1f5f9",
+                    color: "#475569",
+                    border: "none",
+                    padding: "10px 20px",
+                    borderRadius: 10,
+                    fontSize: 14,
+                    cursor: "pointer",
                     transition: "background 0.2s",
                     display: "flex",
                     alignItems: "center",
@@ -761,41 +868,61 @@ export default function DailyCollectionSheet() {
         {view === "list" && (
           <div className="cdp-fade-in" style={{ opacity: 0 }}>
             {filteredItems.length === 0 ? (
-              <div style={{
-                background: "#fff", borderRadius: 20,
-                padding: "48px 24px", textAlign: "center",
-                boxShadow: "0 4px 24px rgba(0,74,173,0.06)",
-              }}>
+              <div
+                style={{
+                  background: "#fff",
+                  borderRadius: 20,
+                  padding: "48px 24px",
+                  textAlign: "center",
+                  boxShadow: "0 4px 24px rgba(0,74,173,0.06)",
+                }}
+              >
                 <div style={{ fontSize: 56, marginBottom: 16 }}>📭</div>
-                <div style={{ fontSize: 16, color: "#64748b", marginBottom: 8 }}>
-                  No collection items found
-                </div>
+                <div style={{ fontSize: 16, color: "#64748b", marginBottom: 8 }}>No collection items found</div>
                 <div style={{ fontSize: 13, color: "#94a3b8", marginBottom: 20 }}>
                   {selectedAdmin ? `No items for ${selectedAdmin}` : "Add your first collection item to get started"}
                 </div>
-                <button
-                  onClick={handleNew}
-                  style={{
-                    background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)",
-                    color: "#fff", border: "none",
-                    padding: "10px 24px", borderRadius: 10,
-                    fontSize: 14, fontWeight: 600, cursor: "pointer",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 6,
-                  }}
-                >
-                  <Plus size={14} />
-                  Add First Item
-                </button>
+
+                {isAdmin && (
+                  <button
+                    onClick={handleNew}
+                    style={{
+                      background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)",
+                      color: "#fff",
+                      border: "none",
+                      padding: "10px 24px",
+                      borderRadius: 10,
+                      fontSize: 14,
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 6,
+                    }}
+                  >
+                    <Plus size={14} />
+                    Add First Item
+                  </button>
+                )}
               </div>
             ) : (
               <>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12, flexWrap: "wrap", gap: 10 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: 12,
+                    flexWrap: "wrap",
+                    gap: 10,
+                  }}
+                >
                   <div>
                     <span style={{ fontSize: 13, color: "#64748b" }}>
                       {selectedAdmin ? (
-                        <>Showing items for <strong style={{ color: "#004AAD" }}>{selectedAdmin}</strong></>
+                        <>
+                          Showing items for <strong style={{ color: "#004AAD" }}>{selectedAdmin}</strong>
+                        </>
                       ) : (
                         <>Showing all collection items</>
                       )}
@@ -805,38 +932,53 @@ export default function DailyCollectionSheet() {
                         • Active chaser: {selectedChaser}
                       </span>
                     )}
+                    {isChaser && (
+                      <span style={{ fontSize: 12, color: "#64748b", marginLeft: 8 }}>
+                        • View only (no edit/delete)
+                      </span>
+                    )}
                   </div>
-                  <button
-                    onClick={handleNew}
-                    style={{
-                      background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)",
-                      color: "#fff", border: "none",
-                      padding: "8px 18px", borderRadius: 10,
-                      fontSize: 13, fontWeight: 600, cursor: "pointer",
-                      display: "flex", alignItems: "center", gap: 6,
-                    }}
-                  >
-                    <Plus size={14} />
-                    Add Item
-                  </button>
+
+                  {isAdmin && (
+                    <button
+                      onClick={handleNew}
+                      style={{
+                        background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)",
+                        color: "#fff",
+                        border: "none",
+                        padding: "8px 18px",
+                        borderRadius: 10,
+                        fontSize: 13,
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                      }}
+                    >
+                      <Plus size={14} />
+                      Add Item
+                    </button>
+                  )}
                 </div>
 
                 {/* Display items grouped by chaser who collected them */}
                 {selectedChaser && Object.keys(itemsByChaser).length > 0 && (
                   <div style={{ marginBottom: 20 }}>
-                    <div style={{
-                      background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-                      borderRadius: 12, padding: "12px 16px",
-                      marginBottom: 12,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                    }}>
+                    <div
+                      style={{
+                        background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                        borderRadius: 12,
+                        padding: "12px 16px",
+                        marginBottom: 12,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                      }}
+                    >
                       <CheckCircle2 size={18} color="#fff" />
                       <div>
-                        <div style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>
-                          Collected by {selectedChaser}
-                        </div>
+                        <div style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>Collected by {selectedChaser}</div>
                         <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 11 }}>
                           {itemsByChaser[selectedChaser]?.length || 0} items collected
                         </div>
@@ -846,35 +988,48 @@ export default function DailyCollectionSheet() {
                 )}
 
                 {/* Desktop Table */}
-                <div className="hidden md:block" style={{
-                  background: "#fff", borderRadius: 20, overflow: "hidden",
-                  boxShadow: "0 4px 24px rgba(0,74,173,0.07)",
-                  border: "1px solid rgba(0,74,173,0.06)",
-                  overflowX: "auto",
-                }}>
+                <div
+                  className="hidden md:block"
+                  style={{
+                    background: "#fff",
+                    borderRadius: 20,
+                    overflow: "hidden",
+                    boxShadow: "0 4px 24px rgba(0,74,173,0.07)",
+                    border: "1px solid rgba(0,74,173,0.06)",
+                    overflowX: "auto",
+                  }}
+                >
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 780 }}>
                     <thead>
                       <tr style={{ background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)" }}>
                         {["#", "✓", "End User", "MOC", "Job No", "Description", "PO No", "Supplier", "Status", "Actions"].map((h) => (
-                          <th key={h} style={{
-                            padding: "12px 12px", textAlign: "left",
-                            color: "#fff", fontSize: 11, fontWeight: 600,
-                            letterSpacing: "0.4px", whiteSpace: "nowrap",
-                          }}>
+                          <th
+                            key={h}
+                            style={{
+                              padding: "12px 12px",
+                              textAlign: "left",
+                              color: "#fff",
+                              fontSize: 11,
+                              fontWeight: 600,
+                              letterSpacing: "0.4px",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
                             {h}
                           </th>
                         ))}
-                       </tr>
+                      </tr>
                     </thead>
                     <tbody>
                       {filteredItems.map((item, idx) => {
-                        const rowBg = item.collected
-                          ? "rgba(16,185,129,0.04)"
-                          : idx % 2 === 0 ? "#fff" : "rgba(0,74,173,0.015)";
+                        const rowBg = item.collected ? "rgba(16,185,129,0.04)" : idx % 2 === 0 ? "#fff" : "rgba(0,74,173,0.015)";
                         const isCollectedByCurrentChaser = item.collected && item.collectedByChaser === selectedChaser;
                         return (
-                          <tr key={item.id} className="cdp-data-row"
-                            style={{ borderBottom: "1px solid rgba(0,74,173,0.06)", background: rowBg }}>
+                          <tr
+                            key={item.id}
+                            className="cdp-data-row"
+                            style={{ borderBottom: "1px solid rgba(0,74,173,0.06)", background: rowBg }}
+                          >
                             <td style={{ padding: "10px 12px", color: "#94a3b8", fontSize: 11 }}>{idx + 1}</td>
                             <td style={{ padding: "10px 12px", textAlign: "center" }}>
                               <button
@@ -895,12 +1050,13 @@ export default function DailyCollectionSheet() {
                                   alignItems: "center",
                                 }}
                               >
-                                {item.collected ? 
-                                  <CheckCircle2 size={18} color="#10b981" /> : 
+                                {item.collected ? (
+                                  <CheckCircle2 size={18} color="#10b981" />
+                                ) : (
                                   <Square size={18} color={selectedChaser ? "#94a3b8" : "#cbd5e1"} />
-                                }
+                                )}
                               </button>
-                             </td>
+                            </td>
                             <td style={{ padding: "10px 12px", fontSize: 12, color: "#334155" }}>
                               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                                 <User size={12} color="#64748b" />
@@ -909,15 +1065,20 @@ export default function DailyCollectionSheet() {
                             </td>
                             <td style={{ padding: "10px 12px" }}>
                               {item.moc && (
-                                <span style={{
-                                  background: "rgba(0,74,173,0.08)", color: "#004AAD",
-                                  fontSize: 11, fontWeight: 700,
-                                  padding: "2px 8px", borderRadius: 6,
-                                }}>
+                                <span
+                                  style={{
+                                    background: "rgba(0,74,173,0.08)",
+                                    color: "#004AAD",
+                                    fontSize: 11,
+                                    fontWeight: 700,
+                                    padding: "2px 8px",
+                                    borderRadius: 6,
+                                  }}
+                                >
                                   {item.moc}
                                 </span>
                               )}
-                             </td>
+                            </td>
                             <td style={{ padding: "10px 12px", fontSize: 12, color: "#334155" }}>
                               <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                                 <FileText size={11} color="#64748b" />
@@ -925,15 +1086,17 @@ export default function DailyCollectionSheet() {
                               </div>
                             </td>
                             <td style={{ padding: "10px 12px", fontWeight: 500, maxWidth: 180 }}>
-                              {item.collected
-                                ? <s style={{ color: "#94a3b8", fontSize: 13 }}>{item.description}</s>
-                                : <span style={{ color: "#1e293b", fontSize: 13 }}>{item.description}</span>}
+                              {item.collected ? (
+                                <s style={{ color: "#94a3b8", fontSize: 13 }}>{item.description}</s>
+                              ) : (
+                                <span style={{ color: "#1e293b", fontSize: 13 }}>{item.description}</span>
+                              )}
                               {isCollectedByCurrentChaser && (
                                 <div style={{ fontSize: 10, color: "#10b981", marginTop: 2 }}>
                                   ✓ Collected by {item.collectedByChaser}
                                 </div>
                               )}
-                             </td>
+                            </td>
                             <td style={{ padding: "10px 12px", fontSize: 12, whiteSpace: "nowrap", color: "#475569" }}>
                               <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                                 <Package size={11} color="#64748b" />
@@ -958,34 +1121,45 @@ export default function DailyCollectionSheet() {
                               </span>
                             </td>
                             <td style={{ padding: "10px 12px", whiteSpace: "nowrap" }}>
-                              <button
-                                onClick={() => handleEdit(item)}
-                                title="Edit"
-                                style={{
-                                  background: "rgba(0,74,173,0.07)", border: "none",
-                                  borderRadius: 7, padding: "6px 8px",
-                                  cursor: "pointer", marginRight: 8,
-                                  display: "inline-flex",
-                                  alignItems: "center",
-                                  gap: 4,
-                                }}
-                              >
-                                <Edit size={14} color="#004AAD" />
-                              </button>
-                              <button
-                                onClick={() => handleDelete(item.id)}
-                                title="Delete"
-                                style={{
-                                  background: "rgba(239,68,68,0.07)", border: "none",
-                                  borderRadius: 7, padding: "6px 8px",
-                                  cursor: "pointer",
-                                  display: "inline-flex",
-                                  alignItems: "center",
-                                  gap: 4,
-                                }}
-                              >
-                                <Trash2 size={14} color="#ef4444" />
-                              </button>
+                              {isChaser ? (
+                                <span style={{ fontSize: 11, color: "#94a3b8" }}>View only</span>
+                              ) : (
+                                <>
+                                  <button
+                                    onClick={() => handleEdit(item)}
+                                    title="Edit"
+                                    style={{
+                                      background: "rgba(0,74,173,0.07)",
+                                      border: "none",
+                                      borderRadius: 7,
+                                      padding: "6px 8px",
+                                      cursor: "pointer",
+                                      marginRight: 8,
+                                      display: "inline-flex",
+                                      alignItems: "center",
+                                      gap: 4,
+                                    }}
+                                  >
+                                    <Edit size={14} color="#004AAD" />
+                                  </button>
+                                  <button
+                                    onClick={() => handleDelete(item.id)}
+                                    title="Delete"
+                                    style={{
+                                      background: "rgba(239,68,68,0.07)",
+                                      border: "none",
+                                      borderRadius: 7,
+                                      padding: "6px 8px",
+                                      cursor: "pointer",
+                                      display: "inline-flex",
+                                      alignItems: "center",
+                                      gap: 4,
+                                    }}
+                                  >
+                                    <Trash2 size={14} color="#ef4444" />
+                                  </button>
+                                </>
+                              )}
                             </td>
                           </tr>
                         );
@@ -1002,17 +1176,22 @@ export default function DailyCollectionSheet() {
                       <div
                         key={item.id}
                         style={{
-                          background: "#fff", borderRadius: 16,
+                          background: "#fff",
+                          borderRadius: 16,
                           boxShadow: "0 2px 12px rgba(0,74,173,0.07)",
                           border: item.collected ? "1px solid #86efac" : "1px solid rgba(0,74,173,0.08)",
                           overflow: "hidden",
                         }}
                       >
-                        <div style={{
-                          display: "flex", alignItems: "center", justifyContent: "space-between",
-                          padding: "10px 16px",
-                          background: item.collected ? "rgba(16,185,129,0.06)" : "rgba(0,74,173,0.03)",
-                        }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            padding: "10px 16px",
+                            background: item.collected ? "rgba(16,185,129,0.06)" : "rgba(0,74,173,0.03)",
+                          }}
+                        >
                           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                             <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600 }}>#{idx + 1}</span>
                             <button
@@ -1032,55 +1211,69 @@ export default function DailyCollectionSheet() {
                                 display: "inline-flex",
                               }}
                             >
-                              {item.collected ? 
-                                <CheckCircle2 size={18} color="#10b981" /> : 
+                              {item.collected ? (
+                                <CheckCircle2 size={18} color="#10b981" />
+                              ) : (
                                 <Square size={18} color={selectedChaser ? "#94a3b8" : "#cbd5e1"} />
-                              }
+                              )}
                             </button>
-                            <span
-                              className={getBadgeClasses(item.status)}
-                              style={{ padding: "2px 9px", borderRadius: 20, fontSize: 11, fontWeight: 600 }}
-                            >
+                            <span className={getBadgeClasses(item.status)} style={{ padding: "2px 9px", borderRadius: 20, fontSize: 11, fontWeight: 600 }}>
                               {item.status}
                             </span>
                           </div>
+
                           <div style={{ display: "flex", gap: 8 }}>
-                            <button onClick={() => handleEdit(item)}
-                              style={{ background: "none", border: "none", cursor: "pointer", padding: "4px" }}>
-                              <Edit size={16} color="#004AAD" />
-                            </button>
-                            <button onClick={() => handleDelete(item.id)}
-                              style={{ background: "none", border: "none", cursor: "pointer", padding: "4px" }}>
-                              <Trash2 size={16} color="#ef4444" />
-                            </button>
+                            {isAdmin ? (
+                              <>
+                                <button onClick={() => handleEdit(item)} style={{ background: "none", border: "none", cursor: "pointer", padding: "4px" }}>
+                                  <Edit size={16} color="#004AAD" />
+                                </button>
+                                <button onClick={() => handleDelete(item.id)} style={{ background: "none", border: "none", cursor: "pointer", padding: "4px" }}>
+                                  <Trash2 size={16} color="#ef4444" />
+                                </button>
+                              </>
+                            ) : (
+                              <span style={{ fontSize: 11, color: "#94a3b8" }}>View only</span>
+                            )}
                           </div>
                         </div>
 
                         <div style={{ padding: "12px 16px" }}>
-                          <p style={{
-                            fontWeight: 600, fontSize: 14,
-                            textDecoration: item.collected ? "line-through" : "none",
-                            color: item.collected ? "#94a3b8" : "#1e293b",
-                            marginBottom: 8,
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 6,
-                          }}>
+                          <p
+                            style={{
+                              fontWeight: 600,
+                              fontSize: 14,
+                              textDecoration: item.collected ? "line-through" : "none",
+                              color: item.collected ? "#94a3b8" : "#1e293b",
+                              marginBottom: 8,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 6,
+                            }}
+                          >
                             <FileText size={12} color="#64748b" />
                             {item.description || <span style={{ color: "#cbd5e1", fontStyle: "italic" }}>No description</span>}
                           </p>
+
                           {isCollectedByCurrentChaser && (
-                            <div style={{
-                              fontSize: 11, color: "#10b981", background: "rgba(16,185,129,0.1)",
-                              padding: "4px 8px", borderRadius: 6, marginBottom: 8,
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 4,
-                            }}>
+                            <div
+                              style={{
+                                fontSize: 11,
+                                color: "#10b981",
+                                background: "rgba(16,185,129,0.1)",
+                                padding: "4px 8px",
+                                borderRadius: 6,
+                                marginBottom: 8,
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 4,
+                              }}
+                            >
                               <CheckCircle2 size={12} />
                               Collected by {item.collectedByChaser}
                             </div>
                           )}
+
                           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 16px", fontSize: 12, color: "#64748b" }}>
                             {item.endUser && (
                               <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
@@ -1090,7 +1283,16 @@ export default function DailyCollectionSheet() {
                             {item.moc && (
                               <span>
                                 <b>MOC:</b>{" "}
-                                <span style={{ background: "rgba(0,74,173,0.08)", color: "#004AAD", fontWeight: 700, padding: "1px 6px", borderRadius: 4, fontSize: 11 }}>
+                                <span
+                                  style={{
+                                    background: "rgba(0,74,173,0.08)",
+                                    color: "#004AAD",
+                                    fontWeight: 700,
+                                    padding: "1px 6px",
+                                    borderRadius: 4,
+                                    fontSize: 11,
+                                  }}
+                                >
                                   {item.moc}
                                 </span>
                               </span>
@@ -1123,13 +1325,17 @@ export default function DailyCollectionSheet() {
         )}
 
         {/* Footer */}
-        <div style={{
-          textAlign: "center", fontSize: 11, color: "#94a3b8",
-          marginTop: 28, paddingTop: 16,
-          borderTop: "1px solid rgba(0,74,173,0.06)",
-        }}>
-          Form No: 8.4-DMP-FO-13 · Issue: 01 (2010-01-01) · Rev: 02 (2015-10-01) ·
-          Generated from CP for Local Purchase 8.4-DMP-CP-02
+        <div
+          style={{
+            textAlign: "center",
+            fontSize: 11,
+            color: "#94a3b8",
+            marginTop: 28,
+            paddingTop: 16,
+            borderTop: "1px solid rgba(0,74,173,0.06)",
+          }}
+        >
+          Form No: 8.4-DMP-FO-13 · Issue: 01 (2010-01-01) · Rev: 02 (2015-10-01) · Generated from CP for Local Purchase 8.4-DMP-CP-02
         </div>
       </div>
     </div>
