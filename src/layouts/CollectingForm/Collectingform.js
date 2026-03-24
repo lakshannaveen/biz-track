@@ -1276,8 +1276,11 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                               </div>
                               <textarea
                                 value={item.remark || ""}
-                                onChange={(e) => handleRemarkChange(item.id, e.target.value)}
-                                placeholder="Type remark and click Save"
+                                onChange={(e) => {
+                                  handleRemarkChange(item.id, e.target.value);
+                                  showToast("Remark auto-saved");
+                                }}
+                                placeholder="Type remark (auto-saves)"
                                 rows={2}
                                 style={{
                                   width: "100%",
@@ -1289,23 +1292,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                                   outline: "none",
                                 }}
                               />
-                              <button
-                                type="button"
-                                onClick={() => showToast("Remark saved for this item")}
-                                style={{
-                                  marginTop: 4,
-                                  border: "none",
-                                  borderRadius: 6,
-                                  padding: "4px 10px",
-                                  fontSize: 11,
-                                  fontWeight: 600,
-                                  cursor: "pointer",
-                                  background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)",
-                                  color: "#fff",
-                                }}
-                              >
-                                Save
-                              </button>
                             </div>
                           ) : (
                             <div
