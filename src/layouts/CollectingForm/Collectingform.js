@@ -604,11 +604,11 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
   // ── Form field definitions ──
   const formFields = [
     ["endUser", "End User (Mr/Mrs)", "text"],
-    ["moc", "MOC", "moc"],
+    ["moc", "MOC", "text"],
     ["jobNo", "Job No", "text"],
     ["description", "Description *", "text"],
     ["poNo", "PO No", "po"],
-    ["supplierName", "Supplier Name & Location", "supplier"],
+    ["supplierName", "Supplier Name & Location", "text"],
     ["pcNo", "P/C No", "text"],
     ["status", "Status", "status"],
     ["invoiceCollectedBy", "Invoice Collected Person & Service No", "text"],
@@ -1008,31 +1008,13 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
                 {formFields.map(([key, label, type]) => (
                   <Field key={key} label={label}>
-                    {type === "moc" ? (
-                      <SearchableSelect
-                        options={mocOptions.length > 0 ? mocOptions : MOC_OPTIONS}
-                        value={form[key]}
-                        onChange={(v) => setForm({ ...form, [key]: v })}
-                        placeholder="-- Select --"
-                        id={`moc-${key}`}
-                        usePrimaryPlaceholderStyle={false}
-                      />
-                    ) : type === "po" ? (
+                    {type === "po" ? (
                       <SearchableSelect
                         options={poOptions}
                         value={form[key]}
                         onChange={(v) => setForm({ ...form, [key]: v })}
                         placeholder={loadingOptions ? "Loading..." : "Select PO No"}
                         id={`po-${key}`}
-                        usePrimaryPlaceholderStyle={false}
-                      />
-                    ) : type === "supplier" ? (
-                      <SearchableSelect
-                        options={supplierOptions}
-                        value={form[key]}
-                        onChange={(v) => setForm({ ...form, [key]: v })}
-                        placeholder={loadingOptions ? "Loading..." : "Select Supplier"}
-                        id={`supplier-${key}`}
                         usePrimaryPlaceholderStyle={false}
                       />
                     ) : type === "status" ? (
