@@ -1311,7 +1311,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                                   fontSize: 11,
                                   fontWeight: 600,
                                   cursor: "pointer",
-                                  background: "linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)",
+                                  background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)",
                                   color: "#fff",
                                 }}
                               >
