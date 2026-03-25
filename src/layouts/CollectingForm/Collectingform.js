@@ -481,6 +481,11 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
           ...prev,
           supplierName: matchingItem.SUPPLIER_NAME || prev.supplierName,
           moc: String(matchingItem.MOCNO) || prev.moc,
+          // Build Job No from JCAT + JMAIN when available
+          jobNo:
+            matchingItem.JCAT && matchingItem.JMAIN
+              ? `${matchingItem.JCAT}${matchingItem.JMAIN}`
+              : prev.jobNo,
         }));
       }
     }
@@ -607,7 +612,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     ["moc", "MOC", "text"],
     ["jobNo", "Job No", "text"],
     ["description", "Description *", "text"],
-    ["poNo", "PO No", "po"],
     ["supplierName", "Supplier Name & Location", "text"],
     ["pcNo", "P/C No", "text"],
     ["status", "Status", "status"],
@@ -989,6 +993,20 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                   </div>
                   <div style={{ fontSize: 11, color: "#94a3b8" }}>Fill in the details below</div>
                 </div>
+              </div>
+
+              {/* PO No before Handling Admin */}
+              <div style={{ marginBottom: 16 }}>
+                <Field label="PO No">
+                  <SearchableSelect
+                    options={poOptions}
+                    value={form.poNo}
+                    onChange={(v) => setForm({ ...form, poNo: v })}
+                    placeholder={loadingOptions ? "Loading..." : "Select PO No"}
+                    id="po-poNo-form"
+                    usePrimaryPlaceholderStyle={false}
+                  />
+                </Field>
               </div>
 
               {/* Admin selection in form */}
