@@ -1277,17 +1277,21 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                             <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600 }}>#{idx + 1}</span>
                             <button
                               onClick={() => {
+                                if (!isChaser) return;
                                 if (selectedChaser) {
                                   handleCollection(item.id, selectedChaser);
                                 } else {
                                   showToast("Please select a chaser first!", "error");
                                 }
                               }}
-                              disabled={!selectedChaser || item.collected}
+                              disabled={!isChaser || !selectedChaser || item.collected}
                               style={{
                                 background: "none",
                                 border: "none",
-                                cursor: selectedChaser && !item.collected ? "pointer" : "not-allowed",
+                                cursor:
+                                  isChaser && selectedChaser && !item.collected
+                                    ? "pointer"
+                                    : "not-allowed",
                                 padding: 0,
                                 display: "inline-flex",
                               }}
