@@ -43,7 +43,6 @@ const defaultForm = {
   supplierName: "",
   pcNo: "",
   status: "Pending",
-  invoiceCollectedBy: "",
   collectedByChaser: "", // Track which chaser collected this item
   remark: "", // Chaser remark (admin view-only)
 };
@@ -365,7 +364,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
         supplierName: "ABC Steel Suppliers, Colombo",
         pcNo: "PC-789",
         status: "Pending",
-        invoiceCollectedBy: "Service No: 12345",
         collected: false,
         remark: "",
         date: selectedDate,
@@ -381,7 +379,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
         supplierName: "ElectroTech Ltd, Negombo",
         pcNo: "PC-790",
         status: "Collected",
-        invoiceCollectedBy: "Service No: 23456",
         collected: true,
         collectedByChaser: "Mr. Damiya",
         collectedAt: new Date().toISOString(),
@@ -399,7 +396,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
         supplierName: "Marine Paints Co, Colombo",
         pcNo: "PC-791",
         status: "Partial",
-        invoiceCollectedBy: "Service No: 34567",
         collected: false,
         remark: "",
         date: selectedDate,
@@ -615,7 +611,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     ["supplierName", "Supplier Name & Location", "text"],
     ["pcNo", "P/C No", "text"],
     ["status", "Status", "status"],
-    ["invoiceCollectedBy", "Invoice Collected Person & Service No", "text"],
   ];
 
   // If chaser: force list view always (no form)
