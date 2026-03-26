@@ -17,6 +17,7 @@ import {
   FileText,
   Clock,
   Square,
+  Loader2,
 } from "lucide-react";
 
 // Services
@@ -84,10 +85,14 @@ const GLOBAL_CSS = `
     0%   { opacity: 0; transform: translateY(-8px) scale(0.95); }
     100% { opacity: 1; transform: translateY(0)    scale(1);    }
   }
+  @keyframes cdp-spin {
+    to { transform: rotate(360deg); }
+  }
   .cdp-fade-in  { animation: cdp-fadeIn  0.5s ease forwards; }
   .cdp-slide-in { animation: cdp-slideIn 0.35s ease forwards; }
   .cdp-pop-in   { animation: cdp-popIn   0.4s cubic-bezier(0.34,1.56,0.64,1) forwards; }
   .cdp-toast-in { animation: cdp-toastIn 0.3s ease forwards; }
+  .cdp-spin     { animation: cdp-spin 0.8s linear infinite; }
 
   .cdp-shimmer-card {
     background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
@@ -335,6 +340,8 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
   const [selectedChaser, setSelectedChaser] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [filteredItems, setFilteredItems] = useState([]);
+  const [savingRemarkForId, setSavingRemarkForId] = useState(null);
+  const savingRemarkTimeout = useRef(null);
 
   // API data states
   const [poOptions, setPoOptions] = useState([]);
@@ -576,6 +583,16 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
           : it
       )
     );
+
+    // show per-item saving indicator for a short duration
+    setSavingRemarkForId(itemId);
+    if (savingRemarkTimeout.current) {
+      clearTimeout(savingRemarkTimeout.current);
+    }
+    savingRemarkTimeout.current = setTimeout(() => {
+      setSavingRemarkForId(null);
+      showToast("Remark auto-saved");
+    }, 700);
   }
 
   function handleNew() {
@@ -1341,14 +1358,38 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                           {/* Remark: editable for chaser, read-only for admin */}
                           {isChaser ? (
                             <div style={{ marginBottom: 8 }}>
-                              <div style={{ fontSize: 11, color: "#64748b", marginBottom: 4, fontWeight: 600 }}>
-                                Chaser Remark
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                  marginBottom: 4,
+                                }}
+                              >
+                                <div
+                                  style={{ fontSize: 11, color: "#64748b", fontWeight: 600 }}
+                                >
+                                  Chaser Remark
+                                </div>
+                                {savingRemarkForId === item.id && (
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: 4,
+                                      fontSize: 11,
+                                      color: "#0ea5e9",
+                                    }}
+                                  >
+                                    <Loader2 size={12} className="cdp-spin" />
+                                    Saving...
+                                  </div>
+                                )}
                               </div>
                               <textarea
                                 value={item.remark || ""}
                                 onChange={(e) => {
                                   handleRemarkChange(item.id, e.target.value);
-                                  showToast("Remark auto-saved");
                                 }}
                                 placeholder="Type remark (auto-saves)"
                                 rows={2}
