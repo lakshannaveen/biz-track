@@ -482,6 +482,56 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     fetchToDoList();
   }, []);
 
+  // Fetch daily collect list from API and map into local items
+  useEffect(() => {
+    const fetchDailyCollect = async () => {
+      setLoadingOptions(true);
+      try {
+        const resp = await CommonService.GetDailyCollect({});
+        const data = resp?.data?.ResultSet || resp?.data?.Result || [];
+        if (Array.isArray(data) && data.length > 0) {
+          const mapped = data.map((r, idx) => {
+            const id = `${(r.DATE || '').toString().replace(/\s+/g, '_')}_${r.SERIAL_NO ?? idx}_${r.PO_NO ?? ''}`;
+            let dateIso = selectedDate;
+            try {
+              const parsed = new Date(r.DATE);
+              if (!Number.isNaN(parsed.getTime())) dateIso = parsed.toISOString();
+            } catch (e) {
+              // keep selectedDate as fallback
+            }
+
+            return {
+              id,
+              handlingAdmin: r.HANDLE_BY || r.HANDLED_BY || "",
+              endUser: r.REQUEST_BY || "",
+              moc: r.MOC_NO ?? r.MOCNO ?? r.MOC ?? "",
+              jobNo: (r.JCAT || "") + (r.JMAIN || ""),
+              description: r.DESCRIPTION || "",
+              poNo: r.PO_NO || r.PO || "",
+              supplierName: r.SUPPLIER_NAME || r.SUPPLIER_CODE || "",
+              pcNo: r.PC_NO || r.PCNo || r.PC || "",
+              status: r.STATUS || "Pending",
+              collected: false,
+              collectedByChaser: r.INVCOLLECTED_BY || "",
+              remark: r.CHASER_REMARK || r.REMARK || "",
+              date: dateIso,
+            };
+          });
+
+          setItems(mapped);
+        }
+      } catch (err) {
+        console.error("Error fetching DailyCollect:", err);
+        showToast("Failed to load collection list from server", "error");
+      } finally {
+        setLoadingOptions(false);
+      }
+    };
+
+    fetchDailyCollect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDate]);
+
   // Auto-fill supplier and moc when poNo changes
   useEffect(() => {
     if (form.poNo && apiData.length > 0) {

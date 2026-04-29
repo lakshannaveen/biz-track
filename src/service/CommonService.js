@@ -43,6 +43,18 @@ const GetToDoList = async () => {
   });
 };
 
+const GetDailyCollect = async (params = {}) => {
+  const authKey = JSON.parse(localStorage.getItem("token"));
+  return axios.get(`DailyCollect/GetDailyCollect`, {
+    headers: {
+      "auth-key": authKey,
+    },
+    params,
+  }).then((response) => {
+    return response;
+  });
+};
+
 const PostDailyCollect = async (payload) => {
   const authKey = JSON.parse(localStorage.getItem("token"));
   return axios
@@ -63,6 +75,7 @@ const CommonService = {
   GetAccessHeadComponent,
   GetUserByServiceNo,
   GetToDoList,
+  GetDailyCollect,
   PostDailyCollect,
 };
 
