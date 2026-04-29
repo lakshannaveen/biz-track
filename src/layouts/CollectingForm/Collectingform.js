@@ -4,7 +4,6 @@ import { useLocation } from "react-router-dom";
 import {
   Save,
   Edit,
-  Trash2,
   Plus,
   CheckCircle2,
   XCircle,
@@ -1444,13 +1443,8 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                                 <button onClick={() => handleEdit(item)} style={{ background: "none", border: "none", cursor: "pointer", padding: "4px" }}>
                                   <Edit size={16} color="#004AAD" />
                                 </button>
-                                <button onClick={() => handleDelete(item.id)} style={{ background: "none", border: "none", cursor: "pointer", padding: "4px" }}>
-                                  <Trash2 size={16} color="#ef4444" />
-                                </button>
                               </>
-                            ) : (
-                              <></>
-                            )}
+                            ) : null}
                           </div>
                         </div>
 
