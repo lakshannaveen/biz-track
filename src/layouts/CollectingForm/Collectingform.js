@@ -349,6 +349,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
   const [supplierOptions, setSupplierOptions] = useState([]);
   const [loadingOptions, setLoadingOptions] = useState(false);
   const [apiData, setApiData] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const dateLong = new Date(selectedDate).toLocaleDateString("en-US", {
     weekday: "long",
@@ -576,16 +577,26 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
 
     // Send to API, but still persist locally on failure
     let apiOk = false;
+    setIsSubmitting(true);
     try {
       const resp = await CommonService.PostDailyCollect(payload);
-      if (resp && resp.data) {
-        // Accept common success patterns
+      // Determine server success by common patterns
+      const serverStatus = resp?.status ?? resp?.data?.statusCode ?? resp?.data?.StatusCode;
+      const serverMsg = resp?.data?.Message ?? resp?.data?.message ?? resp?.data?.resultMessage ?? null;
+      if (serverStatus === 200 || resp?.status === 200) {
         apiOk = true;
-        showToast("Saved to server successfully.");
+        showToast(serverMsg || "Saved to server successfully.");
+      } else if (resp && resp.data) {
+        // Server responded but not OK
+        console.warn("Server returned non-200:", resp);
+        showToast(serverMsg || "Server returned an error while saving.", "error");
       }
     } catch (err) {
+      const serverMsg = err?.response?.data?.Message ?? err?.response?.data?.message ?? err.message ?? "Network error";
       console.error("PostDailyCollect failed:", err);
-      showToast("Failed to save to server — saved locally.", "error");
+      showToast(serverMsg || "Failed to save to server — saved locally.", "error");
+    } finally {
+      setIsSubmitting(false);
     }
 
     if (editId) {
@@ -1136,7 +1147,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
               <div style={{ display: "flex", gap: 10, marginTop: 20, flexWrap: "wrap" }}>
                 <button
                   onClick={handleSubmit}
-                  disabled={!selectedAdmin}
+                  disabled={!selectedAdmin || isSubmitting}
                   style={{
                     background: selectedAdmin ? "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)" : "#cbd5e1",
                     color: "#fff",
@@ -1145,7 +1156,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                     borderRadius: 10,
                     fontSize: 14,
                     fontWeight: 600,
-                    cursor: selectedAdmin ? "pointer" : "not-allowed",
+                    cursor: selectedAdmin && !isSubmitting ? "pointer" : "not-allowed",
                     boxShadow: selectedAdmin ? "0 4px 12px rgba(0,74,173,0.3)" : "none",
                     transition: "transform 0.15s, box-shadow 0.15s",
                     display: "flex",
@@ -1153,7 +1164,12 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                     gap: 8,
                   }}
                 >
-                  {editId ? (
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 size={14} className="cdp-spin" />
+                      {editId ? "Updating..." : "Saving..."}
+                    </>
+                  ) : editId ? (
                     <>
                       <Edit size={14} />
                       Update Item
