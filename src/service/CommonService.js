@@ -32,21 +32,9 @@ const GetUserByServiceNo = async () => {
     });
 };
 
-const GetToDoList = async () => {
-  const authKey = JSON.parse(localStorage.getItem("token"));
-  return axios.get(`TODOList/GetToDoList`, {
-    headers: {
-      "auth-key": authKey,
-    },
-  }).then((response) => {
-    return response;
-  });
-};
-
 
 export default {
   getBannerImages,
   GetAccessHeadComponent,
   GetUserByServiceNo,
-  GetToDoList,
 };
