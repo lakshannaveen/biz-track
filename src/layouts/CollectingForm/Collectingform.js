@@ -510,7 +510,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
   }
 
   // ── CRUD ──
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!form.description.trim()) {
       showToast("Description is required!", "error");
       return;
@@ -531,6 +531,62 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
       handlingAdmin: selectedAdmin, // Use selected admin
       remark: existingRemark,
     };
+
+    // Build payload for API
+    const formatDateForApi = (iso) => {
+      try {
+        const d = new Date(iso);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = d.toLocaleString("en-US", { month: "short" }).toUpperCase();
+        const year = String(d.getFullYear()).slice(-2);
+        return `${day}-${month}-${year}`;
+      } catch (e) {
+        return iso;
+      }
+    };
+
+    // Find matching API record for additional fields
+    const matchingItem = apiData.find((it) => it.PO_NO === form.poNo) || {};
+
+    const mapStatus = (s) => {
+      if (!s) return "P";
+      if (s === "Pending") return "P";
+      if (s === "Collected") return "C";
+      if (s === "Not Available") return "N";
+      if (s === "Partial") return "PA";
+      return s;
+    };
+
+    const payload = {
+      P_MDD_DATE: formatDateForApi(selectedDate),
+      P_MDD_CHASER_ID: selectedChaser && Number(selectedChaser) ? String(selectedChaser) : "1",
+      P_MDD_HANDLE_BY: selectedAdmin || form.handlingAdmin || "",
+      P_MDD_REQUEST_BY: localStorage.getItem("ServiceNo") || "",
+      P_MDD_MOC_NO: (matchingItem.MOCNO ?? matchingItem.MOC_NO ?? form.moc) || "",
+      P_MDD_JCAT: matchingItem.JCAT || "",
+      P_MDD_JMAIN: matchingItem.JMAIN || form.jobNo || "",
+      P_MDD_DESCRIPTION: form.description || "",
+      P_MDD_PO_NO: form.poNo || "",
+      P_MDD_SUPPLIER_CODE: matchingItem.SUPPLIER_CODE || "",
+      P_MDD_CHASER_REMARK: form.remark || "",
+      P_MDD_STATUS: mapStatus(form.status),
+      P_MDD_PC_NO: form.pcNo || "",
+      P_MDD_INVCOLLECTED_BY: form.collectedByChaser || "",
+    };
+
+    // Send to API, but still persist locally on failure
+    let apiOk = false;
+    try {
+      const resp = await CommonService.PostDailyCollect(payload);
+      if (resp && resp.data) {
+        // Accept common success patterns
+        apiOk = true;
+        showToast("Saved to server successfully.");
+      }
+    } catch (err) {
+      console.error("PostDailyCollect failed:", err);
+      showToast("Failed to save to server — saved locally.", "error");
+    }
 
     if (editId) {
       setItems((prev) => prev.map((it) => (it.id === editId ? newItem : it)));

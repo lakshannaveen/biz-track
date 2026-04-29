@@ -43,10 +43,27 @@ const GetToDoList = async () => {
   });
 };
 
+const PostDailyCollect = async (payload) => {
+  const authKey = JSON.parse(localStorage.getItem("token"));
+  return axios
+    .post(`DailyCollect/PostDailyCollect`, payload, {
+      headers: {
+        "auth-key": authKey,
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => {
+      return response;
+    });
+};
 
-export default {
+
+const CommonService = {
   getBannerImages,
   GetAccessHeadComponent,
   GetUserByServiceNo,
   GetToDoList,
+  PostDailyCollect,
 };
+
+export default CommonService;
