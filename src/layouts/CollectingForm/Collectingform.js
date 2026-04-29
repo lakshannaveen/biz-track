@@ -451,17 +451,23 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
         if (response.data && response.data.ResultSet) {
           const data = response.data.ResultSet;
           setApiData(data);
-          
+          // Helper to read MOC from various API field names
+          const readMoc = (it) => {
+            return (
+              it.MOCNO ?? it.MOC_NO ?? it.MOCNo ?? it.MOC_no ?? it.MOC ?? it.moc ?? null
+            );
+          };
+
           // Extract unique PO Nos
-          const uniquePoNos = [...new Set(data.map(item => item.PO_NO).filter(Boolean))];
+          const uniquePoNos = [...new Set(data.map((item) => item.PO_NO).filter(Boolean))];
           setPoOptions(uniquePoNos);
-          
-          // Extract unique MOCs
-          const uniqueMocs = [...new Set(data.map(item => String(item.MOCNO)).filter(Boolean))];
+
+          // Extract unique MOCs (support multiple API naming variants)
+          const uniqueMocs = [...new Set(data.map((item) => String(readMoc(item))).filter((v) => v && v !== 'null'))];
           setMocOptions(uniqueMocs);
-          
+
           // Extract unique Supplier Names
-          const uniqueSuppliers = [...new Set(data.map(item => item.SUPPLIER_NAME).filter(Boolean))];
+          const uniqueSuppliers = [...new Set(data.map((item) => item.SUPPLIER_NAME).filter(Boolean))];
           setSupplierOptions(uniqueSuppliers);
         }
       } catch (error) {
@@ -480,10 +486,13 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     if (form.poNo && apiData.length > 0) {
       const matchingItem = apiData.find(item => item.PO_NO === form.poNo);
       if (matchingItem) {
-        setForm(prev => ({
+        // readMoc helper used above in fetch; replicate here to be safe
+        const readMocLocal = (it) => it.MOCNO ?? it.MOC_NO ?? it.MOCNo ?? it.MOC_no ?? it.MOC ?? it.moc ?? null;
+
+        setForm((prev) => ({
           ...prev,
           supplierName: matchingItem.SUPPLIER_NAME || prev.supplierName,
-          moc: String(matchingItem.MOCNO) || prev.moc,
+          moc: String(readMocLocal(matchingItem)) || prev.moc,
           // Build Job No from JCAT + JMAIN when available
           jobNo:
             matchingItem.JCAT && matchingItem.JMAIN
