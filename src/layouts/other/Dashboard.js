@@ -1159,7 +1159,7 @@ const ArcGauge = ({ rate, color, trackColor }) => {
 // ─── Single Attendance KPI Card ───────────────────────────────────────────────
 const AttendanceKpiCard = ({ type, strength, eligible, attendance, onClick }) => {
   const cfg  = TYPE_CONFIG[type] || TYPE_CONFIG["CDPLC"];
-  const rate = strength > 0 ? Math.round((attendance / eligible) * 100) : 0;
+  const rate = eligible > 0 ? Math.round((attendance / eligible) * 100) : 0;
   const isInteractive = Boolean(onClick);
 
   const handleKeyDown = (event) => {
@@ -1539,6 +1539,7 @@ const Dashboard = () => {
   const [cachedAllAttendance, setCachedAllAttendance] = useState(null);
   const [cachedTraineeTypes, setCachedTraineeTypes]   = useState(null);
   const cdplcChartRef = useRef(null);
+  const traineeTypeChartRef = useRef(null);
 
   const [loadingStates, setLoadingStates] = useState({
     divisionData:     true,
@@ -1614,11 +1615,19 @@ const Dashboard = () => {
   const attendanceData = cachedAllAttendance || allAttendance || [];
 
   const handleAttendanceCardClick = (type) => {
-    if (type !== "CDPLC") return;
-    setActiveTab(0);
-    requestAnimationFrame(() => {
-      cdplcChartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+    if (type === "CDPLC") {
+      setActiveTab(0);
+      requestAnimationFrame(() => {
+        cdplcChartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      return;
+    }
+    if (type === "Trainee") {
+      setActiveTab(0);
+      requestAnimationFrame(() => {
+        traineeTypeChartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
   };
 
   return (
@@ -1745,7 +1754,7 @@ const Dashboard = () => {
               </Box>
 
               {/* ── Employee Type Chart ── */}
-              <Box sx={{ mb: "24px" }}>
+              <Box ref={traineeTypeChartRef} sx={{ mb: "24px" }}>
                 {loadingStates.traineeTypes ? <ChartSkeleton height={300} /> : <EmployeeTypeChart employeeTypeData={employeeTypeData} />}
               </Box>
 
