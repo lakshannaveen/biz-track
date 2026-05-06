@@ -8,17 +8,15 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Cell,
+  CartesianGrid,
 } from "recharts";
 import { useDispatch, useSelector } from "react-redux";
 import { GetCDLCategoryAtt } from "../../action/Attendance";
-import { CDPLCCustomTooltip, CDPLCLegend } from "./ChartUtils";
+import { CDPLCCustomTooltip } from "./ChartUtils";
 
-const colorMap = {
-  CLERICAL: "#06b6d4",
-  EXECUTIVE: "#3b82f6",
-  SUPERVISORY: "#8b5cf6",
-  INDUSTRIAL: "#10b981",
+const seriesColors = {
+  strength: "#f59e0b",
+  attendance: "#3b82f6",
 };
 
 export function CDPLCBreakdown({
@@ -56,11 +54,10 @@ export function CDPLCBreakdown({
           const typeName = item.Type.toUpperCase();
           return {
             name: typeName,
-            attendance: item.Attendance,
-            strength: item.EligibleStrength,
+            attendance: item.Attendance || 0,
+            strength: item.ActualStrength || item.Strength || 0,
             actualPct: item.ActualPercentage,
             eligiblePct: item.EligiblePercentage,
-            fill: colorMap[typeName] || "#64748b",
           };
         })
     : [];
@@ -300,15 +297,24 @@ export function CDPLCBreakdown({
                 left: isMobile ? 0 : 24,
               }}
             >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="rgba(0,0,0,0.08)"
+                horizontal={false}
+              />
               <XAxis
                 type="number"
-                domain={[0, 100]}
+                axisLine={false}
+                tickLine={false}
                 tick={{ fill: "#64748b", fontSize: 11 }}
+                tickFormatter={(value) => Number(value).toLocaleString()}
               />
               <YAxis
                 type="category"
                 dataKey="name"
                 width={isMobile ? 70 : 90}
+                axisLine={false}
+                tickLine={false}
                 tick={{ fill: "#475569", fontSize: 11 }}
               />
               <Tooltip
@@ -316,17 +322,56 @@ export function CDPLCBreakdown({
                   <CDPLCCustomTooltip {...props} cdplcData={transformedCdplc} />
                 )}
               />
-              <Bar dataKey="actualPct" radius={[0, 8, 8, 0]} maxBarSize={24}>
-                {transformedCdplc.map((entry) => (
-                  <Cell key={entry.name} fill={entry.fill} />
-                ))}
-              </Bar>
+              <Bar
+                dataKey="strength"
+                name="Actual Strength"
+                fill={seriesColors.strength}
+                radius={[0, 8, 8, 0]}
+                barSize={isMobile ? 14 : 18}
+              />
+              <Bar
+                dataKey="attendance"
+                name="Attendance"
+                fill={seriesColors.attendance}
+                radius={[0, 8, 8, 0]}
+                barSize={isMobile ? 14 : 18}
+              />
             </BarChart>
           </ResponsiveContainer>
         </Box>
 
         {/* Legend */}
-        <CDPLCLegend cdplcData={transformedCdplc} />
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: "16px",
+            marginTop: "8px",
+          }}
+        >
+          {[
+            { label: "Actual Strength", color: seriesColors.strength },
+            { label: "Attendance", color: seriesColors.attendance },
+          ].map((item) => (
+            <Box
+              key={item.label}
+              sx={{ display: "flex", alignItems: "center", gap: "6px" }}
+            >
+              <Box
+                sx={{
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "3px",
+                  backgroundColor: item.color,
+                }}
+              />
+              <Typography sx={{ fontSize: "12px", color: "#64748b" }}>
+                {item.label}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
 
         {/* Total Heading */}
         <Typography
@@ -348,7 +393,7 @@ export function CDPLCBreakdown({
             display: "grid",
             gridTemplateColumns: {
               xs: "repeat(2, 1fr)",
-              md: "repeat(4, 1fr)",
+              md: "repeat(3, 1fr)",
             },
             gap: "12px",
           }}
@@ -378,7 +423,7 @@ export function CDPLCBreakdown({
               sx={{
                 fontSize: "24px",
                 fontWeight: 700,
-                color: "#3b82f6",
+                color: seriesColors.strength,
               }}
             >
               {totalItem?.ActualStrength || "N/A"}
@@ -410,46 +455,14 @@ export function CDPLCBreakdown({
               sx={{
                 fontSize: "24px",
                 fontWeight: 700,
-                color: "#10b981",
+                color: seriesColors.attendance,
               }}
             >
               {totalItem?.Attendance || "N/A"}
             </Typography>
           </Box>
 
-          {/* Card 3: Eligible Strength */}
-          <Box
-            sx={{
-              backgroundColor: "#f8fafc",
-              borderRadius: "8px",
-              padding: "12px",
-              border: "1px solid #e2e8f0",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "10px",
-                color: "#64748b",
-                fontWeight: 600,
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-                marginBottom: "8px",
-              }}
-            >
-              Eligible Strength
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "24px",
-                fontWeight: 700,
-                color: "#8b5cf6",
-              }}
-            >
-              {totalItem?.EligibleStrength || "N/A"}
-            </Typography>
-          </Box>
-
-          {/* Card 4: Eligible Percentage */}
+          {/* Card 3: Eligible Percentage */}
           <Box
             sx={{
               backgroundColor: "#f8fafc",

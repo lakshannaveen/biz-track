@@ -218,6 +218,8 @@ export const CustomTooltip = ({ active, payload, label, divisionData }) => {
 export const CDPLCCustomTooltip = ({ active, payload, cdplcData }) => {
   if (active && payload && payload.length) {
     const item = cdplcData?.find((d) => d.name === payload[0].payload.name);
+    const actualPct =
+      typeof item?.actualPct === "number" ? `${item.actualPct}%` : "N/A";
     return (
       <Box
         sx={{
@@ -248,29 +250,12 @@ export const CDPLCCustomTooltip = ({ active, payload, cdplcData }) => {
             }}
           >
             <Typography sx={{ color: "#64748b", fontSize: "11px" }}>
-              Actual %
+              Actual Strength
             </Typography>
             <Typography
               sx={{ fontWeight: 600, color: "#1a2d4d", fontSize: "11px" }}
             >
-              {item?.actualPct}%
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              gap: "16px",
-              marginBottom: "4px",
-            }}
-          >
-            <Typography sx={{ color: "#64748b", fontSize: "11px" }}>
-              Eligible %
-            </Typography>
-            <Typography
-              sx={{ fontWeight: 600, color: "#1a2d4d", fontSize: "11px" }}
-            >
-              {item?.eligiblePct}%
+              {item?.strength ?? "N/A"}
             </Typography>
           </Box>
           <Box
@@ -287,7 +272,7 @@ export const CDPLCCustomTooltip = ({ active, payload, cdplcData }) => {
             <Typography
               sx={{ fontWeight: 600, color: "#1a2d4d", fontSize: "11px" }}
             >
-              {item?.attendance}
+              {item?.attendance ?? "N/A"}
             </Typography>
           </Box>
           <Box
@@ -298,12 +283,12 @@ export const CDPLCCustomTooltip = ({ active, payload, cdplcData }) => {
             }}
           >
             <Typography sx={{ color: "#64748b", fontSize: "11px" }}>
-              Strength
+              Actual %
             </Typography>
             <Typography
               sx={{ fontWeight: 600, color: "#1a2d4d", fontSize: "11px" }}
             >
-              {item?.strength}
+              {actualPct}
             </Typography>
           </Box>
         </Box>
