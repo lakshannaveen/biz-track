@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
+import { useMediaQuery, useTheme } from "@mui/material";
 import {
   ResponsiveContainer,
-  RadialBarChart,
-  RadialBar,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
   Tooltip,
-  PolarAngleAxis,
+  Cell,
 } from "recharts";
 import { useDispatch, useSelector } from "react-redux";
 import { GetCDLCategoryAtt } from "../../action/Attendance";
@@ -23,6 +26,8 @@ export function CDPLCBreakdown({
   radialData: propRadialData,
   hadDate,
 }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch();
   const {
     cdplcData: reduxCdplcData,
@@ -66,18 +71,11 @@ export function CDPLCBreakdown({
   );
   const overallPercentage = totalItem ? totalItem.ActualPercentage : "N/A";
 
-  const radialData = transformedCdplc.map((c) => ({
-    name: c.name,
-    value: c.actualPct,
-    fill: c.fill,
-  }));
-
   // debug: ensure data is present during development
   // eslint-disable-next-line no-console
   console.log("CDPLCBreakdown: loaded data", {
     apiData,
     transformedCdplc,
-    radialData,
     overallPercentage,
     loading,
     msg,
@@ -263,30 +261,38 @@ export function CDPLCBreakdown({
         {/* Chart */}
         <Box sx={{ height: "288px", width: "100%", marginBottom: "16px" }}>
           <ResponsiveContainer width="100%" height="100%">
-            <RadialBarChart
-              cx="50%"
-              cy="50%"
-              innerRadius="20%"
-              outerRadius="90%"
-              data={radialData}
-              startAngle={90}
-              endAngle={-270}
+            <BarChart
+              data={transformedCdplc}
+              layout="vertical"
+              margin={{
+                top: 8,
+                right: isMobile ? 12 : 24,
+                bottom: 8,
+                left: isMobile ? 0 : 24,
+              }}
             >
-              <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
-              <RadialBar
-                dataKey="value"
-                cornerRadius={6}
-                background={{
-                  fill: "rgba(0, 0, 0, 0.04)",
-                }}
-                label={false}
+              <XAxis
+                type="number"
+                domain={[0, 100]}
+                tick={{ fill: "#64748b", fontSize: 11 }}
+              />
+              <YAxis
+                type="category"
+                dataKey="name"
+                width={isMobile ? 70 : 90}
+                tick={{ fill: "#475569", fontSize: 11 }}
               />
               <Tooltip
                 content={(props) => (
                   <CDPLCCustomTooltip {...props} cdplcData={transformedCdplc} />
                 )}
               />
-            </RadialBarChart>
+              <Bar dataKey="actualPct" radius={[0, 8, 8, 0]} maxBarSize={24}>
+                {transformedCdplc.map((entry) => (
+                  <Cell key={entry.name} fill={entry.fill} />
+                ))}
+              </Bar>
+            </BarChart>
           </ResponsiveContainer>
         </Box>
 
