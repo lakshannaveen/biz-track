@@ -9,6 +9,7 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
+  LabelList,
 } from "recharts";
 import { useDispatch, useSelector } from "react-redux";
 import { GetCDLCategoryAtt } from "../../action/Attendance";
@@ -78,6 +79,12 @@ export function CDPLCBreakdown({
   const totalPercentage =
     totalStrength > 0 ? Math.round((totalAttendance / totalStrength) * 100) : "N/A";
 
+    // Format numbers for labels
+    const formatNumber = (value) => {
+      if (value === null || value === undefined || value === "") return "-";
+      return Number(value).toLocaleString();
+    };
+
   // debug: ensure data is present during development
   // eslint-disable-next-line no-console
   console.log("CDPLCBreakdown: loaded data", {
@@ -99,7 +106,7 @@ export function CDPLCBreakdown({
           "@keyframes fadeInUp": {
             "0%": { opacity: 0, transform: "translateY(24px)" },
             "100%": { opacity: 1, transform: "translateY(0)" },
-          },
+          }
         }}
       >
         <Box
@@ -319,14 +326,18 @@ export function CDPLCBreakdown({
                 fill={seriesColors.strength}
                 radius={[0, 8, 8, 0]}
                 barSize={isMobile ? 14 : 18}
-              />
+              >
+                <LabelList dataKey="strength" position="right" formatter={formatNumber} />
+              </Bar>
               <Bar
                 dataKey="attendance"
                 name="Attendance"
                 fill={seriesColors.attendance}
                 radius={[0, 8, 8, 0]}
                 barSize={isMobile ? 14 : 18}
-              />
+              >
+                <LabelList dataKey="attendance" position="right" formatter={formatNumber} />
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </Box>
