@@ -80,9 +80,9 @@ const GetCDLWeekAttendance = async (hadDate) => {
 const GetCDLCategoryAtt = async (hadDate) => {
   return axios
     .get(`Attendancedashboard/GetCDLCategoryAtt`, {
-      // params: {
-      //   p_had_date: hadDate,
-      // },
+      params: {
+        p_had_date: hadDate,
+      },
     })
     .then((response) => {
       return response;
