@@ -261,6 +261,35 @@ export function CDPLCBreakdown({
         {/* Chart */}
         <Box sx={{ height: "288px", width: "100%", marginBottom: "16px" }}>
           <ResponsiveContainer width="100%" height="100%">
+            {/* Previous chart (radial) */}
+            {/*
+            <RadialBarChart
+              cx="50%"
+              cy="50%"
+              innerRadius="20%"
+              outerRadius="90%"
+              data={radialData}
+              startAngle={90}
+              endAngle={-270}
+            >
+              <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
+              <RadialBar
+                dataKey="value"
+                cornerRadius={6}
+                background={{
+                  fill: "rgba(0, 0, 0, 0.04)",
+                }}
+                label={false}
+              />
+              <Tooltip
+                content={(props) => (
+                  <CDPLCCustomTooltip {...props} cdplcData={transformedCdplc} />
+                )}
+              />
+            </RadialBarChart>
+            */}
+
+            {/* Current chart (bar) */}
             <BarChart
               data={transformedCdplc}
               layout="vertical"
