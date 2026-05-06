@@ -260,8 +260,7 @@ export default function Footer() {
   const { data } = useSelector((state) => state.userbyServiceNo);
   const { headComponent } = useSelector((state) => state.headComponent);
   const [unreadCount, setUnreadCount] = React.useState(0);
-
-  // Check if user has access to Attendance Dashboard component (EMOBCI0013)
+ 
   
   const hasDashboardAccess = headComponent?.some(
     (component) => component.ComponentId === "EMOBCI0013"

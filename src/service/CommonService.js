@@ -31,7 +31,6 @@ const GetUserByServiceNo = async () => {
       return response;
     });
 };
-
 const GetToDoList = async () => {
   const authKey = JSON.parse(localStorage.getItem("token"));
   return axios.get(`DailyCollect/GetSupplier`, {
@@ -70,7 +69,7 @@ const PostDailyCollect = async (payload) => {
 };
 
 
-const CommonService = {
+export default {
   getBannerImages,
   GetAccessHeadComponent,
   GetUserByServiceNo,
@@ -78,5 +77,3 @@ const CommonService = {
   GetDailyCollect,
   PostDailyCollect,
 };
-
-export default CommonService;

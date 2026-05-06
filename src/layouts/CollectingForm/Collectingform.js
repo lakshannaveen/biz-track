@@ -21,17 +21,15 @@ import {
 
 // Services
 import CommonService from "../../service/CommonService";
-
-// ─── Constants ────────────────────────────────────────────────────────────────
-const STORAGE_KEY = "cdplc_collection_items_v3";
+ 
 const MOC_OPTIONS = ["PE", "EM", "PM", "ON", "NC", "CA", "SR", "BS", "OR", "CP"];
 const STATUS_OPTIONS = ["Pending", "Collected", "Not Available", "Partial"];
 
-// Admin list from the image
+ 
 const ADMIN_OPTIONS = ["Waruni", "Lakshmi", "Roshni", "Hiran", "Osani", "Rakmal"];
 
-// Chaser list from the image
-const CHASER_OPTIONS = ["Mr. Damiya", "Mrs. Kamala", "Mr. Nimal", "Mrs. Priyanka"];
+ 
+const CHASER_OPTIONS = ["Damith", "Kamal", "Nimal", "Priyanka"];
 
 const defaultForm = {
   handlingAdmin: "",
@@ -43,8 +41,8 @@ const defaultForm = {
   supplierName: "",
   pcNo: "",
   status: "Pending",
-  collectedByChaser: "", // Track which chaser collected this item
-  remark: "", // Chaser remark (admin view-only)
+  collectedByChaser: "", 
+  remark: "", 
 };
 
 function generateId() {
@@ -170,11 +168,8 @@ function SearchableSelect({
   onChange,
   placeholder = "-- Select --",
   id,
-  usePrimaryPlaceholderStyle = true,
-  // When true, keep the primary (blue) styling even after a value is selected.
-  // Used for the top-card Admin/Chaser selectors only.
-  keepPrimaryBackgroundAfterSelect = false,
-  // Allow caller to customize the primary background color (top card only)
+  usePrimaryPlaceholderStyle = true, 
+  keepPrimaryBackgroundAfterSelect = false, 
   primaryBackgroundColor = "#1976d2",
 }) {
   const [open, setOpen] = useState(false);
@@ -321,8 +316,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const typeParam = searchParams.get("type");
-
-  // Determine role: query param has highest priority, then prop
+ 
   const role = typeParam === "chaser" ? "chaser" : "admin";
 
   const isChaser = role === "chaser";
@@ -334,7 +328,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
   const [editId, setEditId] = useState(null);
   const [toast, setToast] = useState(null);
 
-  // New state for admin and chaser selection
+  
   const [selectedAdmin, setSelectedAdmin] = useState("");
   const [selectedChaser, setSelectedChaser] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
@@ -342,7 +336,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
   const [savingRemarkForId, setSavingRemarkForId] = useState(null);
   const savingRemarkTimeout = useRef(null);
 
-  // API data states
+ 
   const [poOptions, setPoOptions] = useState([]);
   const [mocOptions, setMocOptions] = useState([]);
   const [supplierOptions, setSupplierOptions] = useState([]);
@@ -356,85 +350,10 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     month: "long",
     day: "numeric",
   });
-
-  // ── Sample Data ──
-  function getSampleItems() {
-    return [
-      {
-        id: "sample-1",
-        handlingAdmin: "Waruni",
-        endUser: "Mr. John Smith",
-        moc: "PE",
-        jobNo: "JOB-2024-001",
-        description: "Steel plates for hull construction",
-        poNo: "PO-2024-0456",
-        supplierName: "ABC Steel Suppliers, Colombo",
-        pcNo: "PC-789",
-        status: "Pending",
-        collected: false,
-        remark: "",
-        date: selectedDate,
-      },
-      {
-        id: "sample-2",
-        handlingAdmin: "Lakshmi",
-        endUser: "Mrs. Priya Fernando",
-        moc: "EM",
-        jobNo: "JOB-2024-002",
-        description: "Electrical cables and connectors",
-        poNo: "PO-2024-0457",
-        supplierName: "ElectroTech Ltd, Negombo",
-        pcNo: "PC-790",
-        status: "Collected",
-        collected: true,
-        collectedByChaser: "Mr. Damiya",
-        collectedAt: new Date().toISOString(),
-        remark: "",
-        date: selectedDate,
-      },
-      {
-        id: "sample-3",
-        handlingAdmin: "Waruni",
-        endUser: "Mr. Rajesh Kumar",
-        moc: "PM",
-        jobNo: "JOB-2024-003",
-        description: "Paint and coating materials",
-        poNo: "PO-2024-0458",
-        supplierName: "Marine Paints Co, Colombo",
-        pcNo: "PC-791",
-        status: "Partial",
-        collected: false,
-        remark: "",
-        date: selectedDate,
-      },
-    ];
-  }
-
-  // ── Persistence ──
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsedItems = JSON.parse(saved);
-        setItems(parsedItems.length > 0 ? parsedItems : getSampleItems());
-      } else {
-        setItems(getSampleItems());
-      }
-    } catch {
-      setItems(getSampleItems());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  }, [items]);
-
-  // Filter items based on selected admin and date
+ 
   useEffect(() => {
     let filtered = items;
-
-    // Filter by handlingAdmin
+ 
     if (selectedAdmin) {
       filtered = filtered.filter((item) => item.handlingAdmin === selectedAdmin);
     }
@@ -442,7 +361,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     setFilteredItems(filtered);
   }, [items, selectedAdmin, selectedDate]);
 
-  // Fetch TODO list options
   useEffect(() => {
     const fetchToDoList = async () => {
       setLoadingOptions(true);
@@ -451,22 +369,20 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
         if (response.data && response.data.ResultSet) {
           const data = response.data.ResultSet;
           setApiData(data);
-          // Helper to read MOC from various API field names
+           
           const readMoc = (it) => {
             return (
               it.MOCNO ?? it.MOC_NO ?? it.MOCNo ?? it.MOC_no ?? it.MOC ?? it.moc ?? null
             );
           };
 
-          // Extract unique PO Nos
+          
           const uniquePoNos = [...new Set(data.map((item) => item.PO_NO).filter(Boolean))];
           setPoOptions(uniquePoNos);
 
-          // Extract unique MOCs (support multiple API naming variants)
           const uniqueMocs = [...new Set(data.map((item) => String(readMoc(item))).filter((v) => v && v !== 'null'))];
           setMocOptions(uniqueMocs);
 
-          // Extract unique Supplier Names
           const uniqueSuppliers = [...new Set(data.map((item) => item.SUPPLIER_NAME).filter(Boolean))];
           setSupplierOptions(uniqueSuppliers);
         }
@@ -481,7 +397,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     fetchToDoList();
   }, []);
 
-  // Fetch daily collect list from API and map into local items
   useEffect(() => {
     const fetchDailyCollect = async () => {
       setLoadingOptions(true);
@@ -496,7 +411,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
               const parsed = new Date(r.DATE);
               if (!Number.isNaN(parsed.getTime())) dateIso = parsed.toISOString();
             } catch (e) {
-              // keep selectedDate as fallback
             }
 
             return {
@@ -528,22 +442,18 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     };
 
     fetchDailyCollect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate]);
 
-  // Auto-fill supplier and moc when poNo changes
   useEffect(() => {
     if (form.poNo && apiData.length > 0) {
       const matchingItem = apiData.find(item => item.PO_NO === form.poNo);
       if (matchingItem) {
-        // readMoc helper used above in fetch; replicate here to be safe
         const readMocLocal = (it) => it.MOCNO ?? it.MOC_NO ?? it.MOCNo ?? it.MOC_no ?? it.MOC ?? it.moc ?? null;
 
         setForm((prev) => ({
           ...prev,
           supplierName: matchingItem.SUPPLIER_NAME || prev.supplierName,
           moc: String(readMocLocal(matchingItem)) || prev.moc,
-          // Build Job No from JCAT + JMAIN when available
           jobNo:
             matchingItem.JCAT && matchingItem.JMAIN
               ? `${matchingItem.JCAT}${matchingItem.JMAIN}`
@@ -553,20 +463,17 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     }
   }, [form.poNo, apiData]);
 
-  // ── Toast ──
   function showToast(msg, type = "success") {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 2500);
   }
 
-  // ── CRUD ──
   async function handleSubmit() {
     if (!form.description.trim()) {
       showToast("Description is required!", "error");
       return;
     }
 
-    // Preserve existing remark when admin edits; new items start without remark
     let existingRemark = "";
     if (editId) {
       const existingItem = items.find((it) => it.id === editId);
@@ -577,12 +484,12 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
       ...form,
       id: editId || generateId(),
       collected: false,
-      date: selectedDate, // Store the date
-      handlingAdmin: selectedAdmin, // Use selected admin
+      date: selectedDate,
+      handlingAdmin: selectedAdmin,
       remark: existingRemark,
     };
 
-    // Build payload for API
+
     const formatDateForApi = (iso) => {
       try {
         const d = new Date(iso);
@@ -595,7 +502,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
       }
     };
 
-    // Find matching API record for additional fields
     const matchingItem = apiData.find((it) => it.PO_NO === form.poNo) || {};
 
     const mapStatus = (s) => {
@@ -610,8 +516,8 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     const payload = {
       P_MDD_DATE: formatDateForApi(selectedDate),
       P_MDD_CHASER_ID: selectedChaser && Number(selectedChaser) ? String(selectedChaser) : "1",
-      P_MDD_HANDLE_BY: selectedAdmin || form.handlingAdmin || "",
-      P_MDD_REQUEST_BY: localStorage.getItem("ServiceNo") || "",
+      P_MDD_HANDLE_BY: localStorage.getItem("ServiceNo") || "",
+      P_MDD_REQUEST_BY: selectedChaser ,
       P_MDD_MOC_NO: (matchingItem.MOCNO ?? matchingItem.MOC_NO ?? form.moc) || "",
       P_MDD_JCAT: matchingItem.JCAT || "",
       P_MDD_JMAIN: matchingItem.JMAIN || form.jobNo || "",
@@ -624,19 +530,18 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
       P_MDD_INVCOLLECTED_BY: form.collectedByChaser || "",
     };
 
-    // Send to API, but still persist locally on failure
     let apiOk = false;
     setIsSubmitting(true);
     try {
       const resp = await CommonService.PostDailyCollect(payload);
-      // Determine server success by common patterns
+
       const serverStatus = resp?.status ?? resp?.data?.statusCode ?? resp?.data?.StatusCode;
       const serverMsg = resp?.data?.Message ?? resp?.data?.message ?? resp?.data?.resultMessage ?? null;
       if (serverStatus === 200 || resp?.status === 200) {
         apiOk = true;
         showToast(serverMsg || "Saved to server successfully.");
       } else if (resp && resp.data) {
-        // Server responded but not OK
+        
         console.warn("Server returned non-200:", resp);
         showToast(serverMsg || "Server returned an error while saving.", "error");
       }
@@ -817,16 +722,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
             {/* Top row: title + role/date */}
             <div className="cdp-header-top-row">
               <div>
-                <div
-                  style={{
-                    fontSize: 11,
-                    opacity: 0.8,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                  }}
-                >
-                  COLOMBO DOCKYARD PLC
-                </div>
+                
                 <div
                   style={{
                     marginTop: 4,
@@ -839,16 +735,8 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                 >
                   <ClipboardList size={18} />
                   Daily Collection Detail Sheet
-                </div>
-                <div style={{ fontSize: 11, opacity: 0.85, marginTop: 2 }}>
-                  Supplies & Material Control — Local Purchase
-                </div>
-              </div>
-
-              <div className="cdp-header-meta">
-                <div style={{ fontSize: 11, opacity: 0.7 }}>Today</div>
-                <div style={{ fontSize: 12, fontWeight: 600 }}>{dateLong}</div>
-              </div>
+                </div> 
+              </div> 
             </div>
 
             {/* Middle row: quick stats */}

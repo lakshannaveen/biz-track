@@ -1187,8 +1187,7 @@ export function EmployeeStrengthAttendanceChart({ allAttendance = [] }) {
     { strength: 0, eligible: 0, attendance: 0, kryAttendance: 0 }
   );
   const totalAttendance = totals.attendance + totals.kryAttendance;
-
-  // ── Label formatters ──
+ 
   const fmtVal = (v) => (v > 0 ? v.toLocaleString() : "");
   const fmtStr = (v) => {
     if (!v || v === 0) return "";
