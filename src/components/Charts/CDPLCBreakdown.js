@@ -68,6 +68,16 @@ export function CDPLCBreakdown({
   );
   const overallPercentage = totalItem ? totalItem.ActualPercentage : "N/A";
 
+  // Totals (fallback to summing transformed data)
+  const totalStrength =
+    totalItem?.ActualStrength ||
+    transformedCdplc.reduce((acc, cur) => acc + (Number(cur.strength) || 0), 0);
+  const totalAttendance =
+    totalItem?.Attendance ||
+    transformedCdplc.reduce((acc, cur) => acc + (Number(cur.attendance) || 0), 0);
+  const totalPercentage =
+    totalStrength > 0 ? Math.round((totalAttendance / totalStrength) * 100) : "N/A";
+
   // debug: ensure data is present during development
   // eslint-disable-next-line no-console
   console.log("CDPLCBreakdown: loaded data", {
@@ -234,25 +244,6 @@ export function CDPLCBreakdown({
               Actual attendance %
             </Typography>
           </Box>
-          <Box sx={{ textAlign: "right" }}>
-            <Typography
-              sx={{
-                fontSize: "20px",
-                fontWeight: 700,
-                color: "#2512ca",
-              }}
-            >
-              {overallPercentage}%
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: "12px",
-                color: "#64748b",
-              }}
-            >
-              Overall Actual
-            </Typography>
-          </Box>
         </Box>
 
         {/* Chart */}
@@ -371,6 +362,50 @@ export function CDPLCBreakdown({
               </Typography>
             </Box>
           ))}
+        </Box>
+
+        {/* Summary row (totals) */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: 2,
+            mt: 2,
+            pt: 2,
+            borderTop: "1px solid #eef2f6",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box sx={{ width: 8, height: 8, borderRadius: 2, bgcolor: seriesColors.strength }} />
+            <Box>
+              <Typography sx={{ fontSize: 12, color: "#64748b" }}>Total Strength</Typography>
+              <Typography sx={{ fontSize: 16, fontWeight: 700, color: "#1a2d4d" }}>
+                {totalStrength.toLocaleString()}
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box sx={{ width: 8, height: 8, borderRadius: 2, bgcolor: seriesColors.attendance }} />
+            <Box>
+              <Typography sx={{ fontSize: 12, color: "#64748b" }}>Total Attendance</Typography>
+              <Typography sx={{ fontSize: 16, fontWeight: 700, color: "#1a2d4d" }}>
+                {totalAttendance.toLocaleString()}
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box sx={{ width: 8, height: 8, borderRadius: 2, bgcolor: "#f59e0b" }} />
+            <Box>
+              <Typography sx={{ fontSize: 12, color: "#64748b" }}>Percentage</Typography>
+              <Typography sx={{ fontSize: 16, fontWeight: 700, color: "#1a2d4d" }}>
+                {typeof totalPercentage === "number" ? `${totalPercentage}%` : totalPercentage}
+              </Typography>
+            </Box>
+          </Box>
         </Box>
       </Box>
     </Box>
