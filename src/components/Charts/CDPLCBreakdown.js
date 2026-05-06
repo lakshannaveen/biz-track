@@ -232,7 +232,7 @@ export function CDPLCBreakdown({
                 color: "#1a2d4d",
               }}
             >
-              CDPLC Category 
+              CDPLC Employee Strength 
             </Typography>
             <Typography
               sx={{
