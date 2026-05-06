@@ -1063,16 +1063,7 @@ import { DivisionBreakdown } from "../../components/Charts/DivisionBreakdown";
 import { TraineesDivisionBreakdown } from "../../components/Charts/TraineesDivisionBreakdown";
 import WeeklyAttendanceTrend from "../../components/Charts/WeeklyAttendanceTrend";
 import { EmployeeTypeChart } from "../../components/Charts/EmployeeTypeChart";
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  CartesianGrid,
-} from "recharts";
+import { CDPLCBreakdown } from "../../components/Charts/CDPLCBreakdown";
 import {
   GetCdlBasedDivison,
   GetTraineeBasedTypes,
@@ -1162,106 +1153,6 @@ const ArcGauge = ({ rate, color, trackColor }) => {
         />
       </svg>
     </Box>
-  );
-};
-
-// ─── Employee Strength & Attendance Overview ─────────────────────────────────
-const EmployeeStrengthAttendanceOverview = ({ allAttendance = [] }) => {
-  const breakdown = buildTypeBreakdown(allAttendance);
-  const chartData = breakdown.map((row) => ({
-    type: row.type,
-    strength: row.strength,
-    attendance: row.attendance,
-  }));
-  const totals = breakdown.reduce(
-    (acc, row) => ({
-      eligible: acc.eligible + (row.eligible || 0),
-      attendance: acc.attendance + (row.attendance || 0),
-    }),
-    { eligible: 0, attendance: 0 },
-  );
-  const overallPct = totals.eligible
-    ? Math.round((totals.attendance / totals.eligible) * 100)
-    : 0;
-
-  return (
-    <Paper
-      elevation={0}
-      sx={{
-        overflow: "hidden",
-        backgroundColor: "#ffffff",
-        borderRadius: "16px",
-        padding: { xs: "16px", sm: "20px", md: "24px" },
-        boxShadow: "0 6px 18px rgba(0, 0, 0, 0.06)",
-        border: "1px solid #e8eef6",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          mb: 2,
-        }}
-      >
-        <Box>
-          <Typography
-            sx={{
-              fontSize: { xs: "14px", sm: "16px" },
-              fontWeight: 700,
-              color: "#1e2a3a",
-            }}
-          >
-            CDPLC Category
-          </Typography>
-          <Typography sx={{ fontSize: "12px", color: "#64748b", mt: "2px" }}>
-            Actual attendance %
-          </Typography>
-        </Box>
-        <Box sx={{ textAlign: "right" }}>
-          <Typography sx={{ fontSize: "18px", fontWeight: 700, color: "#2512ca" }}>
-            {overallPct}%
-          </Typography>
-          <Typography sx={{ fontSize: "12px", color: "#64748b" }}>
-            Overall Actual
-          </Typography>
-        </Box>
-      </Box>
-
-      <Box sx={{ height: { xs: 260, sm: 320 } }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={chartData}
-            layout="vertical"
-            margin={{ top: 8, right: 16, left: 8, bottom: 8 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#eef2f7" />
-            <XAxis
-              type="number"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: "#7a8796", fontSize: 11 }}
-            />
-            <YAxis
-              dataKey="type"
-              type="category"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: "#1f2937", fontSize: 12, fontWeight: 600 }}
-              width={90}
-            />
-            <Tooltip
-              formatter={(value, name) => [Number(value).toLocaleString(), name]}
-              labelStyle={{ fontWeight: 600 }}
-              contentStyle={{ borderRadius: 10, border: "1px solid #e5e7eb" }}
-            />
-            <Legend wrapperStyle={{ fontSize: 11 }} />
-            <Bar dataKey="strength" name="Actual Strength" fill="#f59e0b" radius={[0, 6, 6, 0]} />
-            <Bar dataKey="attendance" name="Attendance" fill="#3b82f6" radius={[0, 6, 6, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-      </Box>
-    </Paper>
   );
 };
 
@@ -1839,11 +1730,7 @@ const Dashboard = () => {
 
               {/* ── CDPLC Breakdown ── */}
               <Box ref={cdplcChartRef} sx={{ mb: "24px" }}>
-                {loadingStates.divisionData ? (
-                  <ChartSkeleton height={300} />
-                ) : (
-                  <EmployeeStrengthAttendanceOverview allAttendance={attendanceData} />
-                )}
+                {loadingStates.divisionData ? <ChartSkeleton height={300} /> : <CDPLCBreakdown hadDate={today} />}
               </Box>
 
               {/* ── Division Breakdown ── */}
