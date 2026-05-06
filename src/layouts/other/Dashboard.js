@@ -1033,7 +1033,7 @@
 
 
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Typography,
@@ -1157,13 +1157,26 @@ const ArcGauge = ({ rate, color, trackColor }) => {
 };
 
 // ─── Single Attendance KPI Card ───────────────────────────────────────────────
-const AttendanceKpiCard = ({ type, strength, eligible, attendance }) => {
+const AttendanceKpiCard = ({ type, strength, eligible, attendance, onClick }) => {
   const cfg  = TYPE_CONFIG[type] || TYPE_CONFIG["CDPLC"];
   const rate = strength > 0 ? Math.round((attendance / eligible) * 100) : 0;
+  const isInteractive = Boolean(onClick);
+
+  const handleKeyDown = (event) => {
+    if (!isInteractive) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onClick();
+    }
+  };
 
   return (
     <Paper
       elevation={0}
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
+      role={isInteractive ? "button" : undefined}
+      tabIndex={isInteractive ? 0 : undefined}
       sx={{
         borderRadius: "16px",
         overflow: "hidden",
@@ -1171,6 +1184,7 @@ const AttendanceKpiCard = ({ type, strength, eligible, attendance }) => {
         borderColor: "divider",
         backgroundColor: "background.paper",
         transition: "transform 0.2s, box-shadow 0.2s",
+        cursor: isInteractive ? "pointer" : "default",
         "&:hover": {
           transform: "translateY(-4px)",
           boxShadow: "0 8px 28px rgba(0,0,0,0.09)",
@@ -1343,7 +1357,7 @@ const ChartSkeleton = ({ height = 300 }) => (
 );
 
 // ─── Employee Type KPI Cards Grid ─────────────────────────────────────────────
-const EmployeeTypeKpiGrid = ({ allAttendance, loading }) => {
+const EmployeeTypeKpiGrid = ({ allAttendance, loading, onCardClick }) => {
   const breakdown = buildTypeBreakdown(allAttendance);
   const byType = {};
   breakdown.forEach((row) => { byType[row.type] = row; });
@@ -1372,6 +1386,7 @@ const EmployeeTypeKpiGrid = ({ allAttendance, loading }) => {
             strength={byType[type]?.strength   || 0}
             eligible={byType[type]?.eligible   || 0}
             attendance={byType[type]?.attendance || 0}
+            onClick={onCardClick ? () => onCardClick(type) : undefined}
           />
         )
       )}
@@ -1523,6 +1538,7 @@ const Dashboard = () => {
   const [activeTab, setActiveTab]                     = useState(4);
   const [cachedAllAttendance, setCachedAllAttendance] = useState(null);
   const [cachedTraineeTypes, setCachedTraineeTypes]   = useState(null);
+  const cdplcChartRef = useRef(null);
 
   const [loadingStates, setLoadingStates] = useState({
     divisionData:     true,
@@ -1596,6 +1612,14 @@ const Dashboard = () => {
   });
 
   const attendanceData = cachedAllAttendance || allAttendance || [];
+
+  const handleAttendanceCardClick = (type) => {
+    if (type !== "CDPLC") return;
+    setActiveTab(0);
+    requestAnimationFrame(() => {
+      cdplcChartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
 
   return (
     <Box
@@ -1684,6 +1708,7 @@ const Dashboard = () => {
               <EmployeeTypeKpiGrid
                 allAttendance={attendanceData}
                 loading={loadingStates.allAttendance}
+                onCardClick={handleAttendanceCardClick}
               />
 
               {/* ── Weekly Attendance ── */}
@@ -1704,7 +1729,7 @@ const Dashboard = () => {
               </Box>
 
               {/* ── CDPLC Breakdown ── */}
-              <Box sx={{ mb: "24px" }}>
+              <Box ref={cdplcChartRef} sx={{ mb: "24px" }}>
                 {loadingStates.divisionData ? <ChartSkeleton height={300} /> : <CDPLCBreakdown hadDate={today} />}
               </Box>
 
