@@ -442,6 +442,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
           const existingItem = existingBySerial.get(String(r.SERIAL_NO ?? ""));
           const serverRemark = r.CHASER_REMARK || r.REMARK || "";
           const remark = serverRemark || existingItem?.remark || "";
+          const remarkDraft = existingItem?.remarkDraft || "";
 
           return {
             id,
@@ -458,6 +459,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
             collected: normalizedStatus === "Collected",
             collectedByChaser: r.INVCOLLECTED_BY || "",
             remark,
+            remarkDraft,
             date: dateIso,
           };
         });
@@ -783,9 +785,9 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
         it.id === itemId
           ? {
               ...it,
-              // remove any legacy remarkText field and store under remark
+              // store draft separately so API remark can show as placeholder
               remarkText: undefined,
-              remark: remarkText,
+              remarkDraft: remarkText,
             }
           : it
       )
@@ -797,7 +799,13 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     const currentItem = items.find((it) => it.id === itemId);
     if (!currentItem) return;
     setSavingRemarkForId(itemId);
-    await updateChaserItem(itemId, { remark: currentItem.remark || "" }, "Remark updated");
+    const draft = currentItem.remarkDraft || "";
+    const nextRemark = draft.trim() ? draft : currentItem.remark || "";
+    await updateChaserItem(
+      itemId,
+      { remark: nextRemark, remarkDraft: "" },
+      "Remark updated"
+    );
     setSavingRemarkForId(null);
   };
 
@@ -1589,11 +1597,15 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                                 )}
                               </div>
                               <textarea
-                                value={item.remark || ""}
+                                value={item.remarkDraft || ""}
                                 onChange={(e) => {
                                   handleRemarkChange(item.id, e.target.value);
                                 }}
-                                placeholder="Type remark"
+                                placeholder={
+                                  item.remark && item.remark.trim()
+                                    ? `Current: ${item.remark}. Type update then click Update.`
+                                    : "Type remark then click Update."
+                                }
                                 rows={2}
                                 style={{
                                   width: "100%",
