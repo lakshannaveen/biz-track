@@ -207,6 +207,8 @@ function SearchableSelect({
         }}
         style={{
           ...inputSx,
+          height: 40,
+          padding: "0 12px",
           background: usePrimary ? primaryBackgroundColor : "#fff",
           display: "flex",
           alignItems: "center",
@@ -714,8 +716,8 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
             style={{
               borderRadius: 16,
               background: "linear-gradient(135deg, #5B52B3 0%, #004AAD 100%)",
-              padding: "12px 14px",
-              marginBottom: 14,
+              padding: "12px 14px 18px",
+              marginBottom: 20,
               boxShadow: "0 6px 18px rgba(15,23,42,0.25)",
               color: "#ffffff",
             }}
@@ -803,16 +805,19 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
               </div>
             </div>
 
-            {/* Bottom row: date + filters */}
+            {/* Bottom row: date + filters (compact horizontal on mobile) */}
             <div
               style={{
-                marginTop: 16,
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
+                marginTop: 12,
+                display: "flex",
                 gap: 10,
+                alignItems: "flex-start",
+                flexWrap: "nowrap",
+                paddingBottom: 6,
               }}
             >
-              <div>
+              {/* Make all three controls equal-width and visually consistent */}
+              <div style={{ flex: "1 1 0", minWidth: 0 }}>
                 <label
                   style={{
                     fontSize: 11,
@@ -833,15 +838,17 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                     background: "rgba(255,255,255,0.12)",
                     border: "1px solid rgba(255,255,255,0.35)",
                     borderRadius: 10,
-                    padding: "8px 10px",
+                    padding: "9px 12px",
                     color: "#fff",
                     fontSize: 13,
                     outline: "none",
+                    height: 40,
+                    boxSizing: "border-box",
+                    WebkitAppearance: "none",
                   }}
                 />
               </div>
-
-              <div>
+              <div style={{ flex: "1 1 0", minWidth: 0 }}>
                 <label
                   style={{
                     fontSize: 11,
@@ -853,18 +860,19 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                   <Users size={12} style={{ marginRight: 4 }} />
                   Select Admin
                 </label>
-                <SearchableSelect
-                  options={ADMIN_OPTIONS}
-                  value={selectedAdmin}
-                  onChange={(v) => setSelectedAdmin(v)}
-                  placeholder="-- Select Admin --"
-                  id="select-admin-header"
-                  keepPrimaryBackgroundAfterSelect
-                  primaryBackgroundColor="#004AAD"
-                />
+                <div style={{ height: 40 }}>
+                  <SearchableSelect
+                    options={ADMIN_OPTIONS}
+                    value={selectedAdmin}
+                    onChange={(v) => setSelectedAdmin(v)}
+                    placeholder="Admin"
+                    id="select-admin-header"
+                    keepPrimaryBackgroundAfterSelect
+                    primaryBackgroundColor="#004AAD"
+                  />
+                </div>
               </div>
-
-              <div>
+              <div style={{ flex: "1 1 0", minWidth: 0 }}>
                 <label
                   style={{
                     fontSize: 11,
@@ -876,15 +884,17 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                   <Truck size={12} style={{ marginRight: 4 }} />
                   Select Chaser
                 </label>
-                <SearchableSelect
-                  options={CHASER_OPTIONS}
-                  value={selectedChaser}
-                  onChange={(v) => setSelectedChaser(v)}
-                  placeholder="-- Select Chaser --"
-                  id="select-chaser-header"
-                  keepPrimaryBackgroundAfterSelect
-                  primaryBackgroundColor="#004AAD"
-                />
+                <div style={{ height: 40 }}>
+                  <SearchableSelect
+                    options={CHASER_OPTIONS}
+                    value={selectedChaser}
+                    onChange={(v) => setSelectedChaser(v)}
+                    placeholder="Chaser"
+                    id="select-chaser-header"
+                    keepPrimaryBackgroundAfterSelect
+                    primaryBackgroundColor="#004AAD"
+                  />
+                </div>
               </div>
             </div>
           </div>
