@@ -338,7 +338,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [savingRemarkForId, setSavingRemarkForId] = useState(null);
-  const savingRemarkTimeout = useRef(null);
 
  
   const [poOptions, setPoOptions] = useState([]);
@@ -776,7 +775,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     );
   }
 
-  // Chaser-only: update remark text for a specific item
+  // Chaser-only: update remark text for a specific item (local only)
   function handleRemarkChange(itemId, remarkText) {
     if (!isChaser) return;
     setItems((prev) =>
@@ -791,18 +790,16 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
           : it
       )
     );
-
-    // show per-item saving indicator for a short duration
-    setSavingRemarkForId(itemId);
-    if (savingRemarkTimeout.current) {
-      clearTimeout(savingRemarkTimeout.current);
-    }
-    savingRemarkTimeout.current = setTimeout(() => {
-      const currentItem = items.find((it) => it.id === itemId);
-      updateChaserItem(itemId, { remark: remarkText }, "Remark updated");
-      setSavingRemarkForId(null);
-    }, 700);
   }
+
+  const handleRemarkUpdate = async (itemId) => {
+    if (!isChaser) return;
+    const currentItem = items.find((it) => it.id === itemId);
+    if (!currentItem) return;
+    setSavingRemarkForId(itemId);
+    await updateChaserItem(itemId, { remark: currentItem.remark || "" }, "Remark updated");
+    setSavingRemarkForId(null);
+  };
 
   function handleNew() {
     if (isChaser) return;
@@ -1596,7 +1593,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                                 onChange={(e) => {
                                   handleRemarkChange(item.id, e.target.value);
                                 }}
-                                placeholder="Type remark (auto-saves)"
+                                placeholder="Type remark"
                                 rows={2}
                                 style={{
                                   width: "100%",
@@ -1608,6 +1605,25 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                                   outline: "none",
                                 }}
                               />
+                              <div style={{ marginTop: 6, display: "flex", justifyContent: "flex-end" }}>
+                                <button
+                                  onClick={() => handleRemarkUpdate(item.id)}
+                                  disabled={savingRemarkForId === item.id}
+                                  style={{
+                                    background: "linear-gradient(135deg, #004AAD 0%, #1d4ed8 100%)",
+                                    color: "#fff",
+                                    border: "none",
+                                    padding: "6px 12px",
+                                    borderRadius: 8,
+                                    fontSize: 12,
+                                    fontWeight: 600,
+                                    cursor: savingRemarkForId === item.id ? "not-allowed" : "pointer",
+                                    boxShadow: "0 3px 10px rgba(0,74,173,0.25)",
+                                  }}
+                                >
+                                  Update
+                                </button>
+                              </div>
                             </div>
                           ) : (
                             <div
