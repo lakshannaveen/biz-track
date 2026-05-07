@@ -711,11 +711,11 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
           /* ── Header / Summary Card (Admin only) ───────────────────── */
           <div
             style={{
-              borderRadius: 18,
+              borderRadius: 16,
               background: "linear-gradient(135deg, #5B52B3 0%, #004AAD 100%)",
-              padding: "16px 18px 18px",
-              marginBottom: 20,
-              boxShadow: "0 10px 30px rgba(15,23,42,0.35)",
+              padding: "12px 14px",
+              marginBottom: 14,
+              boxShadow: "0 6px 18px rgba(15,23,42,0.25)",
               color: "#ffffff",
             }}
           >
@@ -725,77 +725,78 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                 
                 <div
                   style={{
-                    marginTop: 4,
-                    fontSize: 16,
+                    marginTop: 2,
+                    fontSize: 15,
                     fontWeight: 700,
                     display: "flex",
                     alignItems: "center",
                     gap: 8,
                   }}
                 >
-                  <ClipboardList size={18} />
+                  <ClipboardList size={16} />
                   Daily Collection Detail Sheet
-                </div> 
+                </div>
               </div> 
             </div>
 
             {/* Middle row: quick stats */}
             <div
               style={{
-                marginTop: 14,
+                marginTop: 10,
                 display: "grid",
                 gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
                 gap: 8,
+                alignItems: "center",
               }}
             >
               <div
                 style={{
-                  background: "rgba(15,23,42,0.18)",
-                  borderRadius: 10,
-                  padding: "8px 10px",
+                  background: "rgba(15,23,42,0.12)",
+                  borderRadius: 8,
+                  padding: "6px 8px",
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
                   fontSize: 12,
                 }}
               >
-                <ClipboardList size={16} />
+                <ClipboardList size={14} />
                 <div>
-                  <div style={{ fontSize: 10, opacity: 0.8 }}>Total Items</div>
+                  <div style={{ fontSize: 10, opacity: 0.85 }}>Total Items</div>
                   <div style={{ fontWeight: 700 }}>{total}</div>
                 </div>
               </div>
               <div
                 style={{
-                  background: "rgba(15,23,42,0.18)",
-                  borderRadius: 10,
-                  padding: "8px 10px",
+                  background: "rgba(15,23,42,0.12)",
+                  borderRadius: 8,
+                  padding: "6px 8px",
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
                   fontSize: 12,
                 }}
               >
-                <Clock size={16} />
+                <Clock size={14} />
                 <div>
-                  <div style={{ fontSize: 10, opacity: 0.8 }}>Pending</div>
+                  <div style={{ fontSize: 10, opacity: 0.85 }}>Pending</div>
                   <div style={{ fontWeight: 700 }}>{pending}</div>
                 </div>
               </div>
               <div
                 style={{
-                  background: "rgba(15,23,42,0.18)",
-                  borderRadius: 10,
-                  padding: "8px 10px",
+                  background: "rgba(15,23,42,0.12)",
+                  borderRadius: 8,
+                  padding: "6px 8px",
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
                   fontSize: 12,
                 }}
               >
-                <CheckCircle2 size={16} />
+                <CheckCircle2 size={14} />
                 <div>
-                  <div style={{ fontSize: 10, opacity: 0.8 }}>Collected</div>
+                  <div style={{ fontSize: 10, opacity: 0.85 }}>Collected</div>
                   <div style={{ fontWeight: 700 }}>{collected}</div>
                 </div>
               </div>
