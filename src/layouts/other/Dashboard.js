@@ -1064,6 +1064,7 @@ import { TraineesDivisionBreakdown } from "../../components/Charts/TraineesDivis
 import WeeklyAttendanceTrend from "../../components/Charts/WeeklyAttendanceTrend";
 import { EmployeeTypeChart } from "../../components/Charts/EmployeeTypeChart";
 import { CDPLCBreakdown } from "../../components/Charts/CDPLCBreakdown";
+import { CDLLocBaseAttendance } from "../../components/Charts/CDLLocBaseAttendance";
 import {
   GetCdlBasedDivison,
   GetTraineeBasedTypes,
@@ -1740,6 +1741,11 @@ const Dashboard = () => {
               {/* ── CDPLC Breakdown ── */}
               <Box ref={cdplcChartRef} sx={{ mb: "24px" }}>
                 {loadingStates.divisionData ? <ChartSkeleton height={300} /> : <CDPLCBreakdown hadDate={today} />}
+              </Box>
+
+              {/* ── CDPLC Location Attendance ── */}
+              <Box sx={{ mb: "24px" }}>
+                <CDLLocBaseAttendance />
               </Box>
 
               {/* ── Division Breakdown ── */}
