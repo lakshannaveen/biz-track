@@ -418,6 +418,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
 
             return {
               id,
+              serialNo: r.SERIAL_NO ?? null,
               handlingAdmin: r.HANDLE_BY || r.HANDLED_BY || "",
               endUser: r.REQUEST_BY || "",
               moc: r.MOC_NO ?? r.MOCNO ?? r.MOC ?? "",
@@ -533,10 +534,17 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
       P_MDD_INVCOLLECTED_BY: form.collectedByChaser || "",
     };
 
+    // include serial when editing an existing record
+    if (editId && form.serialNo) {
+      payload.P_MDD_SERIAL_NO = form.serialNo;
+    }
+
     let apiOk = false;
     setIsSubmitting(true);
     try {
-      const resp = await CommonService.PostDailyCollect(payload);
+      const resp = editId
+        ? await CommonService.UpdateDailyCollect(payload)
+        : await CommonService.PostDailyCollect(payload);
 
       const serverStatus = resp?.status ?? resp?.data?.statusCode ?? resp?.data?.StatusCode;
       const serverMsg = resp?.data?.Message ?? resp?.data?.message ?? resp?.data?.resultMessage ?? null;

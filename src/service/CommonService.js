@@ -68,6 +68,20 @@ const PostDailyCollect = async (payload) => {
     });
 };
 
+const UpdateDailyCollect = async (payload) => {
+  const authKey = JSON.parse(localStorage.getItem("token"));
+  return axios
+    .post(`DailyCollect/UpdateDailyCollect`, payload, {
+      headers: {
+        "auth-key": authKey,
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => {
+      return response;
+    });
+};
+
 
 export default {
   getBannerImages,
@@ -76,4 +90,5 @@ export default {
   GetToDoList,
   GetDailyCollect,
   PostDailyCollect,
+  UpdateDailyCollect,
 };
