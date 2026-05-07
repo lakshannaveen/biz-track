@@ -442,8 +442,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
           const normalizedStatus = normalizeStatusFromApi(r.STATUS);
           const existingItem = existingBySerial.get(String(r.SERIAL_NO ?? ""));
           const serverRemark = r.CHASER_REMARK || r.REMARK || "";
-          const cachedRemark = readRemarkCache(r.SERIAL_NO ?? null);
-          const remark = serverRemark || cachedRemark || existingItem?.remark || "";
+          const remark = serverRemark || existingItem?.remark || "";
 
           return {
             id,
@@ -505,23 +504,12 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
   }
 
   const saveRemarkCache = (serialNo, remarkText) => {
-    if (serialNo == null) return;
-    const raw = localStorage.getItem("dailyCollectRemarkCache");
-    const cache = raw ? JSON.parse(raw) : {};
-    cache[String(serialNo)] = remarkText || "";
-    localStorage.setItem("dailyCollectRemarkCache", JSON.stringify(cache));
+    // Removed localStorage usage
   };
 
   const readRemarkCache = (serialNo) => {
-    if (serialNo == null) return "";
-    const raw = localStorage.getItem("dailyCollectRemarkCache");
-    if (!raw) return "";
-    try {
-      const cache = JSON.parse(raw);
-      return cache[String(serialNo)] || "";
-    } catch (e) {
-      return "";
-    }
+    // Removed localStorage usage
+    return "";
   };
 
   const formatDateForApi = (iso) => {
@@ -554,7 +542,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
       collected: false,
       date: selectedDate,
       handlingAdmin: selectedAdmin,
-      remark: existingRemark,
+      remark: form.remark || existingRemark,
     };
 
 
@@ -761,9 +749,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
         setItems((prev) =>
           prev.map((it) => (it.id === itemId ? { ...it, ...overrides } : it))
         );
-        if (overrides.remark !== undefined) {
-          saveRemarkCache(currentItem.serialNo, overrides.remark);
-        }
         if (successToast) {
           showToast(successToast);
         }
@@ -814,8 +799,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     }
     savingRemarkTimeout.current = setTimeout(() => {
       const currentItem = items.find((it) => it.id === itemId);
-      const status = currentItem?.collected ? "Collected" : currentItem?.status || "Pending";
-      updateChaserItem(itemId, { remark: remarkText, status }, "Remark updated");
+      updateChaserItem(itemId, { remark: remarkText }, "Remark updated");
       setSavingRemarkForId(null);
     }, 700);
   }
