@@ -327,6 +327,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
 
   const [view, setView] = useState(viewParam === "form" ? "form" : "list");
   const [items, setItems] = useState([]);
+  const itemsRef = useRef([]);
   const [form, setForm] = useState(defaultForm);
   const [editId, setEditId] = useState(null);
   const [toast, setToast] = useState(null);
@@ -354,6 +355,10 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     day: "numeric",
   });
  
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
+
   useEffect(() => {
     let filtered = items;
  
@@ -422,6 +427,9 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
       const resp = await CommonService.GetDailyCollect({});
       const data = resp?.data?.ResultSet || resp?.data?.Result || [];
       if (Array.isArray(data) && data.length > 0) {
+        const existingBySerial = new Map(
+          itemsRef.current.map((it) => [String(it.serialNo ?? ""), it])
+        );
         const mapped = data.map((r, idx) => {
           const id = `${(r.DATE || '').toString().replace(/\s+/g, '_')}_${r.SERIAL_NO ?? idx}_${r.PO_NO ?? ''}`;
           let dateIso = selectedDate;
@@ -430,6 +438,12 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
             if (!Number.isNaN(parsed.getTime())) dateIso = parsed.toISOString();
           } catch (e) {
           }
+
+          const normalizedStatus = normalizeStatusFromApi(r.STATUS);
+          const existingItem = existingBySerial.get(String(r.SERIAL_NO ?? ""));
+          const serverRemark = r.CHASER_REMARK || r.REMARK || "";
+          const cachedRemark = readRemarkCache(r.SERIAL_NO ?? null);
+          const remark = serverRemark || cachedRemark || existingItem?.remark || "";
 
           return {
             id,
@@ -442,10 +456,10 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
             poNo: r.PO_NO || r.PO || "",
             supplierName: r.SUPPLIER_NAME || r.SUPPLIER_CODE || "",
             pcNo: r.PC_NO || r.PCNo || r.PC || "",
-            status: normalizeStatusFromApi(r.STATUS),
-            collected: false,
+            status: normalizedStatus,
+            collected: normalizedStatus === "Collected",
             collectedByChaser: r.INVCOLLECTED_BY || "",
-            remark: r.CHASER_REMARK || r.REMARK || "",
+            remark,
             date: dateIso,
           };
         });
@@ -490,6 +504,38 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     setTimeout(() => setToast(null), 2500);
   }
 
+  const saveRemarkCache = (serialNo, remarkText) => {
+    if (serialNo == null) return;
+    const raw = localStorage.getItem("dailyCollectRemarkCache");
+    const cache = raw ? JSON.parse(raw) : {};
+    cache[String(serialNo)] = remarkText || "";
+    localStorage.setItem("dailyCollectRemarkCache", JSON.stringify(cache));
+  };
+
+  const readRemarkCache = (serialNo) => {
+    if (serialNo == null) return "";
+    const raw = localStorage.getItem("dailyCollectRemarkCache");
+    if (!raw) return "";
+    try {
+      const cache = JSON.parse(raw);
+      return cache[String(serialNo)] || "";
+    } catch (e) {
+      return "";
+    }
+  };
+
+  const formatDateForApi = (iso) => {
+    try {
+      const d = new Date(iso);
+      const day = String(d.getDate()).padStart(2, "0");
+      const month = d.toLocaleString("en-US", { month: "short" }).toUpperCase();
+      const year = String(d.getFullYear()).slice(-2);
+      return `${day}-${month}-${year}`;
+    } catch (e) {
+      return iso;
+    }
+  };
+
   async function handleSubmit() {
     if (!form.description.trim()) {
       showToast("Description is required!", "error");
@@ -511,18 +557,6 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
       remark: existingRemark,
     };
 
-
-    const formatDateForApi = (iso) => {
-      try {
-        const d = new Date(iso);
-        const day = String(d.getDate()).padStart(2, "0");
-        const month = d.toLocaleString("en-US", { month: "short" }).toUpperCase();
-        const year = String(d.getFullYear()).slice(-2);
-        return `${day}-${month}-${year}`;
-      } catch (e) {
-        return iso;
-      }
-    };
 
     const matchingItem = apiData.find((it) => it.PO_NO === form.poNo) || {};
 
@@ -651,22 +685,110 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     showToast("Item removed.", "error");
   }
 
+  const mapStatusForApi = (s) => {
+    if (!s) return "P";
+    if (s === "Pending") return "P";
+    if (s === "Collected" || s === "Completed") return "C";
+    if (s === "Not Available") return "N";
+    if (s === "Partial") return "PA";
+    return s;
+  };
+
+  const normalizeMocValue = (value) => {
+    if (value == null) return "";
+    const str = String(value).trim();
+    if (!str || str.toLowerCase() === "null") return "";
+    return str;
+  };
+
+  const resolveSupplierCode = (item) => {
+    const matching = apiData.find((it) => it.PO_NO === item.poNo);
+    return matching?.SUPPLIER_CODE || item.supplierName || "";
+  };
+
+  const splitJobNoValue = (jobNoValue, fallbackCat = "", fallbackMain = "") => {
+    if (jobNoValue && typeof jobNoValue === "string") {
+      const trimmed = jobNoValue.trim();
+      if (trimmed.length >= 2) {
+        return {
+          jobCat: trimmed.slice(0, 2),
+          jobMain: trimmed.slice(2),
+        };
+      }
+    }
+
+    return { jobCat: fallbackCat, jobMain: fallbackMain };
+  };
+
+  const buildChaserPayload = (item, overrides = {}) => {
+    const updated = { ...item, ...overrides };
+    const { jobCat, jobMain } = splitJobNoValue(updated.jobNo, "", "");
+    const payloadDate = updated.date || selectedDate;
+
+    return {
+      P_MDD_DATE: formatDateForApi(payloadDate),
+      P_MDD_SERIAL_NO: updated.serialNo,
+      P_MDD_HANDLE_BY: updated.handlingAdmin || localStorage.getItem("ServiceNo") || "",
+      P_MDD_REQUEST_BY: updated.endUser || "",
+      P_MDD_MOC_NO: normalizeMocValue(updated.moc),
+      P_MDD_JCAT: jobCat,
+      P_MDD_JMAIN: jobMain,
+      P_MDD_DESCRIPTION: updated.description || "",
+      P_MDD_PO_NO: updated.poNo || "",
+      P_MDD_SUPPLIER_CODE: resolveSupplierCode(updated),
+      P_MDD_CHASER_REMARK: updated.remark || "",
+      P_MDD_STATUS: mapStatusForApi(updated.status),
+      P_MDD_PC_NO: updated.pcNo || "",
+      P_MDD_INVCOLLECTED_BY: updated.collectedByChaser || "",
+    };
+  };
+
+  const updateChaserItem = async (itemId, overrides = {}, successToast) => {
+    const currentItem = items.find((it) => it.id === itemId);
+    if (!currentItem) return;
+
+    const serialNo = currentItem.serialNo;
+    if (!serialNo) {
+      showToast("Serial number is required to update.", "error");
+      return;
+    }
+
+    const payload = buildChaserPayload(currentItem, overrides);
+    try {
+      const resp = await CommonService.UpdateDailyCollect(payload);
+      const serverStatus = resp?.status ?? resp?.data?.statusCode ?? resp?.data?.StatusCode;
+      if (serverStatus === 200 || resp?.status === 200) {
+        setItems((prev) =>
+          prev.map((it) => (it.id === itemId ? { ...it, ...overrides } : it))
+        );
+        if (overrides.remark !== undefined) {
+          saveRemarkCache(currentItem.serialNo, overrides.remark);
+        }
+        if (successToast) {
+          showToast(successToast);
+        }
+        fetchDailyCollect();
+      } else {
+        showToast("Update failed on server.", "error");
+      }
+    } catch (err) {
+      const serverMsg = err?.response?.data?.Message ?? err?.response?.data?.message ?? err.message ?? "Network error";
+      showToast(serverMsg || "Update failed.", "error");
+    }
+  };
+
   // Handle collection with chaser tracking
   function handleCollection(itemId, chaserName) {
-    setItems((prev) =>
-      prev.map((it) =>
-        it.id === itemId
-          ? {
-              ...it,
-              collected: true,
-              collectedByChaser: chaserName,
-              collectedAt: new Date().toISOString(),
-              status: "Collected",
-            }
-          : it
-      )
+    updateChaserItem(
+      itemId,
+      {
+        collected: true,
+        collectedByChaser: chaserName,
+        collectedAt: new Date().toISOString(),
+        status: "Collected",
+      },
+      `Item marked as collected by ${chaserName}!`
     );
-    showToast(`Item marked as collected by ${chaserName}!`);
   }
 
   // Chaser-only: update remark text for a specific item
@@ -691,8 +813,10 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
       clearTimeout(savingRemarkTimeout.current);
     }
     savingRemarkTimeout.current = setTimeout(() => {
+      const currentItem = items.find((it) => it.id === itemId);
+      const status = currentItem?.collected ? "Collected" : currentItem?.status || "Pending";
+      updateChaserItem(itemId, { remark: remarkText, status }, "Remark updated");
       setSavingRemarkForId(null);
-      showToast("Remark auto-saved");
     }, 700);
   }
 
