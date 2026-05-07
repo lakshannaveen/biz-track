@@ -316,13 +316,14 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const typeParam = searchParams.get("type");
- 
+  const viewParam = searchParams.get("view");
+
   const role = typeParam === "chaser" ? "chaser" : "admin";
 
   const isChaser = role === "chaser";
   const isAdmin = role === "admin";
 
-  const [view, setView] = useState("list");
+  const [view, setView] = useState(viewParam === "form" ? "form" : "list");
   const [items, setItems] = useState([]);
   const [form, setForm] = useState(defaultForm);
   const [editId, setEditId] = useState(null);

@@ -11,7 +11,7 @@ export default function CollectChoice() {
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
         <div
           role="button"
-          onClick={() => navigate("/collectForm?type=admin")}
+          onClick={() => navigate("/collectForm?type=admin&view=form")}
           style={{
             cursor: "pointer",
             flex: 1,
