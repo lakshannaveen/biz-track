@@ -1,5 +1,16 @@
 import axios from "axios";
 
+const readAuthKey = () => {
+  const raw = localStorage.getItem("token");
+  if (!raw) return "";
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed || raw;
+  } catch (err) {
+    return raw;
+  }
+};
+
 const getBannerImages = async () => {
   return axios.get(`home/GetBannerImgList`).then((response) => {
     return response;
@@ -32,7 +43,7 @@ const GetUserByServiceNo = async () => {
     });
 };
 const GetToDoList = async () => {
-  const authKey = JSON.parse(localStorage.getItem("token"));
+  const authKey = readAuthKey();
   return axios.get(`DailyCollect/GetSupplier`, {
     headers: {
       "auth-key": authKey,
@@ -43,7 +54,7 @@ const GetToDoList = async () => {
 };
 
 const GetDailyCollect = async (params = {}) => {
-  const authKey = JSON.parse(localStorage.getItem("token"));
+  const authKey = readAuthKey();
   return axios.get(`DailyCollect/GetDailyCollect`, {
     headers: {
       "auth-key": authKey,
@@ -55,7 +66,7 @@ const GetDailyCollect = async (params = {}) => {
 };
 
 const PostDailyCollect = async (payload) => {
-  const authKey = JSON.parse(localStorage.getItem("token"));
+  const authKey = readAuthKey();
   return axios
     .post(`DailyCollect/PostDailyCollect`, payload, {
       headers: {
@@ -69,7 +80,7 @@ const PostDailyCollect = async (payload) => {
 };
 
 const UpdateDailyCollect = async (payload) => {
-  const authKey = JSON.parse(localStorage.getItem("token"));
+  const authKey = readAuthKey();
   return axios
     .post(`DailyCollect/UpdateDailyCollect`, payload, {
       headers: {
