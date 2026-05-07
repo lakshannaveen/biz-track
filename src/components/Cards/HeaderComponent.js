@@ -1454,7 +1454,7 @@ export default function HeaderComponent() {
                 >
                   <CardActionArea
                     onClick={() => {
-                      navigate("/collectForm");
+                      navigate("/collectChoice");
                     }}
                   >
                     <div
