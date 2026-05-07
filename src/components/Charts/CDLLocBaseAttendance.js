@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import axios from "axios";
+import CommonService from "../../service/CommonService";
 import {
   Avatar,
   Box,
@@ -725,7 +725,7 @@ export const CDLLocBaseAttendance = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await axios.get("Attendancedashboard/GetCdllocbaseAttendance");
+        const response = await CommonService.GetCdllocbaseAttendance();
         const resultSet = response?.data?.ResultSet || [];
         const normalized = resultSet.map(normalizeRow);
         if (active) setData(normalized);

@@ -93,6 +93,12 @@ const UpdateDailyCollect = async (payload) => {
     });
 };
 
+const GetCdllocbaseAttendance = async () => {
+  return axios.get("Attendancedashboard/GetCdllocbaseAttendance").then((response) => {
+    return response;
+  });
+};
+
 
 export default {
   getBannerImages,
@@ -102,4 +108,5 @@ export default {
   GetDailyCollect,
   PostDailyCollect,
   UpdateDailyCollect,
+  GetCdllocbaseAttendance,
 };
