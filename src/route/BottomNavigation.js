@@ -394,6 +394,9 @@ export default function Footer() {
             />
           )}
 
+
+            
+
           {/* QR */}
           <BottomNavigationAction
             label="Scan"

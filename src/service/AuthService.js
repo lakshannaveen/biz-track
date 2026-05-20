@@ -17,10 +17,27 @@ const login = async (service_no,password,device, ip) => {
     return response;
   });
 };
+const verifyOTP = async (userOTP, encryptedOTP) => {
+  const config = {
+    method: "post",
+    url: "Login/VerifyOTP",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      UserOTP: userOTP,
+      EncryptedOTP: encryptedOTP,
+    },
+  };
 
+  return axios.request(config).then((response) => {
+    return response;
+  });
+};
 
 
 export default {
   login,
+  verifyOTP
 
 };

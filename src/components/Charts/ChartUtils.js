@@ -250,7 +250,7 @@ export const CDPLCCustomTooltip = ({ active, payload, cdplcData }) => {
             }}
           >
             <Typography sx={{ color: "#64748b", fontSize: "11px" }}>
-              Actual Strength
+              Eligible Strength
             </Typography>
             <Typography
               sx={{ fontWeight: 600, color: "#1a2d4d", fontSize: "11px" }}
@@ -283,7 +283,7 @@ export const CDPLCCustomTooltip = ({ active, payload, cdplcData }) => {
             }}
           >
             <Typography sx={{ color: "#64748b", fontSize: "11px" }}>
-              Actual %
+              Percentage 
             </Typography>
             <Typography
               sx={{ fontWeight: 600, color: "#1a2d4d", fontSize: "11px" }}

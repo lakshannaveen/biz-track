@@ -453,7 +453,11 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
             jobNo: (r.JCAT || "") + (r.JMAIN || ""),
             description: r.DESCRIPTION || "",
             poNo: r.PO_NO || r.PO || "",
-            supplierName: r.SUPPLIER_NAME || r.SUPPLIER_CODE || "",
+            End_User_By: r.End_User_By,
+            End_User: r.End_User,
+            supplierCode: r.SUPPLIER_NAME || r.SUPPLIER_CODE || "",
+            suppliername: r.Sup_Name,
+            SupplierAddress: r.Sup_Address,
             pcNo: r.PC_NO || r.PCNo || r.PC || "",
             status: normalizedStatus,
             collected: normalizedStatus === "Collected",
@@ -840,7 +844,7 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
     ["jobNo", "Job No", "text"],
     ["description", "Description *", "text"],
     ["supplierName", "Supplier Name & Location", "text"],
-    ["pcNo", "P/C No", "text"],
+   // ["pcNo", "P/C No", "text"],
     ["status", "Status", "status"],
   ];
 
@@ -1678,6 +1682,16 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                                 </span>
                               </span>
                             )}
+                             {item.End_User_By && (
+                              <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                <FileText size={10} /> <b>End User_by:</b> {item.End_User_By}
+                              </span>
+                            )}
+                            {item.End_User && (
+                              <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                <FileText size={10} /> <b>End User:</b> {item.End_User}
+                              </span>
+                            )}
                             {item.jobNo && (
                               <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
                                 <FileText size={10} /> <b>Job No:</b> {item.jobNo}
@@ -1688,10 +1702,16 @@ export default function DailyCollectionSheet({ role: propRole = "admin" }) {
                                 <Package size={10} /> <b>PO No:</b> {item.poNo}
                               </span>
                             )}
-                            {item.pcNo && <span><b>P/C No:</b> {item.pcNo}</span>}
-                            {item.supplierName && (
+                             
+                            {item.supplierCode && (
                               <span style={{ gridColumn: "1 / -1", display: "flex", alignItems: "center", gap: 4 }}>
-                                <Truck size={10} /> <b>Supplier:</b> {item.supplierName}
+                                <Truck size={10} /> <b>Supplier Code:</b> {item.supplierCode}
+                              </span>
+                            )}
+                             
+                            {item.SupplierAddress && (
+                              <span style={{ gridColumn: "1 / -1", display: "flex", alignItems: "center", gap: 4 }}>
+                                <Truck size={10} /> <b>Supplier Address :</b> {item.SupplierAddress}
                               </span>
                             )}
                           </div>

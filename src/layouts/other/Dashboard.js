@@ -1033,6 +1033,8 @@
 
 
 
+
+
 import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
@@ -1498,13 +1500,13 @@ const NavigationDrawer = ({ open, onClose, activeTab, onTabChange }) => {
         <Divider sx={{ mb: 2, borderColor: "rgba(0,74,173,0.08)" }} />
 
         <Typography variant="subtitle2" sx={{ px: 2, mb: 1, color: "#ef4444", fontWeight: 700, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-          OVERVIEW
+          KPI'S OVERVIEW
         </Typography>
         {renderMenuItems(overviewItems, true)}
 
-        <Typography variant="subtitle2" sx={{ px: 2, mb: 1, color: "#004AAD", fontWeight: 600, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+        {/* <Typography variant="subtitle2" sx={{ px: 2, mb: 1, color: "#004AAD", fontWeight: 600, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" }}>
           KPI'S
-        </Typography>
+        </Typography> */}
         {renderMenuItems(mainItems, false)}
 
         <Divider sx={{ my: 2, borderColor: "rgba(0,74,173,0.12)", borderBottomWidth: 2 }} />
@@ -1523,6 +1525,7 @@ const Dashboard = () => {
   const dispatch  = useDispatch();
   const navigate  = useNavigate();
   const location  = useLocation();
+  const [activeTab, setActiveTab] = useState(0);
   const theme     = useTheme();
   const isMobile  = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -1536,7 +1539,6 @@ const Dashboard = () => {
   } = useSelector((state) => state.attendanceCard);
 
   const [drawerOpen, setDrawerOpen]                   = useState(false);
-  const [activeTab, setActiveTab]                     = useState(4);
   const [cachedAllAttendance, setCachedAllAttendance] = useState(null);
   const [cachedTraineeTypes, setCachedTraineeTypes]   = useState(null);
   const cdplcChartRef = useRef(null);
@@ -1721,6 +1723,38 @@ const Dashboard = () => {
                 onCardClick={handleAttendanceCardClick}
               />
 
+              
+
+              {/* ── CDPLC Breakdown ── */}
+              <Box ref={cdplcChartRef} sx={{ mb: "24px" }}>
+                {loadingStates.divisionData ? <ChartSkeleton height={300} /> : <CDPLCBreakdown hadDate={today} />}
+              </Box>
+
+              {/* ── CDPLC Location Attendance ── */}
+              <Box sx={{ mb: "24px" }}>
+                <CDLLocBaseAttendance />
+              </Box>
+
+              {/* ──--------- Division Breakdown -----------── */}
+              {/* <Box sx={{ mb: "24px" }}>
+                {loadingStates.divisionData ? (
+                  <ChartSkeleton height={400} />
+                ) : (
+                  transformedDivisionData.length > 0 && (
+                    <DivisionBreakdown divisionData={transformedDivisionData} />
+                  )
+                )}
+              </Box> */}
+
+              {/* ── Employee Type Chart ── */}
+              <Box ref={traineeTypeChartRef} sx={{ mb: "24px" }}>
+                {loadingStates.traineeTypes ? <ChartSkeleton height={300} /> : <EmployeeTypeChart employeeTypeData={employeeTypeData} />}
+              </Box>
+
+              {/* ── Trainees Division Breakdown ── */}
+              <Box sx={{ mb: "24px" }}>
+                {loadingStates.traineeDivision ? <ChartSkeleton height={400} /> : <TraineesDivisionBreakdown traineeDivisionData={traineeDivision} />}
+              </Box>
               {/* ── Weekly Attendance ── */}
               <Box sx={{ mb: "24px" }}>
                 <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: "16px" }}>
@@ -1736,37 +1770,6 @@ const Dashboard = () => {
                     )}
                   </Box>
                 </Box>
-              </Box>
-
-              {/* ── CDPLC Breakdown ── */}
-              <Box ref={cdplcChartRef} sx={{ mb: "24px" }}>
-                {loadingStates.divisionData ? <ChartSkeleton height={300} /> : <CDPLCBreakdown hadDate={today} />}
-              </Box>
-
-              {/* ── CDPLC Location Attendance ── */}
-              <Box sx={{ mb: "24px" }}>
-                <CDLLocBaseAttendance />
-              </Box>
-
-              {/* ── Division Breakdown ── */}
-              <Box sx={{ mb: "24px" }}>
-                {loadingStates.divisionData ? (
-                  <ChartSkeleton height={400} />
-                ) : (
-                  transformedDivisionData.length > 0 && (
-                    <DivisionBreakdown divisionData={transformedDivisionData} />
-                  )
-                )}
-              </Box>
-
-              {/* ── Employee Type Chart ── */}
-              <Box ref={traineeTypeChartRef} sx={{ mb: "24px" }}>
-                {loadingStates.traineeTypes ? <ChartSkeleton height={300} /> : <EmployeeTypeChart employeeTypeData={employeeTypeData} />}
-              </Box>
-
-              {/* ── Trainees Division Breakdown ── */}
-              <Box sx={{ mb: "24px" }}>
-                {loadingStates.traineeDivision ? <ChartSkeleton height={400} /> : <TraineesDivisionBreakdown traineeDivisionData={traineeDivision} />}
               </Box>
 
               <Box sx={{ height: "20px" }} />

@@ -23,6 +23,7 @@ const GetAccessHeadComponent = async () => {
   });
 };
 
+
 const GetUserByServiceNo = async () => {
  
   
@@ -99,6 +100,45 @@ const GetCdllocbaseAttendance = async () => {
   });
 };
 
+const GetEmployeeNoPay = async (barcodeNo, currentYear) => {
+  return axios.get(`Attendancedashboard/GetEmployeeNoPay`, {
+    params: {
+      p_barcode_no: barcodeNo,
+      p_current_year: currentYear
+    }
+  }).then((response) => {
+    return response;
+  });
+};
+
+const GetEmployeeDetails = async (p_sno) => {
+  return axios.get(`Attendancedashboard/GetEmployeeDetails`, {
+    params: {
+      p_sno: p_sno
+    }
+  }).then((response) => {
+    return response;
+  });
+};
+const GetEmployeeAttSummary = async (p_sno) => {
+  return axios.get(`Attendancedashboard/GetEmployeeAttSummary`, {
+    params: {
+      p_sno: p_sno
+    }
+  }).then((response) => {
+    return response;
+  });
+};
+
+const GetEmployeeOtherInfo = async (p_sno) => {
+  return axios.get(`Attendancedashboard/GetEmployeeOtherInfo`, {
+    params: {
+      p_sno: p_sno
+    }
+  }).then((response) => {
+    return response;
+  });
+};
 
 export default {
   getBannerImages,
@@ -109,4 +149,8 @@ export default {
   PostDailyCollect,
   UpdateDailyCollect,
   GetCdllocbaseAttendance,
+  GetEmployeeNoPay,
+  GetEmployeeDetails,
+  GetEmployeeAttSummary,
+  GetEmployeeOtherInfo
 };

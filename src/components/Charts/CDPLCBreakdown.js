@@ -16,8 +16,8 @@ import { GetCDLCategoryAtt } from "../../action/Attendance";
 import { CDPLCCustomTooltip } from "./ChartUtils";
 
 const seriesColors = {
-  strength: "#f59e0b",
-  attendance: "#3b82f6",
+  strength: "#e07b39",
+  attendance: "#4472c4",
 };
 
 export function CDPLCBreakdown({
@@ -27,66 +27,63 @@ export function CDPLCBreakdown({
 }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const categorySpacing = 12; 
   const dispatch = useDispatch();
   const {
     cdplcData: reduxCdplcData,
     loading,
     msg,
   } = useSelector((state) => state.attendanceCard);
-
-  // Use Redux data, fallback to props
+ 
   const apiData =
     reduxCdplcData && reduxCdplcData.length > 0
       ? reduxCdplcData
       : propCdplcData;
 
-  useEffect(() => {
-    // Fetch data with provided date or today's date by default
+  useEffect(() => { 
     const dateToFetch = hadDate || new Date().toISOString().split("T")[0];
     console.log("CDPLCBreakdown: Fetching data for date:", dateToFetch);
     dispatch(GetCDLCategoryAtt(dateToFetch));
   }, [dispatch, hadDate]);
-
-  // Transform API data to component format
-  const transformedCdplc = apiData
-    ? apiData
-        .filter((item) => item.Type && item.Type.toUpperCase() !== "TOTAL")
-        .map((item) => {
-          const typeName = item.Type.toUpperCase();
-          return {
-            name: typeName,
-            attendance: item.Attendance || 0,
-            strength: item.ActualStrength || item.Strength || 0,
-            actualPct: item.ActualPercentage,
-            eligiblePct: item.EligiblePercentage,
-          };
-        })
-    : [];
-
-  // Get overall percentage from TOTAL entry
+ 
+ 
+const transformedCdplc = apiData
+  ? apiData
+      .filter((item) => item.Type && item.Type.toUpperCase() !== "TOTAL")
+      .map((item) => {
+        const typeName = item.Type.toUpperCase();
+        const attendance = item.Attendance || 0;
+        const strength = item.EligibleStrength || item.Strength || 0;
+        return {
+          name: typeName,
+          attendance,
+          absent: Math.max(0, strength - attendance),   
+          strength,
+          actualPct: item.ActualPercentage,
+          eligiblePct: item.EligiblePercentage,
+        };
+      })
+  : [];
+ 
   const totalItem = apiData?.find(
     (item) => item.Type && item.Type.toUpperCase() === "TOTAL",
   );
   const overallPercentage = totalItem ? totalItem.ActualPercentage : "N/A";
-
-  // Totals (fallback to summing transformed data)
+ 
   const totalStrength =
-    totalItem?.ActualStrength ||
+    totalItem?.EligibleStrength ||
     transformedCdplc.reduce((acc, cur) => acc + (Number(cur.strength) || 0), 0);
   const totalAttendance =
     totalItem?.Attendance ||
     transformedCdplc.reduce((acc, cur) => acc + (Number(cur.attendance) || 0), 0);
   const totalPercentage =
     totalStrength > 0 ? Math.round((totalAttendance / totalStrength) * 100) : "N/A";
-
-    // Format numbers for labels
+ 
     const formatNumber = (value) => {
       if (value === null || value === undefined || value === "") return "-";
       return Number(value).toLocaleString();
     };
-
-  // debug: ensure data is present during development
-  // eslint-disable-next-line no-console
+ 
   console.log("CDPLCBreakdown: loaded data", {
     apiData,
     transformedCdplc,
@@ -96,7 +93,7 @@ export function CDPLCBreakdown({
     reduxCdplcData,
   });
 
-  // Show loading state
+ 
   if (loading && !apiData) {
     return (
       <Box
@@ -241,15 +238,7 @@ export function CDPLCBreakdown({
             >
               CDPLC Employee Strength 
             </Typography>
-            <Typography
-              sx={{
-                fontSize: "12px",
-                color: "#64748b",
-                marginTop: "4px",
-              }}
-            >
-              Actual attendance %
-            </Typography>
+            
           </Box>
         </Box>
 
@@ -286,59 +275,76 @@ export function CDPLCBreakdown({
 
             {/* Current chart (bar) */}
             <BarChart
-              data={transformedCdplc}
-              layout="vertical"
-              margin={{
-                top: 8,
-                right: isMobile ? 12 : 24,
-                bottom: 8,
-                left: isMobile ? 0 : 24,
-              }}
-            >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="rgba(0,0,0,0.08)"
-                horizontal={false}
-              />
-              <XAxis
-                type="number"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#64748b", fontSize: 11 }}
-                tickFormatter={(value) => Number(value).toLocaleString()}
-              />
-              <YAxis
-                type="category"
-                dataKey="name"
-                width={isMobile ? 70 : 90}
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#475569", fontSize: 11 }}
-              />
-              <Tooltip
-                content={(props) => (
-                  <CDPLCCustomTooltip {...props} cdplcData={transformedCdplc} />
-                )}
-              />
-              <Bar
-                dataKey="strength"
-                name="Actual Strength"
-                fill={seriesColors.strength}
-                radius={[0, 8, 8, 0]}
-                barSize={isMobile ? 14 : 18}
-              >
-                <LabelList dataKey="strength" position="right" formatter={formatNumber} />
-              </Bar>
-              <Bar
-                dataKey="attendance"
-                name="Attendance"
-                fill={seriesColors.attendance}
-                radius={[0, 8, 8, 0]}
-                barSize={isMobile ? 14 : 18}
-              >
-                <LabelList dataKey="attendance" position="right" formatter={formatNumber} />
-              </Bar>
-            </BarChart>
+  data={transformedCdplc}
+  layout="vertical"
+  margin={{ top: 5, right: isMobile ? 20 : 100, left: 0, bottom: 10 }}
+  barCategoryGap={categorySpacing}
+  barGap={2}
+>
+  <CartesianGrid
+    strokeDasharray="3 3"
+    stroke="rgba(0,0,0,0.08)"
+    horizontal={false}
+  />
+  <XAxis
+    type="number"
+    axisLine={false}
+    tickLine={false}
+    tick={{ fill: "#64748b", fontSize: 11 }}
+    tickFormatter={(value) => Number(value).toLocaleString()}
+  />
+  <YAxis
+    type="category"
+    dataKey="name"
+    width={isMobile ? 70 : 90}
+    axisLine={false}
+    tickLine={false}
+    tick={{ fill: "#475569", fontSize: 10 }}
+  />
+  <Tooltip
+    content={(props) => (
+      <CDPLCCustomTooltip {...props} cdplcData={transformedCdplc} />
+    )}
+  />
+
+  {/* ── STACKED: Attendance (present) ── */}
+  <Bar
+    dataKey="attendance"
+    name="Attendance"
+    fill={seriesColors.attendance}      // blue  #4472c4
+    stackId="stack"                     // ← same stackId groups them
+    radius={[0, 0, 0, 0]}              // flat edges on inner segment
+    barSize={isMobile ? 14 : 18}
+  >
+    <LabelList
+      dataKey="attendance"
+      position="insideRight"            // label sits inside the bar
+      style={{ fill: "#ffffff" }}
+      fontSize={11}
+      fontWeight={700}
+      formatter={formatNumber}
+    />
+  </Bar>
+
+  {/* ── STACKED: Absent (remaining strength) ── */}
+  <Bar
+    dataKey="absent"
+    name="Absent"
+    fill={seriesColors.strength}        // orange  #e07b39
+    stackId="stack"                     // ← same stackId = stacked
+    radius={[0, 8, 8, 0]}              // rounded cap only on the outermost end
+    barSize={isMobile ? 14 : 18}
+  >
+    <LabelList
+      dataKey="strength"               // show total strength on the outer edge
+      position="right"
+      style={{ fill: "#0f0f0f" }}
+      fontSize={11}
+      fontWeight={700}
+      formatter={formatNumber}
+    />
+  </Bar>
+</BarChart>
           </ResponsiveContainer>
         </Box>
 
@@ -353,7 +359,7 @@ export function CDPLCBreakdown({
           }}
         >
           {[
-            { label: "Actual Strength", color: seriesColors.strength },
+            { label: "Eligible Strength", color: seriesColors.strength },
             { label: "Attendance", color: seriesColors.attendance },
           ].map((item) => (
             <Box
@@ -376,7 +382,7 @@ export function CDPLCBreakdown({
         </Box>
 
         {/* Summary row (totals) */}
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
@@ -417,7 +423,7 @@ export function CDPLCBreakdown({
               </Typography>
             </Box>
           </Box>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );

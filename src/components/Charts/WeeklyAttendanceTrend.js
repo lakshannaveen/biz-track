@@ -111,13 +111,15 @@ export function WeeklyAttendanceTrend({
   }
 
   const chartMargin = {
-    top: 30,
+    top: 16,
     right: isMobile ? -10 : -13,
     left: isMobile ? -20 : -22,
-    bottom: isMobile ? 10 : 30,
+    bottom: chartData.length > 5 ? 40 : 8,
   };
 
-  const chartHeight = isMobile ? 450 : 650;
+  // ✅ Fixed: reduced from 450/650 to compact 260/320
+  const chartHeight = isMobile ? 260 : 320;
+
   const barSize = chartData.length > 5 ? 28 : 40;
   const yAxisWidth = isMobile ? (chartData.length > 5 ? 50 : 60) : 60;
   const yAxisRightWidth = isMobile ? (chartData.length > 5 ? 45 : 60) : 60;
@@ -212,7 +214,7 @@ export function WeeklyAttendanceTrend({
                 dataKey="eligible"
                 name="Eligible"
                 barSize={barSize}
-                fill="#bfdbfe"  
+                fill="#bfdbfe"
                 radius={[6, 6, 6, 6]}
               />
               {/* Attendance rendered second = in front; darker blue, narrower */}
@@ -220,7 +222,7 @@ export function WeeklyAttendanceTrend({
                 yAxisId="left"
                 dataKey="attendance"
                 name="Attendance"
-                barSize={barSize * 0.65} 
+                barSize={barSize * 0.65}
                 fill="#3b82f6"
                 radius={[6, 6, 6, 6]}
               />
@@ -229,9 +231,9 @@ export function WeeklyAttendanceTrend({
                 type="monotone"
                 dataKey="rate"
                 name="Rate %"
-                //stroke="#f59e0b"
-                //strokeWidth={2}
-                //dot={{ r: 4, fill: "#f59e0b" }}
+                stroke="#f59e0b"
+                strokeWidth={2}
+                dot={{ r: 4, fill: "#f59e0b" }}
               />
             </ComposedChart>
           </ResponsiveContainer>
