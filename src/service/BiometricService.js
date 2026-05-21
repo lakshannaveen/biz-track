@@ -1,6 +1,7 @@
 const BIOMETRIC_CREDENTIALS_KEY = "biometric_credentials";
 const BIOMETRIC_CRYPTO_KEY = "biometric_crypto_key";
 const BIOMETRIC_ENROLLED_KEY = "biometric_enrolled";
+const BIOMETRIC_CREDENTIAL_ID_KEY = "biometric_credential_id";
 
 /**
  * Check if the device supports biometric authentication via WebAuthn
@@ -32,7 +33,8 @@ const hasEnrolledCredentials = () => {
     return (
       localStorage.getItem(BIOMETRIC_ENROLLED_KEY) === "true" &&
       localStorage.getItem(BIOMETRIC_CREDENTIALS_KEY) !== null &&
-      localStorage.getItem(BIOMETRIC_CRYPTO_KEY) !== null
+      localStorage.getItem(BIOMETRIC_CRYPTO_KEY) !== null &&
+      localStorage.getItem(BIOMETRIC_CREDENTIAL_ID_KEY) !== null
     );
   } catch (error) {
     console.error("Error checking enrolled credentials:", error);
@@ -135,79 +137,112 @@ const decryptCredentials = async (encryptedData, ivData, keyData) => {
 };
 
 /**
- * Trigger the device biometric prompt via WebAuthn
- * This works with Face ID on iOS, fingerprint/face on Android, Windows Hello on PC
+ * Create a new biometric credential via WebAuthn API (navigator.credentials.create)
+ * This prompts the device/OS to register and save a new passkey/biometric.
  */
-const triggerBiometricPrompt = async () => {
-  try {
-    const challenge = generateRandomBuffer(32);
-    const userId = generateRandomBuffer(16);
+const createBiometricCredential = async () => {
+  const challenge = generateRandomBuffer(32);
+  const userId = generateRandomBuffer(16);
 
-    const publicKeyCredentialCreationOptions = {
-      challenge: challenge,
-      rp: {
-        name: "BizTrack",
-        id: window.location.hostname,
-      },
-      user: {
-        id: userId,
-        name: "biztrack-user",
-        displayName: "BizTrack User",
-      },
-      pubKeyCredParams: [
-        { alg: -7, type: "public-key" },
-        { alg: -257, type: "public-key" },
-      ],
-      authenticatorSelection: {
-        authenticatorAttachment: "platform",
-        userVerification: "required",
-        requireResidentKey: false,
-      },
-      timeout: 60000,
-      attestation: "none",
-    };
+  const publicKeyCredentialCreationOptions = {
+    challenge: challenge,
+    rp: {
+      name: "BizTrack",
+      id: window.location.hostname,
+    },
+    user: {
+      id: userId,
+      name: "biztrack-user",
+      displayName: "BizTrack User",
+    },
+    pubKeyCredParams: [
+      { alg: -7, type: "public-key" }, // ES256
+      { alg: -257, type: "public-key" }, // RS256
+    ],
+    authenticatorSelection: {
+      authenticatorAttachment: "platform",
+      userVerification: "required",
+      requireResidentKey: false,
+    },
+    timeout: 60000,
+    attestation: "none",
+  };
 
-    const credential = await navigator.credentials.create({
-      publicKey: publicKeyCredentialCreationOptions,
-    });
+  const credential = await navigator.credentials.create({
+    publicKey: publicKeyCredentialCreationOptions,
+  });
 
-    return credential !== null;
-  } catch (error) {
-    if (error.name === "NotAllowedError") {
-      throw new Error("Biometric authentication was cancelled or denied");
-    }
-    console.error("Biometric prompt failed:", error);
-    throw new Error("Biometric authentication failed");
-  }
+  return credential;
 };
 
 /**
- * Enroll biometric credentials - encrypts and stores credentials in localStorage
+ * Verify an existing biometric credential via WebAuthn API (navigator.credentials.get)
+ * This prompts the device/OS to authenticate the user using the stored credential, without asking to save.
+ */
+const verifyBiometricCredential = async (storedCredentialId) => {
+  const challenge = generateRandomBuffer(32);
+
+  const publicKeyCredentialRequestOptions = {
+    challenge: challenge,
+    rpId: window.location.hostname,
+    allowCredentials: [
+      {
+        id: base64ToArrayBuffer(storedCredentialId),
+        type: "public-key",
+      },
+    ],
+    userVerification: "required",
+    timeout: 60000,
+  };
+
+  const assertion = await navigator.credentials.get({
+    publicKey: publicKeyCredentialRequestOptions,
+  });
+
+  return assertion !== null;
+};
+
+/**
+ * Enroll biometric credentials - triggers WebAuthn creation, then encrypts and stores credentials in localStorage
  */
 const enrollBiometric = async (serviceNo, password) => {
   try {
+    // 1. Trigger the native biometric registration prompt
+    const credential = await createBiometricCredential();
+    if (!credential) {
+      throw new Error("Failed to create biometric credential");
+    }
+
+    const credentialId = arrayBufferToBase64(credential.rawId);
+
+    // 2. Encrypt credentials
     const { encrypted, iv, key } = await encryptCredentials(
       serviceNo,
       password
     );
 
+    // 3. Store all required keys in localStorage
     localStorage.setItem(
       BIOMETRIC_CREDENTIALS_KEY,
       JSON.stringify({ encrypted, iv })
     );
     localStorage.setItem(BIOMETRIC_CRYPTO_KEY, key);
+    localStorage.setItem(BIOMETRIC_CREDENTIAL_ID_KEY, credentialId);
     localStorage.setItem(BIOMETRIC_ENROLLED_KEY, "true");
 
     return true;
   } catch (error) {
+    if (error.name === "NotAllowedError") {
+      throw new Error("Biometric enrollment was cancelled or denied");
+    }
     console.error("Biometric enrollment failed:", error);
-    throw new Error("Failed to enroll biometric credentials");
+    throw new Error(error.message || "Failed to enroll biometric credentials");
   }
 };
 
 /**
  * Authenticate with biometric and return decrypted credentials
- * Triggers device native biometric prompt, then decrypts stored credentials on success
+ * Triggers device native biometric assertion (verify only), then decrypts stored credentials on success
  */
 const authenticateWithBiometric = async () => {
   try {
@@ -215,8 +250,13 @@ const authenticateWithBiometric = async () => {
       throw new Error("No biometric credentials enrolled");
     }
 
-    // Trigger device biometric (Face ID / Fingerprint / Windows Hello)
-    const verified = await triggerBiometricPrompt();
+    const storedCredentialId = localStorage.getItem(BIOMETRIC_CREDENTIAL_ID_KEY);
+    if (!storedCredentialId) {
+      throw new Error("No biometric credentials enrolled");
+    }
+
+    // Trigger device biometric verification (Face ID / Fingerprint / Windows Hello)
+    const verified = await verifyBiometricCredential(storedCredentialId);
 
     if (!verified) {
       throw new Error("Biometric verification failed");
@@ -236,6 +276,9 @@ const authenticateWithBiometric = async () => {
 
     return credentials;
   } catch (error) {
+    if (error.name === "NotAllowedError") {
+      throw new Error("Biometric authentication was cancelled or denied");
+    }
     console.error("Biometric authentication failed:", error);
     throw error;
   }
@@ -248,6 +291,7 @@ const clearBiometricData = () => {
   try {
     localStorage.removeItem(BIOMETRIC_CREDENTIALS_KEY);
     localStorage.removeItem(BIOMETRIC_CRYPTO_KEY);
+    localStorage.removeItem(BIOMETRIC_CREDENTIAL_ID_KEY);
     localStorage.removeItem(BIOMETRIC_ENROLLED_KEY);
     return true;
   } catch (error) {

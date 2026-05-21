@@ -147,9 +147,6 @@ export const biometricLogin = (navigate) => async (dispatch) => {
   }
 };
 
-/**
- * Enroll biometric credentials after successful login
- */
 export const enrollBiometric = (serviceNo, password) => async (dispatch) => {
   try {
     await BiometricService.enrollBiometric(serviceNo, password);
@@ -164,7 +161,11 @@ export const enrollBiometric = (serviceNo, password) => async (dispatch) => {
         msg: error.message || "Failed to enable biometric login",
       },
     });
-    showThemedToast("Failed to enable biometric login.", "error");
+    if (error.message === "Biometric enrollment was cancelled or denied") {
+      showThemedToast("Biometric enrollment cancelled.", "warn");
+    } else {
+      showThemedToast(error.message || "Failed to enable biometric login.", "error");
+    }
   }
 };
 

@@ -403,7 +403,7 @@ export const loadUser = () => async (dispatch) => {
 
 export const logOut = (navigate) => async (dispatch) => {
   // Selectively clear localStorage, preserving biometric credentials
-  const biometricKeys = ["biometric_credentials", "biometric_crypto_key", "biometric_enrolled"];
+  const biometricKeys = ["biometric_credentials", "biometric_crypto_key", "biometric_enrolled", "biometric_credential_id"];
   const keysToRemove = [];
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
