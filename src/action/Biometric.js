@@ -11,13 +11,13 @@ import {
 
 import BiometricService from "../service/BiometricService";
 import { login } from "./Login";
-import { toast } from "react-toastify";
+import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 /**
  * Helper to display custom styled themed toasts matching Colombo Dockyard corporate design
  */
-const showThemedToast = (message, type = "success") => {
+export const showThemedToast = (message, type = "success") => {
   let themeColor = "#0049AF"; // Colombo Dockyard corporate blue
   let icon = "ℹ";
 
@@ -66,7 +66,8 @@ const showThemedToast = (message, type = "success") => {
       closeButton: false,
       autoClose: 2500, // 2.5 seconds auto close duration
       draggable: true,
-      draggablePercent: 60 // Allow smooth swipe-to-dismiss behavior
+      draggablePercent: 40, // Allow smooth swipe-to-dismiss behavior
+      transition: Slide
     }
   );
 };

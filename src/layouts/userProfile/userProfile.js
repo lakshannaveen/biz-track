@@ -3,8 +3,8 @@ import "./userProfile.css";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import BiometricService from "../../service/BiometricService";
-import { removeBiometric } from "../../action/Biometric";
-import { toast } from "react-toastify";
+import { removeBiometric, enrollBiometric, showThemedToast } from "../../action/Biometric";
+import { toast, Slide } from "react-toastify";
 
 const BiometricDisablePrompt = ({ closeToast, onConfirm }) => {
   return (
@@ -51,6 +51,88 @@ const BiometricDisablePrompt = ({ closeToast, onConfirm }) => {
           }}
         >
           Yes, Disable
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const BiometricEnablePrompt = ({ closeToast, onConfirm }) => {
+  const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState("");
+
+  const handleSubmit = () => {
+    if (!password.trim()) {
+      setError("Please enter your password.");
+      return;
+    }
+    onConfirm(password);
+    closeToast();
+  };
+
+  return (
+    <div style={{ fontFamily: "Roboto, sans-serif", padding: "4px" }}>
+      <div style={{ fontWeight: 600, fontSize: "15px", color: "#0049AF", marginBottom: "6px" }}>
+        Enable Biometric Login
+      </div>
+      <div style={{ fontSize: "13px", color: "#555", marginBottom: "10px", lineHeight: "1.4" }}>
+        Enter your password to enable Face ID / Fingerprint login on this device.
+      </div>
+      <input
+        type="password"
+        placeholder="Enter your password"
+        value={password}
+        onChange={(e) => { setPassword(e.target.value); setError(""); }}
+        onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+        style={{
+          width: "100%",
+          padding: "8px 10px",
+          borderRadius: "6px",
+          border: error ? "1.5px solid #EF4444" : "1.5px solid #D1D5DB",
+          fontSize: "13px",
+          outline: "none",
+          marginBottom: error ? "4px" : "12px",
+          boxSizing: "border-box",
+          fontFamily: "Roboto, sans-serif",
+        }}
+        autoFocus
+      />
+      {error && (
+        <div style={{ fontSize: "11px", color: "#EF4444", marginBottom: "10px" }}>{error}</div>
+      )}
+      <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+        <button
+          onClick={closeToast}
+          style={{
+            backgroundColor: "#F3F4F6",
+            border: "1px solid #E5E7EB",
+            borderRadius: "6px",
+            color: "#374151",
+            padding: "6px 12px",
+            fontSize: "12px",
+            fontWeight: "500",
+            cursor: "pointer",
+            outline: "none",
+          }}
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleSubmit}
+          style={{
+            backgroundColor: "#0049AF",
+            border: "none",
+            borderRadius: "6px",
+            color: "#fff",
+            padding: "6px 14px",
+            fontSize: "12px",
+            fontWeight: "500",
+            cursor: "pointer",
+            boxShadow: "0 2px 4px rgba(0, 73, 175, 0.2)",
+            outline: "none",
+          }}
+        >
+          Enable
         </button>
       </div>
     </div>
@@ -208,12 +290,38 @@ function UserProfile() {
                   autoClose: false,
                   closeOnClick: false,
                   draggable: true,
-                  draggablePercent: 60,
+                  draggablePercent: 40,
                   closeButton: false,
+                  transition: Slide,
                 }
               );
             } else {
-              toast.info("To enable biometric login, please log out and sign in again. You will be prompted to enable it after OTP verification.");
+              const serviceNo = data && data[0] ? data[0].ServiceNo : null;
+              if (!serviceNo) {
+                showThemedToast("Unable to retrieve your account details. Please try again.", "error");
+                return;
+              }
+              toast(
+                ({ closeToast }) => (
+                  <BiometricEnablePrompt
+                    closeToast={closeToast}
+                    onConfirm={(password) => {
+                      dispatch(enrollBiometric(serviceNo, password)).then(() => {
+                        setBiometricEnabled(BiometricService.hasEnrolledCredentials());
+                      });
+                    }}
+                  />
+                ),
+                {
+                  position: "top-center",
+                  autoClose: false,
+                  closeOnClick: false,
+                  draggable: true,
+                  draggablePercent: 40,
+                  closeButton: false,
+                  transition: Slide,
+                }
+              );
             }
           }}>
             <h2>Biometric Login</h2>
