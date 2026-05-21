@@ -97,11 +97,11 @@ const Verification = () => {
                 onChange={setuserInptOTP}
                 numInputs={5}
                 renderSeparator={<span>&nbsp; &nbsp; </span>}
-                renderInput={(props) => <input {...props} />}
+                renderInput={(props) => <input {...props} type="tel" />}
                 separator={<span style={{ width: "8px" }}></span>}
                 isInputNum={true}
                 shouldAutoFocus={true}
-                inputType="realOTP"
+                inputType="tel"
                 inputStyle={{
                   border: "1px solid transparent",
                   borderRadius: "8px",
