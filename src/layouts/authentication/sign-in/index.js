@@ -196,27 +196,36 @@
 
 
 import { useState, useContext, useEffect } from "react";
-import { Box, Card, Container, Typography } from "@mui/material";
+import { Box, Card, Container, Typography, IconButton } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import imge from "../../../assets/images/NewBGImage.jpg";
 import Textlogo from "../../../assets/images/Textlogo.png";
 import LoadingButton from "@mui/lab/LoadingButton";
 import LoginIcon from "@mui/icons-material/Login";
+import FingerprintIcon from "@mui/icons-material/Fingerprint";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { checkBiometricAvailability, biometricLogin } from "../../../action/Biometric";
 
 const SignIn = () => {
   const [serviceNo, setserviceNo] = useState("");
   const [password, setpassword] = useState("");
-  const { loading } = useSelector((state) => state.auth);
+  const { loading, biometricAvailable, biometricLoading } = useSelector((state) => state.auth);
   const { handleLogin } = useAuth();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     metaThemeColor.setAttribute("content", "#004AAD");
   }, []);
+
+  useEffect(() => {
+    dispatch(checkBiometricAvailability());
+  }, [dispatch]);
 
   const getDeviceInfo = () => {
     const userAgent = navigator.userAgent;
@@ -290,6 +299,10 @@ const SignIn = () => {
 
   const onPasswordChanged = (e) => {
     setpassword(e.target.value);
+  };
+
+  const handleBiometricLogin = () => {
+    dispatch(biometricLogin(navigate));
   };
 
   return (
@@ -401,6 +414,25 @@ const SignIn = () => {
                 </span>
               </LoadingButton>
             </Box>
+            {biometricAvailable && (
+              <Box mt={2} mb={1} textAlign="center">
+                <IconButton
+                  onClick={handleBiometricLogin}
+                  disabled={loading || biometricLoading}
+                  sx={{
+                    color: "#0049AF",
+                    "&:hover": {
+                      backgroundColor: "rgba(0, 73, 175, 0.08)",
+                    },
+                  }}
+                >
+                  <FingerprintIcon sx={{ fontSize: 48 }} />
+                </IconButton>
+                <Typography variant="body2" color="#646464" fontWeight={500}>
+                  Use Biometrics
+                </Typography>
+              </Box>
+            )}
           </Box>
         </Box>
       </Card>

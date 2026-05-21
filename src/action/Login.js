@@ -226,7 +226,7 @@ const getIPAddress = async () => {
   }
 };
 
-export const login = (service_no, password, navigate) => async (dispatch) => {
+export const login = (service_no, password, navigate, isBiometric = false) => async (dispatch) => {
   dispatch({
     type: LOGIN_REQUEST,
   });
@@ -239,20 +239,42 @@ export const login = (service_no, password, navigate) => async (dispatch) => {
       (data) => {
         if (data.data.StatusCode === 200) {
           localStorage.setItem("logId", data.data.LogId);
-          dispatch({
-            type: VERIFICATION_REQUEST,
-            payload: {
-              number: service_no,
-              password,
-              useData: data.data.UserDetails,
-              token: data.data.Token,
-              OTP: data.data.OTP,
-              device: device,
-              logId: data.data.LogId,
-              ip: ip,
-            },
-          });
-          navigate(`/Verification`);
+
+          if (isBiometric) {
+            // Direct login for biometric - bypass OTP page and proceed directly to dashboard
+            localStorage.setItem("token", JSON.stringify(data.data.Token));
+            dispatch({
+              type: VERIFICATION_SUCCESS,
+              payload: {
+                user: data.data.UserDetails,
+                Token: data.data.Token,
+              },
+            });
+            dispatch({
+              type: LOGIN_SUCCESS,
+              payload: {
+                data: data.data.UserDetails,
+              },
+            });
+            navigate("/dashboard");
+            window.location.reload();
+          } else {
+            // Normal login - go to OTP verification
+            dispatch({
+              type: VERIFICATION_REQUEST,
+              payload: {
+                number: service_no,
+                password,
+                useData: data.data.UserDetails,
+                token: data.data.Token,
+                OTP: data.data.OTP,
+                device: device,
+                logId: data.data.LogId,
+                ip: ip,
+              },
+            });
+            navigate(`/Verification`);
+          }
         } else {
           dispatch({
             type: LOGIN_FAIL,
@@ -380,7 +402,17 @@ export const loadUser = () => async (dispatch) => {
 };
 
 export const logOut = (navigate) => async (dispatch) => {
-  localStorage.clear();
+  // Selectively clear localStorage, preserving biometric credentials
+  const biometricKeys = ["biometric_credentials", "biometric_crypto_key", "biometric_enrolled"];
+  const keysToRemove = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (!biometricKeys.includes(key)) {
+      keysToRemove.push(key);
+    }
+  }
+  keysToRemove.forEach((key) => localStorage.removeItem(key));
+
   dispatch({
     type: LOGOUT_SUCCESS,
   });

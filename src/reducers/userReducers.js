@@ -8,6 +8,15 @@ import {
   VERIFICATION_REQUEST,
 } from "../constants/userConstants";
 
+import {
+  BIOMETRIC_CHECK_REQUEST,
+  BIOMETRIC_AVAILABLE,
+  BIOMETRIC_NOT_AVAILABLE,
+  BIOMETRIC_LOGIN_REQUEST,
+  BIOMETRIC_LOGIN_SUCCESS,
+  BIOMETRIC_LOGIN_FAIL,
+} from "../constants/biometricConstants";
+
 const initialState = {
   isLoggedIn: false,
   user: null,
@@ -17,6 +26,8 @@ const initialState = {
   data: null,
   msg: null,
   token: null,
+  biometricAvailable: false,
+  biometricLoading: false,
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -82,6 +93,41 @@ export const authReducer = (state = initialState, action) => {
         data: null,
         msg: null,
         token: null,
+      };
+    case BIOMETRIC_CHECK_REQUEST:
+      return {
+        ...state,
+        biometricLoading: true,
+      };
+    case BIOMETRIC_AVAILABLE:
+      return {
+        ...state,
+        biometricAvailable: true,
+        biometricLoading: false,
+      };
+    case BIOMETRIC_NOT_AVAILABLE:
+      return {
+        ...state,
+        biometricAvailable: false,
+        biometricLoading: false,
+      };
+    case BIOMETRIC_LOGIN_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        biometricLoading: true,
+      };
+    case BIOMETRIC_LOGIN_SUCCESS:
+      return {
+        ...state,
+        biometricLoading: false,
+      };
+    case BIOMETRIC_LOGIN_FAIL:
+      return {
+        ...state,
+        loading: false,
+        biometricLoading: false,
+        msg: action.payload.msg,
       };
     default:
       return state;
