@@ -63,7 +63,10 @@ const showThemedToast = (message, type = "success") => {
         boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
         padding: "10px 12px"
       },
-      closeButton: false
+      closeButton: false,
+      autoClose: 2500, // 2.5 seconds auto close duration
+      draggable: true,
+      draggablePercent: 60 // Allow smooth swipe-to-dismiss behavior
     }
   );
 };

@@ -148,7 +148,8 @@ export const AuthContextProvider = ({ children }) => {
                       position: "top-center",
                       autoClose: false,
                       closeOnClick: false,
-                      draggable: false,
+                      draggable: true,
+                      draggablePercent: 60,
                       closeButton: false,
                     }
                   );
