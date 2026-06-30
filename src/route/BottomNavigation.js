@@ -242,7 +242,8 @@ export default function Footer() {
     if (path.startsWith("/userProfile") || path.startsWith("/userProfile"))
       return "Profile";
     if (path.startsWith("/notifications")) return "Notification";
-    // common QR/Scan routes
+   
+    
     if (
       path.startsWith("/qr") ||
       path.startsWith("/scan") ||

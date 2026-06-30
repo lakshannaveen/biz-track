@@ -21,6 +21,48 @@
 //     metaThemeColor.setAttribute("content", "#004AAD");
 //   }, []);
 
+//   const getDeviceInfo = () => {
+//     const userAgent = navigator.userAgent;
+//     let device = "Unknown Device";
+    
+//     // Detect device type
+//     if (/Android/i.test(userAgent)) {
+//       device = "Android Mobile";
+//     } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
+//       device = "iOS Device";
+//     } else if (/Windows/i.test(userAgent)) {
+//       device = "Windows PC";
+//     } else if (/Mac/i.test(userAgent)) {
+//       device = "Mac Computer";
+//     } else if (/Linux/i.test(userAgent)) {
+//       device = "Linux Computer";
+//     }
+    
+//     // Add browser info
+//     if (/Chrome/i.test(userAgent) && !/Edg/i.test(userAgent)) {
+//       device += " (Chrome)";
+//     } else if (/Firefox/i.test(userAgent)) {
+//       device += " (Firefox)";
+//     } else if (/Safari/i.test(userAgent) && !/Chrome/i.test(userAgent)) {
+//       device += " (Safari)";
+//     } else if (/Edg/i.test(userAgent)) {
+//       device += " (Edge)";
+//     }
+    
+//     return device;
+//   };
+
+//   const getIPAddress = async () => {
+//     try {
+//       const response = await fetch('https://api.ipify.org?format=json');
+//       const data = await response.json();
+//       return data.ip || "Unknown IP";
+//     } catch (error) {
+//       console.error("Failed to get IP address:", error);
+//       return "Unknown IP";
+//     }
+//   };
+
 //   const validate = () => {
 //     let isValid = true;
 //     if (serviceNo.trim() === "" || password.trim() === "") {
@@ -30,9 +72,18 @@
 //     return isValid;
 //   };
 
-//   const handleButtonClick = (e) => {
+//   const handleButtonClick = async (e) => {
 //     if (validate() && !loading) {
-//       handleLogin(serviceNo, password);
+//       try {
+//         // Get device and IP information
+//         const device = getDeviceInfo();
+//         const ip = await getIPAddress();
+        
+//         // Pass device and IP to handleLogin
+//         handleLogin(serviceNo, password, device, ip);
+//       } catch (error) {
+//         toast.error("Failed to get device information");
+//       }
 //     }
 //   };
 
@@ -52,7 +103,6 @@
 //         justifyContent: "center",
 //         alignItems: "center",
 //         minHeight: "100vh",
-//         //height: 800,
 //         backgroundColor: "#F8F9FA",
 //         backgroundImage: `url(${imge})`,
 //         backgroundSize: "cover",
@@ -75,7 +125,7 @@
 //         fontWeight={300}
 //         sx={{ my: 2, color: "#fff", marginBottom: "30%" }}
 //       >
-//         Cooperate Mobile App
+//         Corporate Mobile App
 //       </Typography>
 
 //       <Card sx={{ borderRadius: 5, boxShadow: 8 }}>
@@ -135,9 +185,6 @@
 //               />
 //             </Box>
 //             <Box mt={4} mb={1}>
-//               {/* <Button color="info" fullWidth>
-//                 Sign In
-//               </Button> */}
 //               <LoadingButton
 //                 onClick={handleButtonClick}
 //                 endIcon={<LoginIcon />}
@@ -166,7 +213,6 @@
 //           flexDirection: "column",
 //           justifyContent: "flex-end",
 //           alignItems: "center",
-
 //           marginTop: 10,
 //         }}
 //       >
@@ -195,6 +241,8 @@
 
 
 
+//-------------------------------------------- Frintgerprint-------------------------
+
 import { useState, useContext, useEffect } from "react";
 import { Box, Card, Container, Typography, IconButton } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -209,10 +257,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { checkBiometricAvailability, biometricLogin } from "../../../action/Biometric";
+import MainLogo from "../../../assets/images/main-logo.png";
 
 const SignIn = () => {
   const [serviceNo, setserviceNo] = useState("");
   const [password, setpassword] = useState("");
+  const [hasPromptedBiometric, setHasPromptedBiometric] = useState(false);
   const { loading, biometricAvailable, biometricLoading } = useSelector((state) => state.auth);
   const { handleLogin } = useAuth();
   const dispatch = useDispatch();
@@ -226,6 +276,19 @@ const SignIn = () => {
   useEffect(() => {
     dispatch(checkBiometricAvailability());
   }, [dispatch]);
+
+  const handleBiometricLogin = () => {
+    sessionStorage.removeItem("explicit_logout");
+    dispatch(biometricLogin(navigate));
+  };
+
+  useEffect(() => {
+    const isExplicitLogout = sessionStorage.getItem("explicit_logout") === "true";
+    if (biometricAvailable && !hasPromptedBiometric && !isExplicitLogout) {
+      setHasPromptedBiometric(true);
+      handleBiometricLogin();
+    }
+  }, [biometricAvailable, hasPromptedBiometric]);
 
   const getDeviceInfo = () => {
     const userAgent = navigator.userAgent;
@@ -281,6 +344,9 @@ const SignIn = () => {
   const handleButtonClick = async (e) => {
     if (validate() && !loading) {
       try {
+        // Clear explicit logout flag since user is logging in manually
+        sessionStorage.removeItem("explicit_logout");
+
         // Get device and IP information
         const device = getDeviceInfo();
         const ip = await getIPAddress();
@@ -301,9 +367,6 @@ const SignIn = () => {
     setpassword(e.target.value);
   };
 
-  const handleBiometricLogin = () => {
-    dispatch(biometricLogin(navigate));
-  };
 
   return (
     <Container
@@ -320,6 +383,7 @@ const SignIn = () => {
         backgroundPosition: "center",
       }}
     >
+      
       <Box
         component="img"
         sx={{
@@ -339,7 +403,18 @@ const SignIn = () => {
       </Typography>
 
       <Card sx={{ borderRadius: 5, boxShadow: 8 }}>
+        
         <Box p={3} textAlign="center">
+              <Box
+      component="img"
+      src={MainLogo}
+      alt="Main Logo"
+      sx={{
+        width:200,
+        height: 50,
+        objectFit: "contain",
+      }}
+    />
           <Typography variant="h4" fontWeight={600} sx={{ my: 2 }}>
             Sign in
           </Typography>

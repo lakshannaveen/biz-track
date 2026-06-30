@@ -9,11 +9,14 @@ const initialState = {
   responseBody: [],
   divisionData: [],
   weeklyAttendance: [],
+  monthlyAttendance: [],
+  yearlyAttendance: [],
   traineeTypes: [],
   traineeDivision: [],
   allAttendance: [],
   cdplcData: [],
   error: null,
+  otData: null, 
   msg: null,
   loading: false,
 };
@@ -34,11 +37,16 @@ export const GetAttendanceCard = (state = initialState, action) => {
         divisionData: action.payload.divisionData || state.divisionData,
         weeklyAttendance:
           action.payload.weeklyAttendance || state.weeklyAttendance,
+        yearlyAttendance:
+          action.payload.yearlyAttendance || state.yearlyAttendance,
+        monthlyAttendance:
+          action.payload.monthlyAttendance || state.monthlyAttendance,
         traineeTypes: action.payload.traineeTypes || state.traineeTypes,
         traineeDivision:
           action.payload.traineeDivision || state.traineeDivision,
         allAttendance: action.payload.allAttendance || state.allAttendance,
         cdplcData: action.payload.cdplcData || state.cdplcData,
+        otData: action.payload.otData || state.otData,
         msg: null,
       };
     case ATTENDANCE_FAIL:

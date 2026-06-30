@@ -58,6 +58,31 @@ export default function CollectChoice() {
             <div style={{ fontSize: 12, opacity: 0.9 }}>Collect and remark</div>
           </div>
         </div>
+
+        <div
+          role="button"
+          onClick={() => navigate("/executive")}
+          style={{
+            cursor: "pointer",
+            flex: 1,
+            minWidth: 200,
+            background: "linear-gradient(135deg,#8b5cf6 0%,#6d28d9 100%)",
+            color: "#fff",
+            padding: 18,
+            borderRadius: 12,
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+          }}
+        >
+          <div style={{ width: 48, height: 48, borderRadius: 10, background: "rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Truck color="#fff" />
+          </div>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 700 }}>Executive</div>
+            <div style={{ fontSize: 12, opacity: 0.9 }}>View collection details</div>
+          </div>
+        </div>
       </div>
     </div>
   );

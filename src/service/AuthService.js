@@ -36,8 +36,25 @@ const verifyOTP = async (userOTP, encryptedOTP) => {
 };
 
 
+const biometricLogin = async (biometricToken) => {
+  const config = {
+    method: "post",
+    url: "Login/BiometricLogin",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      BiometricToken: biometricToken,
+    },
+  };
+
+  return axios.request(config).then((response) => {
+    return response;
+  });
+};
+
 export default {
   login,
-  verifyOTP
-
+  verifyOTP,
+  biometricLogin,
 };

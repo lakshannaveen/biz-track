@@ -1,5 +1,5 @@
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); // Force new service worker to activate immediately
+  self.skipWaiting();  
 });
 
 self.addEventListener('activate', (event) => {
@@ -7,11 +7,11 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          return caches.delete(cacheName); // Clear all old caches
+          return caches.delete(cacheName);  
         })
       );
     }).then(() => {
-      return self.clients.claim(); // Take control immediately
+      return self.clients.claim(); 
     })
   );
 });

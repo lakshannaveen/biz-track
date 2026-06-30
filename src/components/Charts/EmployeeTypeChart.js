@@ -197,7 +197,7 @@ export function EmployeeTypeChart({ employeeTypeData = [] }) {
               marginBottom: "2px",
             }}
           >
-            Trainees by Type
+            Trainees Attendance Based on Category
           </Typography>
           <Typography
             sx={{

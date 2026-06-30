@@ -77,6 +77,25 @@ const GetCDLWeekAttendance = async (hadDate) => {
     });
 };
 
+const GetCDLMonthlyAttendance = async () => {
+  return axios
+    .get(`Attendancedashboard/GetCDLMonthlyAttendance`, {
+     
+    })
+    .then((response) => {
+      return response;
+    });
+};
+const GetCDLYearlyAttendance = async () => {
+  return axios
+    .get(`Attendancedashboard/GetCDLYearlyAttendance`, {
+      
+    })
+    .then((response) => {
+      return response;
+    });
+};
+
 const GetCDLCategoryAtt = async (hadDate) => {
   return axios
     .get(`Attendancedashboard/GetCDLCategoryAtt`, {
@@ -88,6 +107,11 @@ const GetCDLCategoryAtt = async (hadDate) => {
       return response;
     });
 };
+const GetOTEntered = async () => {
+  return axios
+    .get(`Attendancedashboard/GetOTEntered`)
+    .then((response) => response);
+};
 
 export default {
   GetAttendanceCard,
@@ -96,5 +120,8 @@ export default {
   GetTraineeDivisionAttendance,
   GetAllAttendance,
   GetCDLWeekAttendance,
+  GetCDLYearlyAttendance,
+  GetCDLMonthlyAttendance,
   GetCDLCategoryAtt,
+  GetOTEntered,
 };

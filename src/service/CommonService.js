@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const readAuthKey = () => {
-  const raw = localStorage.getItem("token");
+  const raw = sessionStorage.getItem("token");
   if (!raw) return "";
   try {
     const parsed = JSON.parse(raw);
@@ -56,7 +56,23 @@ const GetToDoList = async () => {
 
 const GetDailyCollect = async (params = {}) => {
   const authKey = readAuthKey();
+  const date = params.date || params.p_mdd_month || '';
+  
   return axios.get(`DailyCollect/GetDailyCollect`, {
+    headers: {
+      "auth-key": authKey,
+    },
+    params: {
+      p_mdd_month: date,
+    },
+  }).then((response) => {
+    return response;
+  });
+};
+
+const GetChaserDailyCollect = async (params = {}) => {
+  const authKey = readAuthKey();
+  return axios.get(`DailyCollect/GetChaserDailyCollect`, {
     headers: {
       "auth-key": authKey,
     },
@@ -65,6 +81,7 @@ const GetDailyCollect = async (params = {}) => {
     return response;
   });
 };
+
 
 const PostDailyCollect = async (payload) => {
   const authKey = readAuthKey();
@@ -152,5 +169,6 @@ export default {
   GetEmployeeNoPay,
   GetEmployeeDetails,
   GetEmployeeAttSummary,
-  GetEmployeeOtherInfo
+  GetEmployeeOtherInfo,
+  GetChaserDailyCollect
 };

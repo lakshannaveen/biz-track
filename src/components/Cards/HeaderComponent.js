@@ -1429,11 +1429,11 @@ export default function HeaderComponent() {
           )}
 
           {/* To-Do List */}
-          {/* {isComponentIdAvailable("EMOBCE0003") ? (
+          {isComponentIdAvailable("EMOBCE0004") ? (
             <Grow
-              in={isComponentIdAvailable("EMOBCE0003")}
+              in={isComponentIdAvailable("EMOBCE0004")}
               style={{ transformOrigin: "0 0 0" }}
-              {...(isComponentIdAvailable("EMOBCE0003")
+              {...(isComponentIdAvailable("EMOBCE0004")
                 ? { timeout: 2500 }
                 : {})}
             >
@@ -1489,7 +1489,7 @@ export default function HeaderComponent() {
             </Grow>
           ) : (
             <></>
-          )} */}
+          )}
         </Grid>
       </Box>
     </>

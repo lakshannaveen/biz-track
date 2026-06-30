@@ -41,6 +41,76 @@ export const GetCDLWeekAttendance = (hadDate) => async (dispatch) => {
     });
   }
 };
+export const GetCDLYearlyAttendance = () => async (dispatch) => {
+  dispatch({
+    type: ATTENDANCE_REQUEST,
+  });
+
+  try {
+    const data = await AttendanceService.GetCDLYearlyAttendance();
+    if (data.data.StatusCode === 200) {
+      dispatch({
+        type: ATTENDANCE_SUCCESS,
+        payload: {
+          yearlyAttendance: data.data.ResultSet,
+        },
+      });
+    } else {
+      dispatch({
+        type: ATTENDANCE_FAIL,
+        payload: {
+          msg: "Failed to fetch weekly attendance data",
+        },
+      });
+    }
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    dispatch({
+      type: ATTENDANCE_FAIL,
+      payload: {
+        msg: message,
+      },
+    });
+  }
+};
+export const GetCDLMonthlyAttendance = () => async (dispatch) => {
+  dispatch({
+    type: ATTENDANCE_REQUEST,
+  });
+
+  try {
+    const data = await AttendanceService.GetCDLMonthlyAttendance();
+    if (data.data.StatusCode === 200) {
+      dispatch({
+        type: ATTENDANCE_SUCCESS,
+        payload: {
+          monthlyAttendance: data.data.ResultSet,
+        },
+      });
+    } else {
+      dispatch({
+        type: ATTENDANCE_FAIL,
+        payload: {
+          msg: "Failed to fetch weekly attendance data",
+        },
+      });
+    }
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    dispatch({
+      type: ATTENDANCE_FAIL,
+      payload: {
+        msg: message,
+      },
+    });
+  }
+};
 
 export const GetCDLCategoryAtt = (hadDate) => async (dispatch) => {
   dispatch({
@@ -148,6 +218,7 @@ export const GetCdlBasedDivison = (mcvDate, hadDate) => async (dispatch) => {
     });
   }
 };
+
 
 export const GetTraineeBasedTypes = (hadDate) => async (dispatch) => {
   dispatch({
@@ -260,5 +331,37 @@ export const GetAllAttendance = (mcvDate, hadDate) => async (dispatch) => {
         msg: message,
       },
     });
+  }
+};
+
+export const GetOTEntered = () => async (dispatch) => {
+  dispatch({ type: ATTENDANCE_REQUEST });
+
+  try {
+    const data = await AttendanceService.GetOTEntered();
+    if (data.data.StatusCode === 200) {
+      const row = data.data.ResultSet?.[0];
+      const liveEmp   = parseInt(row?.live_employee) || 0;
+      const otEntered = parseInt(row?.ot_entered)    || 0;
+      const dutyOff   = parseInt(row?.duty_off)      || 0;
+
+      dispatch({
+        type: ATTENDANCE_SUCCESS,
+        payload: {
+          otData: {
+            liveEmployees: liveEmp,
+            dutyOff,
+            otEntered,
+            otNotEntered: Math.max(0, liveEmp - otEntered ),
+          },
+        },
+      });
+    } else {
+      dispatch({ type: ATTENDANCE_FAIL, payload: { msg: "Failed to fetch OT data" } });
+    }
+  } catch (error) {
+    const message =
+      (error.response?.data?.message) || error.message || error.toString();
+    dispatch({ type: ATTENDANCE_FAIL, payload: { msg: message } });
   }
 };

@@ -1,4 +1,4 @@
-// import React, { useCallback, useEffect, useRef, useState } from "react";
+// import React, { useCallback, useEffect, useRef, useState, useMemo } from "react";
 // import CommonService from "../../service/CommonService";
 // import {
 //   Avatar, Box, Button, Chip, Collapse, Dialog, DialogContent, IconButton, Paper,
@@ -9,7 +9,7 @@
 //   Business, CheckCircle, Close, KeyboardArrowDown, KeyboardArrowUp,
 //   Cancel, LocationOn, Visibility, AccountTree, ArrowBack,
 //   Person, Email, Phone, Work, CalendarToday, AttachMoney,
-//   ReceiptLong, AccessTime, InfoOutlined, EventNote,
+//   ReceiptLong, AccessTime, InfoOutlined, EventNote, Search,
 // } from "@mui/icons-material";
 
 // /* ─── Helpers ─────────────────────────────────────────────────────────────── */
@@ -312,7 +312,6 @@
 //   const [tabValue, setTabValue]               = useState(0);
 //   const [imageError, setImageError]           = useState(false);
 //   const [selectedYear, setSelectedYear]       = useState(currentYear || new Date().getFullYear().toString());
-//   //const [selectedYear, setSelectedYear] = useState( (parseInt(currentYear || new Date().getFullYear(), 10) - 1).toString());
 //   const [noPayLoading, setNoPayLoading]       = useState(false);
 //   const [noPayError, setNoPayError]           = useState(null);
 
@@ -327,12 +326,11 @@
 //       fetchEmployeeData();
 //       setTabValue(0);
 //       setImageError(false);
-//       // setSelectedYear(currentYear || new Date().getFullYear().toString());
 //       setSelectedYear(
-//       currentYear
-//         ? (parseInt(currentYear) - 1).toString()
-//         : (new Date().getFullYear() - 1).toString()
-//     );
+//         currentYear
+//           ? (parseInt(currentYear) - 1).toString()
+//           : (new Date().getFullYear() - 1).toString()
+//       );
 //     }
 //   }, [open, employee, currentYear]);
 
@@ -416,7 +414,6 @@
 //     return years;
 //   };
 
-//   /* ── No Pay total ── */
 //   const noPayTotal = noPayData.reduce(
 //     (sum, item) => sum + (parseFloat(item.Nopay_Count || item.nopay_count) || 0),
 //     0
@@ -545,7 +542,6 @@
 //                     <InfoCard colorKey="blue"  icon={<Email />}         label="Email"          value={employeeDetails.email} />
 //                     <InfoCard colorKey="teal"  icon={<CalendarToday />} label="Permanant Date" value={employeeDetails.permanant_date} />
 //                     <InfoCard colorKey="amber" icon={<EventNote />}     label="Retirement Date" value={employeeDetails.retirement_date} />
-                    
 //                   </>
 //                 ) : (
 //                   <PlaceholderTab icon={<Person sx={{ fontSize: 44 }} />} message="No profile data available" />
@@ -559,7 +555,6 @@
 //             {/* ── No Pay Tab ── */}
 //             {tabValue === 2 && (
 //               <Box sx={{ p: 2 }}>
-//                 {/* Header + Year Selector */}
 //                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
 //                   <Typography sx={{ fontWeight: 700, color: "#004AAD", fontSize: "0.82rem", display: "flex", alignItems: "center", gap: 0.8 }}>
 //                     <AttachMoney sx={{ fontSize: 16 }} />
@@ -587,7 +582,6 @@
 //                   </Box>
 //                 </Box>
 
-//                 {/* States */}
 //                 {noPayLoading ? (
 //                   <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
 //                     <CircularProgress sx={{ color: "#004AAD" }} size={32} />
@@ -596,7 +590,6 @@
 //                   <Box sx={{ textAlign: "center", py: 4 }}>
 //                     <ReceiptLong sx={{ fontSize: 44, color: "#918e8e", mb: 1 }} />
 //                     <Typography sx={{ color: "#918e8e", fontSize: "0.82rem", mb: 1 }}>{noPayError}</Typography>
-                     
 //                   </Box>
 //                 ) : noPayData.length === 0 ? (
 //                   <PlaceholderTab
@@ -604,10 +597,7 @@
 //                     message={`No pay records found for ${selectedYear}`}
 //                   />
 //                 ) : (
-//                   /* ── Table ── */
 //                   <Box sx={{ border: "0.5px solid #e2e8f0", borderRadius: "12px", overflow: "hidden" }}>
-
-//                     {/* Column Headers */}
 //                     <Box
 //                       sx={{
 //                         display: "grid",
@@ -619,7 +609,7 @@
 //                       {[
 //                         { label: "#",      align: "left"  },
 //                         { label: "MONTH",  align: "left"  },
-//                         { label: "COUNT", align: "right" },
+//                         { label: "COUNT",  align: "right" },
 //                       ].map(({ label, align }) => (
 //                         <Typography
 //                           key={label}
@@ -634,7 +624,6 @@
 //                       ))}
 //                     </Box>
 
-//                     {/* Data Rows */}
 //                     {noPayData.map((item, index) => {
 //                       let monthName = item.Month || "-";
 //                       try {
@@ -678,7 +667,6 @@
 //                       );
 //                     })}
 
-//                     {/* Total Row */}
 //                     <Box
 //                       sx={{
 //                         display: "grid",
@@ -752,6 +740,12 @@
 //             </Box>
 //           </Box>
 //         ))}
+//         {divStats.length === 0 && (
+//           <Box sx={{ textAlign: "center", py: 5 }}>
+//             <Search sx={{ fontSize: 40, color: "#cbd5e1", mb: 1 }} />
+//             <Typography sx={{ color: "#94a3b8", fontSize: "0.85rem" }}>No divisions match your search</Typography>
+//           </Box>
+//         )}
 //       </Box>
 //     </Box>
 //   );
@@ -806,7 +800,7 @@
 //           </Box>
 //           <Box sx={{ px: 1.5, pt: 1, pb: 0.5 }}>
 //             <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1.4fr 1.4fr 0.5fr", gap: 0.5, px: 1, py: 0.75, bgcolor: "#e8f0fe", borderRadius: "8px", mb: 0.5 }}>
-//               {["Svc No", "Name", "Designation", "IN"].map((h) => (
+//               {["Service No", "Name", "Designation", "IN Time"].map((h) => (
 //                 <Typography key={h} sx={{ fontSize: "0.62rem", fontWeight: 700, color: "#004AAD" }}>{h}</Typography>
 //               ))}
 //             </Box>
@@ -927,6 +921,14 @@
 //             </React.Fragment>
 //           );
 //         })}
+//         {Object.keys(locationGroups).length === 0 && (
+//           <TableRow>
+//             <TableCell colSpan={5} sx={{ textAlign: "center", py: 5 }}>
+//               <Search sx={{ fontSize: 40, color: "#cbd5e1", display: "block", mx: "auto", mb: 1 }} />
+//               <Typography sx={{ color: "#94a3b8", fontSize: "0.85rem" }}>No locations match your search</Typography>
+//             </TableCell>
+//           </TableRow>
+//         )}
 //       </TableBody>
 //     </Table>
 //   </TableContainer>
@@ -1017,6 +1019,51 @@
 //   </Box>
 // );
 
+// /* ─── SearchBar ───────────────────────────────────────────────────────────── */
+// const SearchBar = ({ value, onChange, placeholder }) => (
+//   <Box
+//     sx={{
+//       display: "flex", alignItems: "center", gap: 1,
+//       mb: 2, px: 1.5, py: 0.85,
+//       border: "1.5px solid #e2e8f0",
+//       borderRadius: "12px",
+//       bgcolor: "#fff",
+//       transition: "border-color 0.18s ease, box-shadow 0.18s ease",
+//       "&:focus-within": {
+//         borderColor: "#004AAD",
+//         boxShadow: "0 0 0 3px rgba(0,74,173,0.08)",
+//       },
+//     }}
+//   >
+//     <Search sx={{ fontSize: 18, color: "#94a3b8", flexShrink: 0 }} />
+//     <Box
+//       component="input"
+//       value={value}
+//       onChange={(e) => onChange(e.target.value)}
+//       placeholder={placeholder || "Search…"}
+//       sx={{
+//         flex: 1, border: "none", outline: "none",
+//         fontSize: "0.85rem", color: "#1e293b",
+//         bgcolor: "transparent", fontFamily: "inherit",
+//         "&::placeholder": { color: "#94a3b8" },
+//       }}
+//     />
+//     {value && (
+//       <IconButton
+//         size="small"
+//         onClick={() => onChange("")}
+//         sx={{
+//           color: "#94a3b8", p: 0.3,
+//           "&:hover": { color: "#004AAD", bgcolor: "#e8f0fe" },
+//           borderRadius: "6px",
+//         }}
+//       >
+//         <Close sx={{ fontSize: 16 }} />
+//       </IconButton>
+//     )}
+//   </Box>
+// );
+
 // /* ─── DGESatt (inner) ─────────────────────────────────────────────────────── */
 // const DGESatt = ({ data = [], loading = false }) => {
 //   const theme    = useTheme();
@@ -1029,14 +1076,26 @@
 //   const [selectedLocation,  setSelectedLocation]   = useState(null);
 //   const [employeePopupOpen, setEmployeePopupOpen]  = useState(false);
 //   const [selectedEmployee,  setSelectedEmployee]   = useState(null);
+//   /* ── NEW: search state ── */
+//   const [searchTerm,        setSearchTerm]         = useState("");
 
 //   const scrollRef = useRef(null);
 
-//   const handleDivisionSelect = useCallback((div) => { setSelectedDivision(div); setExpandedRow(null); }, []);
-//   const handleBack           = useCallback(() => { setSelectedDivision(null); setExpandedRow(null); }, []);
-//   const handleToggle         = useCallback((loc) => setExpandedRow((prev) => (prev === loc ? null : loc)), []);
-//   const handleViewDetails    = useCallback((locData) => { setSelectedLocation(locData); setDrawerOpen(true); }, []);
-//   const handleEmployeeClick  = useCallback((emp) => { setSelectedEmployee(emp); setEmployeePopupOpen(true); }, []);
+//   const handleDivisionSelect = useCallback((div) => {
+//     setSelectedDivision(div);
+//     setExpandedRow(null);
+//     setSearchTerm("");        
+//   }, []);
+
+//   const handleBack = useCallback(() => {
+//     setSelectedDivision(null);
+//     setExpandedRow(null);
+//     setSearchTerm("");        
+//   }, []);
+
+//   const handleToggle      = useCallback((loc) => setExpandedRow((prev) => (prev === loc ? null : loc)), []);
+//   const handleViewDetails = useCallback((locData) => { setSelectedLocation(locData); setDrawerOpen(true); }, []);
+//   const handleEmployeeClick = useCallback((emp) => { setSelectedEmployee(emp); setEmployeePopupOpen(true); }, []);
 
 //   if (loading) {
 //     return (
@@ -1048,10 +1107,23 @@
 //     );
 //   }
 
-//   const divisions = [...new Set(data.map((d) => d.division).filter(Boolean))].sort();
+//   /* ── Filtered data ── */
+//   const term = searchTerm.toLowerCase().trim();
+//   const filteredData = term
+//     ? data.filter((d) =>
+//         d.repname?.toLowerCase().includes(term) ||
+//         d.sno?.toLowerCase().includes(term) ||
+//         d.des?.toLowerCase().includes(term) ||
+//         d.division?.toLowerCase().includes(term) ||
+//         d.loc?.toLowerCase().includes(term)
+//       )
+//     : data;
+
+//   const divisions = [...new Set(filteredData.map((d) => d.division).filter(Boolean))].sort();
+
 //   const locationGroups = {};
 //   if (selectedDivision) {
-//     data.filter((d) => d.division === selectedDivision).forEach((item) => {
+//     filteredData.filter((d) => d.division === selectedDivision).forEach((item) => {
 //       const loc = item.loc?.trim() || "Unknown";
 //       if (!locationGroups[loc]) locationGroups[loc] = [];
 //       locationGroups[loc].push(item);
@@ -1059,41 +1131,80 @@
 //   }
 
 //   const totalLocations = Object.keys(locationGroups).length;
-//   const divEmployees   = selectedDivision ? data.filter((d) => d.division === selectedDivision) : [];
+//   const divEmployees   = selectedDivision ? filteredData.filter((d) => d.division === selectedDivision) : [];
 //   const totalPresent   = divEmployees.filter(isPresent).length;
+
+//   /* ── Subtitle text ── */
+//   const subtitle = selectedDivision
+//     ? `${totalLocations} locations · ${divEmployees.length} employees · ${totalPresent} present${term ? ` · filtered by "${searchTerm}"` : ""}`
+//     : `${divisions.length} divisions · ${filteredData.length} employees total${term ? ` · filtered by "${searchTerm}"` : ""}`;
+
+//   /* ── Search placeholder ── */
+//   const searchPlaceholder = selectedDivision
+//     ? "Search by name, service no, designation, location…"
+//     : "Search by name, service no, designation, division…";
 
 //   return (
 //     <>
 //       <Paper sx={{ p: { xs: 2, sm: 3 }, borderRadius: "20px", boxShadow: "0 4px 24px rgba(0,74,173,0.06)" }}>
-//         <Box sx={{ mb: 2.5 }}>
+//         <Box sx={{ mb: 2 }}>
 //           <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 700, color: "#004AAD", fontSize: { xs: "1rem", sm: "1.2rem" } }}>
 //             CDPLC Employee Strength - Division
 //           </Typography>
 //           <Typography sx={{ color: "#64748b", fontSize: "0.8rem" }}>
-//             {selectedDivision
-//               ? `${totalLocations} locations · ${divEmployees.length} employees · ${totalPresent} present`
-//               : `${divisions.length} divisions · ${data.length} employees total`}
+//             {subtitle}
 //           </Typography>
 //         </Box>
 
-//         {!selectedDivision && <DivisionStep divisions={divisions} data={data} onSelect={handleDivisionSelect} />}
+//         {/* ── Search Bar ── */}
+//         <SearchBar
+//           value={searchTerm}
+//           onChange={setSearchTerm}
+//           placeholder={searchPlaceholder}
+//         />
+
+//         {!selectedDivision && (
+//           <DivisionStep divisions={divisions} data={filteredData} onSelect={handleDivisionSelect} />
+//         )}
 
 //         {selectedDivision && (
 //           <>
 //             <Breadcrumb division={selectedDivision} onBack={handleBack} />
 //             {isMobile ? (
 //               <Box ref={scrollRef}
-//                 sx={{ maxHeight: "calc(100vh - 260px)", overflowY: "auto", overflowX: "hidden", pr: 0.5,
-//                   "&::-webkit-scrollbar": { width: 4 }, "&::-webkit-scrollbar-track": { bgcolor: "transparent" }, "&::-webkit-scrollbar-thumb": { bgcolor: "#cbd5e1", borderRadius: 4 } }}>
+//                 sx={{
+//                   maxHeight: "calc(100vh - 260px)", overflowY: "auto", overflowX: "hidden", pr: 0.5,
+//                   "&::-webkit-scrollbar": { width: 4 },
+//                   "&::-webkit-scrollbar-track": { bgcolor: "transparent" },
+//                   "&::-webkit-scrollbar-thumb": { bgcolor: "#cbd5e1", borderRadius: 4 },
+//                 }}
+//               >
 //                 {Object.entries(locationGroups).map(([location, employees]) => (
-//                   <MobileLocationPanel key={location} location={location} employees={employees}
-//                     isExpanded={expandedRow === location} onToggle={handleToggle} onViewAll={handleEmployeeClick} />
+//                   <MobileLocationPanel
+//                     key={location}
+//                     location={location}
+//                     employees={employees}
+//                     isExpanded={expandedRow === location}
+//                     onToggle={handleToggle}
+//                     onViewAll={handleEmployeeClick}
+//                   />
 //                 ))}
+//                 {Object.keys(locationGroups).length === 0 && (
+//                   <Box sx={{ textAlign: "center", py: 6 }}>
+//                     <Search sx={{ fontSize: 44, color: "#cbd5e1", mb: 1 }} />
+//                     <Typography sx={{ color: "#94a3b8", fontSize: "0.85rem" }}>No locations match your search</Typography>
+//                   </Box>
+//                 )}
 //                 <Box sx={{ height: 80 }} />
 //               </Box>
 //             ) : (
-//               <DesktopLocationTable locationGroups={locationGroups} expandedRow={expandedRow}
-//                 onExpand={handleToggle} onViewDetails={handleViewDetails} onEmployeeClick={handleEmployeeClick} />
+//               <DesktopLocationTable
+//                 locationGroups={locationGroups}
+//                 expandedRow={expandedRow}
+//                 onExpand={handleToggle}
+//                 onViewDetails={handleViewDetails}
+//                 onEmployeeClick={handleEmployeeClick}
+//               />
 //             )}
 //           </>
 //         )}
@@ -1158,7 +1269,7 @@
 
 
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import CommonService from "../../service/CommonService";
 import {
   Avatar, Box, Button, Chip, Collapse, Dialog, DialogContent, IconButton, Paper,
@@ -1185,6 +1296,34 @@ const normalizeRow = (item) => ({
   pout:     item?.COUT || item?.pout || "",
   cno:      item?.CNO  || item?.cno  || "",
 });
+
+/* ─── Chart color helpers ─────────────────────────────────────────────────── */
+const rateColor = (pct) =>
+  pct >= 80 ? "#16a34a" : pct >= 60 ? "#d97706" : "#dc2626";
+
+const rateBg = (pct) =>
+  pct >= 80 ? "#dcfce7" : pct >= 60 ? "#fef3c7" : "#fee2e2";
+
+function PctBadge({ pct }) {
+  return (
+    <Box
+      component="span"
+      sx={{
+        display: "inline-block",
+        px: "7px",
+        py: "1px",
+        borderRadius: "10px",
+        fontSize: 11,
+        fontWeight: 600,
+        background: rateBg(pct),
+        color: rateColor(pct),
+        flexShrink: 0,
+      }}
+    >
+      {pct}%
+    </Box>
+  );
+}
 
 /* ─── InfoCard ────────────────────────────────────────────────────────────── */
 const iconBoxColors = {
@@ -1285,7 +1424,6 @@ const OtherInfoTab = ({ sno }) => {
       </Box>
     );
   }
-
   if (error) {
     return (
       <Box sx={{ textAlign: "center", py: 6 }}>
@@ -1294,57 +1432,22 @@ const OtherInfoTab = ({ sno }) => {
       </Box>
     );
   }
-
   if (!data.length) {
-    return (
-      <PlaceholderTab
-        icon={<InfoOutlined sx={{ fontSize: 44 }} />}
-        message="No other information available"
-      />
-    );
+    return <PlaceholderTab icon={<InfoOutlined sx={{ fontSize: 44 }} />} message="No other information available" />;
   }
 
   return (
     <Box sx={{ p: 2 }}>
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "36px 110px 1fr",
-          px: 1.5, py: 1,
-          bgcolor: "#f1f5f9",
-          borderRadius: "10px",
-          mb: 0.5,
-        }}
-      >
+      <Box sx={{ display: "grid", gridTemplateColumns: "36px 110px 1fr", px: 1.5, py: 1, bgcolor: "#f1f5f9", borderRadius: "10px", mb: 0.5 }}>
         {["#", "DATE", "EVALUATION"].map((h) => (
-          <Typography key={h} sx={{ fontSize: "0.65rem", fontWeight: 700, color: "#64748b", letterSpacing: "0.07em" }}>
-            {h}
-          </Typography>
+          <Typography key={h} sx={{ fontSize: "0.65rem", fontWeight: 700, color: "#64748b", letterSpacing: "0.07em" }}>{h}</Typography>
         ))}
       </Box>
-
       {data.map((item, idx) => (
-        <Box
-          key={idx}
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "36px 110px 1fr",
-            px: 1.5, py: 1.4,
-            borderBottom: idx < data.length - 1 ? "0.5px solid #e2e8f0" : "none",
-            alignItems: "flex-start",
-            bgcolor: "#fff",
-            "&:hover": { bgcolor: "#f8faff" },
-          }}
-        >
-          <Typography sx={{ fontSize: "0.82rem", color: "#94a3b8", fontWeight: 600, pt: "1px" }}>
-            {data.length - idx}
-          </Typography>
-          <Typography sx={{ fontSize: "0.82rem", fontWeight: 700, color: "#1e293b", pt: "1px" }}>
-            {formatDate(item.date)}
-          </Typography>
-          <Typography sx={{ fontSize: "0.7rem", color: "#334155", lineHeight: 1.55, wordBreak: "break-word" }}>
-            {item.evaluation || "-"}
-          </Typography>
+        <Box key={idx} sx={{ display: "grid", gridTemplateColumns: "36px 110px 1fr", px: 1.5, py: 1.4, borderBottom: idx < data.length - 1 ? "0.5px solid #e2e8f0" : "none", alignItems: "flex-start", bgcolor: "#fff", "&:hover": { bgcolor: "#f8faff" } }}>
+          <Typography sx={{ fontSize: "0.82rem", color: "#94a3b8", fontWeight: 600, pt: "1px" }}>{data.length - idx}</Typography>
+          <Typography sx={{ fontSize: "0.82rem", fontWeight: 700, color: "#1e293b", pt: "1px" }}>{formatDate(item.date)}</Typography>
+          <Typography sx={{ fontSize: "0.7rem", color: "#334155", lineHeight: 1.55, wordBreak: "break-word" }}>{item.evaluation || "-"}</Typography>
         </Box>
       ))}
     </Box>
@@ -1353,9 +1456,9 @@ const OtherInfoTab = ({ sno }) => {
 
 /* ─── AttendanceTab ───────────────────────────────────────────────────────── */
 const AttendanceTab = ({ sno }) => {
-  const [attData, setAttData]   = useState([]);
-  const [loading, setLoading]   = useState(false);
-  const [error, setError]       = useState(null);
+  const [attData, setAttData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState(null);
 
   useEffect(() => {
     if (!sno) return;
@@ -1387,7 +1490,6 @@ const AttendanceTab = ({ sno }) => {
       </Box>
     );
   }
-
   if (error) {
     return (
       <Box sx={{ textAlign: "center", py: 6 }}>
@@ -1396,67 +1498,26 @@ const AttendanceTab = ({ sno }) => {
       </Box>
     );
   }
-
   if (!attData.length) {
-    return (
-      <PlaceholderTab
-        icon={<AccessTime sx={{ fontSize: 44 }} />}
-        message="No attendance records found"
-      />
-    );
+    return <PlaceholderTab icon={<AccessTime sx={{ fontSize: 44 }} />} message="No attendance records found" />;
   }
 
   return (
     <Box sx={{ p: 2 }}>
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "40px 1fr 1fr",
-          px: 1.5, py: 1,
-          bgcolor: "#f1f5f9",
-          borderRadius: "10px",
-          mb: 0.5,
-        }}
-      >
+      <Box sx={{ display: "grid", gridTemplateColumns: "40px 1fr 1fr", px: 1.5, py: 1, bgcolor: "#f1f5f9", borderRadius: "10px", mb: 0.5 }}>
         {["#", "YEAR", "PERCENTAGE"].map((h) => (
-          <Typography
-            key={h}
-            sx={{ fontSize: "0.65rem", fontWeight: 700, color: "#64748b", letterSpacing: "0.07em" }}
-          >
-            {h}
-          </Typography>
+          <Typography key={h} sx={{ fontSize: "0.65rem", fontWeight: 700, color: "#64748b", letterSpacing: "0.07em" }}>{h}</Typography>
         ))}
       </Box>
-
       {attData.map((item, idx) => {
-        const pct      = parseFloat(item.pres_Percentage) || 0;
-        const pctText  = `${pct.toFixed(0)}%`;
-        const txtColor =
-          pct >= 75 ? "#0d28c5" :
-          pct >= 50 ? "#d9c406" : "#dc2626";
-
+        const pct     = parseFloat(item.pres_Percentage) || 0;
+        const pctText = `${pct.toFixed(0)}%`;
+        const txtColor = pct >= 75 ? "#0d28c5" : pct >= 50 ? "#d9c406" : "#dc2626";
         return (
-          <Box
-            key={idx}
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "40px 1fr 1fr",
-              px: 1.5, py: 1.4,
-              borderBottom: idx < attData.length - 1 ? "0.5px solid #e2e8f0" : "none",
-              alignItems: "center",
-              bgcolor: "#fff",
-              "&:hover": { bgcolor: "#f8faff" },
-            }}
-          >
-            <Typography sx={{ fontSize: "0.82rem", color: "#94a3b8", fontWeight: 600 }}>
-              {idx + 1}
-            </Typography>
-            <Typography sx={{ fontSize: "0.88rem", fontWeight: 700, color: "#1e293b" }}>
-              {item.year}
-            </Typography>
-            <Typography sx={{ textAlign: "center", fontSize: "0.88rem", fontWeight: 700, color: txtColor }}>
-              {pctText}
-            </Typography>
+          <Box key={idx} sx={{ display: "grid", gridTemplateColumns: "40px 1fr 1fr", px: 1.5, py: 1.4, borderBottom: idx < attData.length - 1 ? "0.5px solid #e2e8f0" : "none", alignItems: "center", bgcolor: "#fff", "&:hover": { bgcolor: "#f8faff" } }}>
+            <Typography sx={{ fontSize: "0.82rem", color: "#94a3b8", fontWeight: 600 }}>{idx + 1}</Typography>
+            <Typography sx={{ fontSize: "0.88rem", fontWeight: 700, color: "#1e293b" }}>{item.year}</Typography>
+            <Typography sx={{ textAlign: "center", fontSize: "0.88rem", fontWeight: 700, color: txtColor }}>{pctText}</Typography>
           </Box>
         );
       })}
@@ -1511,32 +1572,17 @@ const EmployeeDetailsPopup = ({ open, onClose, employee, currentYear }) => {
   };
 
   const fetchNoPayData = async () => {
-    const barcodeNo = employeeDetails?.barcode_no
-                      || employee?.cno
-                      || employee?.barcode_no;
-
-    if (!barcodeNo) {
-      setNoPayError("Barcode number not found for this employee");
-      setNoPayData([]);
-      return;
-    }
-
-    if (!selectedYear) {
-      setNoPayError("No year selected");
-      return;
-    }
-
+    const barcodeNo = employeeDetails?.barcode_no || employee?.cno || employee?.barcode_no;
+    if (!barcodeNo) { setNoPayError("Barcode number not found for this employee"); setNoPayData([]); return; }
+    if (!selectedYear) { setNoPayError("No year selected"); return; }
     setNoPayLoading(true);
     setNoPayError(null);
-
     try {
       const noPayResponse = await CommonService.GetEmployeeNoPay(barcodeNo, selectedYear);
       if (noPayResponse?.data?.StatusCode === 200) {
         const resultSet = noPayResponse.data.ResultSet || [];
         setNoPayData(resultSet);
-        if (resultSet.length === 0) {
-          setNoPayError(`No pay records found for ${selectedYear}`);
-        }
+        if (resultSet.length === 0) setNoPayError(`No pay records found for ${selectedYear}`);
       } else {
         setNoPayData([]);
         setNoPayError(noPayResponse?.data?.Message || `No Pay data is not available for ${selectedYear}`);
@@ -1550,10 +1596,7 @@ const EmployeeDetailsPopup = ({ open, onClose, employee, currentYear }) => {
     }
   };
 
-  const handleYearChange = (event) => {
-    setSelectedYear(event.target.value);
-    setNoPayError(null);
-  };
+  const handleYearChange = (event) => { setSelectedYear(event.target.value); setNoPayError(null); };
 
   const getInitials = (name) => {
     if (!name) return "?";
@@ -1568,15 +1611,12 @@ const EmployeeDetailsPopup = ({ open, onClose, employee, currentYear }) => {
   const getYearOptions = () => {
     const currentYearNum = new Date().getFullYear();
     const years = [];
-    for (let i = 0; i <= 5; i++) {
-      years.push((currentYearNum - i).toString());
-    }
+    for (let i = 0; i <= 5; i++) years.push((currentYearNum - i).toString());
     return years;
   };
 
   const noPayTotal = noPayData.reduce(
-    (sum, item) => sum + (parseFloat(item.Nopay_Count || item.nopay_count) || 0),
-    0
+    (sum, item) => sum + (parseFloat(item.Nopay_Count || item.nopay_count) || 0), 0
   );
 
   const TABS = [
@@ -1593,44 +1633,23 @@ const EmployeeDetailsPopup = ({ open, onClose, employee, currentYear }) => {
       maxWidth="xs"
       fullWidth
       PaperProps={{
-        sx: {
-          borderRadius: "24px",
-          maxHeight: "92vh",
-          overflow: "hidden",
-          boxShadow: "0 24px 60px rgba(0,0,0,0.18)",
-        },
+        sx: { borderRadius: "24px", maxHeight: "92vh", overflow: "hidden", boxShadow: "0 24px 60px rgba(0,0,0,0.18)" },
       }}
     >
       {/* Header */}
       <Box sx={{ position: "relative", bgcolor: "#004AAD", p: "20px" }}>
-        <IconButton
-          onClick={onClose}
-          size="small"
-          sx={{
-            position: "absolute", right: 14, top: 14,
-            color: "#fff", bgcolor: "rgba(255,255,255,0.15)",
-            "&:hover": { bgcolor: "rgba(255,255,255,0.25)" },
-            width: 32, height: 32,
-          }}
-        >
+        <IconButton onClick={onClose} size="small"
+          sx={{ position: "absolute", right: 14, top: 14, color: "#fff", bgcolor: "rgba(255,255,255,0.15)", "&:hover": { bgcolor: "rgba(255,255,255,0.25)" }, width: 32, height: 32 }}>
           <Close sx={{ fontSize: 18 }} />
         </IconButton>
-
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.8 }}>
           <Avatar
             src={!imageError ? getEmployeeImageUrl() : undefined}
             onError={() => setImageError(true)}
-            sx={{
-              width: 68, height: 68,
-              bgcolor: "#d0dff5", color: "#004AAD",
-              fontSize: "1.5rem", fontWeight: 500,
-              border: "3px solid rgba(255,255,255,0.85)",
-              flexShrink: 0,
-            }}
+            sx={{ width: 68, height: 68, bgcolor: "#d0dff5", color: "#004AAD", fontSize: "1.5rem", fontWeight: 500, border: "3px solid rgba(255,255,255,0.85)", flexShrink: 0 }}
           >
             {getInitials(employee?.repname)}
           </Avatar>
-
           <Box sx={{ minWidth: 0 }}>
             <Typography variant="h6" sx={{ color: "#fff", fontWeight: 600, fontSize: "1rem", lineHeight: 1.3 }}>
               {employee?.repname || "-"}
@@ -1658,19 +1677,13 @@ const EmployeeDetailsPopup = ({ open, onClose, employee, currentYear }) => {
         onChange={(_, v) => setTabValue(v)}
         variant="fullWidth"
         sx={{
-          borderBottom: "0.5px solid #e2e8f0",
-          minHeight: 44,
-          "& .MuiTab-root": {
-            textTransform: "none", fontWeight: 600, fontSize: "0.72rem",
-            minHeight: 44, py: 0, gap: "4px", color: "#94a3b8",
-          },
+          borderBottom: "0.5px solid #e2e8f0", minHeight: 44,
+          "& .MuiTab-root": { textTransform: "none", fontWeight: 600, fontSize: "0.72rem", minHeight: 44, py: 0, gap: "4px", color: "#94a3b8" },
           "& .Mui-selected": { color: "#004AAD" },
           "& .MuiTabs-indicator": { backgroundColor: "#004AAD", height: 2 },
         }}
       >
-        {TABS.map((t, i) => (
-          <Tab key={i} icon={t.icon} iconPosition="start" label={t.label} />
-        ))}
+        {TABS.map((t, i) => <Tab key={i} icon={t.icon} iconPosition="start" label={t.label} />)}
       </Tabs>
 
       {/* Body */}
@@ -1681,26 +1694,23 @@ const EmployeeDetailsPopup = ({ open, onClose, employee, currentYear }) => {
           </Box>
         ) : (
           <>
-            {/* ── Profile Tab ── */}
             {tabValue === 0 && (
               <Box sx={{ px: 2, py: 0.5 }}>
                 {employeeDetails ? (
                   <>
-                    <InfoCard colorKey="blue"   icon={<Work />}          label="W.Category"     value={employeeDetails.work_category} />
-                    <InfoCard colorKey="purple" icon={<Phone />}         label="Mobile"         value={employeeDetails.mobile_no}
-                      action={
-                        employeeDetails.mobile_no ? (
-                          <Box component="a" href={`tel:${employeeDetails.mobile_no}`}
-                            sx={{ width: 34, height: 34, borderRadius: "10px", background: "#eaf3de", display: "flex", alignItems: "center", justifyContent: "center", "& svg": { fontSize: 18, color: "#3B6D11" } }}>
-                            <Phone />
-                          </Box>
-                        ) : null
-                      }
+                    <InfoCard colorKey="blue"   icon={<Work />}          label="W.Category"      value={employeeDetails.work_category} />
+                    <InfoCard colorKey="purple" icon={<Phone />}         label="Mobile"          value={employeeDetails.mobile_no}
+                      action={employeeDetails.mobile_no ? (
+                        <Box component="a" href={`tel:${employeeDetails.mobile_no}`}
+                          sx={{ width: 34, height: 34, borderRadius: "10px", background: "#eaf3de", display: "flex", alignItems: "center", justifyContent: "center", "& svg": { fontSize: 18, color: "#3B6D11" } }}>
+                          <Phone />
+                        </Box>
+                      ) : null}
                     />
-                    <InfoCard colorKey="teal"  icon={<Business />}      label="Division"       value={employeeDetails.division} />
-                    <InfoCard colorKey="amber" icon={<AccountTree />}   label="Department"     value={employeeDetails.department} />
-                    <InfoCard colorKey="blue"  icon={<Email />}         label="Email"          value={employeeDetails.email} />
-                    <InfoCard colorKey="teal"  icon={<CalendarToday />} label="Permanant Date" value={employeeDetails.permanant_date} />
+                    <InfoCard colorKey="teal"  icon={<Business />}      label="Division"        value={employeeDetails.division} />
+                    <InfoCard colorKey="amber" icon={<AccountTree />}   label="Department"      value={employeeDetails.department} />
+                    <InfoCard colorKey="blue"  icon={<Email />}         label="Email"           value={employeeDetails.email} />
+                    <InfoCard colorKey="teal"  icon={<CalendarToday />} label="Permanant Date"  value={employeeDetails.permanant_date} />
                     <InfoCard colorKey="amber" icon={<EventNote />}     label="Retirement Date" value={employeeDetails.retirement_date} />
                   </>
                 ) : (
@@ -1708,40 +1718,21 @@ const EmployeeDetailsPopup = ({ open, onClose, employee, currentYear }) => {
                 )}
               </Box>
             )}
-
-            {/* ── Other Info Tab ── */}
             {tabValue === 1 && <OtherInfoTab sno={employee?.sno} />}
-
-            {/* ── No Pay Tab ── */}
             {tabValue === 2 && (
               <Box sx={{ p: 2 }}>
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
                   <Typography sx={{ fontWeight: 700, color: "#004AAD", fontSize: "0.82rem", display: "flex", alignItems: "center", gap: 0.8 }}>
-                    <AttachMoney sx={{ fontSize: 16 }} />
-                    No Pay Summary
+                    <AttachMoney sx={{ fontSize: 16 }} /> No Pay Summary
                   </Typography>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <Typography sx={{ fontSize: "0.7rem", color: "#64748b" }}>Year:</Typography>
-                    <Box
-                      component="select"
-                      value={selectedYear}
-                      onChange={handleYearChange}
-                      sx={{
-                        px: 1.5, py: 0.6,
-                        fontSize: "0.75rem", fontWeight: 600,
-                        border: "1px solid #e2e8f0", borderRadius: "8px",
-                        backgroundColor: "#fff", color: "#004AAD",
-                        cursor: "pointer", outline: "none",
-                        "&:focus": { borderColor: "#004AAD", boxShadow: "0 0 0 2px rgba(0,74,173,0.1)" },
-                      }}
-                    >
-                      {getYearOptions().map((year) => (
-                        <option key={year} value={year}>{year}</option>
-                      ))}
+                    <Box component="select" value={selectedYear} onChange={handleYearChange}
+                      sx={{ px: 1.5, py: 0.6, fontSize: "0.75rem", fontWeight: 600, border: "1px solid #e2e8f0", borderRadius: "8px", backgroundColor: "#fff", color: "#004AAD", cursor: "pointer", outline: "none", "&:focus": { borderColor: "#004AAD", boxShadow: "0 0 0 2px rgba(0,74,173,0.1)" } }}>
+                      {getYearOptions().map((year) => <option key={year} value={year}>{year}</option>)}
                     </Box>
                   </Box>
                 </Box>
-
                 {noPayLoading ? (
                   <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
                     <CircularProgress sx={{ color: "#004AAD" }} size={32} />
@@ -1752,105 +1743,43 @@ const EmployeeDetailsPopup = ({ open, onClose, employee, currentYear }) => {
                     <Typography sx={{ color: "#918e8e", fontSize: "0.82rem", mb: 1 }}>{noPayError}</Typography>
                   </Box>
                 ) : noPayData.length === 0 ? (
-                  <PlaceholderTab
-                    icon={<ReceiptLong sx={{ fontSize: 44 }} />}
-                    message={`No pay records found for ${selectedYear}`}
-                  />
+                  <PlaceholderTab icon={<ReceiptLong sx={{ fontSize: 44 }} />} message={`No pay records found for ${selectedYear}`} />
                 ) : (
                   <Box sx={{ border: "0.5px solid #e2e8f0", borderRadius: "12px", overflow: "hidden" }}>
-                    <Box
-                      sx={{
-                        display: "grid",
-                        gridTemplateColumns: "36px 1fr auto",
-                        px: 2, py: 1.2,
-                        bgcolor: "#f1f5f9",
-                      }}
-                    >
-                      {[
-                        { label: "#",      align: "left"  },
-                        { label: "MONTH",  align: "left"  },
-                        { label: "COUNT",  align: "right" },
-                      ].map(({ label, align }) => (
-                        <Typography
-                          key={label}
-                          sx={{
-                            fontSize: "0.65rem", fontWeight: 700,
-                            color: "#64748b", letterSpacing: "0.07em",
-                            textAlign: align,
-                          }}
-                        >
-                          {label}
-                        </Typography>
+                    <Box sx={{ display: "grid", gridTemplateColumns: "36px 1fr auto", px: 2, py: 1.2, bgcolor: "#f1f5f9" }}>
+                      {[{ label: "#", align: "left" }, { label: "MONTH", align: "left" }, { label: "COUNT", align: "right" }].map(({ label, align }) => (
+                        <Typography key={label} sx={{ fontSize: "0.65rem", fontWeight: 700, color: "#64748b", letterSpacing: "0.07em", textAlign: align }}>{label}</Typography>
                       ))}
                     </Box>
-
                     {noPayData.map((item, index) => {
                       let monthName = item.Month || "-";
                       try {
                         if (item.Month?.includes("-")) {
                           const [y, m] = item.Month.split("-");
-                          monthName = new Date(parseInt(y), parseInt(m) - 1)
-                            .toLocaleString("default", { month: "long" });
+                          monthName = new Date(parseInt(y), parseInt(m) - 1).toLocaleString("default", { month: "long" });
                         } else {
                           const d = new Date(item.Month);
-                          if (!isNaN(d)) {
-                            monthName = d.toLocaleString("default", { month: "long" });
-                          }
+                          if (!isNaN(d)) monthName = d.toLocaleString("default", { month: "long" });
                         }
                       } catch (_) {}
-
                       const count = parseFloat(item.Nopay_Count || item.nopay_count) || 0;
-
                       return (
-                        <Box
-                          key={index}
-                          sx={{
-                            display: "grid",
-                            gridTemplateColumns: "36px 1fr auto",
-                            px: 2, py: 1.4,
-                            borderTop: "0.5px solid #e2e8f0",
-                            bgcolor: "#fff",
-                            alignItems: "center",
-                            "&:hover": { bgcolor: "#f8faff" },
-                          }}
-                        >
-                          <Typography sx={{ fontSize: "0.82rem", color: "#94a3b8", fontWeight: 600 }}>
-                            {index + 1}
-                          </Typography>
-                          <Typography sx={{ fontSize: "0.88rem", color: "#1e293b" }}>
-                            {monthName}
-                          </Typography>
-                          <Typography sx={{ fontSize: "0.88rem", fontWeight: 700, color: "#1e293b", textAlign: "right" }}>
-                            {count.toFixed(2)}
-                          </Typography>
+                        <Box key={index} sx={{ display: "grid", gridTemplateColumns: "36px 1fr auto", px: 2, py: 1.4, borderTop: "0.5px solid #e2e8f0", bgcolor: "#fff", alignItems: "center", "&:hover": { bgcolor: "#f8faff" } }}>
+                          <Typography sx={{ fontSize: "0.82rem", color: "#94a3b8", fontWeight: 600 }}>{index + 1}</Typography>
+                          <Typography sx={{ fontSize: "0.88rem", color: "#1e293b" }}>{monthName}</Typography>
+                          <Typography sx={{ fontSize: "0.88rem", fontWeight: 700, color: "#1e293b", textAlign: "right" }}>{count.toFixed(2)}</Typography>
                         </Box>
                       );
                     })}
-
-                    <Box
-                      sx={{
-                        display: "grid",
-                        gridTemplateColumns: "36px 1fr auto",
-                        px: 2, py: 1.3,
-                        borderTop: "0.5px solid #e2e8f0",
-                        bgcolor: "#f8faff",
-                        alignItems: "center",
-                      }}
-                    >
+                    <Box sx={{ display: "grid", gridTemplateColumns: "36px 1fr auto", px: 2, py: 1.3, borderTop: "0.5px solid #e2e8f0", bgcolor: "#f8faff", alignItems: "center" }}>
                       <Box />
-                      <Typography sx={{ fontSize: "0.7rem", fontWeight: 700, color: "#64748b", letterSpacing: "0.07em" }}>
-                        TOTAL
-                      </Typography>
-                      <Typography sx={{ fontSize: "0.95rem", fontWeight: 700, color: "#dc2626", textAlign: "right" }}>
-                        {noPayTotal.toFixed(2)}
-                      </Typography>
+                      <Typography sx={{ fontSize: "0.7rem", fontWeight: 700, color: "#64748b", letterSpacing: "0.07em" }}>TOTAL</Typography>
+                      <Typography sx={{ fontSize: "0.95rem", fontWeight: 700, color: "#dc2626", textAlign: "right" }}>{noPayTotal.toFixed(2)}</Typography>
                     </Box>
                   </Box>
                 )}
               </Box>
             )}
-
-            {/* ── Attendance Tab ── */}
             {tabValue === 3 && <AttendanceTab sno={employee?.sno} />}
           </>
         )}
@@ -1859,7 +1788,314 @@ const EmployeeDetailsPopup = ({ open, onClose, employee, currentYear }) => {
   );
 };
 
-/* ─── STEP 1: Division Cards ──────────────────────────────────────────────── */
+/* ─── DivisionLevelChart - Shows divisions with expandable locations ─── */ 
+const DivisionLevelChart = ({ data, onDivisionClick }) => {
+  const chartData = useMemo(() => {
+    const divisionMap = new Map();
+    data.forEach((item) => {
+      const div = item.division?.trim() || "Unknown";
+      if (!divisionMap.has(div)) {
+        divisionMap.set(div, { division: div, total: 0, present: 0 });
+      }
+      const entry = divisionMap.get(div);
+      entry.total += 1;
+      if (isPresent(item)) entry.present += 1;
+    });
+    return Array.from(divisionMap.values())
+      .map((item) => ({
+        ...item,
+        percentage: item.total > 0 ? Math.round((item.present / item.total) * 100) : 0,
+      }))
+      .sort((a, b) => a.division.localeCompare(b.division));
+  }, [data]);
+
+  const maxTotal = Math.max(...chartData.map((r) => r.total), 1);
+  const totalEmployees = chartData.reduce((s, r) => s + r.total, 0);
+  const totalPresent = chartData.reduce((s, r) => s + r.present, 0);
+  const overallPct = totalEmployees > 0 ? Math.round((totalPresent / totalEmployees) * 100) : 0;
+
+  if (chartData.length === 0) return null;
+ 
+  const handleDivisionSelect = (divisionName) => {
+    onDivisionClick(divisionName);
+  };
+
+  return (
+    <Box
+      sx={{
+        mb: 3,
+        p: 2,
+        borderRadius: "16px",
+        background: "#fff",
+        border: "1.5px solid #e2e8f0",
+        boxShadow: "0 2px 12px rgba(0,74,173,0.06)",
+      }}
+    >
+      {/* Header */}
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
+        <Box>
+          <Typography sx={{ fontSize: "0.75rem", fontWeight: 700, color: "#004AAD", letterSpacing: "0.03em" }}>
+            Division Overview
+          </Typography>
+          <Typography sx={{ fontSize: "12px", color: "#94a3b8", mt: "1px" }}>
+            {chartData.length} divisions · click any division to view locations
+          </Typography>
+        </Box>
+         
+      </Box>
+
+      {/* Division Bars - Clicking on bar takes to location chart */}
+      {chartData.map((row) => {
+        const barW = Math.max(Math.round((row.present / maxTotal) * 100), row.present > 0 ? 2 : 0);
+        const barColor = rateColor(row.percentage);
+
+        return (
+          <Box 
+            key={row.division} 
+            sx={{ mb: "6px", "&:last-child": { mb: 0 } }}
+            onClick={() => handleDivisionSelect(row.division)}
+          >
+            {/* ── Bar row ── */}
+            <Box
+              sx={{
+                cursor: "pointer",
+                borderRadius: "8px",
+                p: "8px 10px",
+                mx: "-8px",
+                transition: "all 0.18s ease",
+                "&:hover": { bgcolor: "#f0f5ff", transform: "translateX(4px)" },
+              }}
+            >
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: "4px" }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: "5px", minWidth: 0, flex: 1 }}>
+                  <AccountTree sx={{ fontSize: 12, color: "#004AAD", flexShrink: 0 }} />
+                  <Typography sx={{ fontSize: "12px", fontWeight: 600, color: "#1e293b", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {row.division}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0, ml: 1 }}>
+                  <Typography sx={{ fontSize: "0.65rem", color: "#64748b" }}>{row.present}/{row.total}</Typography>
+                  <PctBadge pct={row.percentage} />
+                  <KeyboardArrowDown
+                    sx={{
+                      fontSize: 14, color: "#94a3b8",
+                      transform: "rotate(-90deg)",
+                    }}
+                  />
+                </Box>
+              </Box>
+              <Box sx={{ height: 5, background: "#f1f5f9", borderRadius: "10px", overflow: "hidden" }}>
+                <Box sx={{ height: "100%", borderRadius: "10px", width: `${barW}%`, background: barColor, transition: "width 0.45s ease" }} />
+              </Box>
+            </Box>
+          </Box>
+        );
+      })}
+
+      {/* Legend */}
+      <Box sx={{ display: "flex", gap: 2, justifyContent: "center", pt: "10px", mt: "8px", borderTop: "0.5px solid #f1f5f9" }}>
+        {[{ label: "≥80%", color: "#16a34a" }, { label: "60–79%", color: "#d97706" }, { label: "<60%", color: "#dc2626" }].map((l) => (
+          <Box key={l.label} sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <Box sx={{ width: 7, height: 7, borderRadius: "2px", background: l.color }} />
+            <Typography sx={{ fontSize: "0.62rem", color: "#64748b" }}>{l.label}</Typography>
+          </Box>
+        ))}
+      </Box>
+    </Box>
+  );
+};
+/* ─── InlineLocationChart (existing) ──────────────────────────── */
+const InlineLocationChart = ({ data, division, onEmployeeClick }) => {
+  const [expandedLoc, setExpandedLoc] = useState(null);
+
+  const chartData = useMemo(() => {
+    const filtered = data.filter((d) => d.division === division);
+    const locationMap = new Map();
+    filtered.forEach((item) => {
+      const loc = item.loc?.trim() || "Unknown";
+      if (!locationMap.has(loc)) {
+        locationMap.set(loc, { location: loc, employees: [], total: 0, present: 0 });
+      }
+      const entry = locationMap.get(loc);
+      entry.employees.push(item);
+      entry.total += 1;
+      if (isPresent(item)) entry.present += 1;
+    });
+    return Array.from(locationMap.values())
+      .map((item) => ({
+        ...item,
+        percentage: item.total > 0 ? Math.round((item.present / item.total) * 100) : 0,
+      }))
+      .sort((a, b) => a.location.localeCompare(b.location));
+  }, [data, division]);
+
+  useEffect(() => { setExpandedLoc(null); }, [division]);
+
+  const maxTotal = Math.max(...chartData.map((r) => r.total), 1);
+  const totalEmployees = chartData.reduce((s, r) => s + r.total, 0);
+  const totalPresent   = chartData.reduce((s, r) => s + r.present, 0);
+  const overallPct     = totalEmployees > 0 ? Math.round((totalPresent / totalEmployees) * 100) : 0;
+
+  if (chartData.length === 0) return null;
+
+  const handleBarClick = (locName) =>
+    setExpandedLoc((prev) => (prev === locName ? null : locName));
+
+  return (
+    <Box
+      sx={{
+        mb: 3,
+        p: 2,
+        borderRadius: "16px",
+        background: "#fff",
+        border: "1.5px solid #e2e8f0",
+        boxShadow: "0 2px 12px rgba(0,74,173,0.06)",
+      }}
+    >
+      {/* Header */}
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
+        <Box>
+          <Typography sx={{ fontSize: "0.75rem", fontWeight: 700, color: "#004AAD", letterSpacing: "0.03em" }}>
+            Location Overview - {division}
+          </Typography>
+          <Typography sx={{ fontSize: "12px", color: "#94a3b8", mt: "1px" }}>
+            {chartData.length} locations · click bar to expand
+          </Typography>
+        </Box>
+        
+      </Box>
+
+      {/* Bars + inline employee list */}
+      {chartData.map((row) => {
+        const barW     = Math.max(Math.round((row.present / maxTotal) * 100), row.present > 0 ? 2 : 0);
+        const isOpen   = expandedLoc === row.location;
+        const barColor = rateColor(row.percentage);
+
+        return (
+          <Box key={row.location} sx={{ mb: "6px", "&:last-child": { mb: 0 } }}>
+            {/* ── Bar row ── */}
+            <Box
+              onClick={() => handleBarClick(row.location)}
+              sx={{
+                cursor: "pointer",
+                borderRadius: isOpen ? "8px 8px 0 0" : "8px",
+                p: "6px 8px",
+                mx: "-8px",
+                border: isOpen ? `1.5px solid ${barColor}` : "1.5px solid transparent",
+                borderBottom: isOpen ? "none" : undefined,
+                bgcolor: isOpen ? `${barColor}0d` : "transparent",
+                transition: "background 0.15s ease, border-color 0.15s ease",
+                "&:hover": { bgcolor: isOpen ? `${barColor}0d` : "#f0f5ff" },
+              }}
+            >
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: "4px" }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: "5px", minWidth: 0, flex: 1 }}>
+                  <LocationOn sx={{ fontSize: 12, color: isOpen ? barColor : "#004AAD", flexShrink: 0 }} />
+                  <Typography sx={{ fontSize: "0.72rem", fontWeight: 600, color: "#1e293b", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {row.location}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0, ml: 1 }}>
+                  <Typography sx={{ fontSize: "0.65rem", color: "#64748b" }}>{row.present}/{row.total}</Typography>
+                  <PctBadge pct={row.percentage} />
+                  <KeyboardArrowDown
+                    sx={{
+                      fontSize: 14, color: "#94a3b8",
+                      transition: "transform 0.22s ease",
+                      transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                    }}
+                  />
+                </Box>
+              </Box>
+              <Box sx={{ height: 5, background: "#f1f5f9", borderRadius: "10px", overflow: "hidden" }}>
+                <Box sx={{ height: "100%", borderRadius: "10px", width: `${barW}%`, background: barColor, transition: "width 0.45s ease" }} />
+              </Box>
+            </Box>
+
+            {/* ── Inline employee list (expands below bar) ── */}
+            <Collapse in={isOpen} timeout={220} unmountOnExit>
+              <Box
+                sx={{
+                  mx: "-8px",
+                  border: `1.5px solid ${barColor}`,
+                  borderTop: "none",
+                  borderRadius: "0 0 8px 8px",
+                  overflow: "hidden",
+                  bgcolor: "#fafbff",
+                }}
+              >
+                {/* Stats strip */}
+                <Box sx={{ display: "flex", bgcolor: "#fff", borderBottom: "1px solid #f1f5f9" }}>
+                  {[
+                    { label: "Strength", value: row.total,               color: "#004AAD" },
+                    { label: "Present",  value: row.present,             color: "#16a34a" },
+                    { label: "Absent",   value: row.total - row.present, color: "#dc2626" },
+                  ].map((s) => (
+                    <Box key={s.label} sx={{ flex: 1, textAlign: "center", py: 1, borderRight: "1px solid #f1f5f9", "&:last-child": { borderRight: "none" } }}>
+                      <Typography sx={{ fontSize: "0.6rem", color: "#64748b" }}>{s.label}</Typography>
+                      <Typography sx={{ fontSize: "0.95rem", fontWeight: 800, color: s.color }}>{s.value}</Typography>
+                    </Box>
+                  ))}
+                </Box>
+
+                {/* Column headers */}
+                <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1.6fr 1.4fr 0.7fr 0.5fr", gap: 0.5, px: 1.5, py: 0.7, bgcolor: "#e8f0fe" }}>
+                  {["Svc No", "Name", "Designation", "IN Time", "Status"].map((h) => (
+                    <Typography key={h} sx={{ fontSize: "0.6rem", fontWeight: 700, color: "#004AAD" }}>{h}</Typography>
+                  ))}
+                </Box>
+
+                {/* Employee rows */}
+                {row.employees.map((emp, idx) => {
+                  const p = isPresent(emp);
+                  return (
+                    <Box
+                      key={emp.sno || idx}
+                      onClick={() => onEmployeeClick(emp)}
+                      sx={{
+                        display: "grid", gridTemplateColumns: "1fr 1.6fr 1.4fr 0.7fr 0.5fr", gap: 0.5,
+                        px: 1.5, py: 0.85,
+                        bgcolor: idx % 2 === 0 ? "#fff" : "#f8faff",
+                        borderTop: "0.5px solid #f1f5f9",
+                        alignItems: "center",
+                        cursor: "pointer",
+                        transition: "all 0.18s ease",
+                        "&:hover": { bgcolor: "#e8f0fe", transform: "translateX(3px)" },
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "0.65rem", color: "#475569" }}>{emp.sno || "-"}</Typography>
+                      <Typography sx={{ fontSize: "0.65rem", fontWeight: 600, color: "#1e293b", lineHeight: 1.2, wordBreak: "break-word" }}>{emp.repname || "-"}</Typography>
+                      <Typography sx={{ fontSize: "0.6rem", color: "#64748b", lineHeight: 1.2, wordBreak: "break-word" }}>{emp.des || "-"}</Typography>
+                      <Typography sx={{ fontSize: "0.68rem", fontWeight: p ? 700 : 400, color: p ? "#16a34a" : "#dc2626" }}>{p ? emp.inn : "NR"}</Typography>
+                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        {p
+                          ? <CheckCircle sx={{ fontSize: 14, color: "#16a34a" }} />
+                          : <Cancel     sx={{ fontSize: 14, color: "#dc2626" }} />
+                        }
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Collapse>
+          </Box>
+        );
+      })}
+
+      {/* Legend */}
+      <Box sx={{ display: "flex", gap: 2, justifyContent: "center", pt: "10px", mt: "8px", borderTop: "0.5px solid #f1f5f9" }}>
+        {[{ label: "≥80%", color: "#16a34a" }, { label: "60–79%", color: "#d97706" }, { label: "<60%", color: "#dc2626" }].map((l) => (
+          <Box key={l.label} sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <Box sx={{ width: 7, height: 7, borderRadius: "2px", background: l.color }} />
+            <Typography sx={{ fontSize: "0.62rem", color: "#64748b" }}>{l.label}</Typography>
+          </Box>
+        ))}
+      </Box>
+    </Box>
+  );
+};
+
+/* ─── Division Cards (alternative view) ───────────────────────────────────── */
 const DivisionStep = ({ divisions, data, onSelect }) => {
   const divStats = divisions.map((div) => {
     const emps    = data.filter((d) => d.division === div);
@@ -1870,126 +2106,7 @@ const DivisionStep = ({ divisions, data, onSelect }) => {
     return { div, total: emps.length, present, locs, rate, rateColor };
   });
 
-  return (
-    <Box>
-      <Typography sx={{ mb: 1.5, fontWeight: 600, color: "#64748b", fontSize: "0.8rem" }}>
-        Select a division to view locations
-      </Typography>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-        {divStats.map(({ div, total, present, locs, rate, rateColor }) => (
-          <Box key={div} onClick={() => onSelect(div)}
-            sx={{
-              display: "flex", alignItems: "center", gap: 1.5,
-              px: 2, py: 1.25, border: "1.5px solid #e2e8f0",
-              borderRadius: "12px", cursor: "pointer", bgcolor: "#fff",
-              transition: "all 0.18s ease",
-              "&:hover": { borderColor: "#004AAD", bgcolor: "#f0f5ff" },
-            }}
-          >
-            <Avatar sx={{ width: 34, height: 34, bgcolor: "#e8f0fe", flexShrink: 0 }}>
-              <AccountTree sx={{ fontSize: 17, color: "#004AAD" }} />
-            </Avatar>
-            <Typography sx={{ flex: 1, fontWeight: 700, fontSize: "0.85rem", color: "#1e293b", lineHeight: 1.3, wordBreak: "break-word" }}>
-              {div}
-            </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, flexShrink: 0 }}>
-              <Chip label={`${locs} loc`} size="small" sx={{ height: 22, fontSize: "0.68rem", fontWeight: 600, bgcolor: "#e8f0fe", color: "#004AAD" }} />
-              <Chip label={`${present}/${total}`} size="small" sx={{ height: 22, fontSize: "0.68rem", fontWeight: 600, bgcolor: "#dcfce7", color: "#16a34a" }} />
-              <Chip label={`${rate}%`} size="small" sx={{ height: 22, fontSize: "0.68rem", fontWeight: 700, bgcolor: `${rateColor}18`, color: rateColor, minWidth: 42 }} />
-              <KeyboardArrowDown sx={{ fontSize: 18, color: "#94a3b8", transform: "rotate(-90deg)" }} />
-            </Box>
-          </Box>
-        ))}
-        {divStats.length === 0 && (
-          <Box sx={{ textAlign: "center", py: 5 }}>
-            <Search sx={{ fontSize: 40, color: "#cbd5e1", mb: 1 }} />
-            <Typography sx={{ color: "#94a3b8", fontSize: "0.85rem" }}>No divisions match your search</Typography>
-          </Box>
-        )}
-      </Box>
-    </Box>
-  );
 };
-
-/* ─── STEP 2: Mobile Location Panel ──────────────────────────────────────── */
-const MobileLocationPanel = React.memo(({ location, employees, isExpanded, onToggle, onViewAll }) => {
-  const strength = employees.length;
-  const present  = employees.filter(isPresent).length;
-  const absent   = strength - present;
-  const rate     = strength > 0 ? Math.round((present / strength) * 100) : 0;
-  const rateColor = rate >= 80 ? "#16a34a" : rate >= 60 ? "#d97706" : "#dc2626";
-
-  return (
-    <Box sx={{ mb: 1.5 }}>
-      <Box onClick={() => onToggle(location)}
-        sx={{
-          display: "flex", alignItems: "center", gap: 1.5, px: 2, py: 1.5,
-          bgcolor: isExpanded ? "#004AAD" : "#fff",
-          border: "1.5px solid", borderColor: isExpanded ? "#004AAD" : "#e2e8f0",
-          borderRadius: isExpanded ? "14px 14px 0 0" : "14px",
-          cursor: "pointer", transition: "all 0.25s ease", userSelect: "none",
-        }}
-      >
-        <Avatar sx={{ width: 36, height: 36, bgcolor: isExpanded ? "rgba(255,255,255,0.2)" : "#e8f0fe", flexShrink: 0 }}>
-          <LocationOn sx={{ fontSize: 18, color: isExpanded ? "#fff" : "#004AAD" }} />
-        </Avatar>
-        <Typography sx={{ flex: 1, fontWeight: 700, fontSize: "0.88rem", color: isExpanded ? "#fff" : "#1e293b", lineHeight: 1.3 }}>
-          {location}
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, flexShrink: 0 }}>
-          <Chip label={`${present} / ${strength}`} size="small"
-            sx={{ height: 24, fontSize: "0.72rem", fontWeight: 700, bgcolor: isExpanded ? "rgba(255,255,255,0.18)" : "#e8f0fe", color: isExpanded ? "#fff" : "#004AAD" }} />
-          <Chip label={`${rate}%`} size="small"
-            sx={{ height: 24, fontSize: "0.72rem", fontWeight: 700, bgcolor: isExpanded ? "rgba(255,255,255,0.18)" : `${rateColor}18`, color: isExpanded ? "#fff" : rateColor }} />
-        </Box>
-        <Box sx={{ flexShrink: 0, transition: "transform 0.25s ease", transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", color: isExpanded ? "#fff" : "#94a3b8" }}>
-          <KeyboardArrowDown />
-        </Box>
-      </Box>
-
-      <Collapse in={isExpanded} timeout={250} unmountOnExit>
-        <Box sx={{ border: "1.5px solid #004AAD", borderTop: "none", borderRadius: "0 0 14px 14px", overflow: "hidden", bgcolor: "#f8faff" }}>
-          <Box sx={{ display: "flex", borderBottom: "1px solid #e2e8f0", bgcolor: "#fff" }}>
-            {[{ label: "Strength", value: strength, color: "#004AAD" }, { label: "Present", value: present, color: "#16a34a" }, { label: "Absent", value: absent, color: "#dc2626" }]
-              .map((s) => (
-                <Box key={s.label} sx={{ flex: 1, textAlign: "center", py: 1.5, borderRight: "1px solid #f1f5f9", "&:last-child": { borderRight: "none" } }}>
-                  <Typography sx={{ fontSize: "0.65rem", color: "#64748b", mb: 0.3 }}>{s.label}</Typography>
-                  <Typography sx={{ fontSize: "1.05rem", fontWeight: 800, color: s.color }}>{s.value}</Typography>
-                </Box>
-              ))}
-          </Box>
-          <Box sx={{ px: 1.5, pt: 1, pb: 0.5 }}>
-            <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1.4fr 1.4fr 0.5fr", gap: 0.5, px: 1, py: 0.75, bgcolor: "#e8f0fe", borderRadius: "8px", mb: 0.5 }}>
-              {["Service No", "Name", "Designation", "IN Time"].map((h) => (
-                <Typography key={h} sx={{ fontSize: "0.62rem", fontWeight: 700, color: "#004AAD" }}>{h}</Typography>
-              ))}
-            </Box>
-            {employees.map((emp, idx) => {
-              const p = isPresent(emp);
-              return (
-                <Box key={emp.sno || idx}
-                  sx={{
-                    display: "grid", gridTemplateColumns: "1fr 1.4fr 1.4fr 0.5fr", gap: 0.5,
-                    px: 1, py: 0.9, bgcolor: idx % 2 === 0 ? "#fff" : "#f8faff",
-                    borderRadius: "6px", mb: 0.25, alignItems: "center",
-                    cursor: "pointer", transition: "all 0.2s ease",
-                    "&:hover": { bgcolor: "#e8f0fe", transform: "translateX(4px)" },
-                  }}
-                  onClick={() => onViewAll(emp)}
-                >
-                  <Typography sx={{ fontSize: "0.68rem", color: "#475569" }}>{emp.sno || "-"}</Typography>
-                  <Typography sx={{ fontSize: "0.6rem", fontWeight: 600, color: "#1e293b", lineHeight: 1.2, wordBreak: "break-word" }}>{emp.repname || "-"}</Typography>
-                  <Typography sx={{ fontSize: "0.6rem", fontWeight: 600, color: "#1e293b", lineHeight: 1.2, wordBreak: "break-word" }}>{emp.des || "-"}</Typography>
-                  <Typography sx={{ fontSize: "0.68rem", fontWeight: p ? 700 : 400, color: p ? "#16a34a" : "#f30a0a" }}>{p ? emp.inn : "NR"}</Typography>
-                </Box>
-              );
-            })}
-          </Box>
-        </Box>
-      </Collapse>
-    </Box>
-  );
-});
 
 /* ─── Desktop Location Table ──────────────────────────────────────────────── */
 const DesktopLocationTable = ({ locationGroups, expandedRow, onExpand, onViewDetails, onEmployeeClick }) => (
@@ -2113,13 +2230,12 @@ const DetailDrawer = ({ open, onClose, data, onEmployeeClick }) => {
         <IconButton onClick={onClose} sx={{ color: "#fff" }}><Close /></IconButton>
       </Box>
       <Box sx={{ display: "flex", flexShrink: 0, borderBottom: "1px solid #f1f5f9" }}>
-        {[{ label: "Total", value: strength, color: "#004AAD" }, { label: "Present", value: present, color: "#16a34a" }, { label: "Absent", value: absent, color: "#dc2626" }, { label: "Rate", value: `${rate}%`, color: rateColor }]
-          .map((s) => (
-            <Box key={s.label} sx={{ flex: 1, textAlign: "center", py: 1.5, borderRight: "1px solid #f1f5f9", "&:last-child": { borderRight: "none" } }}>
-              <Typography sx={{ fontSize: "0.63rem", color: "#64748b" }}>{s.label}</Typography>
-              <Typography sx={{ fontSize: "1.1rem", fontWeight: 800, color: s.color }}>{s.value}</Typography>
-            </Box>
-          ))}
+        {[{ label: "Total", value: strength, color: "#004AAD" }, { label: "Present", value: present, color: "#16a34a" }, { label: "Absent", value: absent, color: "#dc2626" }, { label: "Rate", value: `${rate}%`, color: rateColor }].map((s) => (
+          <Box key={s.label} sx={{ flex: 1, textAlign: "center", py: 1.5, borderRight: "1px solid #f1f5f9", "&:last-child": { borderRight: "none" } }}>
+            <Typography sx={{ fontSize: "0.63rem", color: "#64748b" }}>{s.label}</Typography>
+            <Typography sx={{ fontSize: "1.1rem", fontWeight: 800, color: s.color }}>{s.value}</Typography>
+          </Box>
+        ))}
       </Box>
       <Box sx={{ overflowY: "auto", flex: 1, px: 2, py: 1.5 }}>
         <Box sx={{ display: "grid", gridTemplateColumns: "0.8fr 1.4fr 1fr 0.8fr 0.6fr", gap: 0.5, px: 1, py: 0.8, bgcolor: "#e8f0fe", borderRadius: "8px", mb: 1, position: "sticky", top: 0, zIndex: 1 }}>
@@ -2163,7 +2279,7 @@ const DetailDrawer = ({ open, onClose, data, onEmployeeClick }) => {
 
 /* ─── Breadcrumb ──────────────────────────────────────────────────────────── */
 const Breadcrumb = ({ division, onBack }) => (
-  <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2.5 }}>
+  <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
     <IconButton size="small" onClick={onBack}
       sx={{ color: "#004AAD", bgcolor: "#e8f0fe", borderRadius: "8px", "&:hover": { bgcolor: "#d0e2ff" } }}>
       <ArrowBack fontSize="small" />
@@ -2185,46 +2301,24 @@ const SearchBar = ({ value, onChange, placeholder }) => (
     sx={{
       display: "flex", alignItems: "center", gap: 1,
       mb: 2, px: 1.5, py: 0.85,
-      border: "1.5px solid #e2e8f0",
-      borderRadius: "12px",
-      bgcolor: "#fff",
+      border: "1.5px solid #e2e8f0", borderRadius: "12px", bgcolor: "#fff",
       transition: "border-color 0.18s ease, box-shadow 0.18s ease",
-      "&:focus-within": {
-        borderColor: "#004AAD",
-        boxShadow: "0 0 0 3px rgba(0,74,173,0.08)",
-      },
+      "&:focus-within": { borderColor: "#004AAD", boxShadow: "0 0 0 3px rgba(0,74,173,0.08)" },
     }}
   >
     <Search sx={{ fontSize: 18, color: "#94a3b8", flexShrink: 0 }} />
-    <Box
-      component="input"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder || "Search…"}
-      sx={{
-        flex: 1, border: "none", outline: "none",
-        fontSize: "0.85rem", color: "#1e293b",
-        bgcolor: "transparent", fontFamily: "inherit",
-        "&::placeholder": { color: "#94a3b8" },
-      }}
-    />
+    <Box component="input" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder || "Search…"}
+      sx={{ flex: 1, border: "none", outline: "none", fontSize: "0.85rem", color: "#1e293b", bgcolor: "transparent", fontFamily: "inherit", "&::placeholder": { color: "#94a3b8" } }} />
     {value && (
-      <IconButton
-        size="small"
-        onClick={() => onChange("")}
-        sx={{
-          color: "#94a3b8", p: 0.3,
-          "&:hover": { color: "#004AAD", bgcolor: "#e8f0fe" },
-          borderRadius: "6px",
-        }}
-      >
+      <IconButton size="small" onClick={() => onChange("")}
+        sx={{ color: "#94a3b8", p: 0.3, "&:hover": { color: "#004AAD", bgcolor: "#e8f0fe" }, borderRadius: "6px" }}>
         <Close sx={{ fontSize: 16 }} />
       </IconButton>
     )}
   </Box>
 );
 
-/* ─── DGESatt (inner) ─────────────────────────────────────────────────────── */
+/* ─── DGESatt (main component) ────────────────────────────────────────────── */
 const DGESatt = ({ data = [], loading = false }) => {
   const theme    = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -2236,7 +2330,6 @@ const DGESatt = ({ data = [], loading = false }) => {
   const [selectedLocation,  setSelectedLocation]   = useState(null);
   const [employeePopupOpen, setEmployeePopupOpen]  = useState(false);
   const [selectedEmployee,  setSelectedEmployee]   = useState(null);
-  /* ── NEW: search state ── */
   const [searchTerm,        setSearchTerm]         = useState("");
 
   const scrollRef = useRef(null);
@@ -2244,13 +2337,13 @@ const DGESatt = ({ data = [], loading = false }) => {
   const handleDivisionSelect = useCallback((div) => {
     setSelectedDivision(div);
     setExpandedRow(null);
-    setSearchTerm("");        
+    setSearchTerm("");
   }, []);
 
   const handleBack = useCallback(() => {
     setSelectedDivision(null);
     setExpandedRow(null);
-    setSearchTerm("");        
+    setSearchTerm("");
   }, []);
 
   const handleToggle      = useCallback((loc) => setExpandedRow((prev) => (prev === loc ? null : loc)), []);
@@ -2294,12 +2387,10 @@ const DGESatt = ({ data = [], loading = false }) => {
   const divEmployees   = selectedDivision ? filteredData.filter((d) => d.division === selectedDivision) : [];
   const totalPresent   = divEmployees.filter(isPresent).length;
 
-  /* ── Subtitle text ── */
   const subtitle = selectedDivision
     ? `${totalLocations} locations · ${divEmployees.length} employees · ${totalPresent} present${term ? ` · filtered by "${searchTerm}"` : ""}`
     : `${divisions.length} divisions · ${filteredData.length} employees total${term ? ` · filtered by "${searchTerm}"` : ""}`;
 
-  /* ── Search placeholder ── */
   const searchPlaceholder = selectedDivision
     ? "Search by name, service no, designation, location…"
     : "Search by name, service no, designation, division…";
@@ -2308,30 +2399,41 @@ const DGESatt = ({ data = [], loading = false }) => {
     <>
       <Paper sx={{ p: { xs: 2, sm: 3 }, borderRadius: "20px", boxShadow: "0 4px 24px rgba(0,74,173,0.06)" }}>
         <Box sx={{ mb: 2 }}>
-          <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 700, color: "#004AAD", fontSize: { xs: "1rem", sm: "1.2rem" } }}>
-            CDPLC Employee Strength - Division
+          <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 700, color: "#004AAD", fontSize: "16px" }}>
+             CDPLC Attendance Based on Division
           </Typography>
-          <Typography sx={{ color: "#64748b", fontSize: "0.8rem" }}>
-            {subtitle}
-          </Typography>
+         
         </Box>
 
-        {/* ── Search Bar ── */}
-        <SearchBar
-          value={searchTerm}
-          onChange={setSearchTerm}
-          placeholder={searchPlaceholder}
-        />
+        <SearchBar value={searchTerm} onChange={setSearchTerm} placeholder={searchPlaceholder} />
 
-        {!selectedDivision && (
-          <DivisionStep divisions={divisions} data={filteredData} onSelect={handleDivisionSelect} />
-        )}
-
-        {selectedDivision && (
+        {!selectedDivision ? (
+          <>
+            {/* Division Level Chart - Shows divisions with expandable locations */}
+            <DivisionLevelChart 
+              data={filteredData} 
+              onDivisionClick={handleDivisionSelect} 
+            />
+            
+            {/* Original Division Cards as alternative view */}
+            <Box sx={{ mt: 3 }}>
+              <DivisionStep divisions={divisions} data={filteredData} onSelect={handleDivisionSelect} />
+            </Box>
+          </>
+        ) : (
           <>
             <Breadcrumb division={selectedDivision} onBack={handleBack} />
+
+            {/* Location Chart within selected division */}
+            <InlineLocationChart
+              data={filteredData}
+              division={selectedDivision}
+              onEmployeeClick={handleEmployeeClick}
+            />
+
             {isMobile ? (
-              <Box ref={scrollRef}
+              <Box
+                ref={scrollRef}
                 sx={{
                   maxHeight: "calc(100vh - 260px)", overflowY: "auto", overflowX: "hidden", pr: 0.5,
                   "&::-webkit-scrollbar": { width: 4 },
@@ -2339,16 +2441,6 @@ const DGESatt = ({ data = [], loading = false }) => {
                   "&::-webkit-scrollbar-thumb": { bgcolor: "#cbd5e1", borderRadius: 4 },
                 }}
               >
-                {Object.entries(locationGroups).map(([location, employees]) => (
-                  <MobileLocationPanel
-                    key={location}
-                    location={location}
-                    employees={employees}
-                    isExpanded={expandedRow === location}
-                    onToggle={handleToggle}
-                    onViewAll={handleEmployeeClick}
-                  />
-                ))}
                 {Object.keys(locationGroups).length === 0 && (
                   <Box sx={{ textAlign: "center", py: 6 }}>
                     <Search sx={{ fontSize: 44, color: "#cbd5e1", mb: 1 }} />

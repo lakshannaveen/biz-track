@@ -138,12 +138,12 @@ export function TraineesDivisionBreakdown({ traineeDivisionData }) {
             <Briefcase size={20} color="#1a2d4d" />
             <Typography
               sx={{
-                fontSize: "18px",
+                fontSize: "16px",
                 fontWeight: 600,
                 color: "#1a2d4d",
               }}
             >
-              Trainees Based on Division 
+              Trainees Attendance Based on Division
             </Typography>
           </Box>
           <Typography

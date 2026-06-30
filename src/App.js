@@ -533,8 +533,9 @@ import Reservations from "./layouts/reservations/ReservationCard";
 import Reservations1 from "./layouts/reservations/Reservations";
 import Rfid_Attendence from "./layouts/rfid_attendence/Rfid_Attendence";
 import Personal from "./layouts/personal/personal"; 
-import CollectForm from "./layouts/CollectingForm/Collectingform";
+import CollectForm from "./layouts/CollectingForm/Dailycollectionsheet";
 import CollectChoice from "./layouts/CollectingForm/CollectChoice";
+import ExecutivePage from './layouts/CollectingForm/ExecutiveData';
 
 // Import all approval component files
 import IwoApp from "./layouts/approvals/IwoApp";
@@ -659,6 +660,7 @@ function App() {
                       <Route element={<BudgetShop />} path="/budgetshop" />
                       <Route element={<Leave />} path="/leave" />
                       <Route element={<Extra_Hours />} path="/ex_hours" />
+                      
                       <Route
                         element={<Time_Endoresement />}
                         path="/time_endoresement"
@@ -668,6 +670,7 @@ function App() {
                       <Route element={<Telephone />} path="/telephone" />
                       <Route element={<Jobs />} path="/jobs" />
                       <Route element={<CollectChoice />} path="/collectChoice" />
+                      <Route element={<ExecutivePage />} path="/executive" /> 
                       <Route element={<CollectForm />} path="/collectForm" />
                       <Route
                         element={<MaintenancePage />}
